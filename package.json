@@ -1,0 +1,30 @@
+{
+  "name": "dokan_e2e_test",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start-env": "wp-env start -- --update",
+    "stop-env": "wp-env stop",
+    "restart-env": "wp-env stop && wp-env start",
+    "reset-db": "wp-env clean all && wp-env start",
+    "delete-all": "wp-env destroy all && wp-env start",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "test-e2e": "wp-scripts test-e2e",
+    "test-e2e:debug": "wp-scripts --inspect-brk test-e2e --puppeteer-devtools",
+    "test-e2e:watch": "npm run test-e2e --  --watchAll",
+    "wp-env": "wp-env"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@wordpress/e2e-test-utils": "^6.0.1",
+    "@wordpress/env": "^4.2.1",
+    "@wordpress/jest-console": "^5.0.1",
+    "@wordpress/jest-puppeteer-axe": "^4.0.1",
+    "@wordpress/scripts": "^21.0.2",
+    "expect-puppeteer": "^6.1.0",
+    "puppeteer-testing-library": "^0.6.0"
+  }
+}
