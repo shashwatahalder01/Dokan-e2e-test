@@ -4,15 +4,25 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start-env": "wp-env start -- --update",
+    "start-env": "wp-env start",
+    "start-env_up": "wp-env start -- --update",
     "stop-env": "wp-env stop",
     "restart-env": "wp-env stop && wp-env start",
     "reset-db": "wp-env clean all && wp-env start",
     "delete-all": "wp-env destroy all && wp-env start",
+    "dev-user-list": "wp-env run cli wp user list",
+    "activate-sf-dev": "npm run wp-env run cli 'wp theme activate storefront'",
+    "activate-sf-test": "wp-env run tests-cli 'wp theme activate storefront'",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "test-e2e": "wp-scripts test-e2e",
+    "test:e2e:help": "wp-scripts test-e2e --help",
+    "test-e2e": "wp-scripts test-e2e ",
+    "test_interactive": "wp-scripts test-e2e -- --puppeteer-interactive", 
+    "test_interactive_devtools": "wp-scripts test-e2e -- --puppeteer-interactive  --puppeteer-devtools", 
+    "test_interactive_single": "wp-scripts test-e2e vendor.spec.js ", 
+    "test-e2e:watch": "npm run test-e2e -- --watchAll",
+    "test_interactive_watch": "npm run test-e2e:watch -- --puppeteer-interactive", 
     "test-e2e:debug": "wp-scripts --inspect-brk test-e2e --puppeteer-devtools",
-    "test-e2e:watch": "npm run test-e2e --  --watchAll",
+    "container_path": "wp-env install-path",
     "wp-env": "wp-env"
   },
   "keywords": [],
@@ -26,5 +36,8 @@
     "@wordpress/scripts": "^21.0.2",
     "expect-puppeteer": "^6.1.0",
     "puppeteer-testing-library": "^0.6.0"
+  },
+  "devDependencies": {
+    "@faker-js/faker": "^6.0.0-beta.0"
   }
 }

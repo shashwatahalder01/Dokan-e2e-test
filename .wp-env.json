@@ -1,6 +1,15 @@
 {
-  "phpVersion": "7.4.27",
+  "phpVersion": "7.4",
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
-  "themes": [ "WordPress/storefront"]
+  "plugins": [
+    "./wp-content/plugins/dokan/",
+    "./wp-content/plugins/dokan-pro/",
+    "./wp-content/plugins/woocommerce/"
+  ],
+  "themes": [
+    "./wp-content/themes/storefront/" 
+  ]
+
+  
 }
