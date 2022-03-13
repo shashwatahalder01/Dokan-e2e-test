@@ -3,10 +3,10 @@ const puppeteer = require('puppeteer');
 // This page contains all necessary puppeteer automation methods 
 module.exports = {
 
-    async click(selector){
+    async click(selector) {
         // await page.click(selector);
         // await page.waitForNavigation({waitUntil: 'networkidle2'});
-        await Promise.all([page.click(selector), page.waitForNavigation({waitUntil:'networkidle2'})])        
+        await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
     // async clickxpath(selector){
@@ -76,7 +76,8 @@ module.exports = {
 
 
     // set dropdown option  span dropdown
-    async setDropdownOption(selector, value) {
+    async setDropdownOptionSpan(selector, value) {
+        // await page.click(selector)
         let elements = await page.$$(selector);
         for (let element of elements) {
             const text = await page.evaluate(element => element.textContent, element)
@@ -88,6 +89,7 @@ module.exports = {
         }
 
     },
+
 
     // or select dropdown
     async setSelect(selector, value) {
@@ -135,10 +137,10 @@ module.exports = {
 
     },
 
-    async opennewtab(){
+    async opennewtab() {
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
-   
+
         // await browser.newPage(); 
         // const page2 = await browser.newPage();        // open new tab
         // await page2.bringToFront(); 

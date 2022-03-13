@@ -89,17 +89,25 @@ describe('vendor functionaly test', () => {
    //    await vendorPage.cancelrequestwithdraw()
    // });
 
-   //    it('vendor add auto withdraw disbursement schedule ', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.addautowithdrawdisbursementschedule('weekly')
-   // });
-
-      it('vendor add default withdraw payment methods ', async () => {
+      it('vendor add auto withdraw disbursement schedule ', async () => {
       await loginPage.login()
       await vendorPage.goToVendorDashbord()
-      await vendorPage.adddefaultwithdrawpaymentmethods('weekly')
+      await vendorPage.addautowithdrawdisbursementschedule('dokan_custom','skrill','weekly','5','15')
    });
+
+   //    it('vendor add default withdraw payment methods ', async () => {
+   //    await loginPage.login()
+   //    await vendorPage.goToVendorDashbord()
+   //    await vendorPage.adddefaultwithdrawpaymentmethods('Skrill')
+   // });
+
+
+
+   // it('vendor add default withdraw payment methods ', async () => {
+   //    await loginPage.login()
+   //    await vendorPage.goToVendorDashbord()
+   //    await vendorPage.adddefaultwithdrawpaymentmethods('weekly')
+   // });
 
 
 
