@@ -1,4 +1,4 @@
-name: PHPUnit and End-to-End Tests
+name: End-to-End Tests
 
 on:
     pull_request:
