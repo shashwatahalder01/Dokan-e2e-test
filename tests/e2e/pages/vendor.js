@@ -1521,6 +1521,9 @@ module.exports = {
     },
 
     async setsocialprofile(url) {
+        await base.click(this.vDashboard.settings)
+        await base.click(this.vSettings.socialProfile) 
+
         await page.type(this.vSocialProfileSettings.facebook, url);
         await page.type(this.vSocialProfileSettings.twitter, url);
         await page.type(this.vSocialProfileSettings.pinterest, url);
@@ -1529,6 +1532,10 @@ module.exports = {
         await page.type(this.vSocialProfileSettings.instragram, url);
         await page.type(this.vSocialProfileSettings.flicker, url);
         await base.click(this.vSocialProfileSettings.updateSettings);
+
+        let text = await page.evaluate(() => document.querySelector('.alert-success').innerText);
+        console.log(text)
+        expect(text).to.equal('Settings updated successfully.')
     },
 
 
