@@ -36,13 +36,13 @@ describe('admin functionaly test', () => {
 
 
 
-    it('admin add test settings', async () => {
-        // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await loginUser()
+    // it('admin add test settings', async () => {
+    //     // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginUser()
         
-        await adminPage.addtestsettings()
+    //     await adminPage.addtestsettings()
 
-    });
+    // });
 
 
 

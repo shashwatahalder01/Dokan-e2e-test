@@ -1,18 +1,76 @@
 
 const puppeteer = require('puppeteer');
+import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
 // This page contains all necessary puppeteer automation methods 
 module.exports = {
+
+    async isLocatorReady(element, page) {
+        const isVisibleHandle = await page.evaluateHandle((e) => {
+            const style = window.getComputedStyle(e);
+            return (style && style.display !== 'none' &&
+                style.visibility !== 'hidden' && style.opacity !== '0');
+        }, element);
+        var visible = await isVisibleHandle.jsonValue();
+        const box = await element.boxModel();
+        if (visible && box) {
+            return true;
+        }
+        return false;
+    },
+
+    async isVisible(page, selector) {
+        return await page.evaluate((selector) => {
+            var e = document.querySelector(selector);
+            if (e) {
+                var style = window.getComputedStyle(e);
+
+                return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0';
+            }
+            else {
+                return false;
+            }
+        }, selector);
+    },
+
 
     async click(selector) {
         // await page.click(selector);
         // await page.waitForNavigation({waitUntil: 'networkidle2'});
-        await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        if (selector.startsWith('//')) {
+            await this.clickXpath(selector)
+        } else {
+            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        }
     },
 
-    // async clickxpath(selector){
-    //     let element = await page.$x(selector)
-    //     await element.click()     
-    // },
+    async clickXpath(selector) {
+        let [element] = await page.$x(selector)
+        // console.log(element)
+        // await element.click()
+        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+  
+    },    
+    
+    async clickXpath1(selector) {
+        let [element] = await page.$x(selector)
+        console.log(element)
+        await element.click()
+    },
+
+    async uploadImage(selector, image) {
+        const [fileChooser] = await Promise.all([page.waitForFileChooser(), this.click(selector)])
+        await fileChooser.accept([image])
+    },
+
+    async goto(subpath) {
+        await Promise.all([page.goto(createURL(subpath)), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    },
+
+    async reload() {
+        await page.reload({ waitUntil: 'networkidle2' });
+    },
+
+
 
 
     // get text
@@ -31,7 +89,13 @@ module.exports = {
         return text;
     },
 
-
+    // get element text
+    async getElementValue(selector) {
+        let element = await page.$(selector);
+        let text = await (await element.getProperty('value')).jsonValue();
+        console.log(text);
+        return text;
+    },
 
     // get elements
     async getElements(selector) {

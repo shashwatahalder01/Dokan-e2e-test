@@ -10,7 +10,7 @@ module.exports = {
         letsGo: '.lets-go-btn',
         notRightNow: '.not-right-now-btn',
 
-        // store setup   
+        //store setup   
         storeProductsPerPage: '#store_ppp',
         street: '#address[street_1]',
         street2: '#address[street_2]',
@@ -23,10 +23,10 @@ module.exports = {
         continueStoreSetup: '.store-step-continue',
         skipTheStepStoreSetup: '.store-step-skip-btn',
 
-        // payment setup
+        //payment setup
         //paypal
         paypal: '.email',
-        // bank
+        //bank
         bankAccountName: '.dokan-form-group:nth-child(1) .dokan-form-control',
         bankAccountNumber: '.dokan-form-group:nth-child(2) .dokan-form-control',
         bankName: '.dokan-form-group:nth-child(3) .dokan-form-control',
@@ -41,6 +41,8 @@ module.exports = {
         paypalMarketplaceSigUp: '.vendor_paypal_connect',
         // Stripe
         ConnectWithStripe: '.dokan-stripe-connect-link',
+        //skrill
+        skrill: "", //TODO: add skrill locator
         // continue from payment setup
         continuePaymentSetup: '.payment-continue-btn',
         skipTheStepPaymentSetup: '.payment-step-skip-btn',
@@ -125,7 +127,7 @@ module.exports = {
         productScheduleTo: ".dokan-end-date",
         productScheduleCancel: ".cancel_sale_schedule.dokan-hide",
         productCategory: "#select2-product_cat-container",
-        productcategoryValues: ".select2-results ul li",  // TODO: create dropdown locator like this (ul > li or ul li)
+        productCategoryValues: ".select2-results ul li",  // TODO: create dropdown locator like this (ul > li or ul li)
         productTags: '.select2-search__field',
         productDescription: 'textarea[placeholder="Enter some short description about this product..."]',
         createProduct: "#dokan-create-new-product-btn",
@@ -349,6 +351,9 @@ module.exports = {
         //menues
         myCoupons: ".active:nth-child(1) > a",
         marketplaceCoupons: ".active:nth-child(2) > a",
+
+        //coupon dashboard
+        createdCoupon: ".coupon-code.column-primary strong span"
     },
 
     //reports
@@ -875,41 +880,244 @@ module.exports = {
     },
 
     //store settings
-    vStoreSwettings: {
+    vStoreSettings: {
+        banner: ".dokan-banner-drag",
+        // banner: "//a[normalize-space()='Upload banner']",
+        // uploadBanner: "#\\__wp-uploader-id-1",
+        profilePicture: ".dokan-pro-gravatar-drag",
+        // uploadProfilePicture: "#\\__wp-uploader-id-4",
+
+        // selectFiles: "//div[@style='position: relative;']//button[@class='browser button button-hero']",
+        selectFiles: "//div[@style='position: relative;']//button[contains(text(),'Select Files')]",
+        // selectAndCrop: "//div[@style='position: relative;']//button[@class='button media-button button-primary button-large media-button-select']",
+        selectAndCrop: "//div[@style='position: relative;']//button[contains(text(),'Select and Crop')]",
+        // cropImage: "//div[@style='position: relative;']//button[@class='button media-button button-primary button-large media-button-insert']",
+        cropImage: "//div[@style='position: relative;']//button[contains(text(),'Crop image')]",
+        
+        storeName: "#dokan_store_name",
+        storeProductsPerPage: "#dokan_store_ppp",
+        phoneNo: "#setting_phone",
+        multipleLocation: "#multiple-store-location",
+        locationName: "#store-location-name-input",
+        //address
+        addLocation: "#show-add-store-location-section-btn",
+        editLocation: ".store-pickup-location-edit-btn",
+        street: "#dokan_address\\[street_1\\]",
+        street2: "#dokan_address\\[street_2\\]",
+        city: "#dokan_address\\[city\\]",
+        postOrZipCode: "#dokan_address\\[zip\\]",
+        country: "#dokan_address_country",
+        state: "#dokan_address_state",
+        saveLocation: "#dokan-save-store-location-btn",
+        cancelSaveLocation: "#cancel-store-location-section-btn",
+        deleteSaveLocation: ".store-pickup-location-delete-btn",
+        //company info
+        companyName: "#settings_dokan_company_name",
+        companyIdOrEuidNumber: "#settings_dokan_company_id_number",
+        vatOrTaxNumber: "#setting_vat_number",
+        nameOfBank: "#setting_bank_name",
+        bankIban: "#setting_bank_iban",
+        //email
+        email: "input[name='setting_show_email']",
+        moreProducts: "input[name='setting_show_more_ptab']",
+        //map
+        map: "#dokan-map-add",
+        // map1: "#dokan-location-find-btn",//not interactable
+        // mapFirstResult: "#ui-id-4", //not working
+        mapFirstResult: "#ui-id-3",
+        //store openning closing time
+        storeOpeningClosingTime: "#dokan-store-time-enable",
+        chooseBusinessDays: ".select2-container--below .select2-selection__rendered",
+        // TODO: need to improve locator days, openning and closing time,addrow,delete row
+        monday: ".tabs > li:nth-child(1)",
+        tuesday: ".tabs > li:nth-child(2)",
+        wednesday: ".tabs > li:nth-child(3)",
+        thursday: ".tabs > li:nth-child(4)",
+        friday: ".tabs > li:nth-child(5)",
+        saturday: ".tabs > li:nth-child(6)",
+        sunday: ".tabs > li:nth-child(7)",
+        openingTime: "#opening-time-sunday",
+        closingTime: "#closing-time-sunday",
+        addNewRow: "#store-tab-sunday .added-store-opening-time > .fa",
+        deleteOnerow: ".remove-store-closing-time > .fa",
+        storeOpenNotice: ".dokan-form-group:nth-child(19) .dokan-form-control",
+        storeCloseNotice: ".dokan-form-group:nth-child(20) .dokan-form-control",
+        //vacation
+        goToVacation: "#dokan-seller-vacation-activate",
+        closingStyle: "label > .form-control",
+        dateRangeFrom: "#dokan-seller-vacation-date-from",
+        dateRangeTo: "#dokan-seller-vacation-date-to",
+        setVacationMessage: ".dokan-form-group:nth-child(2) #dokan-seller-vacation-message",
+        saveEdit: "#dokan-seller-vacation-save-edit > span",
+        cancelEdit: "#dokan-seller-vacation-cancel-edit",
+        setVacationMessage: ".dokan-form-group:nth-child(2) #dokan-seller-vacation-message",
+        editSavedVacationSchedule: "tr:nth-child(1) > .dokan-seller-vacation-list-action .fas",
+        deleteSavedVacationSchedule: "tr:nth-child(1) .dokan-seller-vacation-remove-schedule",
+        confirmDeleteSavedVacationSchedule: ".swal2-confirm",
+        cancelDeleteSavedVacationSchedule: ".swal2-cancel",
+        //discount
+        enableStoreWideDiscount: "#lbl_setting_minimum_quantity",
+        minimunOrderAmount: "#setting_minimum_order_amount",
+        percentage: "#setting_order_percentage",
+        //biography
+        biography: "p",//TODO: improve
+        //store support
+        showSupportButtonInStore: "#support_checkbox",
+        showSupportButtonInSingleProduct: "#support_checkbox_product",
+        supportButtonText: "#dokan_support_btn_name",
+        //min-max
+        enableMinMaxQuantities: "#enable_vendor_min_max_quantity",
+        minimumProductQuantityToPlaceAnOrder: "#min_quantity_to_order",
+        maximumProductQuantityToPlaceAnOrder: "#max_quantity_to_order",
+        enableMinMaxAmount: "#enable_vendor_min_max_amount",
+        minimumAmountToPlaceAnOrder: "#min_amount_to_order",
+        maximumAmountToPlaceAnOrder: "#max_amount_to_order",
+        selectProducts: ".select2-search:nth-child(1) > .select2-search__field",
+        selectAll: ".dokan-min-max-product-select-all",
+        clear: ".dokan-min-max-product-clear-all",
+        selectCategory: "#product_cat",
+        //product advertizement
+        //TODO: product advertizement
         a: "",
         a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
+
+        //update settings
         updateSettings: ".dokan-btn",
+
     },
 
     //addons settings
     vAddonSettings: {
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        updateSettings: ".dokan-btn",
+        createNewAddon: ".dokan-btn",
+        createNew: "div:nth-child(2) > a:nth-child(1)",
+        backToAddonLists: ".back-to-addon-lists-btn",
+        name: "#addon-reference",
+        priority: "#addon-priority",
+        productCategories: ".select2-search__field",
+        //TODO: locators may need to be updated addons
+        //add-ons
+        addField: ".wc-pao-add-field",
+        type: "#wc-pao-addon-content-type-0",
+        displayAs: "#wc-pao-addon-content-display-0",
+        titleRequired: "#wc-pao-addon-content-name-0",
+        formatTitle: "#wc-pao-addon-content-title-format",
+        enableDescription: "wc-pao-addon-description-enable-0",
+        addDescription: "#wc-pao-addon-description-0",
+        requiredField: "#wc-pao-addon-required-0",
+        import: ".wc-pao-import-addons",
+        export: ".wc-pao-export-addons",
+        expandAll: ".wc-pao-expand-all",
+        closeAll: ".wc-pao-close-all",
+        publish: "#submit",
+
     },
 
     //payment settings
     vPaymentSettings: {
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
+        //paypal
+        paypal: '.payment-field-paypal .dokan-form-control',
+
+        //bank transfer
+        bankAccountName: '.dokan-form-group:nth-child(1) > .dokan-w8 > .dokan-form-control',
+        bankAccountNumber: '.dokan-form-group:nth-child(2) .dokan-form-control',
+        bankName: '.dokan-form-group:nth-child(3) .dokan-form-control',
+        bankAddress: '.dokan-form-group:nth-child(4) .dokan-form-control',
+        bankRoutingNumber: '.dokan-form-group:nth-child(5) .dokan-form-control',
+        bankIban: '.dokan-form-group:nth-child(6) .dokan-form-control',
+        bankSwiftCode: '.dokan-form-group:nth-child(7) .dokan-form-control',
+
+        //Stripe
+        ConnectWithStripe: '.dokan-stripe-connect-link',
+
+        //paypal marketplace
+        paypalMarketplace: '#vendor_paypal_email_address',
+        paypalMarketplaceSigUp: '.vendor_paypal_connect',
+
+        //razorpay
+        rzSignup: ".vendor_razorpay_connect",
+        rzClosePopup: ".mfp-close",
+        // existing account info
+        rzIHaveAlreadyAnAccount: "#dokan_razorpay_existing_user_chekbox",
+        rzAccountId: "#dokan_razorpay_account_id",
+        rzConnectExistingAccount: "#dokan_razorpay_vendor_register_button",
+        //new account info
+        rzAccountName: "#razorpay_account_name",
+        rzAccountEmail: "#razorpay_account_email",
+        rzYourCompanyName: "#razorpay_business_name",
+        rzYourCompanyType: "#razorpay_business_type",
+        rzBankAccountName: "#razorpay_beneficiary_name",
+        rzBankAccountNumber: "#razorpay_account_number",
+        rzBankIfscCode: "#razorpay_ifsc_code",
+        rzBankAccountType: "#razorpay_account_type",
+        rzConnectAccount: "#dokan_razorpay_vendor_register_button",
+
+        //mangopay
+        //mangopay payment setup options
+        accountForm: ".dokan-mp-account",
+        bankAccount: ".dokan-mp-bank",
+        verification: ".dokan-mp-verification",
+        eWallets: ".dokan-mp-wallets",
+
+        //connect & account info
+        dateOfBirth: "#dokan-mangopay-user-birthday",
+        nationality: "#dokan-mangopay-user-nationality",
+        typeOfUser: "#dokan-mangopay-user-status",
+        typeOfBusiness: "#dokan-mangopay-business-type",
+        companyNumber: "#dokan-mangopay-company-number",
+        address: "#dokan-mangopay-address1",
+        addressDetails: "#dokan-mangopay-address2",
+        country: "#dokan-mangopay-country",
+        state: "#dokan-mangopay-state",
+        city: "#dokan-mangopay-city",
+        postcode: "#dokan-mangopay-postcode",
+        connect: "#dokan-mangopay-account-connect",
+        disconnect: "#dokan-mangopay-account-disconnect",
+        update: "#dokan-mangopay-account-connect",
+        // bank account
+        addNew: "#dokan-mp-bank-account-add-new",
+        accountType: "#dokan-mangopay-vendor-acccount-type",
+        //iban
+        ibanIban: "#dokan-mangopay-vendor-acccount-IBAN-iban",
+        ibanBic: "#dokan-mangopay-vendor-acccount-IBAN-bic",
+        //gb
+        gbAccountNumber: "#dokan-mangopay-vendor-acccount-GB-account_number",
+        gbSortCode: "#dokan-mangopay-vendor-acccount-GB-sort_code",
+        //us
+        usAccountNumber: "#dokan-mangopay-vendor-acccount-US-account_number",
+        usAba: "#dokan-mangopay-vendor-acccount-US-aba",
+        usDepositAccountType: "#dokan-mangopay-vendor-acccount-US-datype",
+        //ca    
+        caBankName: "#dokan-mangopay-vendor-acccount-CA-bank_name",
+        caInstitutionNumber: "#dokan-mangopay-vendor-acccount-CA-inst_number",
+        caBranchCode: "#dokan-mangopay-vendor-acccount-CA-branch_code",
+        caAccountNumber: "#dokan-mangopay-vendor-acccount-CA-account_number",
+        //others
+        othersCountry: "#dokan-mangopay-vendor-acccount-OTHER-country",
+        othersBic: "#dokan-mangopay-vendor-acccount-OTHER-bic",
+        othersAccountNumber: "#dokan-mangopay-vendor-acccount-OTHER-account_number",
+        //account holders details
+        accountHoldersName: "#dokan-mangopay-vendor-account-name",
+        accountHoldersAddress: "#dokan-mangopay-vendor-account-address1",
+        accountHoldersAddressDetails: "#dokan-mangopay-vendor-account-address2",
+        accountHoldersCountry: "#dokan-mangopay-vendor-account-country",
+        accountHoldersState: "#dokan-mangopay-vendor-account-state",
+        city: "#dokan-mangopay-vendor-account-city",
+        postcode: "#dokan-mangopay-vendor-account-postcode",
+        submit: "#dokan-mp-bank-account-create",
+        cancel: "#dokan-mp-bank-account-cancel",
+        // verification
+        documentType: "#dokan-kyc-file-type",
+        chooseFiles: "#dokan-kyc-file",
+        //TODO: add UBO locators
+        submit: "#dokan-mangopay-submit-kyc",
+
+        //custom payment method
+        customPayment: '.payment-field-dokan_custom',
+
+        //skrill
+        skrill: ".payment-field-skrill",
+
+        //update settings
         updateSettings: ".dokan-btn",
     },
 
@@ -924,57 +1132,110 @@ module.exports = {
         selectPhoto: "#\\__wp-uploader-id-1",
         submitId: "#dokan_v_id_submit",
         cancelSubmitId: "#dokan_v_id_cancel_form",
+        cancelIdVerificationRequest: "#dokan_v_id_cancel_form",
 
         //address  verification
         startAddressVerification: "#dokan_v_address_click",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        submitAddress: "",
-        cancelSubmitAddress: "",
-
+        street: "#dokan_address\[street_1\]",
+        street2: "#dokan_address\[street_2\]",
+        city: "#dokan_address\[city\]",
+        postOrZipCode: "#dokan_address\[zip\]",
+        country: "#dokan_address_country",
+        state: "#dokan_address_state",
+        submitAddress: "#dokan_v_address_submit",
+        cancelSubmitAddress: ".dokan-form-group > #dokan_v_address_cancel",
+        cancelAddressVerificationRequest: ".dokan-panel-body > #dokan_v_address_cancel",
 
         //Social profiles
         //TODO: add more locator
 
         //company verification
-        startCompanyVerification: "",
-        a: "",
+        startCompanyVerification: "#dokan_v_company_click",
+        uploadCompanyInfo: ".dokan-files-drag",
+        selectInfo: "#\\__wp-uploader-id-19",
+        cancelSelectedInfo: ".fa-times",
+        submitCompanyInfo: "#dokan_v_company_submit",
+        cancelSubmitCompanyInfo: ".dokan-w5 > #dokan_v_company_cancel",
+        cancelCompanyVerificationRequest: ".dokan-panel-body > #dokan_v_company_cancel",
     },
 
     //delivery time settings
     vDeliveryTimeSettins: {
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
+        // delivery support
+        homeDelivery: ".checkbox > label > input:nth-child(2)",
+        storePickup: "#enable-store-location-pickup",
+
+        deliveryBlockedBuffer: ".checkbox > div:nth-child(3)",
+
+        // Delivery day
+        sundayCheckbox: "div:nth-child(1) > label > .delivery-day-checkbox",
+        mondayCheckbox: "div:nth-child(2) > label > .delivery-day-checkbox",
+        tuesdayCheckbox: "div:nth-child(3) > label > .delivery-day-checkbox",
+        wednesdayCheckbox: "div:nth-child(4) .delivery-day-checkbox",
+        thursdayCheckbox: "div:nth-child(5) .delivery-day-checkbox",
+        fridayCheckbox: "div:nth-child(6) .delivery-day-checkbox",
+        saturdayCheckbox: "div:nth-child(7) .delivery-day-checkbox",
+
+        sunday: ".tabs > li:nth-child(1)",
+        monday: ".tabs > li:nth-child(2)",
+        tuesday: ".tabs > li:nth-child(3)",
+        wednesday: ".tabs > li:nth-child(4)",
+        thursday: ".tabs > li:nth-child(5)",
+        friday: ".tabs > li:nth-child(6)",
+        saturday: ".tabs > li:nth-child(7)",
+
+        //individual day settings
+        openingTime: (day) => `#delivery_opening_time\[${day}\]`,
+        closingTime: (day) => `#delivery_closing_time\[${day}\]`,
+        timeSlot: (day) => `#delivery_time_slot-${day}`,
+        orderPerSlot: (day) => `#order_per_slot-${day}`,
     },
 
     //shipping settings
     vShippingSettings: {
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
-        a: "",
+        clickHereToAddShippingPolicies: ".dokan-btn",
+        backToZoneList: ".router-link-active",
+        processingTime: "#dps_pt",
+        shippingPolicy: "#\\_dps_shipping_policy",
+        refundPolicy: ".dokan-form-group:nth-child(3) .dokan-form-control",
+        saveSettings: ".dokan-btn-danger",
+
+        //Zonewise Shipping Settings
+        addshippingMethod: "p:nth-child(1) > a:nth-child(2)",
+        backToZoneList: "",
+        edit: "",
+        selectStates: "",
+        limitZIPOrPostcodes: "",
+        addshippingMethod: "",
+        saveChanges: "",
+        //ToDO: add more locators
+
+        //previous shipping settings
+        previousShippingSettings: "p:nth-child(2) > a",
+        backToZoneWiseShippingSeettings: ".dokan-page-help a",
+        enableShipping: "",
+        enableShippingFunctionality: "",
+        defaultShippingPrice: "",
+        perProductAdditionalPrice: "",
+        perQtyAdditionalPrice: "",
+        processingTime: "",
+        readyToShipIn: "",
+        shippingPolicy: "",
+        refundPolicy: "",
+        shipsFrom: "",
+        shipTo: "",
+        cost: "",
+        addLocation: "",
+        previousShippingsaveSettings: "",
+
+
     },
 
-    //store SEO settings
-    vStoreSeoSettings: {
-
+    //shipStation settings
+    vShipStationSettings: {
+        exportOrderStatuses: ".select2-search__field",
+        shippedOrderStatus: "#select2--container",
+        saveChanges: "#dokan-store-shipstation-form-submit",
     },
 
     //social profile settings
@@ -1002,66 +1263,86 @@ module.exports = {
 
     //store SEO settings
     vStoreSeoSettings: {
-
+        seoTitle: "#dokan-seo-meta-title",
+        metaDescription: "#dokan-seo-meta-desc",
+        metaKeywords: "#dokan-seo-meta-keywords",
+        facebookTitle: "#dokan-seo-og-title",
+        facebookDescription: "#dokan-seo-og-desc",
+        facebookImage: ".dokan-form-group:nth-child(6) .dokan-gravatar-drag",
+        uploadFacebookImage: "#\\__wp-uploader-id-1",
+        twitterTitle: "#dokan-seo-twitter-title",
+        twitterDescription: "#dokan-seo-twitter-desc",
+        twitterImage: ".dokan-form-group:nth-child(9) .dokan-gravatar-drag",
+        uploadTwitterImage: "#\\__wp-uploader-id-4",
+        saveChanges: "#dokan-store-seo-form-submit",
     },
 
 
     // methods
 
-    async vendorSetupWizard(storeProductsPerPage, street, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment) {
-        await page.click(this.vSetup.letsGo);
-        // await page.waitForTimeout(3000);
+    // async vendorSetupWizard(storeProductsPerPage, street, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment) {
+    //     await page.click(this.vSetup.letsGo);
+    //     // await page.waitForTimeout(3000);
 
-        await page.type(this.vSetup.storeProductsPerPage, storeProductsPerPage);
-        await page.type(this.vSetup.street, street);
-        await page.type(this.vSetup.street2, street2);
-        await page.type(this.vSetup.city, city);
-        await page.type(this.vSetup.zipCode, zipCode);
-        await page.type(this.vSetup.state, state);
-        await page.click(this.vSetup.country);
-        await page.type(this.vSetup.countryInput, country);
-        await page.click(this.vSetup.email);
-        await page.click(this.vSetup.continueStoreSetup);
-        // await page.waitForTimeout(3000);
+    //     await page.type(this.vSetup.storeProductsPerPage, storeProductsPerPage);
+    //     await page.type(this.vSetup.street, street);
+    //     await page.type(this.vSetup.street2, street2);
+    //     await page.type(this.vSetup.city, city);
+    //     await page.type(this.vSetup.zipCode, zipCode);
+    //     await page.type(this.vSetup.state, state);
+    //     await page.click(this.vSetup.country);
+    //     await page.type(this.vSetup.countryInput, country);
+    //     await page.click(this.vSetup.email);
+    //     await page.click(this.vSetup.continueStoreSetup);
+    //     // await page.waitForTimeout(3000);
 
 
-        await page.type(this.vSetup.paypal, paypal);
-        await page.type(this.vSetup.bankAccountName, bankAccountName);
-        await page.type(this.vSetup.bankAccountNumber, bankAccountNumber);
-        await page.type(this.vSetup.bankName, bankName);
-        await page.type(this.vSetup.bankAddress, bankAddress);
-        await page.type(this.vSetup.bankRoutingNumber, bankRoutingNumber);
-        await page.type(this.vSetup.bankIban, bankIban);
-        await page.type(this.vSetup.bankSwiftCode, bankSwiftCode);
+    //     await page.type(this.vSetup.paypal, paypal);
+    //     await page.type(this.vSetup.bankAccountName, bankAccountName);
+    //     await page.type(this.vSetup.bankAccountNumber, bankAccountNumber);
+    //     await page.type(this.vSetup.bankName, bankName);
+    //     await page.type(this.vSetup.bankAddress, bankAddress);
+    //     await page.type(this.vSetup.bankRoutingNumber, bankRoutingNumber);
+    //     await page.type(this.vSetup.bankIban, bankIban);
+    //     await page.type(this.vSetup.bankSwiftCode, bankSwiftCode);
 
-        await page.type(this.vSetup.customPayment, customPayment);
+    //     await page.type(this.vSetup.customPayment, customPayment);
 
-        // TODO: stripe connect
-        // TODO: paypal marketplace
-        await page.click(this.vSetup.continuePaymentSetup);
-        // await page.waitForTimeout(3000);
+    //     // TODO: stripe connect
+    //     // TODO: paypal marketplace
+    //     await page.click(this.vSetup.continuePaymentSetup);
+    //     // await page.waitForTimeout(3000);
 
-        await page.click(this.vSetup.goToStoreDashboard);
-        // await page.waitForTimeout(5000);
+    //     await page.click(this.vSetup.goToStoreDashboard);
+    //     // await page.waitForTimeout(5000);
 
-    },
+    // },
 
     async goToVendorDashbord() {
         await page.goto(createURL('dashboard'))
+
+        let dashboardIsVisible = await base.isVisible(page, this.vDashboard.dashboard)
+        expect(dashboardIsVisible).toBe(true)
+
     },
 
-
+    //products
+    //vendor create product
     async addproduct(productName, productPrice, category) {
         await base.click(this.vDashboard.products);
         await page.click(this.product.addNewProduct);
         await page.type(this.product.productName, productName);
-        await page.type(this.product.ProductPrice, productPrice);
-        // await page.click(this.product.productCategory);
-        // await base.getMultipleElementTexts(this.product.categoryValues)
-        await base.setDropdownOptionSpan(this.product.categoryValues, category)
-        await page.click(this.product.createProduct)
-    },
+        await page.type(this.product.productPrice, productPrice);
+        await page.click(this.product.productCategory);
+        // await base.getMultipleElementTexts(this.product.productCategoryValues)
+        await base.setDropdownOptionSpan(this.product.productCategoryValues, category)
+        await base.click(this.product.createProduct)
 
+        let createdProduct = await base.getElementValue(this.product.title)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase());
+    },
+    //coupon
+    //vendor create coupon
     async addcoupon(couponTitle, couponAmount) {
         await base.click(this.vDashboard.coupons);
         await base.click(this.vCoupon.addNewCoupon);
@@ -1070,26 +1351,39 @@ module.exports = {
         await page.click(this.vCoupon.selectAll);
         await page.click(this.vCoupon.applyForNewProducts);
         await page.click(this.vCoupon.showOnStore);
-        await page.click(this.vCoupon.createCoupon);
+        await base.click(this.vCoupon.createCoupon);
+
+        let createdCoupon = await base.getElementText(this.vCoupon.createdCoupon)
+        expect(createdCoupon.toLowerCase()).toBe(couponTitle.toLowerCase());
     },
 
+    //withdraw
+    //vendor request withdraw 
     async requestwithdraw(withdrawAmount, withdrawMethod) {
         await base.click(this.vDashboard.withdraw);
         let minimumWithdrawAmount = await base.getElementText(this.vWithdraw.minimumWithdrawAmount)
         minimumWithdrawAmount = minimumWithdrawAmount.replace('$', '')
         // console.log(minimumWithdrawAmount)
         await page.click(this.vWithdraw.requestWithdraw);
-        let balance = await base.getValue(this.withdraw.withdrawAmount)
+        let balance = await base.getValue(this.vWithdraw.withdrawAmount)
         if (Number(balance) > Number(minimumWithdrawAmount)) {
             await page.type(this.vWithdraw.withdrawAmount, minimumWithdrawAmount);
             // await base.setDropdownOption(this.withdraw.withdrawMethod, withdrawMethod);
-            await page.click(this.vWithdraw.submitRequest);
+            await base.click(this.vWithdraw.submitRequest);
         }
+        //TODO: handle else condition
+        // await base.reload()
+        let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
+        expect(canRequestIsVisible).toBe(true)
+
     },
 
     async cancelrequestwithdraw() {
         await base.click(this.vDashboard.withdraw);
         await page.click(this.vWithdraw.cancelRequest);
+
+        let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
+        expect(canRequestIsVisible).toBe(false)
 
     },
 
@@ -1105,16 +1399,154 @@ module.exports = {
         // await page.waitForTimeout(5000)
     },
 
-    async adddefaultwithdrawpaymentmethods(preferredSchedule) {
-        // TODO : locator issue
-        await base.click(this.vDashboard.withdraw);
-        // let a = page.$(this.vWithdraw.bankTransferSetup)
-        // a.click()
-        // await page.waitForXPath(this.vWithdraw.customMethodSetup('qwerty'));
-        // await page.hover(this.vWithdraw.customMethodSetup('qwerty'));
-        // await page.click(this.vWithdraw.customMethodSetup('qwerty'));
-        // await page.waitForTimeout(5000);
+    // async adddefaultwithdrawpaymentmethods(preferredSchedule) {
+    //     // TODO : locator issue
+    //     await base.click(this.vDashboard.withdraw);
+    //     // let a = page.$(this.vWithdraw.bankTransferSetup)
+    //     // a.click()
+    //     // await page.waitForXPath(this.vWithdraw.customMethodSetup('qwerty'));
+    //     // await page.hover(this.vWithdraw.customMethodSetup('qwerty'));
+    //     // await page.click(this.vWithdraw.customMethodSetup('qwerty'));
+    //     // await page.waitForTimeout(5000);
+    // },
+
+
+    async setstoresettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
+        companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimunOrderAmount, percentage, supportButtonText,
+        minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder
+    ) {
+
+        await base.click(this.vDashboard.settings)
+        // await base.click(this.vSettings.store)
+
+
+        // await page.click(this.vStoreSettings.banner)
+        // await page.click(this.vStoreSettings.banner)
+        // await page.waitForTimeout(6000)
+        // await base.clickXpath(this.vStoreSettings.selectFiles)
+        // await base.uploadImage(this.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avater.png')
+        // await page.waitForTimeout(6000)
+
+        // const [fileChooser] = await Promise.all([ page.waitForFileChooser(),base.clickXpath1(this.vStoreSettings.selectFiles)])
+        // await fileChooser.accept(['/Users/rk/Automation/Dokan_e2e_test/avater.png'])
+
+        // await base.clickXpath(this.vStoreSettings.selectAndCrop)
+        // await base.clickXpath(this.vStoreSettings.cropImage)
+ 
+        // await page.waitForTimeout(6000)
+
+        await base.clearandtype(this.vStoreSettings.storeName, storeName)
+        await base.clearandtype(this.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
+        await base.clearandtype(this.vStoreSettings.phoneNo, phoneNo)
+        //address
+        // await page.click(this.vStoreSettings.multipleLocation)
+        // await page.type(this.vStoreSettings.locationName, locationName)
+        // await page.click(this.vStoreSettings.addLocation)
+        // await page.click(this.vStoreSettings.editLocation)
+        await base.clearandtype(this.vStoreSettings.street, street)
+        await base.clearandtype(this.vStoreSettings.street2, street2)
+        await base.clearandtype(this.vStoreSettings.city, city)
+        await base.clearandtype(this.vStoreSettings.postOrZipCode, postOrZipCode)
+        await page.select(this.vStoreSettings.country, country)
+        await page.select(this.vStoreSettings.state, state)
+        // await page.type(this.vStoreSettings.saveLocation, saveLocation)
+        // await page.click(this.vStoreSettings.saveLocation)
+        // await page.click(this.vStoreSettings.cancelSaveLocation)
+        // await page.click(this.vStoreSettings.deleteSaveLocation)
+
+        //company info
+        await base.clearandtype(this.vStoreSettings.companyName, companyName)
+        await base.clearandtype(this.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
+        await base.clearandtype(this.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
+        await base.clearandtype(this.vStoreSettings.nameOfBank, nameOfBank)
+        await base.clearandtype(this.vStoreSettings.bankIban, bankIban)
+        //email
+        // await page.click(this.vStoreSettings.email)
+        // await page.click(this.vStoreSettings.moreProducts)
+        //map
+        await page.click(this.vStoreSettings.map)
+        await base.clearandtype(this.vStoreSettings.map, map)
+        await page.waitForTimeout(2000)
+        // await page.click(this.vStoreSettings.map1)
+        await page.click(this.vStoreSettings.mapFirstResult)
+        //store openning closing time
+        //vacation
+
+        //discount
+        await page.click(this.vStoreSettings.enableStoreWideDiscount)
+        await base.clearandtype(this.vStoreSettings.minimunOrderAmount, minimunOrderAmount)
+        await base.clearandtype(this.vStoreSettings.percentage, percentage)
+        //biography
+
+        //store support
+        await page.click(this.vStoreSettings.showSupportButtonInStore)
+        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct) 
+        await page.click(this.vStoreSettings.showSupportButtonInStore)
+        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
+        await base.clearandtype(this.vStoreSettings.supportButtonText, supportButtonText)
+        // //min-max
+        // await page.click(this.vStoreSettings.enableMinMaxQuantities)
+        // await base.clearandtype(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
+        // await base.clearandtype(this.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
+        // await page.click(this.vStoreSettings.enableMinMaxAmount)
+        // await base.clearandtype(this.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
+        // await base.clearandtype(this.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
+        // await page.click(this.vStoreSettings.selectAll)
+
+        //update settings
+        await page.click(this.vStoreSettings.updateSettings)
+
     },
+
+    async setaddonsettings() {
+
+    },
+
+    async setpaymetnsettings() {
+
+    },
+
+    async setverificationsettings() {
+
+    },
+
+
+
+    async setdeliverytimesettings() {
+
+    },
+
+    async setshippingsettings() {
+
+    },
+
+    async setsocialprofile(url) {
+        await page.type(this.vSocialProfileSettings.facebook, url);
+        await page.type(this.vSocialProfileSettings.twitter, url);
+        await page.type(this.vSocialProfileSettings.pinterest, url);
+        await page.type(this.vSocialProfileSettings.linkedin, url);
+        await page.type(this.vSocialProfileSettings.youtube, url);
+        await page.type(this.vSocialProfileSettings.instragram, url);
+        await page.type(this.vSocialProfileSettings.flicker, url);
+        await base.click(this.vSocialProfileSettings.updateSettings);
+    },
+
+
+
+    async setrmasettings() {
+
+    },
+
+
+
+    async addAuctionProduct() {
+
+    },
+
+    async addbookingproduct() {
+
+    },
+
 
 
 

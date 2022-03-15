@@ -3,8 +3,10 @@ module.exports = {
     headless: false, // Enable UI mode
     // slowMo: 250, // slow down by 250ms
     // slowMo: 200, // slow down by 250ms
+    // slowMo: 150, // slow down by 250ms
     // slowMo: 100, // slow down by 250ms
     // slowMo: 50, // slow down by 250ms
+    // slowMo: 30, // slow down by 250ms
     // slowMo: 10, // slow down by 250ms
 
     // headless: process.env.HEADLESS !== 'false',

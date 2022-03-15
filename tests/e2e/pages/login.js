@@ -1,6 +1,6 @@
-const { opennewtab } = require("../pages/base.js");
 const base = require("../pages/base.js");
-import { createURL,adminLogin, loginUser } from '@wordpress/e2e-test-utils'
+const vendorPage = require('../pages/vendor.js')
+import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
 
 module.exports = {
 
@@ -14,7 +14,7 @@ module.exports = {
     myAccount: '.nav-menu > li:nth-child(5) > a',
     myOrders: '.nav-menu > li:nth-child(6) > a',
     shop: '.nav-menu > li:nth-child(8) > a',
-    storeList: '.nav-menu > li:nth-child(9) > a',    
+    storeList: '.nav-menu > li:nth-child(9) > a',
 
     // frontend user login
     username: '#username',
@@ -24,7 +24,7 @@ module.exports = {
     lostPassword: 'woocommerce-LostPassword > a',
 
     // user registration
-    
+
     // customer registration
     regEmail: '#reg_email',
     regPassword: '#reg_password',
@@ -51,6 +51,7 @@ module.exports = {
     // user logout
     customerLogout: '.woocommerce-MyAccount-navigation-link--customer-logout > a',
     vendorLogout: 'a:nth-child(3)',
+    vendorLogout: '.fa-power-off',
 
 
     // user forget password
@@ -83,7 +84,7 @@ module.exports = {
         await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
     },
 
-    async vendorregister(userEmail, password, firstname, lastname, shopname, shopurl, companyName, companyId, vatNumber,bankName, bankIban, phone) {
+    async vendorregister(userEmail, password, firstname, lastname, shopname, shopurl, companyName, companyId, vatNumber, bankName, bankIban, phone) {
         // await page.goto(this.baseUrl + '/my-account');
         // await page.goto(createURL('my-account/'));
         // await page.waitForTimeout(4000);
@@ -108,26 +109,48 @@ module.exports = {
     },
 
 
+    async loginFromWpAdmin(username, password) {
+        await base.goto('wp-admin')
+        let res = await base.isVisible(page, this.adminEmail)
+        if (res) {
+            await page.type(this.adminEmail, username)
+            await page.type(this.adminPassword, password)
+            await base.click(this.adminLogin)
+
+            let homeIsVisible = await base.isVisible(page, this.home)
+            expect(homeIsVisible).toBe(true)
+        }
+        else {
+            return
+        }
+    },
 
     async login(username, password) {
         // await page.goto(this.baseUrl + '/my-account');
         // await page.type(this.username, username)
         // await page.type(this.userPassword, password);
         // await page.click(this.logIn);
-        // await page.waitForTimeout(5000); // TODO: add page load complete to revome this line
-        await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+        // await page.waitForTimeout(5000); 
+        // await isCurrentURL()
+        // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+        await this.loginFromWpAdmin('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
     },
 
     async customerlogout() {
         await page.click(this.customerLogout)
     },
     async vendorlogout() {
-        await page.click(this.vendorLogout)
+        await vendorPage.goToVendorDashbord()
+        await base.click(this.vendorLogout)
+
+        let homeIsVisible = await base.isVisible(page, this.home)
+        expect(homeIsVisible).toBe(true)
+
     },
 
 
     async adminlogin(username, password) {
-        await page.goto(this.baseUrl + + '/wp-admin')
+        await page.goto(this.baseUrl + '/wp-admin')
         await page.type(this.adminEmail, username)
         await page.type(this.adminPassword, password)
         await page.click(this.adminLogin)
@@ -136,13 +159,13 @@ module.exports = {
 
     async adminlogout(username, password) {
         await page.hover(this.adminUserMenu)
-        await page.waitForTimeout(2000) 
+        await page.waitForTimeout(2000)
         await page.click(this.adminLogout)
         await page.waitForTimeout(5000) // TODO: add page load complete to revome this line
     },
 
-    async switchtoadmin(username, password){
-        // await opennewtab()
+    async switchtoadmin(username, password) {
+        // await base.opennewtab()
         // await page.waitForTimeout(2000) // TODO: add page load complete to revome this line
         await this.adminlogin(username, password)
     }

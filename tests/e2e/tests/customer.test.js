@@ -25,43 +25,43 @@ describe('customer functionaly test', () => {
     //  });
 
 
-    it('customer register', async () => {
-        await loginPage.customerregister('customer101@gmail.com', process.env.CUSTOMER_PASSWORD)
-    });
+    // it('customer register', async () => {
+    //     await loginPage.customerregister('customer101@gmail.com', process.env.CUSTOMER_PASSWORD)
+    // });
 
 
-    it('customer login', async () => {
-        await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
-    });
+    // it('customer login', async () => {
+    //     await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
+    // });
 
 
-    it('customer logout', async () => {
-        await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
-        await loginPage.customerlogout() // TODO: shift to customer page
-    });
+    // it('customer logout', async () => {
+    //     await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
+    //     await loginPage.customerlogout() // TODO: shift to customer page
+    // });
 
 
-    it('customer become a vendor', async () => {
-        await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
-        await customerPage.customerbecomevednor('vendor101', 'v101', 'v101', 'v101', 'abc street', '123456789', 'abcComapany', '123456789', '123456789','abcbank', '1234567890') 
-        await vendorPage.vendorSetupWizard( 20, 'abc street', 'street2', 'New York', '10001', "United States (US)", "New York", "vendor@paypal.com", 'vendorbankaccount',  1234567890, 'abcBank', 'abc bank address', 1234567890, 1234567890, 123456789, 'custom@payment.com') 
-    });
+    // it('customer become a vendor', async () => {
+    //     await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.customerbecomevednor('vendor101', 'v101', 'v101', 'v101', 'abc street', '123456789', 'abcComapany', '123456789', '123456789','abcbank', '1234567890') 
+    //     await vendorPage.vendorSetupWizard( 20, 'abc street', 'street2', 'New York', '10001', "United States (US)", "New York", "vendor@paypal.com", 'vendorbankaccount',  1234567890, 'abcBank', 'abc bank address', 1234567890, 1234567890, 123456789, 'custom@payment.com') 
+    // });
 
 
-    it('customer become a wholesale customer', async () => {
-        // await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
-        // await customerPage.customersendwholesalerequest() 
-        await loginPage.switchtoadmin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await adminPage.adminapprovewholesalerequest(process.env.CUSTOMER_EMAIL)
-    });
+    // it('customer become a wholesale customer', async () => {
+    //     // await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
+    //     // await customerPage.customersendwholesalerequest() 
+    //     await loginPage.switchtoadmin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await adminPage.adminapprovewholesalerequest(process.env.CUSTOMER_EMAIL)
+    // });
 
 
 
-    it('customer buy product', async () => {
-        await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
-        await cutomer.addproducttocart()
+    // it('customer buy product', async () => {
+    //     await loginPage.login(process.env.CUSTOMER_EMAIL, process.env.CUSTOMER_PASSWORD)
+    //     await cutomer.addproducttocart()
 
-    });
+    // });
 
 
 

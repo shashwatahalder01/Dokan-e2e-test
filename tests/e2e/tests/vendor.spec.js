@@ -3,12 +3,14 @@ const { createUser, loginUser, changeSiteTimezone } = require('@wordpress/e2e-te
 const loginPage = require('../pages/login.js')
 const vendorPage = require('../pages/vendor.js')
 const data = require('../utils/testdata.js')
+const base = require("../pages/base.js");
 // const env = process.env // TODO: Configure through jest global setupß
 
 
 describe('vendor functionaly test', () => {
 
    beforeAll(async () => {
+      // jest.setTimeout(600 * 1000)
       // await page.setDefaultNavigationTimeout(30000);
    });
    // await page.goto('http://localhost:8889');
@@ -21,93 +23,106 @@ describe('vendor functionaly test', () => {
    //    await page.goto('http://dokan2.test/my-account');
    //  });
 
-   //  afterEach(async () => {
-   //    await browser.close()
-   //  });
-
-
-   // it('vendor register', async () => {
-      // await loginPage.vendorregister(
-      //    data.vendorinfo.userEmail,
-      //    data.vendorinfo.password,
-      //    data.vendorinfo.firstName,
-      //    data.vendorinfo.lastName,
-      //    data.vendorinfo.shopName,
-      //    data.vendorinfo.companyName,
-      //    data.vendorinfo.companyId,
-      //    data.vendorinfo.vatNumber,
-      //    data.vendorinfo.bankName,
-      //    data.vendorinfo.bankIban,
-      //    data.vendorinfo.phone,
-      //    )
-      // await changeSiteTimezone('UTC+6')
-      // const firstName = await data.vendorinfo.firstName
-      // const passwordd = await createUser(data.vendorinfo.firstName,data.vendorinfo.lastName,'Vendor')
-      // await loginUser(firstName, passwordd)
-      // console.log(firstName, passwordd)
-      // await page.waitForTimeout(80000);
-   // });
-
-   // it('vendor login', async () => {
-   //    await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   // afterEach(async () => {
+   //    // await browser.close()
+   //    // await loginPage.vendorlogout()
+   //    // await page.waitForTimeout(3000);
+   //    // await page.waitForNavigation({waitUntil: 'networkidle2'});
    // });
 
 
-   // it('vendor logout', async () => {
-   //    await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   it.skip('vendor can register', async () => {
+      await loginPage.vendorregister(
+         data.vendorinfo.userEmail,
+         data.vendorinfo.password,
+         data.vendorinfo.firstName,
+         data.vendorinfo.lastName,
+         data.vendorinfo.shopName,
+         data.vendorinfo.companyName,
+         data.vendorinfo.companyId,
+         data.vendorinfo.vatNumber,
+         data.vendorinfo.bankName,
+         data.vendorinfo.bankIban,
+         data.vendorinfo.phone,
+      )
+      await changeSiteTimezone('UTC+6')
+      const firstName = await data.vendorinfo.firstName
+      const passwordd = await createUser(data.vendorinfo.firstName, data.vendorinfo.lastName, 'Vendor')
+      await loginUser(firstName, passwordd)
+      console.log(firstName, passwordd)
+      await page.waitForTimeout(80000);
+   });
+
+   it('vendor can login', async () => {
+      // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+      await loginPage.login()
+   });
+
+
+   // it('vendor can logout', async () => {
+   //    // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   //    await loginPage.login()
    //    await loginPage.vendorlogout() // TODO: shift to vendor page
    // });
 
 
 
-   // it('vendor add product', async () => {
-   //    // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.addproduct(data.product.name,data.product.price,'Uncategorized')
-   // });
-
-
-
-   // it('vendor add coupon', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.addcoupon(data.coupon.title, data.coupon.amount)
-   // });
-
-
-   //    it('vendor request withdraw', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.requestwithdraw()
-   // });
-
-
-   // it('vendor cancel request withdraw', async () => {
-   //    // await loginPage.login()
-   //    // await vendorPage.goToVendorDashbord()
-   //    await vendorPage.cancelrequestwithdraw()
-   // });
-
-      it('vendor add auto withdraw disbursement schedule ', async () => {
+   it('vendor can add product', async () => {
+      // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
       await loginPage.login()
       await vendorPage.goToVendorDashbord()
-      await vendorPage.addautowithdrawdisbursementschedule('dokan_custom','skrill','weekly','5','15')
+      await vendorPage.addproduct(data.product.name, data.product.price, 'Uncategorized')
    });
 
-   //    it('vendor add default withdraw payment methods ', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.adddefaultwithdrawpaymentmethods('Skrill')
-   // });
 
 
+   it('vendor can add coupon', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.addcoupon(data.coupon.title, data.coupon.amount)
+   });
 
-   // it('vendor add default withdraw payment methods ', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.adddefaultwithdrawpaymentmethods('weekly')
-   // });
+
+   it('vendor can request withdraw', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.requestwithdraw()
+   });
+
+
+   it('vendor can cancel request withdraw', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.cancelrequestwithdraw()
+   });
+
+   it.skip('vendor can add auto withdraw disbursement schedule ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.addautowithdrawdisbursementschedule('dokan_custom', 'weekly', '5', '15')
+   });
+
+   it.skip('vendor can add default withdraw payment methods ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.adddefaultwithdrawpaymentmethods('Skrill')
+   });
+
+   it.skip('vendor can add default withdraw payment methods ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.adddefaultwithdrawpaymentmethods('weekly')
+   });
+
+   it('vendor can set store settings ', async () => {
+      // jest.setTimeout(600 * 1000)
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.setstoresettings('NYshop', '12', '0123456789', 'abc street', 'xyz street2','New York', '1006', 'US', 'NY', 'companyName',
+         'companyIdOrEuidNumber', '123456', 'nameOfBank', '123456789xcvb', 'New York', '200', '10', 'Get Support',
+         '1', '20', '10', '1000000'
+      )
+   });
 
 
 
