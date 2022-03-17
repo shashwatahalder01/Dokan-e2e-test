@@ -7,11 +7,14 @@ const base = require("../pages/base.js");
 // const env = process.env // TODO: Configure through jest global setupß
 
 
+// jest.useRealTimers();
+
 describe('vendor functionaly test', () => {
 
    beforeAll(async () => {
       // jest.setTimeout(600 * 1000)
       // await page.setDefaultNavigationTimeout(30000);
+      // jest.useFakeTimers('legacy')
    });
    // await page.goto('http://localhost:8889');
 
@@ -19,11 +22,15 @@ describe('vendor functionaly test', () => {
    //    await browser.close()
    //  });
 
-   // beforeEach(async () => {
-   //    await page.goto('http://dokan2.test/my-account');
-   //  });
+   beforeEach(async () => {
+      // await page.goto('http://dokan2.test/my-account');
+      // jest.useFakeTimers()
+      // jest.setTimeout(60000) 
+    });
 
    // afterEach(async () => {
+      // jest.runOnlyPendingTimers()
+      // jest.useRealTimers()
    //    // await browser.close()
    //    // await loginPage.vendorlogout()
    //    // await page.waitForTimeout(3000);
@@ -48,8 +55,8 @@ describe('vendor functionaly test', () => {
       await changeSiteTimezone('UTC+6')
       const firstName = await data.vendorinfo.firstName
       const password = await createUser(data.vendorinfo.firstName, data.vendorinfo.lastName, 'Vendor')
-      // await loginUser(firstName, password)
-      await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+      await loginUser(firstName, password)
+      // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
       // console.log(firstName, password)
       await page.waitForTimeout(80000);
    });
@@ -97,11 +104,11 @@ describe('vendor functionaly test', () => {
       await vendorPage.cancelrequestwithdraw()
    });
 
-   // it.skip('vendor can add auto withdraw disbursement schedule ', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.addautowithdrawdisbursementschedule('dokan_custom', 'weekly', '5', '15')
-   // });
+   it('vendor can add auto withdraw disbursement schedule ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.addautowithdrawdisbursementschedule('dokan_custom', 'weekly', '5', '15')
+   });
 
    // it.skip('vendor can add default withdraw payment methods ', async () => {
    //    await loginPage.login()
@@ -116,20 +123,26 @@ describe('vendor functionaly test', () => {
    // });
 
    it('vendor can set store settings ', async () => {
+      // jest.setTimeout(10 * 1000); 
       await loginPage.login()
       await vendorPage.goToVendorDashbord()
       await vendorPage.setstoresettings('NYshop', '12', '0123456789', 'abc street', 'xyz street2', 'New York', '1006', 'US', 'NY', 'companyName',
          'companyIdOrEuidNumber', '123456', 'nameOfBank', '123456789xcvb', 'New York', '200', '10', 'Get Support',
          '1', '20', '10', '1000000'
       )
-   });
+   },100000);
 
-   // it.only('vendor can set social profile settings ', async () => {
-   //    await loginPage.login()
-   //    await vendorPage.goToVendorDashbord()
-   //    await vendorPage.setsocialprofile('https://www.facebook.com')
-      
-   // });
+   it.skip('vendor can set social profile settings ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.setsocialprofile('https://www.facebook.com')
+   },100000);
+
+   it.skip('vendor can set rma settings ', async () => {
+      await loginPage.login()
+      await vendorPage.goToVendorDashbord()
+      await vendorPage.setrmasettings('Warranty','included_warranty','limited', '1', 'weeks')
+   },100000);
 
 
 

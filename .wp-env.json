@@ -3,11 +3,12 @@
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
   "plugins": [
-    "weDevsOfficial/dokan#develop",
-    "woocommerce/woocommerce#trunk"
+    "./wp-content/plugins/dokan/",
+    "./wp-content/plugins/dokan-pro/",
+    "./wp-content/plugins/woocommerce/"
   ],
   "themes": [
-    "https://downloads.wordpress.org/theme/storefront.latest-stable.zip" 
+    "./wp-content/themes/storefront/" 
   ]
 
   

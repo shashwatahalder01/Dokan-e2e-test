@@ -5,6 +5,14 @@ const { faker } = require('@faker-js/faker');
 const withdrawPaymentmethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
 const reserveBalance = ['0','5','10','15','50','100','200','300','500','1000','2000','3000','5000','10000']
 
+//rma settings
+const rmaType=['no_warranty','included_warranty','addon_warranty']
+const rmalength=['limited','lifetime']
+const rmalengthDuration =['days','weeks','months','years']
+//auction
+const itemCondition= ['new','used']
+const actionType= ['normal','reverse']
+
 
 const vendorinfo = {
    userEmail: faker.internet.email(),

@@ -231,7 +231,7 @@ module.exports = {
         //discount options
         enableBulkDiscount: "#\\_is_lot_discount",
         MinimumQuantity: "#\\_lot_discount_quantity",
-        discountInPercentage: "#\_lot_discount_amount",
+        discountInPercentage: "#\\_lot_discount_amount",
         //rma options
         overrideYourDefaultRmaSettingsForThisProduct: "#dokan_rma_product_override",
         label: "#dokan-rma-label",
@@ -499,6 +499,7 @@ module.exports = {
         vitual: "#\\_virtual",
         accommodationBooking: "#\\_is_dokan_accommodation",
         category: "#select2-product_cat-container ",
+        categoryValues: ".select2-results ul li",
         tags: ".select2-search__field",
         //accommodation Booking options
         minimumNumberOfNightsAllowedInABooking: "#\\_wc_booking_min_duration",
@@ -509,11 +510,11 @@ module.exports = {
         bookingDurationType: "#\\_wc_booking_duration_type",
         bookingDuration: "#\\_wc_booking_duration",
         bookingDurationUnit: "#\\_wc_booking_duration_unit",
-        //checkboxs
+
         calanderDisplayMode: "#\\_wc_booking_calendar_display_mode",
+        //checkboxs
         enableCalendarRangePicker: "#\\_wc_booking_enable_range_picker",
         requiresConfirmation: "#\\_wc_booking_requires_confirmation",
-
         canBeCancelled: "#\\_wc_booking_user_can_cancel",
         bookingCanbeCancelledLimit: "#\\_wc_booking_cancel_limit",
         bookingCanbeCancelledLimitUnit: "#\\_wc_booking_cancel_limit_unit",
@@ -539,13 +540,13 @@ module.exports = {
         allDatesAre: "#\\_wc_booking_default_date_availability",
         checkRulesAgainst: "#\\_wc_booking_check_availability_against",
         restrictStartAndEndDays: "#dokan_booking_has_restricted_days_field",
-        sunday: "#\\_wc_booking_restricted_days\[0\]",
-        monday: "#\\_wc_booking_restricted_days\[1\]",
-        tuesday: "#\\_wc_booking_restricted_days\[2\]",
-        wednesday: "#\\_wc_booking_restricted_days\[3\]",
-        thursday: "#\\_wc_booking_restricted_days\[4\]",
-        friday: "#\\_wc_booking_restricted_days\[5\]",
-        saturday: "#\\_wc_booking_restricted_days\[6\]",
+        sunday: "#\\_wc_booking_restricted_days\\[0\\]",
+        monday: "#\\_wc_booking_restricted_days\\[1\\]",
+        tuesday: "#\\_wc_booking_restricted_days\\[2\\]",
+        wednesday: "#\\_wc_booking_restricted_days\\[3\\]",
+        thursday: "#\\_wc_booking_restricted_days\\[4\\]",
+        friday: "#\\_wc_booking_restricted_days\\[5\\]",
+        saturday: "#\\_wc_booking_restricted_days\\[6\\]",
         //setAvailabilityRange
         addRangeAvailability: ".table_grid:nth-child(8) .button",
         rangeTypeAbility: ".wc_booking_availability_type > select",
@@ -764,7 +765,8 @@ module.exports = {
         uploadProductImage: '#\\__wp-uploader-id-1',
         addGalleryImage: ".fa-plus",
         uploadalleryImage: "#\\__wp-uploader-id-4",
-        productCategory: "select2-product_cat-container",
+        category: "select2-product_cat-container",
+        categoryValues: ".select2-results ul li",
         productTag: ".select2-search__field",
         downloadable: "#\\_downloadable",
         virtual: "#\\_virtual",
@@ -893,7 +895,7 @@ module.exports = {
         selectAndCrop: "//div[@style='position: relative;']//button[contains(text(),'Select and Crop')]",
         // cropImage: "//div[@style='position: relative;']//button[@class='button media-button button-primary button-large media-button-insert']",
         cropImage: "//div[@style='position: relative;']//button[contains(text(),'Crop image')]",
-        
+
         storeName: "#dokan_store_name",
         storeProductsPerPage: "#dokan_store_ppp",
         phoneNo: "#setting_phone",
@@ -976,10 +978,6 @@ module.exports = {
         selectAll: ".dokan-min-max-product-select-all",
         clear: ".dokan-min-max-product-clear-all",
         selectCategory: "#product_cat",
-        //product advertizement
-        //TODO: product advertizement
-        a: "",
-        a: "",
 
         //update settings
         updateSettings: ".dokan-btn",
@@ -1136,10 +1134,10 @@ module.exports = {
 
         //address  verification
         startAddressVerification: "#dokan_v_address_click",
-        street: "#dokan_address\[street_1\]",
-        street2: "#dokan_address\[street_2\]",
-        city: "#dokan_address\[city\]",
-        postOrZipCode: "#dokan_address\[zip\]",
+        street: "#dokan_address\\[street_1\\]",
+        street2: "#dokan_address\\[street_2\\]",
+        city: "#dokan_address\\[city\\]",
+        postOrZipCode: "#dokan_address\\[zip\\]",
         country: "#dokan_address_country",
         state: "#dokan_address_state",
         submitAddress: "#dokan_v_address_submit",
@@ -1185,8 +1183,8 @@ module.exports = {
         saturday: ".tabs > li:nth-child(7)",
 
         //individual day settings
-        openingTime: (day) => `#delivery_opening_time\[${day}\]`,
-        closingTime: (day) => `#delivery_closing_time\[${day}\]`,
+        openingTime: (day) => `#delivery_opening_time\\[${day}\\]`,
+        closingTime: (day) => `#delivery_closing_time\\[${day}\\]`,
         timeSlot: (day) => `#delivery_time_slot-${day}`,
         orderPerSlot: (day) => `#order_per_slot-${day}`,
     },
@@ -1240,14 +1238,15 @@ module.exports = {
 
     //social profile settings
     vSocialProfileSettings: {
-        facebook: "#settings\[social\]\[fb\]",
-        twitter: "#settings\[social\]\[twitter\]",
-        pinterest: "#settings\[social\]\[pinterest\]",
-        linkedin: "#settings\[social\]\[linkedin\]",
-        youtube: "#settings\[social\]\[youtube\]",
-        instragram: "#settings\[social\]\[instagram\]",
-        flicker: "#settings\[social\]\[flickr\]",
+        facebook: "#settings\\[social\\]\\[fb\\]",
+        twitter: "#settings\\[social\\]\\[twitter\\]",
+        pinterest: "#settings\\[social\\]\\[pinterest\\]",
+        linkedin: "#settings\\[social\\]\\[linkedin\\]",
+        youtube: "#settings\\[social\\]\\[youtube\\]",
+        instragram: "#settings\\[social\\]\\[instagram\\]",
+        flicker: "#settings\\[social\\]\\[flickr\\]",
         updateSettings: ".dokan-btn",
+        updateSettingssuccessmessage: ".dokan-alert.dokan-alert-success > p",
     },
 
     //rma settings
@@ -1257,6 +1256,8 @@ module.exports = {
         length: "#dokan-warranty-length",
         lengthValue: "content-half-part:nth-child(4) > .dokan-form-control",
         lengthDuration: "#dokan-warranty-length-duration",
+        //TODO: add more locators add warrenty as addon and  refund reasons invoked from admin settings
+
         rmaPolicy: "p", //TODO: improve
         saveChanges: "#dokan-store-rma-form-submit",
     },
@@ -1279,6 +1280,14 @@ module.exports = {
 
 
     // methods
+
+    async goToVendorDashbord() {
+        await page.goto(createURL('dashboard'))
+
+        let dashboardIsVisible = await base.isVisible(page, this.vDashboard.dashboard)
+        expect(dashboardIsVisible).toBe(true)
+
+    },
 
     // async vendorSetupWizard(storeProductsPerPage, street, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment) {
     //     await page.click(this.vSetup.letsGo);
@@ -1318,13 +1327,7 @@ module.exports = {
 
     // },
 
-    async goToVendorDashbord() {
-        await page.goto(createURL('dashboard'))
 
-        let dashboardIsVisible = await base.isVisible(page, this.vDashboard.dashboard)
-        expect(dashboardIsVisible).toBe(true)
-
-    },
 
     //products
     //vendor create product
@@ -1432,7 +1435,7 @@ module.exports = {
 
         // await base.clickXpath(this.vStoreSettings.selectAndCrop)
         // await base.clickXpath(this.vStoreSettings.cropImage)
- 
+
         // await page.waitForTimeout(6000)
 
         await base.clearandtype(this.vStoreSettings.storeName, storeName)
@@ -1464,11 +1467,11 @@ module.exports = {
         // await page.click(this.vStoreSettings.email)
         // await page.click(this.vStoreSettings.moreProducts)
         //map
-        await page.click(this.vStoreSettings.map)
-        await base.clearandtype(this.vStoreSettings.map, map)
-        await page.waitForTimeout(2000)
+        // await page.click(this.vStoreSettings.map)
+        // await base.clearandtype(this.vStoreSettings.map, map)
+        // await page.waitForTimeout(2000)
         // await page.click(this.vStoreSettings.map1)
-        await page.click(this.vStoreSettings.mapFirstResult)
+        // await page.click(this.vStoreSettings.mapFirstResult)
         //store openning closing time
         //vacation
 
@@ -1480,10 +1483,11 @@ module.exports = {
 
         //store support
         await page.click(this.vStoreSettings.showSupportButtonInStore)
-        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct) 
+        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
         await page.click(this.vStoreSettings.showSupportButtonInStore)
         await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
         await base.clearandtype(this.vStoreSettings.supportButtonText, supportButtonText)
+
         // //min-max
         // await page.click(this.vStoreSettings.enableMinMaxQuantities)
         // await base.clearandtype(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
@@ -1495,6 +1499,10 @@ module.exports = {
 
         //update settings
         await page.click(this.vStoreSettings.updateSettings)
+        await page.waitForTimeout(2000)
+
+        let successmessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingssuccessmessage)
+        expect(successmessage).toMatch('Your information has been saved successfully')
 
     },
 
@@ -1503,6 +1511,57 @@ module.exports = {
     },
 
     async setpaymetnsettings() {
+
+        await base.click(this.vDashboard.settings)
+        await base.click(this.vSettings.payment)
+
+        //paypal
+        await base.clearandtype(this.vPaymentSettings.paypal, paypal)
+
+        //bank transfer
+        await base.clearandtype(this.vPaymentSettings.bankAccountName, bankAccountName)
+        await base.clearandtype(this.vPaymentSettings.bankAccountNumber, bankAccountNumber)
+        await base.clearandtype(this.vPaymentSettings.bankName, bankName)
+        await base.clearandtype(this.vPaymentSettings.bankAddress, bankAddress)
+        await base.clearandtype(this.vPaymentSettings.bankRoutingNumber, bankRoutingNumber)
+        await base.clearandtype(this.vPaymentSettings.bankIban, bankIban)
+        await base.clearandtype(this.vPaymentSettings.bankSwiftCode, bankSwiftCode)
+
+
+        // //Stripe
+        // await base.click(this.vPaymentSettings.ConnectWithStripe)
+
+        // //paypal marketplace
+        // await base.clearandtype(this.vPaymentSettings.paypalMarketplace, paypalMarketplace)
+        // await base.click(this.vPaymentSettings.paypalMarketplaceSigUp)
+
+        //razorpay
+        //     await base.click(this.vPaymentSettings.rzSignup)
+        //  // existing account info
+        //     await page.click(this.vPaymentSettings.rzIHaveAlreadyAnAccount)
+        //     await base.clearandtype(this.vPaymentSettings.rzAccountId, rzAccountId)
+        //     await page.click(this.vPaymentSettings.rzConnectExistingAccount)
+        //  //new account info
+        //     await base.clearandtype(this.vPaymentSettings.rzAccountName, rzAccountName)
+        //     await base.clearandtype(this.vPaymentSettings.rzAccountEmail, rzAccountEmail)
+        //     await base.clearandtype(this.vPaymentSettings.rzYourCompanyName, rzYourCompanyName)
+        //     await base.clearandtype(this.vPaymentSettings.rzYourCompanyType, rzYourCompanyType)
+        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountName, rzBankAccountName)
+        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountNumber, rzBankAccountNumber)
+        //     await base.clearandtype(this.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
+        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountType, rzBankAccountType)
+        //     await base.click(this.vPaymentSettings.rzConnectAccount)
+
+        //mangopay
+
+        //custom payment method
+        await base.clearandtype(this.vPaymentSettings.customPayment, customPayment)
+
+        //skrill
+        await base.clearandtype(this.skrill.email, skrillEmail)
+
+        //update settings
+        await page.click(this.vPaymentSettings.updateSettings)
 
     },
 
@@ -1522,7 +1581,7 @@ module.exports = {
 
     async setsocialprofile(url) {
         await base.click(this.vDashboard.settings)
-        await base.click(this.vSettings.socialProfile) 
+        await base.click(this.vSettings.socialProfile)
 
         await page.type(this.vSocialProfileSettings.facebook, url);
         await page.type(this.vSocialProfileSettings.twitter, url);
@@ -1531,30 +1590,97 @@ module.exports = {
         await page.type(this.vSocialProfileSettings.youtube, url);
         await page.type(this.vSocialProfileSettings.instragram, url);
         await page.type(this.vSocialProfileSettings.flicker, url);
-        await base.click(this.vSocialProfileSettings.updateSettings);
+        await page.click(this.vSocialProfileSettings.updateSettings);
+        await page.waitForTimeout(6000)
 
-        let text = await page.evaluate(() => document.querySelector('.alert-success').innerText);
-        console.log(text)
-        expect(text).to.equal('Settings updated successfully.')
+        let successmessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingssuccessmessage)
+        expect(successmessage).toBe('Your information has been saved successfully')
     },
 
+    async setrmasettings(label, type, length, lengthValue, lengthDuration) {
+        await base.click(this.vDashboard.settings)
+        await base.click(this.vSettings.rma)
 
+        await base.clearandtype(this.vRmaSettings.label, label);
+        await page.select(this.vRmaSettings.type, type);
+        await page.select(this.vRmaSettings.length, length);
+        await base.clearandtype(this.vRmaSettings.lengthValue, lengthValue);
+        await page.select(this.vRmaSettings.lengthDuration, lengthDuration);
+        await base.click(this.vSettings.saveChanges)
 
-    async setrmasettings() {
+        let successmessage = await base.getSelectorText(this.vRmaSettings.updateSettingssuccessmessage)
+        expect(successmessage).toBe('Settings saved successfully')
 
     },
 
+    async addAuctionProduct(productName, productShortDescription, category, itemCondition, actionType, startPrice, bidIncrement, reservedPrice, buyItNowPrice, auctionStartDate, auctionEndDate) {
 
+        await base.click(this.vDashboard.auction)
 
-    async addAuctionProduct() {
+        await base.click(this.vAction.addNewActionProduct)
+        await page.type(this.vAction.productName, productName)
+        await page.type(this.vAction.productShortDescription, productShortDescription)
+        await page.click(this.vAction.productCategory);
+        await base.setDropdownOptionSpan(this.vAction.productCategoryValues, category)
+        await page.select(this.vAction.itemCondition, itemCondition)
+        await page.select(this.vAction.actionType, actionType)
+        await page.type(this.vAction.startPrice, startPrice)
+        await page.type(this.vAction.bidIncrement, bidIncrement)
+        await page.type(this.vAction.reservedPrice, reservedPrice)
+        await page.type(this.vAction.buyItNowPrice, buyItNowPrice)
+        await page.type(this.vAction.auctionStartDate, auctionStartDate)
+        await page.type(this.vAction.auctionEndDate, auctionEndDate)
+        await page.click(this.vAction.addAuctionProduct)
 
     },
 
-    async addbookingproduct() {
+    async addbookingproduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calanderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
+        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingwindowIntoTheFutureDate, maximumBookingwindowIntoTheFutureDateUnit,
+        baseCost, blockCost) {
+
+        await page.type(this.vBooking.productName, productName)
+        await page.click(this.vBooking.category);
+        await base.setDropdownOptionSpan(this.vBooking.categoryValues, category)
+
+        // general Booking options
+        await page.select(this.vBooking.bookingDurationType, bookingDurationType)
+        await page.type(this.vBooking.bookingDuration, bookingDuration)
+        await page.select(this.vBooking.bookingDurationUnit, bookingDurationUnit)
+
+        await page.select(this.vBooking.calanderDisplayMode, calanderDisplayMode)
+        await page.select(this.vBooking.enableCalendarRangePicker, enableCalendarRangePicker)
+
+        //availability
+        await page.type(this.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
+        await page.type(this.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
+        await page.select(this.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
+        await page.type(this.vBooking.maximumBookingwindowIntoTheFutureDate, maximumBookingwindowIntoTheFutureDate)
+        await page.select(this.vBooking.maximumBookingwindowIntoTheFutureDateUnit, maximumBookingwindowIntoTheFutureDateUnit)
+
+        //costs
+        await page.type(this.vBooking.baseCost, baseCost)
+        await page.type(this.vBooking.blockCost, blockCost)
+
+        await base.click(this.vBooking.saveProduct)
 
     },
 
+    async searchSimilarProduct(productName) {
+        await page.click(this.vSerchSimilarProduct.search)
+        await page.type(this.vDasvSerchSimilarProducthboard.search, productName)
+        await base.click(this.vSerchSimilarProduct.search)
+        await page.click(this.vSerchSimilarProduct.search)
+    },
 
+    async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
+        await base.clearandtype(this.vendorDetails.firstName, firstName)
+        await base.clearandtype(this.vendorDetails.lastName, lastName)
+        await base.clearandtype(this.vendorDetails.email, email)
+        await page.type(this.vendorDetails.currentPassword, currentPassword)
+        await page.type(this.vendorDetails.NewPassword, newPassword)
+        await page.type(this.vendorDetails.confirmNewPassword, newPassword)
+        await page.click(this.vendorDetails.saveChanges)
 
+    },
 
 };
