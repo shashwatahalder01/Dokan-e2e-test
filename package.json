@@ -18,7 +18,7 @@
     "test-e2e": "wp-scripts test-e2e ",
     "test_interactive": "wp-scripts test-e2e -- --puppeteer-interactive", 
     "test_interactive_devtools": "wp-scripts test-e2e -- --puppeteer-interactive  --puppeteer-devtools", 
-    "test_interactive_single": "wp-scripts test-e2e vendor.spec.js ", 
+    "test_interactive_single": "wp-scripts test-e2e customer.spec.js ", 
     "test-e2e:watch": "npm run test-e2e -- --watchAll",
     "test_interactive_watch": "npm run test-e2e:watch -- --puppeteer-interactive", 
     "test-e2e:debug": "wp-scripts --inspect-brk test-e2e --puppeteer-devtools",

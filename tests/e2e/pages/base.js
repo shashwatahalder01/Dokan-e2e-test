@@ -48,9 +48,9 @@ module.exports = {
         // console.log(element)
         // await element.click()
         await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-  
-    },    
-    
+
+    },
+
     async clickXpath1(selector) {
         let [element] = await page.$x(selector)
         console.log(element)
@@ -211,5 +211,19 @@ module.exports = {
         // const page = page2
     },
 
+
+    async checkPHPError() {
+        // let pageContent = await page.content()
+        // let pageContent = pageContent.toLowerCase()  
+        let pageContent = await page.content();
+
+        if ((pageContent.includes('Warning')) || (pageContent.includes('Fatal error')) || (pageContent.includes('Notice:'))) {
+            await page.screenshot({ path: 'tests/e2e/screenshot/phpError' + Date.now() + '.png', fullPage: true })
+        }
+        else {
+            console.log('no php error')
+        }
+
+    }
 
 }

@@ -1,5 +1,7 @@
 const base = require("../pages/base.js");
 
+import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
+
 module.exports = {
     //locators
 
@@ -393,20 +395,20 @@ module.exports = {
     cPayWithMangoPay: {},
     cPayWithStripeExpress: {},
 
-    cOrderReceived:{
+    cOrderReceived: {
         orderReceivedPageHeader: ".entry-title",
 
         orderNumber: ".woocommerce-order-overview__order.order strong",
         orderDate: ".woocommerce-order-overview__date.date strong",
-        email:".woocommerce-order-overview__email.email strong",
-        total:".woocommerce-order-overview__total.total strong ",
-        paymentMethod:".woocommerce-order-overview__payment-method.method strong ",
+        email: ".woocommerce-order-overview__email.email strong",
+        total: ".woocommerce-order-overview__total.total strong ",
+        paymentMethod: ".woocommerce-order-overview__payment-method.method strong ",
 
         //order details
-        subtotal:"//th[normalize-space()='Subtotal:']//..//span",
-        shipping:"//th[normalize-space()='Shipping:']//..//span",	
-        orderDetailsPaymentMethod:"//th[normalize-space()='Payment method:']//..//td",	
-        orderDetailsTotal:"//th[normalize-space()='Total:']//..//span",
+        subtotal: "//th[normalize-space()='Subtotal:']//..//span",
+        shipping: "//th[normalize-space()='Shipping:']//..//span",
+        orderDetailsPaymentMethod: "//th[normalize-space()='Payment method:']//..//td",
+        orderDetailsTotal: "//th[normalize-space()='Total:']//..//span",
     },
 
     cWooSelector: {
@@ -425,6 +427,9 @@ module.exports = {
 
         let dashboardIsVisible = await base.isVisible(page, this.cMyaccount.dashboard)
         expect(dashboardIsVisible).toBe(true)
+
+        //TODO: REPLACE WITH ppage.url()
+        // page.url()
 
     },
 
@@ -475,21 +480,21 @@ module.exports = {
         //billing address
         await page.click(this.cAddress.editBillingAddress)
 
-        await base.clearAndType(this.cAddress.billingFirstName, billingFirstName)
-        await base.clearAndType(this.cAddress.billingLastName, billingLastName)
-        await base.clearAndType(this.cAddress.billingCompanyName, billingCompanyName)
-        await base.clearAndType(this.cAddress.billingCompanyIDOrEuidNumber, billingCompanyIDOrEuidNumber)
-        await base.clearAndType(this.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
-        await base.clearAndType(this.cAddress.billingNameOfBank, billingNameOfBank)
-        await base.clearAndType(this.cAddress.billingBankIban, billingBankIban)
+        await base.clearandtype(this.cAddress.billingFirstName, billingFirstName)
+        await base.clearandtype(this.cAddress.billingLastName, billingLastName)
+        await base.clearandtype(this.cAddress.billingCompanyName, billingCompanyName)
+        await base.clearandtype(this.cAddress.billingCompanyIDOrEuidNumber, billingCompanyIDOrEuidNumber)
+        await base.clearandtype(this.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
+        await base.clearandtype(this.cAddress.billingNameOfBank, billingNameOfBank)
+        await base.clearandtype(this.cAddress.billingBankIban, billingBankIban)
         await page.select(this.cAddress.billingCountryOrRegion, billingCountryOrRegion)
-        await base.clearAndType(this.cAddress.billingStreetAddress, billingStreetAddress)
-        await base.clearAndType(this.cAddress.billingStreetAddress2, adbillingStreetAddress2dress)
-        await base.clearAndType(this.cAddress.billingTownCity, billingTownCity)
+        await base.clearandtype(this.cAddress.billingStreetAddress, billingStreetAddress)
+        await base.clearandtype(this.cAddress.billingStreetAddress2, adbillingStreetAddress2dress)
+        await base.clearandtype(this.cAddress.billingTownCity, billingTownCity)
         await page.select(this.cAddress.billingState, billingState)
-        await base.clearAndType(this.cAddress.billingZipCode, billingZipCode)
-        await base.clearAndType(this.cAddress.billingPhone, billingPhone)
-        await base.clearAndType(this.cAddress.billingEmailAddress, billingEmailAddress)
+        await base.clearandtype(this.cAddress.billingZipCode, billingZipCode)
+        await base.clearandtype(this.cAddress.billingPhone, billingPhone)
+        await base.clearandtype(this.cAddress.billingEmailAddress, billingEmailAddress)
         await page.click(this.cAddress.billingSaveAddress)
 
         let SuccessMessage = await base.getSelectorText(this.cWooSelector.successMessage)
@@ -501,15 +506,15 @@ module.exports = {
         await page.click(this.cMyaccount.addresses)
         //shipping address
         await page.click(this.cAddress.editShippingAddress)
-        await base.clearAndType(this.cAddress.shippingFirstName, shippingFirstName)
-        await base.clearAndType(this.cAddress.shippingLastName, shippingLastName)
-        await base.clearAndType(this.cAddress.shippingCompanyName, shippingCompanyName)
+        await base.clearandtype(this.cAddress.shippingFirstName, shippingFirstName)
+        await base.clearandtype(this.cAddress.shippingLastName, shippingLastName)
+        await base.clearandtype(this.cAddress.shippingCompanyName, shippingCompanyName)
         await page.select(this.cAddress.shippingCountryOrRegion, shippingCountryOrRegion)
-        await base.clearAndType(this.cAddress.shippingStreetAddress, shippingStreetAddress)
-        await base.clearAndType(this.cAddress.shippingStreetAddress2, shippingStreetAddress2)
-        await base.clearAndType(this.cAddress.shippingTownCity, shippingTownCity)
+        await base.clearandtype(this.cAddress.shippingStreetAddress, shippingStreetAddress)
+        await base.clearandtype(this.cAddress.shippingStreetAddress2, shippingStreetAddress2)
+        await base.clearandtype(this.cAddress.shippingTownCity, shippingTownCity)
         await page.select(this.cAddress.shippingState, shippingState)
-        await base.clearAndType(this.cAddress.shippingZipCode, shippingZipCode)
+        await base.clearandtype(this.cAddress.shippingZipCode, shippingZipCode)
         await page.click(this.cAddress.shippingSaveAddress)
 
         let SuccessMessage = await base.getSelectorText(this.cWooSelector.successMessage)
@@ -527,7 +532,7 @@ module.exports = {
         expect(successMessage).toMatch("Message send successfully")
     },
 
-    async addCard(cardNumber, cardExpiryDate, cardCvc) {
+    async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) {
         await base.click(this.cMyaccount.paymentMethods)
 
         await base.click(this.cPaymentMethods.addPaymentMethod)
@@ -547,7 +552,7 @@ module.exports = {
         expect(successMessage).toMatch("Payment method successfully added.")
     },
 
-    async deleteCard() {
+    async deletePaymentMethod() {
         await base.click(this.cMyaccount.paymentMethods)
         await page.click(this.cPaymentMethods.deleteMethod)
 
@@ -556,9 +561,9 @@ module.exports = {
     },
 
     async updatePassword(currentPassword, newPassword) {
-        await base.clearAndType(this.cAccountDetails.currentPassword, currentPassword)
-        await base.clearAndType(this.cAccountDetails.NewPassword, newPassword)
-        await base.clearAndType(this.cAccountDetails.confirmNewPassword, newPassword)
+        await base.clearandtype(this.cAccountDetails.currentPassword, currentPassword)
+        await base.clearandtype(this.cAccountDetails.NewPassword, newPassword)
+        await base.clearandtype(this.cAccountDetails.confirmNewPassword, newPassword)
         await page.click(this.cAccountDetails.saveChanges)
 
         let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
@@ -570,10 +575,10 @@ module.exports = {
 
         await page.click(this.cMyaccount.accountDetails)
 
-        await base.clearAndType(this.cAccountDetails.firstName, firstName)
-        await base.clearAndType(this.cAccountDetails.lastName, lastName)
-        await base.clearAndType(this.cAccountDetails.displayName, displayName)
-        await base.clearAndType(this.cAccountDetails.email, email)
+        await base.clearandtype(this.cAccountDetails.firstName, firstName)
+        await base.clearandtype(this.cAccountDetails.lastName, lastName)
+        await base.clearandtype(this.cAccountDetails.displayName, displayName)
+        await base.clearandtype(this.cAccountDetails.email, email)
         await this.updatePassword(currentPassword, newPassword)
         await this.updatePassword(newPassword, currentPassword)
     },
@@ -583,7 +588,7 @@ module.exports = {
         await page.click(this.cSupportTickets.openTickets)
 
         // await page.click(this.cSupportTickets.addReply)
-        await base.clearAndType(this.cSupportTickets.addReply, message)
+        await base.clearandtype(this.cSupportTickets.addReply, message)
         await page.click(this.cSupportTickets.submitReply)
         //TODO: add assertion
     },
@@ -646,5 +651,14 @@ module.exports = {
 
         let orderReceivedIsVisible = await base.isVisible(page, this.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)
-    }
+    },
+
+    async sendWarrentyRequest(itemQuantity, requestType, RequestDetails) {
+        await base.click(this.cOrders.warrantyRequest);
+        await base.click(this.cOrders.warrantyRequestItemName);
+        // await page.type(this.cOrders.warrantyRequestItemQuantity, itemQuantity);
+        await page.type(this.cOrders.warrantyRequestType, requestType);
+        await base.setValue(this.cOrders.warrantyRequestDetails, RequestDetails);
+        await base.click(this.cOrders.warrantySubmitRequest);
+    },
 };

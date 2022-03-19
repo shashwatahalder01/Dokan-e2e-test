@@ -26,11 +26,11 @@ describe('vendor functionaly test', () => {
       // await page.goto('http://dokan2.test/my-account');
       // jest.useFakeTimers()
       // jest.setTimeout(60000) 
-    });
+   });
 
    // afterEach(async () => {
-      // jest.runOnlyPendingTimers()
-      // jest.useRealTimers()
+   // jest.runOnlyPendingTimers()
+   // jest.useRealTimers()
    //    // await browser.close()
    //    // await loginPage.vendorlogout()
    //    // await page.waitForTimeout(3000);
@@ -130,19 +130,19 @@ describe('vendor functionaly test', () => {
          'companyIdOrEuidNumber', '123456', 'nameOfBank', '123456789xcvb', 'New York', '200', '10', 'Get Support',
          '1', '20', '10', '1000000'
       )
-   },100000);
+   }, 100000);
 
    it.skip('vendor can set social profile settings ', async () => {
       await loginPage.login()
       await vendorPage.goToVendorDashbord()
       await vendorPage.setsocialprofile('https://www.facebook.com')
-   },100000);
+   }, 100000);
 
    it.skip('vendor can set rma settings ', async () => {
       await loginPage.login()
       await vendorPage.goToVendorDashbord()
-      await vendorPage.setrmasettings('Warranty','included_warranty','limited', '1', 'weeks')
-   },100000);
+      await vendorPage.setrmasettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
+   }, 100000);
 
 
 

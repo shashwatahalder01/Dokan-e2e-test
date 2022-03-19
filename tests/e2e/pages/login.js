@@ -133,7 +133,8 @@ module.exports = {
         // await page.waitForTimeout(5000); 
         // await isCurrentURL()
         // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
-        await this.loginFromWpAdmin('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+        // await this.loginFromWpAdmin('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+        await this.loginFromWpAdmin('customer1', '01dokan01')
     },
 
     async customerlogout() {

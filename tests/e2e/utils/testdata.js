@@ -57,3 +57,10 @@ exports.coupon = coupon;
 // min=0
 // max=5
 // console.log(Math.floor(Math.random() * (max - min + 1)) + min)
+
+console.log(Date.now())
+
+// console.log(date.toLocaleString('en-US '))
+let d= new Date()
+console.log(d.toLocaleString('en-US',{ dateStyle:'short', timeStyle:'medium'    }));   
+console.log('tests/e2e/screenshot/phpError'+Date.now()+ '.png')
