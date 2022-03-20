@@ -1,7 +1,8 @@
 
+const { loginUser } = require('@wordpress/e2e-test-utils');
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js');
-const { loginUser } = require('@wordpress/e2e-test-utils');
+const timout = 100000
 
 
 describe('admin functionaly test', () => {
@@ -36,13 +37,13 @@ describe('admin functionaly test', () => {
 
 
 
-    // it('admin add test settings', async () => {
-    //     // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginUser()
-        
-    //     await adminPage.addtestsettings()
+    it('admin add test settings', async () => {
+        // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminlogin()
+        // await adminPage.setWpSettings()
+        await adminPage.setDokanSettings()
 
-    // });
+    },timout);
 
 
 

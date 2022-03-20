@@ -32,16 +32,93 @@ module.exports = {
         }, selector);
     },
 
+    //TODO: page.waitForXpath()
+    //TODO: page.waitForSelector()
 
-    async click(selector) {
-        // await page.click(selector);
-        // await page.waitForNavigation({waitUntil: 'networkidle2'});
-        if (selector.startsWith('//')) {
-            await this.clickXpath(selector)
-        } else {
-            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    // async click(selector) {
+    //     let element = await page.$(selector);
+    //     if (selector.startsWith('//')) {
+    //         await this.clickXpath(selector)
+    //     } else {
+    //         await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+    //     }
+    // },
+
+    // async click(selector) {
+    //     let element = await page.$(selector);
+    //     if ((await (await element.getProperty("type")).jsonValue() === "checkbox") && (await (await element.getProperty("checked")).jsonValue())) {
+
+    //         await page.click(selector);
+    //         await page.click(selector);
+    //     }
+    //     else{
+    //         await page.click(selector)
+    //     }
+    //     if (selector.startsWith('//')) {
+    //         await this.clickXpath(selector)
+    //     } else {
+    //         await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+    //     }
+    // },
+
+    async check(selector) {
+        let element = await page.$(selector);
+        const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
+        if (isCheckBoxChecked) {
+            await page.click(selector);
+            await page.click(selector);
         }
+        else {
+            await page.click(selector)
+        }
+
     },
+
+    // async click(selector) {
+    //     // await page.click(selector);
+    //     // await page.waitForNavigation({waitUntil: 'networkidle2'});
+    //     if (selector.startsWith('//')) {
+    //         await page.waitForXpath(selector)
+    //         await this.clickXpath(selector)
+    //     } else {
+    //         page.waitForSelector(selector)
+    //         page.click(selector)
+
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+    //     }
+    // },
+
+    //mkmkmkmkmkmkmkmkmkmkmkm
+    // You can wait on both simultaneously and handle whichever occurs first:
+
+    // await Promise.race([
+    //   page.waitForNavigation({ waitUntil: "networkidle0" }),
+    //   page.waitForSelector(".Error")
+    // ]);
+
+    // age.waitForResponse( response => response.status() === 200 )   //mkmkmkmkmkmkmk
+
+    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   //mkmkmkmkmkmk
+
+    // Since v1.6.0 there's page.waitForResponse.  ///mkmkmkm
+
+    //mkmkmkmkmkmkmkmkmk
+    // akshaychauhan7737 commented on Nov 28, 2020
+    // Create promise object befor event trigger
+    // If you want to satisfy any one of the condition to wait use
+
+    // const watchDog2 = [
+    //                 page.waitForSelector('.twofa-form .error'),
+    //                 page.waitForNavigation({ waitUntil: 'networkidle2' })
+    // ];
+    // await continueButton.evaluate(continueButton => continueButton.click())
+    // await await Promise.race(watchDog2);
 
     async clickXpath(selector) {
         let [element] = await page.$x(selector)
@@ -55,6 +132,20 @@ module.exports = {
         let [element] = await page.$x(selector)
         console.log(element)
         await element.click()
+    },
+
+    async waitandclick(selector) {
+        // await page.waitForSelector(this.cShop.viewCart, {visible: true})
+        await page.waitForSelector(this.cShop.viewCart)
+        console.log(element)
+        await element.click()
+    },
+
+    async select(selector, value) {
+
+        await page.waitForSelector(selector)
+        await page.select(selector, value)
+
     },
 
     async uploadImage(selector, image) {
@@ -75,6 +166,8 @@ module.exports = {
 
     // get text
     async getSelectorText(selector) {
+        // console.log(selector)
+        await page.waitForSelector(selector)
         let text = await page.$eval(selector, (element) => element.textContent);
         // let text =  await page.$eval(this.label, el => el.innerText);
         console.log(text);
@@ -83,6 +176,7 @@ module.exports = {
 
     // get element text
     async getElementText(selector) {
+        await page.waitForSelector(selector)
         let element = await page.$(selector);
         let text = await (await element.getProperty('textContent')).jsonValue();
         console.log(text);

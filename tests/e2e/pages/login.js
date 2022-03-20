@@ -64,6 +64,7 @@ module.exports = {
     adminPassword: '#user_pass',
     adminRememberMe: '#rememberme',
     adminLogin: '#wp-submit',
+    adminDashboard:".wp-first-item > .wp-menu-name",
 
     // admin logout
     adminUserMenu: '#wp-admin-bar-my-account a',
@@ -80,8 +81,7 @@ module.exports = {
         await page.type(this.regEmail, username)
         await page.type(this.regPassword, password);
         await page.click(this.regCustomer);
-        await page.click(this.register);
-        await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
+        await base.click(this.register);
     },
 
     async vendorregister(userEmail, password, firstname, lastname, shopname, shopurl, companyName, companyId, vatNumber, bankName, bankIban, phone) {
@@ -104,8 +104,7 @@ module.exports = {
         await page.type(this.bankName, bankName);
         await page.type(this.bankIban, bankIban);
         await page.type(this.phone, phone);
-        await page.click(this.register);
-        // await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
+        await base.click(this.register);
     },
 
 
@@ -134,7 +133,8 @@ module.exports = {
         // await isCurrentURL()
         // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
         // await this.loginFromWpAdmin('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
-        await this.loginFromWpAdmin('customer1', '01dokan01')
+        // await this.loginFromWpAdmin('customer1', '01dokan01')
+        await loginUser('admin', 'password')
     },
 
     async customerlogout() {
@@ -151,23 +151,30 @@ module.exports = {
 
 
     async adminlogin(username, password) {
-        await page.goto(this.baseUrl + '/wp-admin')
-        await page.type(this.adminEmail, username)
-        await page.type(this.adminPassword, password)
-        await page.click(this.adminLogin)
-        await page.waitForTimeout(5000) // TODO: add page load complete to revome this line
+        // await base.goto('wp-admin')
+        // let res = await base.isVisible(page, this.adminEmail)
+        // if (res) {
+        //     await page.type(this.adminEmail, username)
+        //     await page.type(this.adminPassword, password)
+        //     await base.click(this.adminLogin)
+
+        //     let homeIsVisible = await base.isVisible(page, this.adminDashboard)
+        //     expect(homeIsVisible).toBe(true)
+        // }
+        // else {
+        //     return
+        // }
+        await loginUser('admin', 'password')
     },
 
     async adminlogout(username, password) {
         await page.hover(this.adminUserMenu)
         await page.waitForTimeout(2000)
-        await page.click(this.adminLogout)
-        await page.waitForTimeout(5000) // TODO: add page load complete to revome this line
+        await base.click(this.adminLogout)
     },
 
     async switchtoadmin(username, password) {
         // await base.opennewtab()
-        // await page.waitForTimeout(2000) // TODO: add page load complete to revome this line
         await this.adminlogin(username, password)
     }
 

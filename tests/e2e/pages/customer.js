@@ -1,6 +1,8 @@
+
+import { createURL } from '@wordpress/e2e-test-utils'
 const base = require("../pages/base.js");
 
-import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
+// await page.waitForTimeout(1000);
 
 module.exports = {
     //locators
@@ -54,6 +56,7 @@ module.exports = {
         //become wholesale customeer
         becomeWholesaleCustomer: '#dokan-become-wholesale-customer-btn',
     },
+
     //customer orders
     cOrders: {
         view: ".order:nth-child(1) .button",
@@ -81,7 +84,8 @@ module.exports = {
     //customer address
     cAddress: {
         //billing address
-        editBillingAddress: ".u-column1 .edit",// TODO: if shipping disable locator class change
+        editBillingAddress: ".u-column1.col-1 .edit",
+        editBillingAddress1: ".edit", // when shipping disabled
         billingFirstName: "#billing_first_name",
         billingLastName: "#billing_last_name",
         billingCompanyName: "#billing_company",
@@ -90,25 +94,29 @@ module.exports = {
         billingNameOfBank: "#billing_dokan_bank_name",
         billingBankIban: "#billing_dokan_bank_iban",
         billingCountryOrRegion: "#select2-billing_country-container",
+        billingCountryOrRegionValues: ".select2-results ul li",
         billingStreetAddress: "#billing_address_1",
         billingStreetAddress2: "#billing_address_2",
         billingTownCity: "#billing_city",
         billingState: "#select2-billing_state-container",
+        billingStateValues: ".select2-results ul li",
         billingZipCode: "#billing_postcode",
         billingPhone: "#billing_phone",
         billingEmailAddress: "#billing_email",
         billingSaveAddress: "p:nth-child(2) > .button",
 
         //shipping address
-        editShippingAddress: ".u-column2 .edit",
+        editShippingAddress: ".u-column2.col-2 .edit",
         shippingFirstName: "#shipping_first_name",
         shippingLastName: "#shipping_last_name",
         shippingCompanyName: "#shipping_company",
-        shippingCountryOrRegion: "select2-shipping_country-container",
+        shippingCountryOrRegion: "#select2-shipping_country-container",
+        shippingCountryOrRegionValues: ".select2-results ul li",
         shippingStreetAddress: "#shipping_address_1",
         shippingStreetAddress2: "#shipping_address_2",
         shippingTownCity: "#shipping_city",
-        shippingState: "select2-shipping_state-container",
+        shippingState: "#select2-shipping_state-container",
+        shippingStateValues: ".select2-results ul li",
         shippingZipCode: "#shipping_postcode",
         shippingSaveAddress: "p:nth-child(2) > .button",
 
@@ -190,7 +198,7 @@ module.exports = {
         sorting: ".woocommerce-ordering:nth-child(3) > .orderby",
         search: ".dokan-btn",
         //cart
-        addToCart: ".button", //TODO: edit
+        addToCart: ".button.add_to_cart_button.ajax_add_to_cart", //TODO: edit
         viewCart: ".added_to_cart",
         //pagination
         previous: ".woocommerce-pagination:nth-child(3) .prev",
@@ -330,7 +338,7 @@ module.exports = {
         freeShipping: "#shipping_method_0_free_shipping2",
         //TODO: edit locator based on vendor
         //proceed To Checkout
-        proceedToCheckout: ".checkout-button"
+        proceedToCheckout: ".checkout-button.button.wc-forward"
 
     },
 
@@ -347,12 +355,14 @@ module.exports = {
         billingNameOfBank: "#billing_dokan_bank_name",
         billingBankIban: "#billing_dokan_bank_iban",
         billingCountryOrRegion: "#select2-billing_country-container",
+        billingCountryOrRegionValues: ".select2-results ul li",
         billingStreetAddress: "#billing_address_1",
         billingStreetAddress2: "#billing_address_2",
         billingTownCity: "#billing_city",
         billinPhone: "#billing_phone",
         billingEmailAddress: "#billing_email",
-        billinggState: "#select2-billing_state-container",
+        billingState: "#select2-billing_state-container",
+        billingStateValues: ".select2-results ul li",
         billingZipCode: "#billing_postcode",
 
         //shipping details
@@ -361,10 +371,12 @@ module.exports = {
         shippingLastName: "#shipping_last_name",
         shippingCompanyName: "#shipping_company",
         shippingCountryOrRegion: "select2-shipping_country-container",
+        shippingCountryOrRegionValues: ".select2-results ul li",
         shippingStreetAddress: "#shipping_address_1",
         shippingStreetAddress2: "#shipping_address_2",
         shippingTownCity: "#shipping_city",
         shippingState: "select2-shipping_state-container",
+        shippingStateValues: ".select2-results ul li",
         shippingZipCode: "#shipping_postcode",
         shippingSaveAddress: "p:nth-child(2) > .button",
 
@@ -465,21 +477,18 @@ module.exports = {
         await page.type(this.cDashboard.bankIban, bankIban);
 
         await base.click(this.becomeAVendor);
-        // await page.waitForTimeout(4000); // TODO: add page load complete to revome this line
     },
 
     async customersendwholesalerequest() {
         await base.click(this.becomeWholesaleCustomer)
-        // await page.waitForTimeout(4000); // TODO: add page load complete to revome this line
     },
 
     async addBillingAddress(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, adbillingStreetAddress2dress, billingTownCity,
         billingState, billingZipCode, billingPhone, billingEmailAddress) {
 
-        await page.click(this.cMyaccount.addresses)
+        await base.click(this.cMyaccount.addresses)
         //billing address
-        await page.click(this.cAddress.editBillingAddress)
-
+        await page.$(this.cMyaccount.addresses) !== null ? await base.click(this.cAddress.editBillingAddress) : await base.click(this.cAddress.editBillingAddress1)
         await base.clearandtype(this.cAddress.billingFirstName, billingFirstName)
         await base.clearandtype(this.cAddress.billingLastName, billingLastName)
         await base.clearandtype(this.cAddress.billingCompanyName, billingCompanyName)
@@ -487,37 +496,42 @@ module.exports = {
         await base.clearandtype(this.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
         await base.clearandtype(this.cAddress.billingNameOfBank, billingNameOfBank)
         await base.clearandtype(this.cAddress.billingBankIban, billingBankIban)
-        await page.select(this.cAddress.billingCountryOrRegion, billingCountryOrRegion)
+        await page.click(this.cAddress.billingCountryOrRegion);
+        await base.setDropdownOptionSpan(this.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
         await base.clearandtype(this.cAddress.billingStreetAddress, billingStreetAddress)
         await base.clearandtype(this.cAddress.billingStreetAddress2, adbillingStreetAddress2dress)
         await base.clearandtype(this.cAddress.billingTownCity, billingTownCity)
-        await page.select(this.cAddress.billingState, billingState)
+        await page.click(this.cAddress.billingState);
+        await base.setDropdownOptionSpan(this.cAddress.billingStateValues, billingState)
         await base.clearandtype(this.cAddress.billingZipCode, billingZipCode)
         await base.clearandtype(this.cAddress.billingPhone, billingPhone)
         await base.clearandtype(this.cAddress.billingEmailAddress, billingEmailAddress)
-        await page.click(this.cAddress.billingSaveAddress)
+        await base.click(this.cAddress.billingSaveAddress)
 
-        let SuccessMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        // await page.waitForSelector(this.cWooSelector.wooCommerceSuccessMessage)
+        let SuccessMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(SuccessMessage).toMatch('Address changed successfully.')
     },
 
     async addShippingAddress(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
 
-        await page.click(this.cMyaccount.addresses)
+        await base.click(this.cMyaccount.addresses)
         //shipping address
-        await page.click(this.cAddress.editShippingAddress)
+        await base.click(this.cAddress.editShippingAddress)
         await base.clearandtype(this.cAddress.shippingFirstName, shippingFirstName)
         await base.clearandtype(this.cAddress.shippingLastName, shippingLastName)
         await base.clearandtype(this.cAddress.shippingCompanyName, shippingCompanyName)
-        await page.select(this.cAddress.shippingCountryOrRegion, shippingCountryOrRegion)
+        await page.click(this.cAddress.shippingCountryOrRegion);
+        await base.setDropdownOptionSpan(this.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
         await base.clearandtype(this.cAddress.shippingStreetAddress, shippingStreetAddress)
         await base.clearandtype(this.cAddress.shippingStreetAddress2, shippingStreetAddress2)
         await base.clearandtype(this.cAddress.shippingTownCity, shippingTownCity)
-        await page.select(this.cAddress.shippingState, shippingState)
+        await page.click(this.cAddress.shippingState);
+        await base.setDropdownOptionSpan(this.cAddress.shippingStateValues, shippingState)
         await base.clearandtype(this.cAddress.shippingZipCode, shippingZipCode)
-        await page.click(this.cAddress.shippingSaveAddress)
+        await base.click(this.cAddress.shippingSaveAddress)
 
-        let SuccessMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let SuccessMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(SuccessMessage).toMatch('Address changed successfully.')
     },
 
@@ -528,7 +542,7 @@ module.exports = {
         await page.type(this.cRma.message, message)
         await page.click(this.cRma.sendMessage)
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Message send successfully")
     },
 
@@ -548,7 +562,7 @@ module.exports = {
 
         await base.click(this.cPaymentMethods.addPaymentMethodCard)
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Payment method successfully added.")
     },
 
@@ -556,7 +570,7 @@ module.exports = {
         await base.click(this.cMyaccount.paymentMethods)
         await page.click(this.cPaymentMethods.deleteMethod)
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Payment method deleted.")
     },
 
@@ -566,7 +580,7 @@ module.exports = {
         await base.clearandtype(this.cAccountDetails.confirmNewPassword, newPassword)
         await page.click(this.cAccountDetails.saveChanges)
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Account details changed successfully.")
 
     },
@@ -593,33 +607,34 @@ module.exports = {
         //TODO: add assertion
     },
 
-    async addproductToCartFromShop(preductName) {
+    async addproductToCartFromShop(productName) {
         await page.type(this.cShop.searchProduct, productName)
-        await page.click(this.cShop.search)
+        await base.click(this.cShop.search)
         await page.click(this.cShop.addToCart)
 
+        await page.waitForSelector(this.cShop.viewCart, {visible: true})
         let cartIsVisible = await base.isVisible(page, this.cShop.viewCart)
         expect(cartIsVisible).toBe(true)
 
     },
 
     async addProductToCartFromSingleProductPage(productName) {
-        await page.click(this.cSingleProduct.addToCart)
+        await base.click(this.cSingleProduct.addToCart)
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch(`“${productName}” has been added to your cart.`)
 
     },
 
     async goToCartFromShop() {
-        await page.click(this.cShop.viewCart)
+        await base.click(this.cShop.viewCart)
 
         let cartIsVisible = await base.isVisible(page, this.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
     },
 
     async goToCartFromSingleProductPage() {
-        await page.click(this.cSingleProduct.viewCart)
+        await base.click(this.cSingleProduct.viewCart)
 
         let cartIsVisible = await base.isVisible(page, this.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
@@ -627,7 +642,9 @@ module.exports = {
     },
 
     async goToCheckoutFromCart() {
-        await page.click(this.cCart.proceedToCheckout)
+        await page.waitForTimeout(2000) 
+        // await page.waitForSelector(this.cCart.proceedToCheckout, {visible: true})
+        await base.click(this.cCart.proceedToCheckout)
 
         let checkoutIsVisible = await base.isVisible(page, this.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
@@ -638,19 +655,61 @@ module.exports = {
         await page.click(this.cCart.applyCoupon)
 
         // // negative test
-        // let failureMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        // let failureMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         // expect(failureMessage).toMatch(`Coupon "${couponCode}" does not exist!`)
         // expect(failureMessage).toMatch("Sorry, this coupon is not applicable to selected products.") //for other vendor coupons
 
-        let successMessage = await base.getSelectorText(this.cWooSelector.successMessage)
+        let successMessage = await base.getSelectorText(this.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Coupon code applied successfully.")
     },
 
     async placeOrder() {
-        await page.click(this.cCheckout.placeOrder)
+        await base.click(this.cCheckout.placeOrder)
 
         let orderReceivedIsVisible = await base.isVisible(page, this.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)
+    },
+
+    async addBillingAddressInCheckout(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, adbillingStreetAddress2dress, billingTownCity,
+        billingState, billingZipCode, billingPhone, billingEmailAddress) {
+        
+        //billing address
+        await base.clearandtype(this.cAddress.billingFirstName, billingFirstName)
+        await base.clearandtype(this.cAddress.billingLastName, billingLastName)
+        await base.clearandtype(this.cAddress.billingCompanyName, billingCompanyName)
+        await base.clearandtype(this.cAddress.billingCompanyIDOrEuidNumber, billingCompanyIDOrEuidNumber)
+        await base.clearandtype(this.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
+        await base.clearandtype(this.cAddress.billingNameOfBank, billingNameOfBank)
+        await base.clearandtype(this.cAddress.billingBankIban, billingBankIban)
+        await page.click(this.cAddress.billingCountryOrRegion);
+        await base.setDropdownOptionSpan(this.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
+        await base.clearandtype(this.cAddress.billingStreetAddress, billingStreetAddress)
+        await base.clearandtype(this.cAddress.billingStreetAddress2, adbillingStreetAddress2dress)
+        await base.clearandtype(this.cAddress.billingTownCity, billingTownCity)
+        await page.click(this.cAddress.billingState);
+        await base.setDropdownOptionSpan(this.cAddress.billingStateValues, billingState)
+        await base.clearandtype(this.cAddress.billingZipCode, billingZipCode)
+        await base.clearandtype(this.cAddress.billingPhone, billingPhone)
+        await base.clearandtype(this.cAddress.billingEmailAddress, billingEmailAddress)
+
+    },
+
+    async addShippingAddressInCheckout(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
+
+        await page.click(this.cCheckout.shipToADifferentAddress)
+        //shipping address
+        await base.clearandtype(this.cAddress.shippingFirstName, shippingFirstName)
+        await base.clearandtype(this.cAddress.shippingLastName, shippingLastName)
+        await base.clearandtype(this.cAddress.shippingCompanyName, shippingCompanyName)
+        await page.click(this.cAddress.shippingCountryOrRegion);
+        await base.setDropdownOptionSpan(this.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
+        await base.clearandtype(this.cAddress.shippingStreetAddress, shippingStreetAddress)
+        await base.clearandtype(this.cAddress.shippingStreetAddress2, shippingStreetAddress2)
+        await base.clearandtype(this.cAddress.shippingTownCity, shippingTownCity)
+        await page.click(this.cAddress.shippingState);
+        await base.setDropdownOptionSpan(this.cAddress.shippingStateValues, shippingState)
+        await base.clearandtype(this.cAddress.shippingZipCode, shippingZipCode)
+        await page.waitForTimeout(2000) 
     },
 
     async sendWarrentyRequest(itemQuantity, requestType, RequestDetails) {

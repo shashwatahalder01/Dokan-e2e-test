@@ -1,7 +1,74 @@
 
 const { faker } = require('@faker-js/faker');
 
+// productsName: ["Plain Cotton Tshirt", "The moon Thsirt", "Summer Thirt"],
+// prizes: [100, 150, 250],
+// tshirts: ["Plain Cotton Tshirt", "The moon Thsirt", "Summer Thirt"],
+// parentCategories: [
+//   "Electronic Devices",
+//   "Electronic Accessories",
+//   "Men's Fashion",
+//   "Clothings",
+//   "Women's Fashion",
+// ],
+// productCategories: [
+//   "SmartPhones",
+//   "Laptops",
+//   "Accessories",
+//   "Shirts",
+//   "T-Shirts",
+//   "Polo Shirts",
+//   "Jeans",
+//   "Pants",
+//   "Shoes",
+//   "Bags",
+// ],
+// productAttributes: ["Size", "Color"],
+// attributeValues: [
+//   ["S", "M", "L", "XL", "XXL"],
+//   ["Red", "Blue", "Black", "Yellow", "White", "Deep blue"],
+// ],
 
+
+//admin
+//general settings
+const sellingProductTypes = ['sell_both', 'sell_physical', 'sell_digital'];
+const storeCategory = ['none','Single','Multiple']
+//selling options settings
+const commissionType = ['flat','percentage','combine']
+const shippingFeeRecipient = ['seller','admin']
+const taxFeeRecipient = ['seller','admin']
+const newProductStatus = ['publish','pending']
+const productCategory = ['single','multiple']
+//appreance settings
+const gMapApiKey = "AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY"
+const mapboxAccessToken = "pk.eyJ1Ijoic2hhc2h3YXRhIiwiYSI6ImNrdzV3bm43eTAxeDYzMG52b2lwanZ4MnkifQ.tb3LaMr3Wa_-YOj5MwkEUA"
+//privacy policy settings
+const privacyPolicy = ['2','3','4','5','6','7','8','9','10']
+//getsupport settings
+const displayOnSingleProductPage = ['above_tab','inside_tab','dont_show']
+//rma settings
+const rmaOrderStatus = ['wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed']
+const enableRefundRequests = ['yes','no']
+const enableCouponRequests = ['yes','no']
+//wholesale customer settings
+const needApprovalForCustomer = ['yes','no']
+//delivery time settings
+const storeOpeningClosingTime = ['12:00 AM','11:30 PM'] //TODO: has more elements -> generate using function
+//geolocation settings
+const locationMapPosition = ['top','left','right']
+const showMap = ['all','store_listing','shop']
+const radiusSearchUnit = ['km','miles']
+//spmv settings
+const availableVendorSectionDisplayPosition = ['below_tabs','inside_tabs','after_tabs']
+const showSpmvProducts = ['show_all','min_price','max_price','top_rated_vendor']
+//vendor subscription settings
+const subscription = ['2','4','5','6','8','9','10','11','15','-1']
+const productStatus = ['publish','pending','draft']
+
+
+
+//vendor
 const withdrawPaymentmethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
 const reserveBalance = ['0','5','10','15','50','100','200','300','500','1000','2000','3000','5000','10000']
 

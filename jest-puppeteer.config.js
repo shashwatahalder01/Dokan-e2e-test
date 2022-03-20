@@ -6,8 +6,9 @@ module.exports = {
     // slowMo: 150, // slow down by 250ms
     // slowMo: 100, // slow down by 250ms
     // slowMo: 50, // slow down by 250ms
-    // slowMo: 30, // slow down by 250ms
-    slowMo: 10, // slow down by 250ms
+    slowMo: 30, // slow down by 250ms
+    // slowMo: 20, // slow down by 250ms
+    // slowMo: 10, // slow down by 250ms
 
     // headless: process.env.HEADLESS !== 'false',
     // slowMo: process.env.SLOWMO ? process.env.SLOWMO : 0,

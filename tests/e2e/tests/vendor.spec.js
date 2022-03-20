@@ -38,33 +38,33 @@ describe('vendor functionaly test', () => {
    // });
 
 
-   it('vendor can register', async () => {
-      await loginPage.vendorregister(
-         data.vendorinfo.userEmail,
-         data.vendorinfo.password,
-         data.vendorinfo.firstName,
-         data.vendorinfo.lastName,
-         data.vendorinfo.shopName,
-         data.vendorinfo.companyName,
-         data.vendorinfo.companyId,
-         data.vendorinfo.vatNumber,
-         data.vendorinfo.bankName,
-         data.vendorinfo.bankIban,
-         data.vendorinfo.phone,
-      )
-      await changeSiteTimezone('UTC+6')
-      const firstName = await data.vendorinfo.firstName
-      const password = await createUser(data.vendorinfo.firstName, data.vendorinfo.lastName, 'Vendor')
-      await loginUser(firstName, password)
-      // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
-      // console.log(firstName, password)
-      await page.waitForTimeout(80000);
-   });
+   // it('vendor can register', async () => {
+   //    await loginPage.vendorregister(
+   //       data.vendorinfo.userEmail,
+   //       data.vendorinfo.password,
+   //       data.vendorinfo.firstName,
+   //       data.vendorinfo.lastName,
+   //       data.vendorinfo.shopName,
+   //       data.vendorinfo.companyName,
+   //       data.vendorinfo.companyId,
+   //       data.vendorinfo.vatNumber,
+   //       data.vendorinfo.bankName,
+   //       data.vendorinfo.bankIban,
+   //       data.vendorinfo.phone,
+   //    )
+   //    await changeSiteTimezone('UTC+6')
+   //    const firstName = await data.vendorinfo.firstName
+   //    const password = await createUser(data.vendorinfo.firstName, data.vendorinfo.lastName, 'Vendor')
+   //    await loginUser(firstName, password)
+   //    // await loginUser('Nannie', '1aO4e9S)7iUs8cdgx5pebN7)')
+   //    // console.log(firstName, password)
+   //    await page.waitForTimeout(80000);
+   // });
 
-   it('vendor can login', async () => {
-      // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
-      await loginPage.login()
-   });
+   // it('vendor can login', async () => {
+   //    // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   //    await loginPage.login()
+   // });
 
 
    // it('vendor can logout', async () => {
