@@ -50,6 +50,7 @@ module.exports = {
   //dokan
   dokan: {
     //dokan menus
+    //TODO: make locators unique
     dashboard: "#toplevel_page_dokan .wp-first-item > .wp-first-item",
     withdraw: "#toplevel_page_dokan li:nth-child(3) > a",
     vendors: "#toplevel_page_dokan li:nth-child(4) > a",
@@ -65,7 +66,8 @@ module.exports = {
     advertising: "#toplevel_page_dokan li:nth-child(14) > a",
     wholesaleCustomer: "#toplevel_page_dokan li:nth-child(15) > a",
     help: "#toplevel_page_dokan li:nth-child(16) > a",
-    settingsmenu: "#toplevel_page_dokan li:nth-child(17) > a",
+    settingsmenu: "#toplevel_page_dokan li:nth-child(18) > a",
+    // settingsmenu: "#toplevel_page_dokan li:nth-child(17) > a",
     license: "#toplevel_page_dokan li:nth-child(18) > a",
 
     //dashboard
@@ -219,9 +221,8 @@ module.exports = {
       geolocation: ".nav-tab:nth-child(22)",
       productReportAbuse: ".nav-tab:nth-child(23)",
       singleProductMultivendor: ".nav-tab:nth-child(24)",
-      vendorSubscription: ".nav-tab:nth-child(25)",
-      vendorAnalytics: ".nav-tab:nth-child(26)",
-
+      vendorAnalytics: ".nav-tab:nth-child(25)",
+      vendorSubscription: ".nav-tab:nth-child(26)",
 
       //general
       //site options
@@ -326,10 +327,10 @@ module.exports = {
       googleReCAPTCHAValidationSiteKey: "#dokan_appearance\\[recaptcha_site_key\\]",
       googleReCAPTCHAValidationSecretKey: "#dokan_appearance\\[recaptcha_secret_key\\]",
       showContactFormOnStorePage: "#dokan_appearance\\[contact_seller\\]",
-      storeHeaderTemplate: ".radio-image:nth-child(1) .button",
-      storeHeaderTemplate: ".radio-image:nth-child(2) .button",
-      storeHeaderTemplate: ".radio-image:nth-child(3) .button",
-      storeHeaderTemplate: ".radio-image:nth-child(4) .button",
+      storeHeaderTemplate1: ".radio-image:nth-child(1) .button",
+      storeHeaderTemplate2: ".radio-image:nth-child(2) .button",
+      storeHeaderTemplate3: ".radio-image:nth-child(3) .button",
+      storeHeaderTemplate4: ".radio-image:nth-child(4) .button",
       storeBannerWidth: "#dokan_appearance\\[store_banner_width\\]",
       storeBannerHeight: "#dokan_appearance\\[store_banner_height\\]",
       storeOpeningClosingTimeWidget: "#dokan_appearance\\[store_open_close\\]",
@@ -467,6 +468,8 @@ module.exports = {
 
       //product report abuse
       reportedBy: "#dokan_report_abuse\\[reported_by_logged_in_users_only\\]",
+      reasonsForAbuseReportList: ".dokan-settings-repeatable-list li",
+      reasonsForAbuseReportSingle: (reason) => `//li[contains(text(),'${reason}')]//span[@class="dashicons dashicons-no-alt remove-item"]`,
       reasonsForAbuseReportInput: ".regular-text",
       reasonsForAbuseReportAdd: ".dokan-repetable-add-item-btn",
       productReportAbuseSaveChanges: "#submit",
@@ -799,16 +802,16 @@ module.exports = {
   async setDokanGeneralSettings() {
     await page.click(this.dokan.settings.general)
     //site options
-    await base.click(this.dokan.settings.adminAreaAccess)
-    // await base.clearandtype(this.dokan.settings.vendorStoreUrl, 'store')
-    // await page.select(this.dokan.settings.sellingProductTypes, 'sell_both')
-    // //vendor store options
-    // await base.check(this.dokan.settings.storeTermsAndConditions)
-    // await base.clearandtype(this.dokan.settings.sroreProductPerPage, '12')
-    // await base.check(this.dokan.settings.enableTermsAndCondition)
-    // await page.select(this.dokan.settings.storCategory, 'none')
-    // await page.click(this.dokan.settings.generalSaveChanges)
-    // await page.waitForTimeout(6000)
+    await base.check(this.dokan.settings.adminAreaAccess)
+    await base.clearandtype(this.dokan.settings.vendorStoreUrl, 'store')
+    await page.select(this.dokan.settings.sellingProductTypes, 'sell_both')
+    //vendor store options
+    await base.check(this.dokan.settings.storeTermsAndConditions)
+    await base.clearandtype(this.dokan.settings.sroreProductPerPage, '12')
+    await base.check(this.dokan.settings.enableTermsAndCondition)
+    await page.select(this.dokan.settings.storCategory, 'none')
+    await page.click(this.dokan.settings.generalSaveChanges)
+    await page.waitForTimeout(6000)
   },
 
   async setDokanSellingSettings() {
@@ -820,14 +823,19 @@ module.exports = {
     await page.select(this.dokan.settings.shippingFeeRecipient, 'seller')
     await page.select(this.dokan.settings.taxFeeRecipient, 'seller')
     //vendor capabilty
-    await page.click(this.dokan.settings.newVendorProductUpload)
-    await page.click(this.dokan.settings.orderStatusChange)
+    await base.check(this.dokan.settings.newVendorProductUpload)
+    await base.check(this.dokan.settings.orderStatusChange)
     await page.select(this.dokan.settings.newProductStatus, 'publish')
-    await page.click(this.dokan.settings.duplicateProduct)
+    await base.check(this.dokan.settings.duplicateProduct)
+    await base.check(this.dokan.settings.productMailNotification)
     await page.select(this.dokan.settings.productCategorySelection, 'single')
     await page.click(this.dokan.settings.vendorsCanCreateTags)
-    await page.click(this.dokan.settings.discountEditingAllowVendorToAddDiscountOnProduct)
-    await page.click(this.dokan.settings.discountEditingAllowVendorToAddDiscountOnOrder)
+    await base.check(this.dokan.settings.discountEditingAllowVendorToAddDiscountOnProduct)
+    await base.check(this.dokan.settings.discountEditingAllowVendorToAddDiscountOnOrder)
+    await base.check(this.dokan.settings.vendorProductReview)
+    await base.check(this.dokan.settings.guestProductEnquiry)
+    await base.check(this.dokan.settings.enableMinMaxQuantities)
+    await base.check(this.dokan.settings.enableMinMaxAmount)
     await page.click(this.dokan.settings.sellingOptionsSaveChanges)
     await page.waitForTimeout(6000)
   },
@@ -835,23 +843,37 @@ module.exports = {
   async setDokanWithdrawSettings() {
     await page.click(this.dokan.settings.withdrawOptions)
     //withdraw options
-    await page.click(this.dokan.settings.withdrawMethodsPaypal)
-    await page.click(this.dokan.settings.withdrawMethodsBankTransfer)
-    // await page.click(this.dokan.settings.withdrawMethodsDokanCustom)
-    await page.click(this.dokan.settings.withdrawMethodsSkrill)
+    await base.check(this.dokan.settings.withdrawMethodsPaypal)
+    await base.check(this.dokan.settings.withdrawMethodsBankTransfer)
+    await base.check(this.dokan.settings.withdrawMethodsDokanCustom)
+    await base.check(this.dokan.settings.withdrawMethodsSkrill)
     await base.clearandtype(this.dokan.settings.customMethodName, 'Bksh')
     await base.clearandtype(this.dokan.settings.customMethodType, 'Email')
     await base.clearandtype(this.dokan.settings.minimumWithdrawAmount, '5')
-    await page.click(this.dokan.settings.orderStatusForWithdrawCompleted)
-    await page.click(this.dokan.settings.orderStatusForWithdrawProcessing)
+    await base.check(this.dokan.settings.orderStatusForWithdrawCompleted)
+    await base.check(this.dokan.settings.orderStatusForWithdrawProcessing)
     await base.clearandtype(this.dokan.settings.withdrawThreshold, '0')
     //disbursement schedule settings
-    await page.click(this.dokan.settings.withdrawDisbursementManual)
-    // await page.click(this.dokan.settings.withdrawDisbursementAuto)
-    await page.click(this.dokan.settings.disburseMentQuarterlySchedule)
-    await page.click(this.dokan.settings.disburseMentMonthlySchedule)
-    await page.click(this.dokan.settings.disburseMentBiweeklySchedule)
-    await page.click(this.dokan.settings.disburseMentWeeklySchedule)
+    await base.check(this.dokan.settings.withdrawDisbursementManual)
+    await base.check(this.dokan.settings.withdrawDisbursementAuto)
+
+    await base.check(this.dokan.settings.disburseMentQuarterlySchedule)
+    await base.check(this.dokan.settings.disburseMentMonthlySchedule)
+    await base.check(this.dokan.settings.disburseMentBiweeklySchedule)
+    await base.check(this.dokan.settings.disburseMentWeeklySchedule)
+
+    // // quaterly schedule
+    // await page.select(this.dokan.settings.quarterlyScheduleMonth, 'march')
+    // await page.select(this.dokan.settings.quarterlyScheduleWeek, '1')
+    // await page.select(this.dokan.settings.quarterlyScheduleDay, 'monday')
+    // // monthly schedule
+    // await page.select(this.dokan.settings.monthlyScheduleWeek, '1')
+    // await page.select(this.dokan.settings.monthlyScheduleDay, 'monday')
+    // // biweekly schedule
+    // await page.select(this.dokan.settings.biweeklyScheduleWeek, '1')
+    // await page.select(this.dokan.settings.biweeklyScheduleDay, 'monday')
+    // // weekly schedule
+    // await page.select(this.dokan.settings.weeklyScheduleDay, 'monday')
     await page.click(this.dokan.settings.withdrawSaveChanges)
     await page.waitForTimeout(6000)
 
@@ -861,12 +883,13 @@ module.exports = {
     await page.click(this.dokan.settings.appearance)
 
     await page.click(this.dokan.settings.showMapOnStorePage)
-    await page.click(this.dokan.settings.mapApiSourceGoogleMaps)
+    await base.check(this.dokan.settings.mapApiSourceGoogleMaps)
     await base.clearandtype(this.dokan.settings.googleMapApiKey, 'AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY')
-    await page.click(this.dokan.settings.storeHeaderTemplate)
+    await page.click(this.dokan.settings.storeHeaderTemplate1)
     await base.clearandtype(this.dokan.settings.storeBannerWidth, '625')
     await base.clearandtype(this.dokan.settings.storeBannerHeight, '300')
-    await page.click(this.dokan.settings.showVendorInfo)
+    await base.check(this.dokan.settings.storeOpeningClosingTimeWidget)
+    await base.check(this.dokan.settings.showVendorInfo)
     await page.click(this.dokan.settings.appearanceSaveChanges)
     await page.waitForTimeout(6000)
   },
@@ -874,6 +897,7 @@ module.exports = {
   async setDokanStoreSupportSettings() {
     await page.click(this.dokan.settings.storeSupport)
 
+    await base.check(this.dokan.settings.displayOnOrderDetails)
     await page.select(this.dokan.settings.displayOnSingleProductPage, 'Get Support')
     await base.clearandtype(this.dokan.settings.supportButttonLabel, 'Get Support')
     await page.click(this.dokan.settings.storeSupportSaveChanges)
@@ -900,10 +924,10 @@ module.exports = {
   async setDokanWholesaleSettings() {
     await page.click(this.dokan.settings.wholesale)
 
-    await page.click(this.dokan.settings.whoCaneeWholesalePriceAllUsers)
-    await page.click(this.dokan.settings.showWholesalePriceOnShopArchive)
+    await base.check(this.dokan.settings.whoCaneeWholesalePriceAllUsers)
+    await base.check(this.dokan.settings.showWholesalePriceOnShopArchive)
     await page.select(this.dokan.settings.needApprovalForCustomer, 'no')
-    // await page.click(this.dokan.settings.wholesaleSaveChanges)
+    await page.click(this.dokan.settings.wholesaleSaveChanges)
     await page.waitForTimeout(6000)
 
   },
@@ -911,43 +935,43 @@ module.exports = {
   async setDokanEuComplianceSettings() {
     await page.click(this.dokan.settings.euComplianceFields)
 
-    await page.click(this.dokan.settings.vendorExtraFieldsCompanyName)
-    await page.click(this.dokan.settings.vendorExtraFieldsCompanyIdOrEuidNumber)
-    await page.click(this.dokan.settings.vendorExtraFieldsVatOrTaxNumber)
-    await page.click(this.dokan.settings.vendorExtraFieldsNameOfBank)
-    await page.click(this.dokan.settings.vendorExtraFieldsBankIban)
-    await page.click(this.dokan.settings.displayInVendorRegistrationForm)
-    await page.click(this.dokan.settings.customerExtraFieldsCompanyIdOrEuidNumber)
-    await page.click(this.dokan.settings.customerExtraFieldsVatOrTaxNumber)
-    await page.click(this.dokan.settings.customerExtraFieldsNameOfBank)
-    await page.click(this.dokan.settings.customerExtraFieldsBankIban)
-    await page.click(this.dokan.settings.enableGermanizedSupportForVendors)
-    await page.click(this.dokan.settings.vendorsWillBeAbleToOverrideInvoiceNumber)
-    // await page.click(this.dokan.settings.euComplianceFieldsSaveChanges)
+    await base.check(this.dokan.settings.vendorExtraFieldsCompanyName)
+    await base.check(this.dokan.settings.vendorExtraFieldsCompanyIdOrEuidNumber)
+    await base.check(this.dokan.settings.vendorExtraFieldsVatOrTaxNumber)
+    await base.check(this.dokan.settings.vendorExtraFieldsNameOfBank)
+    await base.check(this.dokan.settings.vendorExtraFieldsBankIban)
+    await base.check(this.dokan.settings.displayInVendorRegistrationForm)
+    await base.check(this.dokan.settings.customerExtraFieldsCompanyIdOrEuidNumber)
+    await base.check(this.dokan.settings.customerExtraFieldsVatOrTaxNumber)
+    await base.check(this.dokan.settings.customerExtraFieldsNameOfBank)
+    await base.check(this.dokan.settings.customerExtraFieldsBankIban)
+    await base.check(this.dokan.settings.enableGermanizedSupportForVendors)
+    await base.check(this.dokan.settings.vendorsWillBeAbleToOverrideInvoiceNumber)
+    await page.click(this.dokan.settings.euComplianceFieldsSaveChanges)
     await page.waitForTimeout(6000)
   },
 
   async setDokanDeliveryTimeSettings() {
     await page.click(this.dokan.settings.deliveryTime)
 
-    await page.click(this.dokan.settings.allowVendorSettings)
+    await base.check(this.dokan.settings.allowVendorSettings)
     await base.clearandtype(this.dokan.settings.deliveryDateLabel, 'Delivery Date')
     await base.clearandtype(this.dokan.settings.deliveryBlockedBuffer, '0')
     await base.clearandtype(this.dokan.settings.deliveryBoxInfo, 'This store needs %DAY% day(s) to process your delivery request')
-    await page.click(this.dokan.settings.requireDeliveryDateAndTime)
-    await page.click(this.dokan.settings.deliveryDaySunday)
-    await page.click(this.dokan.settings.deliveryDayMonday)
-    await page.click(this.dokan.settings.deliveryDayTuesday)
-    await page.click(this.dokan.settings.deliveryDayWednesday)
-    await page.click(this.dokan.settings.deliveryDayThursday)
-    await page.click(this.dokan.settings.deliveryDayFriday)
-    await page.click(this.dokan.settings.deliveryDaySaturday)
+    await base.check(this.dokan.settings.requireDeliveryDateAndTime)
+    await base.check(this.dokan.settings.deliveryDaySunday)
+    await base.check(this.dokan.settings.deliveryDayMonday)
+    await base.check(this.dokan.settings.deliveryDayTuesday)
+    await base.check(this.dokan.settings.deliveryDayWednesday)
+    await base.check(this.dokan.settings.deliveryDayThursday)
+    await base.check(this.dokan.settings.deliveryDayFriday)
+    await base.check(this.dokan.settings.deliveryDaySaturday)
     await base.clearandtype(this.dokan.settings.openingTime, '12:00 AM')
     await base.clearandtype(this.dokan.settings.closingTime, '11:30 PM')
     await base.clearandtype(this.dokan.settings.timeSlot, '30')
     await base.clearandtype(this.dokan.settings.orderPerSlot, '0')
-    // await page.click(this.dokan.settings.deliveryTimeSaveChanges)
-    // await page.waitForTimeout(6000)
+    await page.click(this.dokan.settings.deliveryTimeSaveChanges)
+    await page.waitForTimeout(6000)
 
   },
 
@@ -956,13 +980,13 @@ module.exports = {
 
     await base.clearandtype(this.dokan.settings.noOfAvailableSlot, '100')
     await base.clearandtype(this.dokan.settings.expireAfterDays, '10')
-    await page.click(this.dokan.settings.vendorCanPurchaseAdvertisement)
+    await base.check(this.dokan.settings.vendorCanPurchaseAdvertisement)
     await base.clearandtype(this.dokan.settings.advertisementCostUsd, '15')
-    await page.click(this.dokan.settings.enableAdvertisementInSubscription)
-    await page.click(this.dokan.settings.markAdvertisedProductAsFeatured)
-    await page.click(this.dokan.settings.displayAdvertisedProductOnTop)
-    await page.click(this.dokan.settings.outOfStockVisibility)
-    // await page.click(this.dokan.settings.productAdvertisingSaveChanges)
+    await base.check(this.dokan.settings.enableAdvertisementInSubscription)
+    await base.check(this.dokan.settings.markAdvertisedProductAsFeatured)
+    await base.check(this.dokan.settings.displayAdvertisedProductOnTop)
+    await base.check(this.dokan.settings.outOfStockVisibility)
+    await page.click(this.dokan.settings.productAdvertisingSaveChanges)
     await page.waitForTimeout(6000)
 
   },
@@ -972,37 +996,36 @@ module.exports = {
 
     await page.select(this.dokan.settings.locationMapPosition, 'top')
     await page.select(this.dokan.settings.showMap, 'all')
-    await page.click(this.dokan.settings.showFiltersBeforeLocationMap)
-    await page.click(this.dokan.settings.productLocationTab)
+    await base.check(this.dokan.settings.showFiltersBeforeLocationMap)
+    await base.check(this.dokan.settings.productLocationTab)
     await page.select(this.dokan.settings.radiusSearchUnit, 'km')
     await base.clearandtype(this.dokan.settings.radiusSearchMinimumDistance, '0')
     await base.clearandtype(this.dokan.settings.radiusSearchMaximumDistance, '10')
     await base.clearandtype(this.dokan.settings.mapZoomLevel, '11')
     // await base.clearandtype(this.dokan.settings.defaultLocation, 'New York, NY, USA')//TODO: add default location
-    // await page.click(this.dokan.settings.geolocationSaveChanges)
+    await page.click(this.dokan.settings.geolocationSaveChanges)
     await page.waitForTimeout(6000)
 
   },
 
   async setDokanProductReportAbuseSettings() {
     await page.click(this.dokan.settings.productReportAbuse)
-
-    await page.click(this.dokan.settings.reportedBy)
+    await base.deleteIfExists(this.dokan.settings.reasonsForAbuseReportSingle('This product is fake'))
     await base.clearandtype(this.dokan.settings.reasonsForAbuseReportInput, 'This product is fake')
-    await base.click(this.dokan.settings.reasonsForAbuseReportAdd)
-    // await page.click(this.dokan.settings.productReportAbuseSaveChanges)
+    await page.click(this.dokan.settings.reasonsForAbuseReportAdd)
+    await page.click(this.dokan.settings.productReportAbuseSaveChanges)
     await page.waitForTimeout(6000)
   },
 
   async setDokanSpmvSettings() {
     await page.click(this.dokan.settings.singleProductMultivendor)
 
-    await page.click(this.dokan.settings.enableSingleProductMultipleVendor)
+    await base.check(this.dokan.settings.enableSingleProductMultipleVendor)
     await base.clearandtype(this.dokan.settings.sellItemButtonText, 'Sell This Item')
     await base.clearandtype(this.dokan.settings.availableVendorDisplayAreaTitle, 'Other Available Vendor')
     await page.select(this.dokan.settings.availableVendorSectionDisplayPosition, 'below_tabs')
     await page.select(this.dokan.settings.showSpmvProducts, 'show_all')
-    // await page.click(this.dokan.settings.singleProductMultivendorSaveChanges)
+    await page.click(this.dokan.settings.singleProductMultivendorSaveChanges)
     await page.waitForTimeout(6000)
   },
 
@@ -1010,23 +1033,23 @@ module.exports = {
     await page.click(this.dokan.settings.vendorSubscription)
 
     await page.select(this.dokan.settings.subscription, '2')
-    await page.click(this.dokan.settings.enableProductSubscription)
-    await page.click(this.dokan.settings.enableSubscriptionInRegistrationForm)
-    await page.click(this.dokan.settings.enableEmailNotification)
+    await base.check(this.dokan.settings.enableProductSubscription)
+    await base.check(this.dokan.settings.enableSubscriptionInRegistrationForm)
+    await base.check(this.dokan.settings.enableEmailNotification)
     await base.clearandtype(this.dokan.settings.noOfDays, '2')
     await page.select(this.dokan.settings.productStatus, 'draft')
     await base.clearandtype(this.dokan.settings.cancellingEmailSubject, 'Subscription Package Cancel notification')
     await base.clearandtype(this.dokan.settings.cancellingEmailbody, 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.')
     await base.clearandtype(this.dokan.settings.alertEmailSubject, 'Subscription Ending Soon')
     await base.clearandtype(this.dokan.settings.alertEmailBody, 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely')
-    // await page.click(this.dokan.settings.vendorSubscriptionSaveChanges)
+    await page.click(this.dokan.settings.vendorSubscriptionSaveChanges)
     await page.waitForTimeout(6000)
   },
 
 
   async setDokanSettings() {
     await this.goToDokanSettings()
-    await this.setDokanGeneralSettings()
+    // await this.setDokanGeneralSettings()
     // await this.setDokanSellingSettings()
     // await this.setDokanWithdrawSettings()
     // await this.setDokanAppearanceSettings()
@@ -1037,7 +1060,7 @@ module.exports = {
     // await this.setDokanDeliveryTimeSettings()
     // await this.setDokanProductAdvertisingSettings()
     // await this.setDokanGeolocationSettings()
-    // await this.setDokanProductReportAbuseSettings()
+    await this.setDokanProductReportAbuseSettings()
     // await this.setDokanSpmvSettings()
     // await this.setDokanVendorSubscriptionSettings()
 

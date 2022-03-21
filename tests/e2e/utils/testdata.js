@@ -40,6 +40,15 @@ const shippingFeeRecipient = ['seller','admin']
 const taxFeeRecipient = ['seller','admin']
 const newProductStatus = ['publish','pending']
 const productCategory = ['single','multiple']
+//withdraw
+const quarterlyScheduleMonth = ['january','february','march']
+const quarterlyScheduleWeek = ['1','2','3','L']
+const quarterlyScheduleDay = ['monday','tuesday','wednesday','thursday','friday']
+const monthlyScheduleWeek = ['1','2','3','L']
+const monthlyScheduleDay = ['monday','tuesday','wednesday','thursday','friday']
+const biweeklyScheduleWeek = ['1','2']
+const biweeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
+const weeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
 //appreance settings
 const gMapApiKey = "AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY"
 const mapboxAccessToken = "pk.eyJ1Ijoic2hhc2h3YXRhIiwiYSI6ImNrdzV3bm43eTAxeDYzMG52b2lwanZ4MnkifQ.tb3LaMr3Wa_-YOj5MwkEUA"

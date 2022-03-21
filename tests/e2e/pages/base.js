@@ -35,16 +35,17 @@ module.exports = {
     //TODO: page.waitForXpath()
     //TODO: page.waitForSelector()
 
-    // async click(selector) {
-    //     let element = await page.$(selector);
-    //     if (selector.startsWith('//')) {
-    //         await this.clickXpath(selector)
-    //     } else {
-    //         await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-    //     }
-    // },
+    async click(selector) {
+        let element = await page.$(selector);
+        if (selector.startsWith('//')) {
+            console.log('entered ')
+            await this.clickXpath(selector)
+        } else {
+            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+        }
+    },
 
     // async click(selector) {
     //     let element = await page.$(selector);
@@ -66,6 +67,7 @@ module.exports = {
     // },
 
     async check(selector) {
+
         let element = await page.$(selector);
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
@@ -121,11 +123,22 @@ module.exports = {
     // await await Promise.race(watchDog2);
 
     async clickXpath(selector) {
+        // console.log(selector)
         let [element] = await page.$x(selector)
         // console.log(element)
         // await element.click()
         await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
 
+    },
+
+    async deleteIfExists(selector) {
+        if (await page.$x(selector) !== null) {
+            // console.log('exists')
+            let [element] = await page.$x(selector)
+            await element.click()
+        } else {
+            return
+        }
     },
 
     async clickXpath1(selector) {
@@ -142,7 +155,6 @@ module.exports = {
     },
 
     async select(selector, value) {
-
         await page.waitForSelector(selector)
         await page.select(selector, value)
 
@@ -235,7 +247,6 @@ module.exports = {
 
     // set dropdown option  span dropdown
     async setDropdownOptionSpan(selector, value) {
-        // await page.click(selector)
         let elements = await page.$$(selector);
         for (let element of elements) {
             const text = await page.evaluate(element => element.textContent, element)
@@ -247,6 +258,24 @@ module.exports = {
         }
 
     },
+
+    // async deleteListElement(selector, value) {
+    //     let elements = await page.$$(selector);
+    //     for (let element of elements) {
+    //         const text = await page.evaluate(element => element.textContent, element)
+    //         var children = await page.$x(element);
+    //         console.log(children)
+    //         // console.log(text)
+    //         // if (value.toLowerCase() == (text.trim()).toLowerCase()) {
+    //         //     // console.log(text)
+    //         //     // await element.click()
+    //         //     console.log(element.childNodes.length)
+    //         // }
+    //     }
+
+    // },
+
+
 
 
     // or select dropdown

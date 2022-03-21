@@ -2,7 +2,7 @@
 const { loginUser } = require('@wordpress/e2e-test-utils');
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js');
-const timout = 100000
+const timout = 600000
 
 
 describe('admin functionaly test', () => {
