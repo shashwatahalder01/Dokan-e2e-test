@@ -1,5 +1,6 @@
 
 const { faker } = require('@faker-js/faker');
+const { wooCommerce } = require('../pages/admin');
 
 // productsName: ["Plain Cotton Tshirt", "The moon Thsirt", "Summer Thirt"],
 // prizes: [100, 150, 250],
@@ -29,10 +30,16 @@ const { faker } = require('@faker-js/faker');
 //   ["Red", "Blue", "Black", "Yellow", "White", "Deep blue"],
 // ],
 
+// wooCommerce
+//shipping
+const shippingMethods = ['flat_rate','free_shipping','local_pickup','dokan_table_rate_shipping','dokan_distance_rate_shipping','dokan_vendor_shipping']
+const taxStatus = ['taxable','none']
+const freeShippingRequires = ['coupon','min_amount','either','both']
 
+//Dokan
 //admin
 //general settings
-const sellingProductTypes = ['sell_both', 'sell_physical', 'sell_digital'];
+const sellingProductTypes = ['sell_both', 'sell_physical', 'sell_digital']
 const storeCategory = ['none','Single','Multiple']
 //selling options settings
 const commissionType = ['flat','percentage','combine']

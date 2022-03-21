@@ -41,7 +41,8 @@ describe('admin functionaly test', () => {
         // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminlogin()
         // await adminPage.setWpSettings()
-        await adminPage.setDokanSettings()
+        // await adminPage.setDokanSettings()
+        await adminPage.setWoocommerceSettings()
 
     },timout);
 

@@ -5,8 +5,9 @@ module.exports = {
     // slowMo: 200, // slow down by 250ms
     // slowMo: 150, // slow down by 250ms
     // slowMo: 100, // slow down by 250ms
-    slowMo: 50, // slow down by 250ms
-    // slowMo: 30, // slow down by 250ms
+    // slowMo: 50, // slow down by 250ms
+    // slowMo: 40, // slow down by 250ms
+    slowMo: 30, // slow down by 250ms
     // slowMo: 20, // slow down by 250ms
     // slowMo: 10, // slow down by 250ms
 

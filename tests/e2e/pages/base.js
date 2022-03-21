@@ -347,6 +347,19 @@ module.exports = {
             console.log('no php error')
         }
 
+    },
+
+    async checkPageNotExist() {
+        let pageContent = await page.content();
+
+        if (pageContent.includes('Oops! That page can’t be found.')) {
+            await page.screenshot({ path: 'tests/e2e/screenshot/pageNotExists' + Date.now() + '.png', fullPage: true })
+            //TODO: save permalink
+        }
+        else {
+            console.log('Page exists')
+        }
+
     }
 
 }
