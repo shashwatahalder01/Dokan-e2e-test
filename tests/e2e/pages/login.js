@@ -58,7 +58,6 @@ module.exports = {
     resetPasswordEmail: '#user_login',
     resetPasswordbtn: 'button[value="Reset password"]',
 
-
     // admin login
     adminEmail: '#user_login',
     adminPassword: '#user_pass',
@@ -70,6 +69,8 @@ module.exports = {
     adminUserMenu: '#wp-admin-bar-my-account a',
     adminLogout: '#wp-admin-bar-logout a',
 
+    //admin dashboard
+    adminDashboard:".wrap h1",
 
     // Data
 
@@ -146,26 +147,33 @@ module.exports = {
 
         let homeIsVisible = await base.isVisible(page, this.home)
         expect(homeIsVisible).toBe(true)
-
     },
 
+    async switchtoadmin(username, password) {
+        // await base.opennewtab()
+        await this.adminlogin(username, password)
+    },
+
+
+    /////////////////////////////////////////  reviewed  ///////////////////////////////////////////////
 
     async adminlogin(username, password) {
-        // await base.goto('wp-admin')
-        // let res = await base.isVisible(page, this.adminEmail)
-        // if (res) {
-        //     await page.type(this.adminEmail, username)
-        //     await page.type(this.adminPassword, password)
-        //     await base.click(this.adminLogin)
+        await base.goto('wp-admin')
+        let res = await base.isVisible(page, this.adminEmail)
+        if (res) {
+            await page.type(this.adminEmail, username)
+            await page.type(this.adminPassword, password)
+            await base.click(this.adminLogin)
 
-        //     let homeIsVisible = await base.isVisible(page, this.adminDashboard)
-        //     expect(homeIsVisible).toBe(true)
-        // }
-        // else {
-        //     return
-        // }
-        await loginUser('admin', 'password')
+            let dashboardIsVisible = await base.isVisible(page, this.adminDashboard)
+            expect(dashboardIsVisible).toBe(true)
+        }
+        else {
+            return
+        }
+        // await loginUser('admin', 'password')
     },
+
 
     async adminlogout(username, password) {
         await page.hover(this.adminUserMenu)
@@ -173,9 +181,6 @@ module.exports = {
         await base.click(this.adminLogout)
     },
 
-    async switchtoadmin(username, password) {
-        // await base.opennewtab()
-        await this.adminlogin(username, password)
-    }
+
 
 }

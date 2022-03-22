@@ -77,7 +77,7 @@ module.exports = {
     withdraw: {},
     //vendors
     vendors: {
-
+      // TODO: recheck locators
       // add new vendors
       addNewVendorClose: '.modal-close.modal-close-link.dashicons.dashicons-no-alt',
       addNewVendor: '.page-title-action',
@@ -183,7 +183,7 @@ module.exports = {
     advertising: {},
     //wholesaleCustomer
     wholesaleCustomer: {
-
+      //TODO: refactor this
       // wholesale customer
       wholesaleCustomerSlider(customer) {
         return '//span[@class="slider round"]' //TODO: update locator
@@ -947,6 +947,9 @@ module.exports = {
     customBase: "#woocommerce_custom_selection",
     permalinkSaveChanges: "#submit",
 
+    //update settings
+    updatedSuccessMessage: "#setting-error-settings_updated strong",
+
   },
 
   //locoTranslate
@@ -958,7 +961,7 @@ module.exports = {
     await await page.goto(createURL('wp-admin/index.php'))
 
     const url = await page.url();
-    expect(url).toMatch('wp-admin/index.php')
+    expect(url).toMatch('wp-admin/index.php') //TODO: update url
   },
 
   async goToDokanSettings() {
@@ -969,7 +972,7 @@ module.exports = {
     await base.click(this.dokan.settingsmenu)
 
     const url = await page.url();
-    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings')
+    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings') //TODO: update url
   },
 
   async goToWooCommerceSettings() {
@@ -980,9 +983,8 @@ module.exports = {
     await base.click(this.wooCommerce.settingsmenu)
 
     const url = await page.url();
-    expect(url).toMatch('wp-admin/admin.php?page=wc-settings')
+    expect(url).toMatch('wp-admin/admin.php?page=wc-settings') //TODO: update url
   },
-
 
   async setWpSettings() {
     await page.hover(this.aDashboard.settings)
@@ -995,11 +997,17 @@ module.exports = {
     await page.select(this.settings.timezone, 'UTC+6')
     await base.click(this.settings.generalSaveChanges)
 
+    let successmessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Settings saved.')
+    
     //set permalinks settings
     await base.click(this.settings.permalinks)
     await page.click(this.settings.postName)
     await page.click(this.settings.customBase)
     await page.click(this.settings.permalinkSaveChanges)
+
+    let parmalinkSuccessmessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
+    expect(parmalinkSuccessmessage).toMatch('Permalink structure updated.')
   },
 
   async setDokanGeneralSettings() {
@@ -1014,7 +1022,7 @@ module.exports = {
     await base.check(this.dokan.settings.enableTermsAndCondition)
     await page.select(this.dokan.settings.storCategory, 'none')
     await page.click(this.dokan.settings.generalSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanSellingSettings() {
@@ -1040,7 +1048,7 @@ module.exports = {
     await base.check(this.dokan.settings.enableMinMaxQuantities)
     await base.check(this.dokan.settings.enableMinMaxAmount)
     await page.click(this.dokan.settings.sellingOptionsSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanWithdrawSettings() {
@@ -1078,7 +1086,7 @@ module.exports = {
     // // weekly schedule
     // await page.select(this.dokan.settings.weeklyScheduleDay, 'monday')
     await page.click(this.dokan.settings.withdrawSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
 
   },
 
@@ -1095,7 +1103,7 @@ module.exports = {
     await base.check(this.dokan.settings.storeOpeningClosingTimeWidget)
     await base.check(this.dokan.settings.showVendorInfo)
     await page.click(this.dokan.settings.appearanceSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanStoreSupportSettings() {
@@ -1105,7 +1113,7 @@ module.exports = {
     await page.select(this.dokan.settings.displayOnSingleProductPage, 'Get Support')
     await base.clearandtype(this.dokan.settings.supportButttonLabel, 'Get Support')
     await page.click(this.dokan.settings.storeSupportSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanRmaSettings() {
@@ -1125,7 +1133,7 @@ module.exports = {
     await page.click(this.dokan.settings.reasonsForRmaAdd)
     //TODO: refund policy
     await page.click(this.dokan.settings.rmaSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanWholesaleSettings() {
@@ -1135,7 +1143,7 @@ module.exports = {
     await base.check(this.dokan.settings.showWholesalePriceOnShopArchive)
     await page.select(this.dokan.settings.needApprovalForCustomer, 'no')
     await page.click(this.dokan.settings.wholesaleSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
 
   },
 
@@ -1155,7 +1163,7 @@ module.exports = {
     await base.check(this.dokan.settings.enableGermanizedSupportForVendors)
     await base.check(this.dokan.settings.vendorsWillBeAbleToOverrideInvoiceNumber)
     await page.click(this.dokan.settings.euComplianceFieldsSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanDeliveryTimeSettings() {
@@ -1178,7 +1186,7 @@ module.exports = {
     await base.clearandtype(this.dokan.settings.timeSlot, '30')
     await base.clearandtype(this.dokan.settings.orderPerSlot, '0')
     await page.click(this.dokan.settings.deliveryTimeSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
 
   },
 
@@ -1194,7 +1202,7 @@ module.exports = {
     await base.check(this.dokan.settings.displayAdvertisedProductOnTop)
     await base.check(this.dokan.settings.outOfStockVisibility)
     await page.click(this.dokan.settings.productAdvertisingSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
 
   },
 
@@ -1211,7 +1219,7 @@ module.exports = {
     await base.clearandtype(this.dokan.settings.mapZoomLevel, '11')
     // await base.clearandtype(this.dokan.settings.defaultLocation, 'New York, NY, USA')//TODO: add default location
     await page.click(this.dokan.settings.geolocationSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
 
   },
 
@@ -1221,7 +1229,7 @@ module.exports = {
     await base.clearandtype(this.dokan.settings.reasonsForAbuseReportInput, 'This product is fake')
     await page.click(this.dokan.settings.reasonsForAbuseReportAdd)
     await page.click(this.dokan.settings.productReportAbuseSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanSpmvSettings() {
@@ -1233,7 +1241,7 @@ module.exports = {
     await page.select(this.dokan.settings.availableVendorSectionDisplayPosition, 'below_tabs')
     await page.select(this.dokan.settings.showSpmvProducts, 'show_all')
     await page.click(this.dokan.settings.singleProductMultivendorSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
   async setDokanVendorSubscriptionSettings() {
@@ -1250,7 +1258,7 @@ module.exports = {
     await base.clearandtype(this.dokan.settings.alertEmailSubject, 'Subscription Ending Soon')
     await base.clearandtype(this.dokan.settings.alertEmailBody, 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely')
     await page.click(this.dokan.settings.vendorSubscriptionSaveChanges)
-    await page.waitForTimeout(6000)
+    await page.waitForTimeout(4000)
   },
 
 
@@ -1355,9 +1363,11 @@ module.exports = {
 
   async enableTax() {
     // enable tax
-    // await base.click(this.wooCommerce.settings.general) // don't need to click 
     await base.check(this.wooCommerce.settings.enableTaxes)
     await base.click(this.wooCommerce.settings.generalSaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
 
   },
 
@@ -1370,10 +1380,15 @@ module.exports = {
       await page.click(this.wooCommerce.settings.insertRow)
     }
     await base.clearandtype(this.wooCommerce.settings.taxRate, '5')
-    await page.click(this.wooCommerce.settings.taxTable)
+    await page.click(this.wooCommerce.settings.taxTable) //TODO: recheck if it required
     await page.waitForTimeout(1000)
     await page.click(this.wooCommerce.settings.taxRateSaveChanges)
-    page.waitForTimeout(5000)
+    await page.waitForTimeout(1000)
+
+    let newTaxRate = await base.getElementValue(this.wooCommerce.settings.taxRate)
+    expect(newTaxRate).toBe('5.0000');
+
+
   },
 
   async addShippingMethod(shippingMethod, shippingMethodName, shippingMethodCustomTitle, taxStatus) {
@@ -1392,28 +1407,57 @@ module.exports = {
     await page.click(this.wooCommerce.settings.deleteShippingMethod(shippingMethodName))
   },
 
+  // payment methods
 
   async setpaymetnsettings() {
     await this.goToWooCommerceSettings()
     await this.setupBasicPaymentMethods()
-    // await this.setupStripeConnect()
-    // await this.setupPaypalMarketPlace()
-    // await this.setupDokanMangoPay()
-    // await this.setupDokanRazorpay()
+    await this.setupStripeConnect()
+    await this.setupPaypalMarketPlace()
+    await this.setupDokanMangoPay()
+    await this.setupDokanRazorpay()
+  },
+
+  async setCurrency(currency) {
+    await this.goToWooCommerceSettings()
+    let currentCurrency = await base.getSelectorText(this.wooCommerce.settings.currency)
+    if (currentCurrency !== currency) {
+      await page.click(this.wooCommerce.settings.currency)
+      await page.type(this.wooCommerce.settings.currency, currency)
+      await page.keyboard.press('Enter')
+      await base.click(this.wooCommerce.settings.generalSaveChanges)
+
+      let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+      expect(successmessage).toMatch('Your settings have been saved.')
+    }
+    else {
+      return
+    }
 
   },
 
+  async enablePaymentMethod(selector) {
+    let classValue = await base.getElementClassValue(selector)
+    if (classValue.includes('woocommerce-input-toggle--disabled')) {
+      await base.clickXpath(selector)
+    } else {
+      await base.clickXpath(selector)
+      await page.waitForTimeout(1000)
+      await base.clickXpath(selector)
+    }
+
+    let classValue1 = await base.getElementClassValue(selector)
+    expect(classValue1).toContain('woocommerce-input-toggle--enabled')
+  },
+
   async setupBasicPaymentMethods() {
-
-
-    //TODO:  only click if not enabled 'woocommerce-input-toggle--disabled'
     await base.click(this.wooCommerce.settings.payments)
     //bank transfer
-    await base.clickXpath(this.wooCommerce.settings.enableDirectBankTransfer)
+    await this.enablePaymentMethod(this.wooCommerce.settings.enableDirectBankTransfer)
     //check payments
-    await base.clickXpath(this.wooCommerce.settings.enableCheckPayments)
+    await this.enablePaymentMethod(this.wooCommerce.settings.enableCheckPayments)
     //cash on delivery
-    await base.clickXpath(this.wooCommerce.settings.enableCashOnDelivery)
+    await this.enablePaymentMethod(this.wooCommerce.settings.enableCashOnDelivery)
 
     await base.click(this.wooCommerce.settings.paymentMethodsSaveChanges)
 
@@ -1501,16 +1545,16 @@ module.exports = {
     await page.click(this.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServices)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServicesValues, 'Sofort*')
     await base.check(this.wooCommerce.settings.dokanMangoPay.savedCards)
-    // Fund Transfers and Payouts
+    // fund transfers and payouts
     await page.click(this.wooCommerce.settings.dokanMangoPay.transferFunds)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.transferFundsValues, 'On payment completed')
     await base.check(this.wooCommerce.settings.dokanMangoPay.payoutMode)
-    // Types and Requirements of Vendors
+    // types and requirements of vendors
     await page.click(this.wooCommerce.settings.dokanMangoPay.typeOfVendors)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.typeOfVendorsValues, 'Either')
     await page.click(this.wooCommerce.settings.dokanMangoPay.businessRequirement)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.businessRequirementValues, 'Any')
-    // advancedSettings
+    // advanced settings
     await base.check(this.wooCommerce.settings.dokanMangoPay.displayNoticeToNonconnectedSellers)
     await base.check(this.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonconnectedSellers)
     await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.announcementInterval, '7')
@@ -1545,23 +1589,7 @@ module.exports = {
     expect(successmessage).toMatch('Your settings have been saved.')
   },
 
-  async setCurrency(currency) {
-    await this.goToWooCommerceSettings()
-    let currentCurrency = await base.getSelectorText(this.wooCommerce.settings.currency)
-    if (currentCurrency !== currency) {
-      await page.click(this.wooCommerce.settings.currency)
-      await page.type(this.wooCommerce.settings.currency, currency)
-      await page.keyboard.press('Enter')
-      await base.click(this.wooCommerce.settings.generalSaveChanges)
 
-      let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-      expect(successmessage).toMatch('Your settings have been saved.')
-    }
-    else {
-      return
-    }
-
-  },
 
 
 
