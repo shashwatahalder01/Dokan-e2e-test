@@ -43,9 +43,9 @@ describe('admin functionaly test', () => {
         // await adminPage.setWpSettings()
         // await adminPage.setDokanSettings()
         await adminPage.setWoocommerceSettings()
+        // await adminPage.setpaymetnsettings()
 
     },timout);
-
 
 
     // it('admin add vendor', async () => {

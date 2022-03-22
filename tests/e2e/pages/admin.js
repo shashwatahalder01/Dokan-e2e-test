@@ -1,6 +1,7 @@
 const { createURL, clickMenuItem, clickOnMoreMenuItem } = require("@wordpress/e2e-test-utils");
 const base = require("../pages/base.js");
-const loginPage = require('../pages/login.js')
+const loginPage = require('../pages/login.js');
+const { setpaymetnsettings } = require("./vendor.js");
 
 
 
@@ -568,6 +569,7 @@ module.exports = {
       taxTable: ".wc_tax_rates",
       insertRow: ".plus",
       taxRate: ".rate input",
+      taxTable: ".wc_tax_rates.wc_input_table.widefat",
       taxRateSaveChanges: ".woocommerce-save-button",
 
       //shipping
@@ -578,7 +580,9 @@ module.exports = {
       // shippingMethod:"select:nth-child(2)",
       shippingMethod: ".wc-shipping-zone-method-selector select",
       addShippingMethod: "#btn-ok",
-      editShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]//..//a[@class='wc-shipping-zone-method-settings']`,
+      createdShippingMethod: ".wc-shipping-zone-method-rows.ui-sortable",
+      editShippingMethod: '.row-actions .wc-shipping-zone-method-settings',
+      // editShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]//..//a[@class='wc-shipping-zone-method-settings']`,
       deleteShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]//..//a[@class='wc-shipping-zone-method-delete']`,
       //edit shipping methods
       //flat rate
@@ -618,23 +622,23 @@ module.exports = {
       enableDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
       enableDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
       enableDokanStripeExpress: "//a[contains(text(),'')]//..//..//span",//TODO: add locator
-      // setup payment methods
-      setupDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//a[contains(text(),'Manage')]",
-      setupCheckPayments: "//a[contains(text(),'Check payments')]//..//..//a[contains(text(),'Manage')]",
-      setupCashOnDelivery: "//a[contains(text(),'Cash on delivery')]//..//..//a[contains(text(),'Manage')]",
-      setupDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//a[contains(text(),'Set up')]",
-      setupDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//a[contains(text(),'Set up')]",
-      setupDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//a[contains(text(),'Set up')]",
-      setupDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//a[contains(text(),'Set up')]",
-      setupDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//a[contains(text(),'Set up')]",
-      setupDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//a[contains(text(),'Set up')]",
+      // setup or manage payment methods
+      setupDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//td[@class='action']//a",
+      setupCheckPayments: "//a[contains(text(),'Check payments')]//..//..//td[@class='action']//a",
+      setupCashOnDelivery: "//a[contains(text(),'Cash on delivery')]//..//..//td[@class='action']//a",
+      setupDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//td[@class='action']//a",
+      setupDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//td[@class='action']//a",
+      setupDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//td[@class='action']//a",
+      setupDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//td[@class='action']//a",
+      setupDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//td[@class='action']//a",
+      setupDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//td[@class='action']//a",
       setupDokanStripeExpress: "",//TODO: add locator
       paymentMethodsSaveChanges: ".woocommerce-save-button",
 
       //stripe
       stripe: {
         //stripe connect
-        enableDisableStripe: "#woocommerce_dokan-stripe-connect_enable",
+        enableDisableStripe: "#woocommerce_dokan-stripe-connect_enabled",
         title: "#woocommerce_dokan-stripe-connect_title",
         description: "#woocommerce_dokan-stripe-connect_description",
         nonConnectedSellers: "#woocommerce_dokan-stripe-connect_allow_non_connected_sellers",
@@ -645,7 +649,6 @@ module.exports = {
         testMode: "#woocommerce_dokan-stripe-connect_testmode",
         stripeCheckout: "#woocommerce_dokan-stripe-connect_stripe_checkout",
         stripeCheckoutLocale: "#select2-woocommerce_dokan-stripe-connect_stripe_checkout_locale-container",
-        stripeCheckoutLocaleValues: ".select2-results ul li", //TODO: use enter instead of class
         checkoutImage: "#woocommerce_dokan-stripe-connect_stripe_checkout_image",
         checkoutButtonLabel: "#woocommerce_dokan-stripe-connect_stripe_checkout_label",
         savedCards: "#woocommerce_dokan-stripe-connect_saved_cards",
@@ -668,9 +671,9 @@ module.exports = {
         sandvoxClientSecret: "#woocommerce_dokan_paypal_marketplace_test_app_pass",
         payPalPartnerAttributionId: "#woocommerce_dokan_paypal_marketplace_bn_code",
         disbursementMode: "#select2-woocommerce_dokan_paypal_marketplace_disbursement_mode-container",
-        disbursementModeValues: ".select2-results ul li", //TODO: use enter instead of class
+        disbursementModeValues: ".select2-results ul li",
         paymentButtonType: "#select2-woocommerce_dokan_paypal_marketplace_button_type-container",
-        paymentButtonTypeValues: ".select2-results ul li", //TODO: use enter instead of class
+        paymentButtonTypeValues: ".select2-results ul li",
         allowUnbrandedCreditCard: "#woocommerce_dokan_paypal_marketplace_ucc_mode",
         marketplaceLogo: "#woocommerce_dokan_paypal_marketplace_marketplace_logo",
         displayNoticeToConnectSeller: "#woocommerce_dokan_paypal_marketplace_display_notice_on_vendor_dashboard",
@@ -719,14 +722,16 @@ module.exports = {
         testKeyId: "#woocommerce_dokan_razorpay_test_key_id",
         testKeySecret: "#woocommerce_dokan_razorpay_test_key_secret",
         disbursementMode: "#select2-woocommerce_dokan_razorpay_disbursement_mode-container",
-        disbursementModeValues: ".select2-results ul li", //TODO: use enter instead of class
+        disbursementModeValues: ".select2-results ul li",
         sellerPaysTheprocessingFee: "#woocommerce_dokan_razorpay_seller_pays_the_processing_fee",
         displayNoticeToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_on_vendor_dashboard",
         sendAnnouncementToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_to_non_connected_sellers",
         sendAnnouncementInterval: "#woocommerce_dokan_razorpay_display_notice_interval",
         dokanRazorpaySaveChanges: ".woocommerce-save-button",
-      }
+      },
 
+      //update success message
+      updatedSuccessMessage: "#message.updated.inline p",
 
     },
 
@@ -1251,43 +1256,52 @@ module.exports = {
 
   async setDokanSettings() {
     await this.goToDokanSettings()
-    // await this.setDokanGeneralSettings()
-    // await this.setDokanSellingSettings()
-    // await this.setDokanWithdrawSettings()
-    // await this.setDokanAppearanceSettings()
-    // await this.setDokanStoreSupportSettings()
+    await this.setDokanGeneralSettings()
+    await this.setDokanSellingSettings()
+    await this.setDokanWithdrawSettings()
+    await this.setDokanAppearanceSettings()
+    await this.setDokanStoreSupportSettings()
     await this.setDokanRmaSettings()
-    // await this.setDokanWholesaleSettings()
-    // await this.setDokanEuComplianceSettings()
-    // await this.setDokanDeliveryTimeSettings()
-    // await this.setDokanProductAdvertisingSettings()
-    // await this.setDokanGeolocationSettings()
-    // await this.setDokanProductReportAbuseSettings()
-    // await this.setDokanSpmvSettings()
-    // await this.setDokanVendorSubscriptionSettings()
+    await this.setDokanWholesaleSettings()
+    await this.setDokanEuComplianceSettings()
+    await this.setDokanDeliveryTimeSettings()
+    await this.setDokanProductAdvertisingSettings()
+    await this.setDokanGeolocationSettings()
+    await this.setDokanProductReportAbuseSettings()
+    await this.setDokanSpmvSettings()
+    await this.setDokanVendorSubscriptionSettings()
   },
 
   async setWoocommerceSettings() {
     await this.goToWooCommerceSettings()
+    // await this.enableTax()
+    await this.addStandardTaxRate()
 
     //add shipping region
     await base.click(this.wooCommerce.settings.shipping)
-    await base.click(this.wooCommerce.settings.addShippingZone)
-    await base.clearandtype(this.wooCommerce.settings.zoneName, 'US')
-    zoneRegions: ".select2-search__field",
-    await page.click(this.wooCommerce.settings.zoneRegions)
-    await page.type(this.wooCommerce.settings.zoneRegions)
-    await base.pressEnter()
+    // await base.click(this.wooCommerce.settings.addShippingZone)
+    // await base.clearandtype(this.wooCommerce.settings.zoneName, 'US')
+    // await page.click(this.wooCommerce.settings.zoneRegions)
+    // // await page.type(this.wooCommerce.settings.zoneRegions, 'United States (US)')
+    // await page.select('#zone_locations','country:US')
+    // // 'country:US'
+    // await page.keyboard.press('Enter')
 
-      //flat rate
-      await base.click(this.wooCommerce.settings.addShippingMethods)
-    await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
-    await page.click(this.wooCommerce.settings.addShippingMethod)
-    await page.click(this.wooCommerce.settings.editShippingMethod('Flat Rate'))
-    await base.clearandtype(this.wooCommerce.settings.flatRateMethodTitle, 'Flat Rate admin')
-    await page.select(this.wooCommerce.settings.flatRateTaxStatus, 'taxable')
-    await base.clearandtype(this.wooCommerce.settings.flatRateCost, '20')
-    await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+
+    //flat rate
+    // await page.click(this.wooCommerce.settings.addShippingMethods)
+    // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
+    // await base.click(this.wooCommerce.settings.addShippingMethod)
+    // // await page.waitForTimeout(5000)
+    // await page.hover(this.wooCommerce.settings.createdShippingMethod)
+    // await page.waitForTimeout(1000)
+    // await page.click(this.wooCommerce.settings.editShippingMethod)
+    // // await base.clickXpath(this.wooCommerce.settings.editShippingMethod('Flat Rate'))
+    // await base.clearandtype(this.wooCommerce.settings.flatRateMethodTitle, 'Flat Rate admin')
+    // await page.select(this.wooCommerce.settings.flatRateTaxStatus, 'taxable')
+    // await base.clearandtype(this.wooCommerce.settings.flatRateCost, '20')
+    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await page.waitForTimeout(4000)
 
     // await page.click(this.wooCommerce.settings.deleteShippingMethod('Flat Rate'))
 
@@ -1347,16 +1361,19 @@ module.exports = {
 
   },
 
-  async addStandardTax() {
+  async addStandardTaxRate() {
     // set tax rate
     await base.click(this.wooCommerce.settings.tax)
     await base.click(this.wooCommerce.settings.standardRates)
     let taxIsVisible = await base.isVisible(page, this.wooCommerce.settings.taxRate)
-    if (!taxIsVisible) {
+    if (taxIsVisible === false) {
       await page.click(this.wooCommerce.settings.insertRow)
     }
     await base.clearandtype(this.wooCommerce.settings.taxRate, '5')
+    await page.click(this.wooCommerce.settings.taxTable)
+    await page.waitForTimeout(1000)
     await page.click(this.wooCommerce.settings.taxRateSaveChanges)
+    page.waitForTimeout(5000)
   },
 
   async addShippingMethod(shippingMethod, shippingMethodName, shippingMethodCustomTitle, taxStatus) {
@@ -1375,130 +1392,176 @@ module.exports = {
     await page.click(this.wooCommerce.settings.deleteShippingMethod(shippingMethodName))
   },
 
-  async setupPaymentMethods() {
 
+  async setpaymetnsettings() {
+    await this.goToWooCommerceSettings()
+    await this.setupBasicPaymentMethods()
+    // await this.setupStripeConnect()
+    // await this.setupPaypalMarketPlace()
+    // await this.setupDokanMangoPay()
+    // await this.setupDokanRazorpay()
+
+  },
+
+  async setupBasicPaymentMethods() {
+
+
+    //TODO:  only click if not enabled 'woocommerce-input-toggle--disabled'
     await base.click(this.wooCommerce.settings.payments)
+    //bank transfer
+    await base.clickXpath(this.wooCommerce.settings.enableDirectBankTransfer)
+    //check payments
+    await base.clickXpath(this.wooCommerce.settings.enableCheckPayments)
+    //cash on delivery
+    await base.clickXpath(this.wooCommerce.settings.enableCashOnDelivery)
 
-    await page.click(this.wooCommerce.settings.enableDirectBankTransfer)
-    await page.click(this.wooCommerce.settings.enableCheckPayments)
-    await page.click(this.wooCommerce.settings.enableCashOnDelivery)
+    await base.click(this.wooCommerce.settings.paymentMethodsSaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
 
   },
 
   async setupStripeConnect() {
+    await this.setCurrency('United States (US) dollar ($)')
+
     await base.click(this.wooCommerce.settings.payments)
     await base.click(this.wooCommerce.settings.setupDokanStripeConnect)
     //setup strip connect
-        enableDisableStripe: "#woocommerce_dokan-stripe-connect_enable",
-        title: "#woocommerce_dokan-stripe-connect_title",
-        description: "#woocommerce_dokan-stripe-connect_description",
-        nonConnectedSellers: "#woocommerce_dokan-stripe-connect_allow_non_connected_sellers",
-        displayNoticeToConnectSeller: "#woocommerce_dokan-stripe-connect_display_notice_to_non_connected_sellers",
-        displayNoticeInterval: "#woocommerce_dokan-stripe-connect_display_notice_interval",
-        threeDSecureAndSca: "#woocommerce_dokan-stripe-connect_enable_3d_secure",
-        sellerPaysTheProcessingFeeIn3DsMode: "#woocommerce_dokan-stripe-connect_seller_pays_the_processing_fee",
-        testMode: "#woocommerce_dokan-stripe-connect_testmode",
-        stripeCheckout: "#woocommerce_dokan-stripe-connect_stripe_checkout",
-        stripeCheckoutLocale: "#select2-woocommerce_dokan-stripe-connect_stripe_checkout_locale-container",
-        stripeCheckoutLocaleValues: ".select2-results ul li", //TODO: use enter instead of class
-        checkoutImage: "#woocommerce_dokan-stripe-connect_stripe_checkout_image",
-        checkoutButtonLabel: "#woocommerce_dokan-stripe-connect_stripe_checkout_label",
-        savedCards: "#woocommerce_dokan-stripe-connect_saved_cards",
-        //test credentials
-        testPublishableKey: "#woocommerce_dokan-stripe-connect_test_publishable_key",
-        testSecretKey: "#woocommerce_dokan-stripe-connect_test_secret_key",
-        testClientId: "#woocommerce_dokan-stripe-connect_test_client_id",
-        stripeSaveChanges: ".woocommerce-save-button",
+    await base.check(this.wooCommerce.settings.stripe.enableDisableStripe)
+    await base.clearandtype(this.wooCommerce.settings.stripe.title, 'Dokan Credit card (Stripe)')
+    await base.clearandtype(this.wooCommerce.settings.stripe.description, 'Pay with your credit card via Stripe.')
+    await base.check(this.wooCommerce.settings.stripe.nonConnectedSellers)
+    await base.check(this.wooCommerce.settings.stripe.displayNoticeToConnectSeller)
+    await base.clearandtype(this.wooCommerce.settings.stripe.displayNoticeInterval, '7')
+    await base.check(this.wooCommerce.settings.stripe.threeDSecureAndSca)
+    await base.check(this.wooCommerce.settings.stripe.sellerPaysTheProcessingFeeIn3DsMode)
+    await base.check(this.wooCommerce.settings.stripe.testMode)
+    await base.check(this.wooCommerce.settings.stripe.stripeCheckout)
+    await page.click(this.wooCommerce.settings.stripe.stripeCheckoutLocale)
+    await page.type(this.wooCommerce.settings.stripe.stripeCheckoutLocale, 'English')
+    // await page.type('.select2-search__field', 'English')
+    await page.keyboard.press('Enter')
+    await base.check(this.wooCommerce.settings.stripe.savedCards)
+    //test credentials
+    await base.clearandtype(this.wooCommerce.settings.stripe.testPublishableKey, 'pk_test_')
+    await base.clearandtype(this.wooCommerce.settings.stripe.testSecretKey, 'sk_test_')
+    await base.clearandtype(this.wooCommerce.settings.stripe.testClientId, 'ca_')
+    await base.click(this.wooCommerce.settings.stripe.stripeSaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
   },
-  
+
   async setupPaypalMarketPlace() {
+    await this.setCurrency('United States (US) dollar ($)')
+
     await base.click(this.wooCommerce.settings.payments)
     await base.click(this.wooCommerce.settings.setupDokanPayPalMarketplace)
     // setup paypal marketplace
-    paypalMarketPlace: {
-      enableDisablePayPalMarketplace: "#woocommerce_dokan_paypal_marketplace_enabled",
-      title: "#woocommerce_dokan_paypal_marketplace_title",
-      description: "#woocommerce_dokan_paypal_marketplace_description",
-      payPalMerchantIdPartnerId: "#woocommerce_dokan_paypal_marketplace_partner_id",
-      // api credentials
-      payPalSandbox: "#woocommerce_dokan_paypal_marketplace_test_mode",
-      sandboxClientId: "#woocommerce_dokan_paypal_marketplace_test_app_user",
-      sandvoxClientSecret: "#woocommerce_dokan_paypal_marketplace_test_app_pass",
-      payPalPartnerAttributionId: "#woocommerce_dokan_paypal_marketplace_bn_code",
-      disbursementMode: "#select2-woocommerce_dokan_paypal_marketplace_disbursement_mode-container",
-      disbursementModeValues: ".select2-results ul li", //TODO: use enter instead of class
-      paymentButtonType: "#select2-woocommerce_dokan_paypal_marketplace_button_type-container",
-      paymentButtonTypeValues: ".select2-results ul li", //TODO: use enter instead of class
-      allowUnbrandedCreditCard: "#woocommerce_dokan_paypal_marketplace_ucc_mode",
-      marketplaceLogo: "#woocommerce_dokan_paypal_marketplace_marketplace_logo",
-      displayNoticeToConnectSeller: "#woocommerce_dokan_paypal_marketplace_display_notice_on_vendor_dashboard",
-      sendAnnouncementToConnectSeller: "#woocommerce_dokan_paypal_marketplace_display_notice_to_non_connected_sellers",
-      sendAnnouncementInterval: "#woocommerce_dokan_paypal_marketplace_display_notice_interval",
-      paypalMarketPlaceSaveChanges: ".woocommerce-save-button",
+    await base.check(this.wooCommerce.settings.paypalMarketPlace.enableDisablePayPalMarketplace)
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.title, 'PayPal Marketplace')
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.description, 'Pay via PayPal Marketplace; you can pay with your credit card if you don\'t have a PayPal account')
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.payPalMerchantIdPartnerId, 'partner_')
+    // api credentials
+    await base.check(this.wooCommerce.settings.paypalMarketPlace.payPalSandbox)
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sandboxClientId, 'client_')
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sandvoxClientSecret, 'secret_')
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.payPalPartnerAttributionId, 'weDevs_SP_Dokan')
+    await page.click(this.wooCommerce.settings.paypalMarketPlace.disbursementMode)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.paypalMarketPlace.disbursementModeValues, 'Delayed')
+    await page.click(this.wooCommerce.settings.paypalMarketPlace.paymentButtonType)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.paypalMarketPlace.paymentButtonTypeValues, 'Smart Payment Buttons')
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.marketplaceLogo, 'http://localhost:8889/wp-content/plugins/dokan/assets/images/dokan-logo.png')
+    await base.check(this.wooCommerce.settings.paypalMarketPlace.displayNoticeToConnectSeller)
+    await base.check(this.wooCommerce.settings.paypalMarketPlace.sendAnnouncementToConnectSeller)
+    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sendAnnouncementInterval, '7')
+    await base.click(this.wooCommerce.settings.paypalMarketPlace.paypalMarketPlaceSaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
   },
 
   async setupDokanMangoPay() {
+    await this.setCurrency('Euro (€)')
+
     await base.click(this.wooCommerce.settings.payments)
     await base.click(this.wooCommerce.settings.setupDokanMangoPay)
     // setup dokan mangopay
-    enableDisableMangoPayPayment: "#woocommerce_dokan_mangopay_enabled",
-    title: "#woocommerce_dokan_mangopay_title",
-    description: "#woocommerce_dokan_mangopay_description",
+    await base.check(this.wooCommerce.settings.dokanMangoPay.enableDisableMangoPayPayment)
+    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.title, 'MangoPay')
+    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.description, 'Pay via MangoPay')
     //api credentials
-    mangoPaySandbox: "#woocommerce_dokan_mangopay_sandbox_mode",
-    sandboxClientId: "#woocommerce_dokan_mangopay_sandbox_client_id",
-    sandbboxapiKey: "#woocommerce_dokan_mangopay_sandbox_api_key",
+    await base.check(this.wooCommerce.settings.dokanMangoPay.mangoPaySandbox)
+    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.sandboxClientId, 'client_')
+    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.sandbboxapiKey, 'secret_')
     // payment options
-    chooseAvailableCreditCards: ".select2-search:nth-child(2) > .select2-search__field",
-    chooseAvailableCreditCardsValues: ".select2-results ul li", //TODO: use enter instead of class
-    chooseAvailableDirectPaymentServices: ".form-table:nth-child(14) tr:nth-child(2) .select2-selection__rendered",
-    chooseAvailableDirectPaymentServicesValues: ".select2-results ul li", //TODO: use enter instead of class
-    savedCards: "#woocommerce_dokan_mangopay_saved_cards",
-    threeDs2: "#woocommerce_dokan_mangopay_disabled_3DS2",
+    await page.click(this.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCardsValues, 'CB/Visa/Mastercard')
+    await page.click(this.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServices)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServicesValues, 'Sofort*')
+    await base.check(this.wooCommerce.settings.dokanMangoPay.savedCards)
     // Fund Transfers and Payouts
-    transferFunds: "#select2-woocommerce_dokan_mangopay_disburse_mode-container",
-    transferFundsValues: ".select2-results ul li", //TODO: use enter instead of class
-    payoutMode: "#woocommerce_dokan_mangopay_instant_payout",
+    await page.click(this.wooCommerce.settings.dokanMangoPay.transferFunds)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.transferFundsValues, 'On payment completed')
+    await base.check(this.wooCommerce.settings.dokanMangoPay.payoutMode)
     // Types and Requirements of Vendors
-    typeOfVendors: "#select2-woocommerce_dokan_mangopay_default_vendor_status-container",
-    typeOfVendorsValues: ".select2-results ul li", //TODO: use enter instead of class
-    businessRequirement: "#select2-woocommerce_dokan_mangopay_default_business_type-container",
-    businessRequirementValues: ".select2-results ul li", //TODO: use enter instead of class
+    await page.click(this.wooCommerce.settings.dokanMangoPay.typeOfVendors)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.typeOfVendorsValues, 'Either')
+    await page.click(this.wooCommerce.settings.dokanMangoPay.businessRequirement)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.businessRequirementValues, 'Any')
     // advancedSettings
-    displayNoticeToNonconnectedSellers: "#woocommerce_dokan_mangopay_notice_on_vendor_dashboard",
-    sendAnnouncementToNonconnectedSellers: "#woocommerce_dokan_mangopay_announcement_to_sellers",
-    announcementInterval: "#woocommerce_dokan_mangopay_notice_interval",
-    dokanMangopaySaveChanges: ".woocommerce-save-button",
+    await base.check(this.wooCommerce.settings.dokanMangoPay.displayNoticeToNonconnectedSellers)
+    await base.check(this.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonconnectedSellers)
+    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.announcementInterval, '7')
+    await base.click(this.wooCommerce.settings.dokanMangoPay.dokanMangopaySaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
   },
 
   async setupDokanRazorpay() {
+    await this.setCurrency('Indian rupee (₹)')
+
     await base.click(this.wooCommerce.settings.payments)
     await base.click(this.wooCommerce.settings.setupDokanRazorpay)
     //setup dokan razorpay
-    enableDisableDokanRazorpay: "#woocommerce_dokan_razorpay_enabled",
-    title: "#woocommerce_dokan_razorpay_title",
-    description: "#woocommerce_dokan_razorpay_description",
+    await base.check(this.wooCommerce.settings.dokanRazorpay.enableDisableDokanRazorpay)
+    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.title, 'Razorpay')
+    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.description, 'Pay securely by Credit or Debit card or Internet Banking through Razorpay.')
     // api credentials
-    razorpaySandbox: "#woocommerce_dokan_razorpay_test_mode",
-    testKeyId: "#woocommerce_dokan_razorpay_test_key_id",
-    testKeySecret: "#woocommerce_dokan_razorpay_test_key_secret",
-    disbursementMode: "#select2-woocommerce_dokan_razorpay_disbursement_mode-container",
-    disbursementModeValues: ".select2-results ul li", //TODO: use enter instead of class
-    sellerPaysTheprocessingFee: "#woocommerce_dokan_razorpay_seller_pays_the_processing_fee",
-    displayNoticeToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_on_vendor_dashboard",
-    sendAnnouncementToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_to_non_connected_sellers",
-    sendAnnouncementInterval: "#woocommerce_dokan_razorpay_display_notice_interval",
-    dokanRazorpaySaveChanges: ".woocommerce-save-button",
+    await base.check(this.wooCommerce.settings.dokanRazorpay.razorpaySandbox)
+    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.testKeyId, 'rzp_test')
+    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.testKeySecret, 'rzp_test')
+    await page.click(this.wooCommerce.settings.dokanRazorpay.disbursementMode)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanRazorpay.disbursementModeValues, 'Delayed')
+    await base.check(this.wooCommerce.settings.dokanRazorpay.sellerPaysTheprocessingFee)
+    await base.check(this.wooCommerce.settings.dokanRazorpay.displayNoticeToConnectSeller)
+    await base.check(this.wooCommerce.settings.dokanRazorpay.sendAnnouncementToConnectSeller)
+    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.sendAnnouncementInterval, '7')
+    await base.click(this.wooCommerce.settings.dokanRazorpay.dokanRazorpaySaveChanges)
+
+    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successmessage).toMatch('Your settings have been saved.')
   },
 
   async setCurrency(currency) {
     await this.goToWooCommerceSettings()
+    let currentCurrency = await base.getSelectorText(this.wooCommerce.settings.currency)
+    if (currentCurrency !== currency) {
+      await page.click(this.wooCommerce.settings.currency)
+      await page.type(this.wooCommerce.settings.currency, currency)
+      await page.keyboard.press('Enter')
+      await base.click(this.wooCommerce.settings.generalSaveChanges)
 
-    await page.click(this.wooCommerce.settings.currency)
-    await page.type(this.wooCommerce.settings.currency, currency)
-    // TODO: press enter
+      let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+      expect(successmessage).toMatch('Your settings have been saved.')
+    }
+    else {
+      return
+    }
 
-  }
+  },
 
 
 

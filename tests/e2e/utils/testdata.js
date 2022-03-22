@@ -35,6 +35,15 @@ const { wooCommerce } = require('../pages/admin');
 const shippingMethods = ['flat_rate','free_shipping','local_pickup','dokan_table_rate_shipping','dokan_distance_rate_shipping','dokan_vendor_shipping']
 const taxStatus = ['taxable','none']
 const freeShippingRequires = ['coupon','min_amount','either','both']
+//payment
+const razorpayDisbursementMode = ['Immediate','On Order Complete','Delayed']
+const payPalMarketplaceDisbursementMode = ['Immediate','On Order Complete','Delayed']
+const payPalMarketplacePaymentButtonType = ['Smart Payment Buttons','Standard Button']
+const mangopayAvailableCreditCards = ['CB/Visa/Mastercard','Maestro*','Bancontact/Mister Cash','Przelewy24*','Diners*','PayLib','iDeal*','MasterPass*','Bankwire Direct*']
+const mangopayAvailableDirectPaymentServices = ['Sofort*','Giropay*']
+const mangopayTransferFunds = ['On payment completed','On order completed','Delayed']
+const mangopayTypeOfVendors = ['Individuals','Business','Either']
+const mangopayBusinessRequirement = ['Organizations','Soletraders','Businesses','Any']
 
 //Dokan
 //admin

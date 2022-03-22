@@ -1,6 +1,7 @@
 
 const puppeteer = require('puppeteer');
 import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
+
 // This page contains all necessary puppeteer automation methods 
 module.exports = {
 
@@ -34,19 +35,6 @@ module.exports = {
 
     //TODO: page.waitForXpath()
     //TODO: page.waitForSelector()
-
-    async click(selector) {
-        let element = await page.$(selector);
-        if (selector.startsWith('//')) {
-            console.log('entered ')
-            await this.clickXpath(selector)
-        } else {
-            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-        }
-    },
-
     // async click(selector) {
     //     let element = await page.$(selector);
     //     if ((await (await element.getProperty("type")).jsonValue() === "checkbox") && (await (await element.getProperty("checked")).jsonValue())) {
@@ -66,9 +54,35 @@ module.exports = {
     //     }
     // },
 
-    async check(selector) {
+    async click(selector) {
+        if (selector.startsWith('//')) {
+            await this.clickXpathAndWait(selector)
+        } else {
+            // await page.waitForSelector(selector)
+            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+        }
+    },
 
+    async clickXpathAndWait(selector) {
+        await page.waitForXPath(selector)
+        let [element] = await page.$x(selector)
+        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
+        // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
+        // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    },
+
+    async clickXpath(selector) {
+        // await page.waitForXPath(selector)
+        let [element] = await page.$x(selector)
+        await element.click()
+    },
+
+    async check(selector) {
         let element = await page.$(selector);
+        // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'));
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
             await page.click(selector);
@@ -122,14 +136,7 @@ module.exports = {
     // await continueButton.evaluate(continueButton => continueButton.click())
     // await await Promise.race(watchDog2);
 
-    async clickXpath(selector) {
-        // console.log(selector)
-        let [element] = await page.$x(selector)
-        // console.log(element)
-        // await element.click()
-        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
 
-    },
 
     async deleteIfExists(selector) {
         if (await page.$x(selector) !== null) {
@@ -141,23 +148,18 @@ module.exports = {
         }
     },
 
-    async clickXpath1(selector) {
-        let [element] = await page.$x(selector)
-        console.log(element)
-        await element.click()
-    },
+
 
     async waitandclick(selector) {
         // await page.waitForSelector(this.cShop.viewCart, {visible: true})
         await page.waitForSelector(this.cShop.viewCart)
-        console.log(element)
+        // console.log(element)
         await element.click()
     },
 
     async select(selector, value) {
         await page.waitForSelector(selector)
         await page.select(selector, value)
-
     },
 
     async uploadImage(selector, image) {
@@ -172,8 +174,6 @@ module.exports = {
     async reload() {
         await page.reload({ waitUntil: 'networkidle2' });
     },
-
-
 
 
     // get text
@@ -195,7 +195,7 @@ module.exports = {
         return text;
     },
 
-    // get element text
+    // get element property value
     async getElementValue(selector) {
         let element = await page.$(selector);
         let text = await (await element.getProperty('value')).jsonValue();
@@ -203,7 +203,7 @@ module.exports = {
         return text;
     },
 
-    // get elements
+    // get multiple elements
     async getElements(selector) {
         let elements = await page.$$(selector);
         return elements;
@@ -304,24 +304,10 @@ module.exports = {
 
     // close tab
     async closetab() {
-
-        // Browser commands
-        // open new tab
+        // close new tab
         await page.close()
         // close browser or close all tab
         await browser.close()
-
-
-        // get Title of a page
-        await page.title()
-        // Get url of current tab in puppeteer
-        await page.url()
-        // Content of page / Page Source
-        await page.content()
-
-        // for firefox
-        //TODO: npm install puppeteer-firefox​
-
     },
 
     async opennewtab() {
@@ -333,7 +319,6 @@ module.exports = {
         // await page2.bringToFront(); 
         // const page = page2
     },
-
 
     async checkPHPError() {
         // let pageContent = await page.content()
@@ -360,6 +345,13 @@ module.exports = {
             console.log('Page exists')
         }
 
-    }
+    },
+
+    // // get Title of a page
+    // await page.title()
+    // // Get url of current tab in puppeteer
+    // await page.url()
+    // // Content of page / Page Source
+    // await page.content()
 
 }
