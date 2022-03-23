@@ -6,21 +6,24 @@ const data = require('../utils/testdata.js')
 const base = require("../pages/base.js");
 // const env = process.env // TODO: Configure through jest global setupß
 
-
-// jest.useRealTimers();
+// jest.retryTimes(3);
 
 describe('vendor functionaly test', () => {
 
    beforeAll(async () => {
-      // jest.setTimeout(600 * 1000)
-      // await page.setDefaultNavigationTimeout(30000);
-      // jest.useFakeTimers('legacy')
-   });
-   // await page.goto('http://localhost:8889');
+      // await page.setDefaultNavigationTimeout(600000);
+  });
 
-   //  afterAll(async () => {
-   //    await browser.close()
-   //  });
+  //  afterAll(async () => {
+  //    await browser.close()
+  //  });
+
+  // beforeEach(async () => {
+  //  });
+
+  //  afterEach(async () => {
+  //    await browser.close()
+  //  });
 
    beforeEach(async () => {
       // await page.goto('http://dokan2.test/my-account');

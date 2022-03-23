@@ -1,9 +1,9 @@
-
 const { loginUser } = require('@wordpress/e2e-test-utils');
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js');
 const timout = 600000
 
+// jest.retryTimes(3);
 
 describe('admin functionaly test', () => {
 
@@ -16,62 +16,57 @@ describe('admin functionaly test', () => {
     //  });
 
     // beforeEach(async () => {
-    //    await page.goto('http://dokan2.test/my-account');
     //  });
 
     //  afterEach(async () => {
     //    await browser.close()
     //  });
 
-
-    // it('admin login', async () => {
-    //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    // });
-
-
-    // it('admin logout', async () => {
-    //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminlogout() // 
-
-    // });
-
-
-
-    it('admin can add test settings', async () => {
-        // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await loginPage.adminlogin('admin', 'password')
-        await adminPage.setWpSettings()
-        // await adminPage.setDokanSettings()
-        await adminPage.setWoocommerceSettings()
-        // await adminPage.setpaymetnsettings()
-
-    },timout);
-
+    //////////////////////////// need to review ///////////////////////////////
 
     // it('admin add vendor', async () => {
     //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await adminPage.addvendor()
-
     // });
 
     // it('admin add product', async () => {
     //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await adminPage.addproduct()
-
     // });
 
     // it('admin add categories', async () => {
     //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await adminPage.addcategory()
-
     // });
+
     // it('admin add attributes', async () => {
     //     await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await adminPage.addattributes()
-
     // });
 
 
+
+    /////////////////////////////////////////////////////////////// reviewed ///////////////////////////////
+
+    // it('admin can login', async () => {
+    //     // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminlogin('admin', 'password')
+    // });
+
+    it('admin can logout', async () => {
+        // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminlogin('admin', 'password')
+        await loginPage.adminlogout()
+    });
+
+    // it('admin can add test settings', async () => {
+    //     // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminlogin('admin', 'password')
+    //     await adminPage.setWpSettings()
+    //     await adminPage.setDokanSettings()
+    //     await adminPage.setWoocommerceSettings()
+    //     await adminPage.setpaymetnsettings()
+    // },timout);
 
     // //settings
 
@@ -210,7 +205,7 @@ describe('admin functionaly test', () => {
     //     await adminPage.setupDokanRazorpay()
     // },timout);
 
-    // it.skip('admin can add strip express payment method', async () => {
+    // it('admin can add strip express payment method', async () => {
     //     // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await loginPage.adminlogin('admin', 'password')
     //     await adminPage.goToWooCommerceSettings()
