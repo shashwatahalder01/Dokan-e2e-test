@@ -1,7 +1,7 @@
-const { createURL, clickMenuItem, clickOnMoreMenuItem } = require("@wordpress/e2e-test-utils");
-const base = require("../pages/base.js");
-const loginPage = require('../pages/login.js');
-const { setpaymetnsettings } = require("./vendor.js");
+const { createURL, clickMenuItem, clickOnMoreMenuItem } = require("@wordpress/e2e-test-utils")
+const base = require("../pages/base.js")
+const loginPage = require('../pages/login.js')
+const { setPaymentSettings } = require("./vendor.js")
 
 
 
@@ -11,7 +11,7 @@ module.exports = {
 
   //admin dashboard
   aDashboard: {
-    //dashboard menues
+    //dashboard menus
     dashboard: ".wp-first-item > .wp-menu-name",
     posts: ".menu-icon-post > .wp-menu-name",
     media: ".menu-icon-media > .wp-menu-name",
@@ -25,7 +25,7 @@ module.exports = {
     analytics: ".toplevel_page_wc-admin\\&path\\=\\/analytics\\/overview > .wp-menu-name",
     marketing: ".toplevel_page_woocommerce-marketing > .wp-menu-name",
     elementor: ".toplevel_page_elementor > .wp-menu-name",
-    templetes: ".menu-icon-elementor_library > .wp-menu-name",
+    templates: ".menu-icon-elementor_library > .wp-menu-name",
     appearance: ".menu-icon-appearance > .wp-menu-name",
     plugins: ".menu-icon-plugins > .wp-menu-name",
     users: ".menu-icon-users > .wp-menu-name",
@@ -52,24 +52,24 @@ module.exports = {
   dokan: {
     //dokan menus
     //TODO: make locators unique
-    dashboard: "#toplevel_page_dokan .wp-first-item > .wp-first-item",
-    withdraw: "#toplevel_page_dokan li:nth-child(3) > a",
-    vendors: "#toplevel_page_dokan li:nth-child(4) > a",
-    abuseReports: "#toplevel_page_dokan li:nth-child(5) > a",
-    storeReviews: "#toplevel_page_dokan li:nth-child(6) > a",
-    storeSupport: "#toplevel_page_dokan li:nth-child(7) > a",
-    announcements: "#toplevel_page_dokan li:nth-child(8) > a",
-    refunds: "#toplevel_page_dokan li:nth-child(9) > a",
-    reports: "#toplevel_page_dokan li:nth-child(10) > a",
-    modules: "#toplevel_page_dokan li:nth-child(11) > a",
-    tools: "#toplevel_page_dokan li:nth-child(12) > a",
-    verifications: "#toplevel_page_dokan li:nth-child(13) > a",
-    advertising: "#toplevel_page_dokan li:nth-child(14) > a",
-    wholesaleCustomer: "#toplevel_page_dokan li:nth-child(15) > a",
-    help: "#toplevel_page_dokan li:nth-child(16) > a",
-    settingsmenu: "#toplevel_page_dokan li:nth-child(18) > a",
-    // settingsmenu: "#toplevel_page_dokan li:nth-child(17) > a",
-    license: "#toplevel_page_dokan li:nth-child(18) > a",
+    dashboardMenu: "#toplevel_page_dokan .wp-first-item > .wp-first-item",
+    withdrawMenu: "#toplevel_page_dokan li:nth-child(3) > a",
+    vendorsMenu: "#toplevel_page_dokan li:nth-child(4) > a",
+    abuseReportsMenu: "#toplevel_page_dokan li:nth-child(5) > a",
+    storeReviewsMenu: "#toplevel_page_dokan li:nth-child(6) > a",
+    storeSupportMenu: "#toplevel_page_dokan li:nth-child(7) > a",
+    announcementsMenu: "#toplevel_page_dokan li:nth-child(8) > a",
+    refundsMenu: "#toplevel_page_dokan li:nth-child(9) > a",
+    reportsMenu: "#toplevel_page_dokan li:nth-child(10) > a",
+    modulesMenu: "#toplevel_page_dokan li:nth-child(11) > a",
+    toolsMenu: "#toplevel_page_dokan li:nth-child(12) > a",
+    verificationsMenu: "#toplevel_page_dokan li:nth-child(13) > a",
+    advertisingMenu: "#toplevel_page_dokan li:nth-child(14) > a",
+    wholesaleCustomerMenu: "#toplevel_page_dokan li:nth-child(15) > a",
+    helpMenu: "#toplevel_page_dokan li:nth-child(16) > a",
+    settingsMenu: "#toplevel_page_dokan li:nth-child(18) > a",
+    // settingsMenu: "#toplevel_page_dokan li:nth-child(17) > a",
+    licenseMenu: "#toplevel_page_dokan li:nth-child(19) > a",
 
     //dashboard
     dashboard: {},
@@ -79,28 +79,40 @@ module.exports = {
     vendors: {
       // TODO: recheck locators
       // add new vendors
-      addNewVendorClose: '.modal-close.modal-close-link.dashicons.dashicons-no-alt',
+      //menus
+      accountInfo: '.first',
+      address: '.tab-title:nth-child(2) a',
+      paymentOptions: '.last a',
+      addNewVendorCloseModal: '.modal-close',
+      next: '.button.button-primary.button-hero',
+      //account info
       addNewVendor: '.page-title-action',
-      vendorPicture: 'div[class="picture"]',
-      banner: 'div[class="dokan-upload-image"] button',
-      vendorfirstName: '#first-name',
-      vendorlastName: '#last-name',
+      vendorPicture: '//div[@class="supports-drag-drop" and @style="position: relative"]//div[@class="moxie-shim moxie-shim-html5"]//input',
+      selectFiles: '//div[@class="supports-drag-drop" and @style="position: relative"]//button[@class="browser button button-hero"]',
+      banner: '', //TODO: add locator 
+      firstName: '#first-name',
+      lastName: '#last-name',
       storeName: '#store-name',
-      storeUrl: '#user-nicename',
+      storeUrl: '#user-nicename', //TODO: there may be another locator for display name
       phoneNumber: '#store-phone',
-      vendorEmail: '#store-email',
-      vendorUsername: '#user-login',
+      email: '#store-email',
+      username: '#user-login',
       generatePassword: '.button.button-secondary',
-      vendorPassword: '#store-password',
-      addressLink: 'body > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(9) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(7) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(2) > div:nth-child(1) > a:nth-child(1)',
+      password: '#store-password',
+      companyName: "#company-name",
+      companyIdEuidNumber: "#company-id-number",
+      vatOrTaxNumber: "#vat-tax-number",
+      nameOfBank: "#dokan-bank-name",
+      bankIban: "#dokan-bank-iban",
+      //address
       street1: '#street-1',
       street2: '#street-2',
       city: '#city',
       zip: '#zip',
-      country: '.multiselect__single',
+      country: '.multiselect__single', //TODO: recheck if needed
       countryInput: '#country',
       state: '#state',
-      paymentOptionlink: 'body > div:nth-child(3) > div:nth-child(2) > div:nth-child(2) > div:nth-child(1) > div:nth-child(9) > div:nth-child(1) > div:nth-child(1) > div:nth-child(2) > div:nth-child(7) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > section:nth-child(1) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > ul:nth-child(1) > li:nth-child(3) > div:nth-child(1) > a:nth-child(1)',
+      // payment options
       accountName: '#account-name',
       accountNumber: '#account-number',
       bankName: '#bank-name',
@@ -109,12 +121,72 @@ module.exports = {
       iban: '#iban',
       swift: '#swift',
       payPalEmail: '#paypal-email',
-      enableSelling: 'div[class="dokan-form-group"] div:nth-child(2) div:nth-child(1) label:nth-child(1)',
-      publishProductDirectly: 'div[class="dokan-form-group"] div:nth-child(3) div:nth-child(1) label:nth-child(1)',
-      makeVendorFeature: 'div[class="dokan-form-group"] div:nth-child(4) div:nth-child(1) label:nth-child(1)',
+      enableSelling: '.checkbox-group:nth-child(2) .slider',
+      publishProductDirectly: '.checkbox-group:nth-child(3) .slider',
+      makeVendorFeature: '.checkbox-group:nth-child(4) .slider',
       createVendor: '.button.button-primary.button-hero',
-      addAnother: 'button[class="swal2-confirm swal2-styled"]',
-      next: '.button.button-primary.button-hero',
+      //sweet alert
+      createAnother: '.swal2-confirm.swal2-styled',  //sweet alert confirm 
+      editVendorInfo: '.swal2-cancel.swal2-styled',   //sweet alert cancel
+      closeSweetAlert: 'button.swal2-close', //sweet alert close
+
+      //edit vendor form
+      editVendor: {
+        editVendorIcon: ".dashicons-edit",
+        changeStorePhoto: "",
+        changeStoreBanner: "",
+        //account info
+        firstName: '#first-name',
+        lastName: '#last-name',
+        storeName: '#store-name',
+        phoneNumber: '#store-phone',
+        email: '#store-email',
+        companyName: "#company-name",
+        companyIdEuidNumber: "#company-id-number",
+        vatOrTaxNumber: "#vat-tax-number",
+        nameOfBank: "#dokan-bank-name",
+        bankIban: "#dokan-bank-iban",
+        // address
+        street1: '#street-1',
+        street2: '#street-2',
+        city: '#city',
+        zip: '#zip',
+        country: '.multiselect__single', //TODO: recheck if needed
+        countryInput: '#country',
+        state: '#state',
+        // social options
+        facebook: "#facebook",
+        flickr: "#flickr",
+        twitter: "#twitter",
+        youtube: "#youtube",
+        linkedin: "#linkedin",
+        pinterest: "#pinterest",
+        instagram: "#instagram",
+        // payment options
+        accountName: '#account-name',
+        accountNumber: '#account-number',
+        bankName: '#bank-name',
+        bankAddress: '#bank-address',
+        routingNumber: '#routing-number',
+        iban: '#iban',
+        swift: '#swift',
+        payPalEmail: '#paypal-email',
+        AdminCommissionType: ".multiselect__single:nth-child(3)",
+        AdminCommissionFlat: ".wc_input_price",
+        AdminCommissionPercentage: ".wc_input_decimal",
+        EnableSelling: ".checkbox-group:nth-child(4) .slider",
+        PublishProductDirectly: ".checkbox-group:nth-child(5) .slider",
+        MakeVendorFeatured: ".checkbox-group:nth-child(6) .slider",
+        // vendor subscription
+        AssignSubscriptionPack: ".multiselect--active > .multiselect__tags",
+        //edit options
+        cancelEdit: ".footer > .button:nth-child(1)",
+        saveChanges: ".footer > .button-primary",
+        cancelEditOnTop: ".action-links:nth-child(2) > .button:nth-child(1)",
+        saveChangesOnTop: ".action-links:nth-child(2) > .button-primary",
+        confirmSaveChanges: ".swal2-confirm",
+      },
+
     },
     //abuseReports
     abuseReports: {},
@@ -221,7 +293,7 @@ module.exports = {
       productAdvertising: ".nav-tab:nth-child(21)",
       geolocation: ".nav-tab:nth-child(22)",
       productReportAbuse: ".nav-tab:nth-child(23)",
-      singleProductMultivendor: ".nav-tab:nth-child(24)",
+      singleProductMultiVendor: ".nav-tab:nth-child(24)",
       vendorAnalytics: ".nav-tab:nth-child(25)",
       vendorSubscription: ".nav-tab:nth-child(26)",
 
@@ -239,7 +311,7 @@ module.exports = {
 
       //vendor store options
       storeTermsAndConditions: "#dokan_general\\[seller_enable_terms_and_conditions\\]",
-      sroreProductPerPage: "#dokan_general\\[store_products_per_page\\]",
+      storeProductPerPage: "#dokan_general\\[store_products_per_page\\]",
       enableTermsAndCondition: "#dokan_general\\[enable_tc_on_reg\\]",
       enableSingSellerMode: "#dokan_general\\[enable_single_seller_mode\\]",
       storCategory: "#dokan_general\\[store_category_type\\]",
@@ -253,7 +325,7 @@ module.exports = {
       taxFeeRecipient: "#dokan_selling\\[tax_fee_recipient\\]",
       processRefundViaAPI: "#dokan_selling\\[automatic_process_api_refund\\]",
 
-      //vendor capabilty
+      //vendor capability
       newVendorProductUpload: "#dokan_selling\\[new_seller_enable_selling\\]",
       disableProductPopup: "#dokan_selling\\[disable_product_popup\\]",
       orderStatusChange: "#dokan_selling\\[order_status_change\\]",
@@ -322,9 +394,9 @@ module.exports = {
       //appearance
       showMapOnStorePage: "#dokan_appearance\\[store_map\\]",
       mapApiSourceGoogleMaps: "#dokan_appearance\\[map_api_source\\]\\[google_maps\\]",
-      mapApiSourceMapbox: "#dokan_appearance\\[map_api_source\\]\\[mapbox\\]",
+      mapApiSourceMapBox: "#dokan_appearance\\[map_api_source\\]\\[mapbox\\]",
       googleMapApiKey: "#dokan_appearance\\[gmap_api_key\\]",
-      mapboxAccessToken: "#dokan_appearance\\[mapbox_access_token\\]",
+      mapBoxAccessToken: "#dokan_appearance\\[mapbox_access_token\\]",
       googleReCAPTCHAValidationSiteKey: "#dokan_appearance\\[recaptcha_site_key\\]",
       googleReCAPTCHAValidationSecretKey: "#dokan_appearance\\[recaptcha_secret_key\\]",
       showContactFormOnStorePage: "#dokan_appearance\\[contact_seller\\]",
@@ -355,7 +427,7 @@ module.exports = {
       //store support
       displayOnOrderDetails: "#dokan_store_support_setting\\[enabled_for_customer_order\\]",
       displayOnSingleProductPage: "#dokan_store_support_setting\\[store_support_product_page\\]",
-      supportButttonLabel: "#dokan_store_support_setting\\[support_button_label\\]",
+      supportButtonLabel: "#dokan_store_support_setting\\[support_button_label\\]",
       storeSupportSaveChanges: "#submit",
 
       //seller verification
@@ -378,12 +450,12 @@ module.exports = {
       //live chat
       enableLiveChat: "#dokan_live_chat\\[enable\\]",
       chatProviderFacebookMessenger: "#dokan_live_chat\\[provider\\]\\[messenger\\]",
-      chatProvidertalkJs: "#dokan_live_chat\\[provider\\]\\[talkjs\\]",
-      chatProvidertawkTo: "#dokan_live_chat\\[provider\\]\\[tawkto\\]",
+      chatProviderTalkJs: "#dokan_live_chat\\[provider\\]\\[talkjs\\]",
+      chatProviderTawkTo: "#dokan_live_chat\\[provider\\]\\[tawkto\\]",
       chatProviderWhatsApp: "#dokan_live_chat\\[provider\\]\\[whatsapp\\]",
       //fb
-      messangerColor: ".button > span",
-      //talkjs
+      messengerColor: ".button > span",
+      //talkJs
       appId: "#dokan_live_chat\\[app_id\\]",
       appSecret: "#dokan_live_chat\\[app_secret\\]",
       //whatsapp
@@ -405,7 +477,7 @@ module.exports = {
       rmaSaveChanges: "#submit",
 
       //wholesale
-      whoCaneeWholesalePriceAllUsers: "#dokan_wholesale\\[wholesale_price_display\\]\\[all_user\\]",
+      whoCanSeeWholesalePriceAllUsers: "#dokan_wholesale\\[wholesale_price_display\\]\\[all_user\\]",
       whoCanSeeWholesalePriceWholesaleCustomer: "#dokan_wholesale\\[wholesale_price_display\\]\\[wholesale_customer\\]",
       showWholesalePriceOnShopArchive: "#dokan_wholesale\\[display_price_in_shop_archieve\\]",
       needApprovalForCustomer: "#dokan_wholesale\\[need_approval_for_wholesale_customer\\]",
@@ -476,13 +548,13 @@ module.exports = {
       reasonsForAbuseReportAdd: ".dokan-repetable-add-item-btn",
       productReportAbuseSaveChanges: "#submit",
 
-      //single product multivendor
+      //single product multi vendor
       enableSingleProductMultipleVendor: "#dokan_spmv\\[enable_pricing\\]",
       sellItemButtonText: "#dokan_spmv\\[sell_item_btn\\]",
       availableVendorDisplayAreaTitle: "#dokan_spmv\\[available_vendor_list_title\\]",
       availableVendorSectionDisplayPosition: "#dokan_spmv\\[available_vendor_list_position\\]",
       showSpmvProducts: "#dokan_spmv\\[show_order\\]",
-      singleProductMultivendorSaveChanges: "#submit",
+      singleProductMultiVendorSaveChanges: "#submit",
 
       //vendor analytics
       //TODO: add locators 
@@ -495,7 +567,7 @@ module.exports = {
       noOfDays: "#dokan_product_subscription\\[no_of_days_before_mail\\]",
       productStatus: "#dokan_product_subscription\\[product_status_after_end\\]",
       cancellingEmailSubject: "#dokan_product_subscription\\[cancelling_email_subject\\]",
-      cancellingEmailbody: "#dokan_product_subscription\\[cancelling_email_body\\]",
+      cancellingEmailBody: "#dokan_product_subscription\\[cancelling_email_body\\]",
       alertEmailSubject: "#dokan_product_subscription\\[alert_email_subject\\]",
       alertEmailBody: "#dokan_product_subscription\\[alert_email_body\\]",
       vendorSubscriptionSaveChanges: "#submit",
@@ -509,7 +581,7 @@ module.exports = {
   //woocommerce
   wooCommerce: {
     //woocommerce menu
-    settingsmenu: "#toplevel_page_woocommerce li:nth-child(6) > a",
+    settingsMenu: "#toplevel_page_woocommerce li:nth-child(6) > a",
 
     //woocommerce settings
     settings: {
@@ -553,8 +625,8 @@ module.exports = {
       zeroRateRates: ".subsubsub > li:nth-child(4) > a",
 
       //tax options
-      pricesEnteredWithTaxpricesInclusiveOfTax: "li:nth-child(1) input",
-      pricesEnteredWithTaxpricesExclusiveOfTax: "li:nth-child(2) input",
+      pricesEnteredWithTaxPricesInclusiveOfTax: "li:nth-child(1) input",
+      pricesEnteredWithTaxPricesExclusiveOfTax: "li:nth-child(2) input",
       calculateTaxBasedOn: "#select2-woocommerce_tax_based_on-container",
       shippingTaxClass: "#select2-woocommerce_shipping_tax_class-container",
       rounding: "#woocommerce_tax_round_at_subtotal",
@@ -567,9 +639,9 @@ module.exports = {
 
       //add tax
       taxTable: ".wc_tax_rates",
+      taxTable: ".wc_tax_rates.wc_input_table.widefat", //TODO: remove one of them
       insertRow: ".plus",
       taxRate: ".rate input",
-      taxTable: ".wc_tax_rates.wc_input_table.widefat",
       taxRateSaveChanges: ".woocommerce-save-button",
 
       //shipping
@@ -607,7 +679,7 @@ module.exports = {
       vendorShippingTaxStatus: "#woocommerce_dokan_vendor_shipping_tax_status",
 
       //shipping method save changes
-      shipppingMethodSaveChanges: "#btn-ok",
+      shippingMethodSaveChanges: "#btn-ok",
 
 
       //payments
@@ -615,13 +687,13 @@ module.exports = {
       enableDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//span",
       enableCheckPayments: "//a[contains(text(),'Check payments')]//..//..//span",
       enableCashOnDelivery: "//a[contains(text(),'Cash on delivery')]//..//..//span",
-      enableDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//a[@class='wc-payment-gateway-method-toggle-enabled']",
-      enableDokanStripeExpress: "//a[contains(text(),'')]//..//..//span",//TODO: add locator
+      enableDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//td[@class='status']//span",
+      enableDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//td[@class='status']//span",
+      enableDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//td[@class='status']//span",
+      enableDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//td[@class='status']//span",
+      enableDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//td[@class='status']//span",
+      enableDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//td[@class='status']//span",
+      enableDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]//..//..//td[@class='status']//span",
       // setup or manage payment methods
       setupDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//td[@class='action']//a",
       setupCheckPayments: "//a[contains(text(),'Check payments')]//..//..//td[@class='action']//a",
@@ -632,7 +704,7 @@ module.exports = {
       setupDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//td[@class='action']//a",
       setupDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//td[@class='action']//a",
       setupDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//td[@class='action']//a",
-      setupDokanStripeExpress: "",//TODO: add locator
+      setupDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]//..//..//td[@class='action']//a",
       paymentMethodsSaveChanges: ".woocommerce-save-button",
 
       //stripe
@@ -668,7 +740,7 @@ module.exports = {
         // api credentials
         payPalSandbox: "#woocommerce_dokan_paypal_marketplace_test_mode",
         sandboxClientId: "#woocommerce_dokan_paypal_marketplace_test_app_user",
-        sandvoxClientSecret: "#woocommerce_dokan_paypal_marketplace_test_app_pass",
+        sandBoxClientSecret: "#woocommerce_dokan_paypal_marketplace_test_app_pass",
         payPalPartnerAttributionId: "#woocommerce_dokan_paypal_marketplace_bn_code",
         disbursementMode: "#select2-woocommerce_dokan_paypal_marketplace_disbursement_mode-container",
         disbursementModeValues: ".select2-results ul li",
@@ -690,7 +762,7 @@ module.exports = {
         //api credentials
         mangoPaySandbox: "#woocommerce_dokan_mangopay_sandbox_mode",
         sandboxClientId: "#woocommerce_dokan_mangopay_sandbox_client_id",
-        sandbboxapiKey: "#woocommerce_dokan_mangopay_sandbox_api_key",
+        sandBoxApiKey: "#woocommerce_dokan_mangopay_sandbox_api_key",
         // payment options
         chooseAvailableCreditCards: ".select2-search:nth-child(2) > .select2-search__field",
         chooseAvailableCreditCardsValues: ".select2-results ul li", //TODO: use enter instead of class
@@ -708,8 +780,8 @@ module.exports = {
         businessRequirement: "#select2-woocommerce_dokan_mangopay_default_business_type-container",
         businessRequirementValues: ".select2-results ul li", //TODO: use enter instead of class
         // advancedSettings
-        displayNoticeToNonconnectedSellers: "#woocommerce_dokan_mangopay_notice_on_vendor_dashboard",
-        sendAnnouncementToNonconnectedSellers: "#woocommerce_dokan_mangopay_announcement_to_sellers",
+        displayNoticeToNonConnectedSellers: "#woocommerce_dokan_mangopay_notice_on_vendor_dashboard",
+        sendAnnouncementToNonConnectedSellers: "#woocommerce_dokan_mangopay_announcement_to_sellers",
         announcementInterval: "#woocommerce_dokan_mangopay_notice_interval",
         dokanMangopaySaveChanges: ".woocommerce-save-button",
       },
@@ -723,11 +795,47 @@ module.exports = {
         testKeySecret: "#woocommerce_dokan_razorpay_test_key_secret",
         disbursementMode: "#select2-woocommerce_dokan_razorpay_disbursement_mode-container",
         disbursementModeValues: ".select2-results ul li",
-        sellerPaysTheprocessingFee: "#woocommerce_dokan_razorpay_seller_pays_the_processing_fee",
+        sellerPaysTheProcessingFee: "#woocommerce_dokan_razorpay_seller_pays_the_processing_fee",
         displayNoticeToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_on_vendor_dashboard",
         sendAnnouncementToConnectSeller: "#woocommerce_dokan_razorpay_display_notice_to_non_connected_sellers",
         sendAnnouncementInterval: "#woocommerce_dokan_razorpay_display_notice_interval",
         dokanRazorpaySaveChanges: ".woocommerce-save-button",
+      },
+
+      stripeExpress: {
+        // Stripe Express
+        enableOrDisableStripeExpress: "#woocommerce_dokan_stripe_express_enabled",
+        title: "#woocommerce_dokan_stripe_express_title",
+        description: "#woocommerce_dokan_stripe_express_description",
+        // API Credentials
+        testMode: "#woocommerce_dokan_stripe_express_testmode",
+        testPublishableKey: "#woocommerce_dokan_stripe_express_test_publishable_key",
+        testSecretKey: "#woocommerce_dokan_stripe_express_test_secret_key",
+        testWebhookSecret: "#woocommerce_dokan_stripe_express_test_webhook_key",
+        // Payment and Disbursement
+        choosePaymentMethods: "//select[@id='woocommerce_dokan_stripe_express_enabled_payment_methods']//..//span[@class='select2-selection select2-selection--multiple']",
+        // choosePaymentMethods: ".select2-search__field",
+        choosePaymentMethodsValues: ".select2-results ul li",
+        takeProcessingFeesFromSellers: "#woocommerce_dokan_stripe_express_sellers_pay_processing_fee",
+        savedCards: "#woocommerce_dokan_stripe_express_saved_cards",
+        capturePaymentsManually: "#woocommerce_dokan_stripe_express_capture",
+        disburseFunds: "#select2-woocommerce_dokan_stripe_express_disburse_mode-container",
+        disbursementModeValues: ".select2-results ul li",
+        customerBankStatement: "#woocommerce_dokan_stripe_express_statement_descriptor",
+        // Payment Request Options (Apple Pay / Google Pay)
+        paymentRequestButtons: "#woocommerce_dokan_stripe_express_payment_request",
+        buttonType: "#woocommerce_dokan_stripe_express_payment_request_button_type",
+        buttonTheme: "#woocommerce_dokan_stripe_express_payment_request_button_theme",
+        buttonLocations: "//select[@id='woocommerce_dokan_stripe_express_payment_request_button_locations']//..//span[@class='select2-selection select2-selection--multiple']",
+        buttonLocationsValues: ".select2-results ul li",
+        buttonSize: "#woocommerce_dokan_stripe_express_payment_request_button_size",
+        // Advanced Settings
+        displayNoticeToNonConnectedSellers: "#woocommerce_dokan_stripe_express_notice_on_vendor_dashboard",
+        sendAnnouncementToNonConnectedSellers: "#woocommerce_dokan_stripe_express_announcement_to_sellers",
+        announcementInterval: "#woocommerce_dokan_stripe_express_notice_interval",
+        debugLog: "#woocommerce_dokan_stripe_express_debug",
+        stripeExpressSaveChanges: ".woocommerce-save-button",
+
       },
 
       //update success message
@@ -743,12 +851,19 @@ module.exports = {
 
     // products
     //TODO: recheck all locators
-    products: 'a[class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-product"] div[class="wp-menu-name"]',
-    addNew: 'a[href="post-new.php?post_type=product"]',
-    addNewonPage: '.page-title-action',
+    products: '.menu-icon-product > .wp-menu-name',
+    // product menus
+    allProductsMenu:'#menu-posts-product .wp-first-item > .wp-first-item',
+    addNewMenu: '#menu-posts-product li:nth-child(3) > a',
+    categoriesMenu: '#menu-posts-product li:nth-child(4) > a',
+    tagsMenu:"#menu-posts-product li:nth-child(5) > a",
+    attributesMenu: '#menu-posts-product li:nth-child(7) > a',
+    addonsMenu:'#menu-posts-product li:nth-child(6) > a',
+
+    addNewOnePage: '.page-title-action',
     productName: '#title',
     productType: '#product-type',
-    virtural: '#_virtual',
+    virtual: '#_virtual',
     downloadable: '#_downloadable',
     regularPrice: '#_regular_price',
     salePrice: '#_sale_price',
@@ -760,7 +875,7 @@ module.exports = {
 
     // categories
     //TODO: recheck all locators
-    categories: 'a[href="edit-tags.php?taxonomy=product_cat&post_type=product"]',
+    
     categoryName: "#tag-name",
     categorySlug: "#tag-slug",
     addNewCategory: "#submit",
@@ -769,12 +884,12 @@ module.exports = {
 
     // attributes
     //TODO: recheck all locators
-    attributes: 'a[href="edit.php?post_type=product&page=product_attributes"]',
+    
     attributeName: "#attribute_label",
     attributeSlug: "#attribute_name",
     addAttribute: "#submit",
     configureTerms(attributeName) {
-      return `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`;
+      return `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`
     },
     attributeValue: "#tag-name",
     attributeValueSlug: "#tag-slug",
@@ -784,18 +899,20 @@ module.exports = {
   //analytics
   analytics: {},
   //marketing
-  marketing: {},
+  marketing: {
+    //coupon
+  },
   //elementor
   elementor: {},
-  //templetes
-  templetes: {},
+  //templates
+  templates: {},
   //appearance
   appearance: {},
   //plugins
   plugins: {
     //plugins 
     //TODO: recheck all locators
-    addnew: '.page-title-action',
+    addNew: '.page-title-action',
     searchPlugin: '#search-plugins',
     uploadPlugin: 'a[role="button"]',
     chooseFile: '#pluginzip',
@@ -816,14 +933,14 @@ module.exports = {
 
     //add new user
     newUserName: "#user_login",
-    newUseremail: "#email",
-    newUserfirstName: "#first_name",
-    newUserfastName: "#last_name",
-    newUserwebsite: '#url',
-    newUserlanguage: "#locale",
-    newUserpassword: "#pass1",
-    newUsersendUserNotification: "#send_user_notification",
-    newUserrole: "#role",
+    newUserEmail: "#email",
+    newUserFirstName: "#first_name",
+    newUserFastName: "#last_name",
+    newUserWebsite: '#url',
+    newUserLanguage: "#locale",
+    newUserPassword: "#pass1",
+    newUserSendUserNotification: "#send_user_notification",
+    newUserRole: "#role",
     addNewUser: "#createusersub",
 
     //edit user
@@ -960,8 +1077,8 @@ module.exports = {
   async goToAdminDashboard() {
     await await page.goto(createURL('wp-admin/index.php'))
 
-    const url = await page.url();
-    expect(url).toMatch('wp-admin/index.php') //TODO: update url
+    const url = await page.url()
+    expect(url).toMatch('wp-admin/index.php') //TODO: update url 2.update assertion
   },
 
   async goToDokanSettings() {
@@ -969,10 +1086,10 @@ module.exports = {
 
     await page.hover(this.aDashboard.dokan)
     await page.waitForTimeout(1000)
-    await base.click(this.dokan.settingsmenu)
+    await base.click(this.dokan.settingsMenu)
 
-    const url = await page.url();
-    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings') //TODO: update url
+    const url = await page.url()
+    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings') //TODO: 1.update url 2.update assertion
   },
 
   async goToWooCommerceSettings() {
@@ -980,10 +1097,10 @@ module.exports = {
 
     await page.hover(this.aDashboard.wooCommerce)
     await page.waitForTimeout(1000)
-    await base.click(this.wooCommerce.settingsmenu)
+    await base.click(this.wooCommerce.settingsMenu)
 
-    const url = await page.url();
-    expect(url).toMatch('wp-admin/admin.php?page=wc-settings') //TODO: update url
+    const url = await page.url()
+    expect(url).toMatch('wp-admin/admin.php?page=wc-settings') //TODO: 1.update url  2.update assertion
   },
 
   async setWpSettings() {
@@ -997,32 +1114,33 @@ module.exports = {
     await page.select(this.settings.timezone, 'UTC+6')
     await base.click(this.settings.generalSaveChanges)
 
-    let successmessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Settings saved.')
-    
+    let successMessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Settings saved.')
+
     //set permalinks settings
     await base.click(this.settings.permalinks)
     await page.click(this.settings.postName)
     await page.click(this.settings.customBase)
     await page.click(this.settings.permalinkSaveChanges)
 
-    let parmalinkSuccessmessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
-    expect(parmalinkSuccessmessage).toMatch('Permalink structure updated.')
+    let permalinkSuccessMessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
+    expect(permalinkSuccessMessage).toMatch('Permalink structure updated.')
   },
 
   async setDokanGeneralSettings() {
     await page.click(this.dokan.settings.general)
     //site options
     await base.check(this.dokan.settings.adminAreaAccess)
-    await base.clearandtype(this.dokan.settings.vendorStoreUrl, 'store')
+    await base.clearAndType(this.dokan.settings.vendorStoreUrl, 'store')
     await page.select(this.dokan.settings.sellingProductTypes, 'sell_both')
     //vendor store options
     await base.check(this.dokan.settings.storeTermsAndConditions)
-    await base.clearandtype(this.dokan.settings.sroreProductPerPage, '12')
+    await base.clearAndType(this.dokan.settings.storeProductPerPage, '12')
     await base.check(this.dokan.settings.enableTermsAndCondition)
     await page.select(this.dokan.settings.storCategory, 'none')
     await page.click(this.dokan.settings.generalSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanSellingSettings() {
@@ -1030,10 +1148,10 @@ module.exports = {
 
     //commission settings
     await page.select(this.dokan.settings.commissionType, 'percentage')
-    await base.clearandtype(this.dokan.settings.adminCommission, '10')
+    await base.clearAndType(this.dokan.settings.adminCommission, '10')
     await page.select(this.dokan.settings.shippingFeeRecipient, 'seller')
     await page.select(this.dokan.settings.taxFeeRecipient, 'seller')
-    //vendor capabilty
+    //vendor capability
     await base.check(this.dokan.settings.newVendorProductUpload)
     await base.check(this.dokan.settings.orderStatusChange)
     await page.select(this.dokan.settings.newProductStatus, 'publish')
@@ -1049,6 +1167,7 @@ module.exports = {
     await base.check(this.dokan.settings.enableMinMaxAmount)
     await page.click(this.dokan.settings.sellingOptionsSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanWithdrawSettings() {
@@ -1058,12 +1177,12 @@ module.exports = {
     await base.check(this.dokan.settings.withdrawMethodsBankTransfer)
     await base.check(this.dokan.settings.withdrawMethodsDokanCustom)
     await base.check(this.dokan.settings.withdrawMethodsSkrill)
-    await base.clearandtype(this.dokan.settings.customMethodName, 'Bksh')
-    await base.clearandtype(this.dokan.settings.customMethodType, 'Email')
-    await base.clearandtype(this.dokan.settings.minimumWithdrawAmount, '5')
+    await base.clearAndType(this.dokan.settings.customMethodName, 'Bksh')
+    await base.clearAndType(this.dokan.settings.customMethodType, 'Email')
+    await base.clearAndType(this.dokan.settings.minimumWithdrawAmount, '5')
     await base.check(this.dokan.settings.orderStatusForWithdrawCompleted)
     await base.check(this.dokan.settings.orderStatusForWithdrawProcessing)
-    await base.clearandtype(this.dokan.settings.withdrawThreshold, '0')
+    await base.clearAndType(this.dokan.settings.withdrawThreshold, '0')
     //disbursement schedule settings
     await base.check(this.dokan.settings.withdrawDisbursementManual)
     await base.check(this.dokan.settings.withdrawDisbursementAuto)
@@ -1073,7 +1192,7 @@ module.exports = {
     await base.check(this.dokan.settings.disburseMentBiweeklySchedule)
     await base.check(this.dokan.settings.disburseMentWeeklySchedule)
 
-    // // quaterly schedule
+    // // quarterly schedule
     // await page.select(this.dokan.settings.quarterlyScheduleMonth, 'march')
     // await page.select(this.dokan.settings.quarterlyScheduleWeek, '1')
     // await page.select(this.dokan.settings.quarterlyScheduleDay, 'monday')
@@ -1087,6 +1206,7 @@ module.exports = {
     // await page.select(this.dokan.settings.weeklyScheduleDay, 'monday')
     await page.click(this.dokan.settings.withdrawSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
 
   },
 
@@ -1095,15 +1215,16 @@ module.exports = {
 
     await page.click(this.dokan.settings.showMapOnStorePage)
     await base.check(this.dokan.settings.mapApiSourceGoogleMaps)
-    await base.clearandtype(this.dokan.settings.googleMapApiKey, 'AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY')
+    await base.clearAndType(this.dokan.settings.googleMapApiKey, 'apikey')
     await page.click(this.dokan.settings.storeHeaderTemplate2)
     await page.click(this.dokan.settings.storeHeaderTemplate1)
-    await base.clearandtype(this.dokan.settings.storeBannerWidth, '625')
-    await base.clearandtype(this.dokan.settings.storeBannerHeight, '300')
+    await base.clearAndType(this.dokan.settings.storeBannerWidth, '625')
+    await base.clearAndType(this.dokan.settings.storeBannerHeight, '300')
     await base.check(this.dokan.settings.storeOpeningClosingTimeWidget)
     await base.check(this.dokan.settings.showVendorInfo)
     await page.click(this.dokan.settings.appearanceSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanStoreSupportSettings() {
@@ -1111,9 +1232,10 @@ module.exports = {
 
     await base.check(this.dokan.settings.displayOnOrderDetails)
     await page.select(this.dokan.settings.displayOnSingleProductPage, 'Get Support')
-    await base.clearandtype(this.dokan.settings.supportButttonLabel, 'Get Support')
+    await base.clearAndType(this.dokan.settings.supportButtonLabel, 'Get Support')
     await page.click(this.dokan.settings.storeSupportSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanRmaSettings() {
@@ -1123,27 +1245,29 @@ module.exports = {
     await page.select(this.dokan.settings.enableRefundRequests, 'yes')
     await page.select(this.dokan.settings.enableCouponRequests, 'yes')
     await base.deleteIfExists(this.dokan.settings.reasonsForRmaSingle('Defective'))
-    await base.clearandtype(this.dokan.settings.reasonsForRmaInput, 'Defective')
+    await base.clearAndType(this.dokan.settings.reasonsForRmaInput, 'Defective')
     await page.click(this.dokan.settings.reasonsForRmaAdd)
     await base.deleteIfExists(this.dokan.settings.reasonsForRmaSingle('Wrong Product'))
-    await base.clearandtype(this.dokan.settings.reasonsForRmaInput, 'Wrong Product')
+    await base.clearAndType(this.dokan.settings.reasonsForRmaInput, 'Wrong Product')
     await page.click(this.dokan.settings.reasonsForRmaAdd)
     await base.deleteIfExists(this.dokan.settings.reasonsForRmaSingle('Other'))
-    await base.clearandtype(this.dokan.settings.reasonsForRmaInput, 'Other')
+    await base.clearAndType(this.dokan.settings.reasonsForRmaInput, 'Other')
     await page.click(this.dokan.settings.reasonsForRmaAdd)
     //TODO: refund policy
     await page.click(this.dokan.settings.rmaSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanWholesaleSettings() {
     await page.click(this.dokan.settings.wholesale)
 
-    await base.check(this.dokan.settings.whoCaneeWholesalePriceAllUsers)
+    await base.check(this.dokan.settings.whoCanSeeWholesalePriceAllUsers)
     await base.check(this.dokan.settings.showWholesalePriceOnShopArchive)
     await page.select(this.dokan.settings.needApprovalForCustomer, 'no')
     await page.click(this.dokan.settings.wholesaleSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
 
   },
 
@@ -1164,15 +1288,16 @@ module.exports = {
     await base.check(this.dokan.settings.vendorsWillBeAbleToOverrideInvoiceNumber)
     await page.click(this.dokan.settings.euComplianceFieldsSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanDeliveryTimeSettings() {
     await page.click(this.dokan.settings.deliveryTime)
 
     await base.check(this.dokan.settings.allowVendorSettings)
-    await base.clearandtype(this.dokan.settings.deliveryDateLabel, 'Delivery Date')
-    await base.clearandtype(this.dokan.settings.deliveryBlockedBuffer, '0')
-    await base.clearandtype(this.dokan.settings.deliveryBoxInfo, 'This store needs %DAY% day(s) to process your delivery request')
+    await base.clearAndType(this.dokan.settings.deliveryDateLabel, 'Delivery Date')
+    await base.clearAndType(this.dokan.settings.deliveryBlockedBuffer, '0')
+    await base.clearAndType(this.dokan.settings.deliveryBoxInfo, 'This store needs %DAY% day(s) to process your delivery request')
     await base.check(this.dokan.settings.requireDeliveryDateAndTime)
     await base.check(this.dokan.settings.deliveryDaySunday)
     await base.check(this.dokan.settings.deliveryDayMonday)
@@ -1181,28 +1306,30 @@ module.exports = {
     await base.check(this.dokan.settings.deliveryDayThursday)
     await base.check(this.dokan.settings.deliveryDayFriday)
     await base.check(this.dokan.settings.deliveryDaySaturday)
-    await base.clearandtype(this.dokan.settings.openingTime, '12:00 AM')
-    await base.clearandtype(this.dokan.settings.closingTime, '11:30 PM')
-    await base.clearandtype(this.dokan.settings.timeSlot, '30')
-    await base.clearandtype(this.dokan.settings.orderPerSlot, '0')
+    await base.clearAndType(this.dokan.settings.openingTime, '12:00 AM')
+    await base.clearAndType(this.dokan.settings.closingTime, '11:30 PM')
+    await base.clearAndType(this.dokan.settings.timeSlot, '30')
+    await base.clearAndType(this.dokan.settings.orderPerSlot, '0')
     await page.click(this.dokan.settings.deliveryTimeSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
 
   },
 
   async setDokanProductAdvertisingSettings() {
     await page.click(this.dokan.settings.productAdvertising)
 
-    await base.clearandtype(this.dokan.settings.noOfAvailableSlot, '100')
-    await base.clearandtype(this.dokan.settings.expireAfterDays, '10')
+    await base.clearAndType(this.dokan.settings.noOfAvailableSlot, '100')
+    await base.clearAndType(this.dokan.settings.expireAfterDays, '10')
     await base.check(this.dokan.settings.vendorCanPurchaseAdvertisement)
-    await base.clearandtype(this.dokan.settings.advertisementCostUsd, '15')
+    await base.clearAndType(this.dokan.settings.advertisementCostUsd, '15')
     await base.check(this.dokan.settings.enableAdvertisementInSubscription)
     await base.check(this.dokan.settings.markAdvertisedProductAsFeatured)
     await base.check(this.dokan.settings.displayAdvertisedProductOnTop)
     await base.check(this.dokan.settings.outOfStockVisibility)
     await page.click(this.dokan.settings.productAdvertisingSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
 
   },
 
@@ -1214,34 +1341,37 @@ module.exports = {
     await base.check(this.dokan.settings.showFiltersBeforeLocationMap)
     await base.check(this.dokan.settings.productLocationTab)
     await page.select(this.dokan.settings.radiusSearchUnit, 'km')
-    await base.clearandtype(this.dokan.settings.radiusSearchMinimumDistance, '0')
-    await base.clearandtype(this.dokan.settings.radiusSearchMaximumDistance, '10')
-    await base.clearandtype(this.dokan.settings.mapZoomLevel, '11')
-    // await base.clearandtype(this.dokan.settings.defaultLocation, 'New York, NY, USA')//TODO: add default location
+    await base.clearAndType(this.dokan.settings.radiusSearchMinimumDistance, '0')
+    await base.clearAndType(this.dokan.settings.radiusSearchMaximumDistance, '10')
+    await base.clearAndType(this.dokan.settings.mapZoomLevel, '11')
+    // await base.clearAndType(this.dokan.settings.defaultLocation, 'New York, NY, USA')//TODO: add default location
     await page.click(this.dokan.settings.geolocationSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
 
   },
 
   async setDokanProductReportAbuseSettings() {
     await page.click(this.dokan.settings.productReportAbuse)
     await base.deleteIfExists(this.dokan.settings.reasonsForAbuseReportSingle('This product is fake'))
-    await base.clearandtype(this.dokan.settings.reasonsForAbuseReportInput, 'This product is fake')
+    await base.clearAndType(this.dokan.settings.reasonsForAbuseReportInput, 'This product is fake')
     await page.click(this.dokan.settings.reasonsForAbuseReportAdd)
     await page.click(this.dokan.settings.productReportAbuseSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanSpmvSettings() {
-    await page.click(this.dokan.settings.singleProductMultivendor)
+    await page.click(this.dokan.settings.singleProductMultiVendor)
 
     await base.check(this.dokan.settings.enableSingleProductMultipleVendor)
-    await base.clearandtype(this.dokan.settings.sellItemButtonText, 'Sell This Item')
-    await base.clearandtype(this.dokan.settings.availableVendorDisplayAreaTitle, 'Other Available Vendor')
+    await base.clearAndType(this.dokan.settings.sellItemButtonText, 'Sell This Item')
+    await base.clearAndType(this.dokan.settings.availableVendorDisplayAreaTitle, 'Other Available Vendor')
     await page.select(this.dokan.settings.availableVendorSectionDisplayPosition, 'below_tabs')
     await page.select(this.dokan.settings.showSpmvProducts, 'show_all')
-    await page.click(this.dokan.settings.singleProductMultivendorSaveChanges)
+    await page.click(this.dokan.settings.singleProductMultiVendorSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
   async setDokanVendorSubscriptionSettings() {
@@ -1251,14 +1381,15 @@ module.exports = {
     await base.check(this.dokan.settings.enableProductSubscription)
     await base.check(this.dokan.settings.enableSubscriptionInRegistrationForm)
     await base.check(this.dokan.settings.enableEmailNotification)
-    await base.clearandtype(this.dokan.settings.noOfDays, '2')
+    await base.clearAndType(this.dokan.settings.noOfDays, '2')
     await page.select(this.dokan.settings.productStatus, 'draft')
-    await base.clearandtype(this.dokan.settings.cancellingEmailSubject, 'Subscription Package Cancel notification')
-    await base.clearandtype(this.dokan.settings.cancellingEmailbody, 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.')
-    await base.clearandtype(this.dokan.settings.alertEmailSubject, 'Subscription Ending Soon')
-    await base.clearandtype(this.dokan.settings.alertEmailBody, 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely')
+    await base.clearAndType(this.dokan.settings.cancellingEmailSubject, 'Subscription Package Cancel notification')
+    await base.clearAndType(this.dokan.settings.cancellingEmailBody, 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.')
+    await base.clearAndType(this.dokan.settings.alertEmailSubject, 'Subscription Ending Soon')
+    await base.clearAndType(this.dokan.settings.alertEmailBody, 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely')
     await page.click(this.dokan.settings.vendorSubscriptionSaveChanges)
     await page.waitForTimeout(4000)
+    //TODO: add assertion
   },
 
 
@@ -1286,9 +1417,9 @@ module.exports = {
     await this.addStandardTaxRate()
 
     //add shipping region
-    await base.click(this.wooCommerce.settings.shipping)
+    // await base.click(this.wooCommerce.settings.shipping)
     // await base.click(this.wooCommerce.settings.addShippingZone)
-    // await base.clearandtype(this.wooCommerce.settings.zoneName, 'US')
+    // await base.clearAndType(this.wooCommerce.settings.zoneName, 'US')
     // await page.click(this.wooCommerce.settings.zoneRegions)
     // // await page.type(this.wooCommerce.settings.zoneRegions, 'United States (US)')
     // await page.select('#zone_locations','country:US')
@@ -1305,10 +1436,10 @@ module.exports = {
     // await page.waitForTimeout(1000)
     // await page.click(this.wooCommerce.settings.editShippingMethod)
     // // await base.clickXpath(this.wooCommerce.settings.editShippingMethod('Flat Rate'))
-    // await base.clearandtype(this.wooCommerce.settings.flatRateMethodTitle, 'Flat Rate admin')
+    // await base.clearAndType(this.wooCommerce.settings.flatRateMethodTitle, 'Flat Rate admin')
     // await page.select(this.wooCommerce.settings.flatRateTaxStatus, 'taxable')
-    // await base.clearandtype(this.wooCommerce.settings.flatRateCost, '20')
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await base.clearAndType(this.wooCommerce.settings.flatRateCost, '20')
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
     // await page.waitForTimeout(4000)
 
     // await page.click(this.wooCommerce.settings.deleteShippingMethod('Flat Rate'))
@@ -1319,46 +1450,46 @@ module.exports = {
     // await page.select(this.wooCommerce.settings.shippingMethod, 'free_shipping')
     // await page.click(this.wooCommerce.settings.addShippingMethod)
     // await page.click(this.wooCommerce.settings.editShippingMethod('Free Shipping'))
-    // await base.clearandtype(this.wooCommerce.settings.freeShippingTitle, 'Free Shipping admin')
+    // await base.clearAndType(this.wooCommerce.settings.freeShippingTitle, 'Free Shipping admin')
     // await page.select(this.wooCommerce.settings.freeShippingRequires, 'min_amount')
-    // await base.clearandtype(this.wooCommerce.settings.freeShippingMinimumOrderAmount, '200')
+    // await base.clearAndType(this.wooCommerce.settings.freeShippingMinimumOrderAmount, '200')
     // await base.check(this.wooCommerce.settings.freeShippingCouponsDiscounts)
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
 
     // //local pickup
     // await base.click(this.wooCommerce.settings.addShippingMethods)
     // await page.select(this.wooCommerce.settings.shippingMethod, 'local_pickup')
     // await page.click(this.wooCommerce.settings.addShippingMethod)
     // await page.click(this.wooCommerce.settings.editShippingMethod('Local Pickup'))
-    // await base.clearandtype(this.wooCommerce.settings.localPickupTitle, 'Local Pickup admin')
+    // await base.clearAndType(this.wooCommerce.settings.localPickupTitle, 'Local Pickup admin')
     // await page.select(this.wooCommerce.settings.localPickupTaxStatus, 'taxable')
-    // await base.clearandtype(this.wooCommerce.settings.localPickupCost, '20')
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await base.clearAndType(this.wooCommerce.settings.localPickupCost, '20')
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
 
     // //dokan table rate shipping
     // await base.click(this.wooCommerce.settings.addShippingMethods)
     // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
     // await page.click(this.wooCommerce.settings.addShippingMethod)
     // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Table Rate'))
-    // await base.clearandtype(this.wooCommerce.settings.dokanTableRateShippingMethodTitle, '	Vendor Table Rate admin')
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await base.clearAndType(this.wooCommerce.settings.dokanTableRateShippingMethodTitle, '	Vendor Table Rate admin')
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
 
     // //dokan distance rate shipping
     // await base.click(this.wooCommerce.settings.addShippingMethods)
     // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
     // await page.click(this.wooCommerce.settings.addShippingMethod)
     // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Distance Rate'))
-    // await base.clearandtype(this.wooCommerce.settings.dokanDistanceRateShippingMethodTitle, 'Vendor Distance Rate admin')
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await base.clearAndType(this.wooCommerce.settings.dokanDistanceRateShippingMethodTitle, 'Vendor Distance Rate admin')
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
 
     // //vendor shipping
     // await base.click(this.wooCommerce.settings.addShippingMethods)
     // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
     // await page.click(this.wooCommerce.settings.addShippingMethod)
     // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Shipping'))
-    // await base.clearandtype(this.wooCommerce.settings.vendorShippingMethodTitle, 'Vendor Shipping admin')
+    // await base.clearAndType(this.wooCommerce.settings.vendorShippingMethodTitle, 'Vendor Shipping admin')
     // await page.select(this.wooCommerce.settings.vendorShippingTaxStatus, 'taxable')
-    // await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
   },
 
   async enableTax() {
@@ -1366,8 +1497,8 @@ module.exports = {
     await base.check(this.wooCommerce.settings.enableTaxes)
     await base.click(this.wooCommerce.settings.generalSaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
 
   },
 
@@ -1379,14 +1510,14 @@ module.exports = {
     if (taxIsVisible === false) {
       await page.click(this.wooCommerce.settings.insertRow)
     }
-    await base.clearandtype(this.wooCommerce.settings.taxRate, '5')
+    await base.clearAndType(this.wooCommerce.settings.taxRate, '5')
     await page.click(this.wooCommerce.settings.taxTable) //TODO: recheck if it required
     await page.waitForTimeout(1000)
     await page.click(this.wooCommerce.settings.taxRateSaveChanges)
     await page.waitForTimeout(1000)
 
     let newTaxRate = await base.getElementValue(this.wooCommerce.settings.taxRate)
-    expect(newTaxRate).toBe('5.0000');
+    expect(newTaxRate).toBe('5.0000')
 
 
   },
@@ -1396,20 +1527,23 @@ module.exports = {
     await page.select(this.wooCommerce.settings.shippingMethod, shippingMethod)
     await page.click(this.wooCommerce.settings.addShippingMethod)
     await page.click(this.wooCommerce.settings.editShippingMethod(shippingMethodName))
-    await base.clearandtype(this.wooCommerce.settings.vendorShippingMethodTitle, shippingMethodCustomTitle)
+    await base.clearAndType(this.wooCommerce.settings.vendorShippingMethodTitle, shippingMethodCustomTitle)
     await page.select(this.wooCommerce.settings.vendorShippingTaxStatus, taxStatus)
-    await page.click(this.wooCommerce.settings.shipppingMethodSaveChanges)
+    await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
     // TODO: add switch case for different shipping methods
+
+    //TODO: add assertion
 
   },
 
   async deleteShippingMethod(shippingMethodName) {
     await page.click(this.wooCommerce.settings.deleteShippingMethod(shippingMethodName))
+    //TODO: add assertion
   },
 
   // payment methods
 
-  async setpaymetnsettings() {
+  async setPaymentSettings() {
     await this.goToWooCommerceSettings()
     await this.setupBasicPaymentMethods()
     await this.setupStripeConnect()
@@ -1427,8 +1561,8 @@ module.exports = {
       await page.keyboard.press('Enter')
       await base.click(this.wooCommerce.settings.generalSaveChanges)
 
-      let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-      expect(successmessage).toMatch('Your settings have been saved.')
+      let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+      expect(successMessage).toMatch('Your settings have been saved.')
     }
     else {
       return
@@ -1461,8 +1595,8 @@ module.exports = {
 
     await base.click(this.wooCommerce.settings.paymentMethodsSaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
 
   },
 
@@ -1473,11 +1607,11 @@ module.exports = {
     await base.click(this.wooCommerce.settings.setupDokanStripeConnect)
     //setup strip connect
     await base.check(this.wooCommerce.settings.stripe.enableDisableStripe)
-    await base.clearandtype(this.wooCommerce.settings.stripe.title, 'Dokan Credit card (Stripe)')
-    await base.clearandtype(this.wooCommerce.settings.stripe.description, 'Pay with your credit card via Stripe.')
+    await base.clearAndType(this.wooCommerce.settings.stripe.title, 'Dokan Credit card (Stripe)')
+    await base.clearAndType(this.wooCommerce.settings.stripe.description, 'Pay with your credit card via Stripe.')
     await base.check(this.wooCommerce.settings.stripe.nonConnectedSellers)
     await base.check(this.wooCommerce.settings.stripe.displayNoticeToConnectSeller)
-    await base.clearandtype(this.wooCommerce.settings.stripe.displayNoticeInterval, '7')
+    await base.clearAndType(this.wooCommerce.settings.stripe.displayNoticeInterval, '7')
     await base.check(this.wooCommerce.settings.stripe.threeDSecureAndSca)
     await base.check(this.wooCommerce.settings.stripe.sellerPaysTheProcessingFeeIn3DsMode)
     await base.check(this.wooCommerce.settings.stripe.testMode)
@@ -1488,13 +1622,13 @@ module.exports = {
     await page.keyboard.press('Enter')
     await base.check(this.wooCommerce.settings.stripe.savedCards)
     //test credentials
-    await base.clearandtype(this.wooCommerce.settings.stripe.testPublishableKey, 'pk_test_')
-    await base.clearandtype(this.wooCommerce.settings.stripe.testSecretKey, 'sk_test_')
-    await base.clearandtype(this.wooCommerce.settings.stripe.testClientId, 'ca_')
+    await base.clearAndType(this.wooCommerce.settings.stripe.testPublishableKey, 'pk_test_')
+    await base.clearAndType(this.wooCommerce.settings.stripe.testSecretKey, 'sk_test_')
+    await base.clearAndType(this.wooCommerce.settings.stripe.testClientId, 'ca_')
     await base.click(this.wooCommerce.settings.stripe.stripeSaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
   },
 
   async setupPaypalMarketPlace() {
@@ -1504,26 +1638,26 @@ module.exports = {
     await base.click(this.wooCommerce.settings.setupDokanPayPalMarketplace)
     // setup paypal marketplace
     await base.check(this.wooCommerce.settings.paypalMarketPlace.enableDisablePayPalMarketplace)
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.title, 'PayPal Marketplace')
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.description, 'Pay via PayPal Marketplace; you can pay with your credit card if you don\'t have a PayPal account')
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.payPalMerchantIdPartnerId, 'partner_')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.title, 'PayPal Marketplace')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.description, 'Pay via PayPal Marketplace you can pay with your credit card if you don\'t have a PayPal account')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.payPalMerchantIdPartnerId, 'partner_')
     // api credentials
     await base.check(this.wooCommerce.settings.paypalMarketPlace.payPalSandbox)
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sandboxClientId, 'client_')
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sandvoxClientSecret, 'secret_')
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.payPalPartnerAttributionId, 'weDevs_SP_Dokan')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.sandboxClientId, 'client_')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.sandBoxClientSecret, 'secret_')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.payPalPartnerAttributionId, 'weDevs_SP_Dokan')
     await page.click(this.wooCommerce.settings.paypalMarketPlace.disbursementMode)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.paypalMarketPlace.disbursementModeValues, 'Delayed')
     await page.click(this.wooCommerce.settings.paypalMarketPlace.paymentButtonType)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.paypalMarketPlace.paymentButtonTypeValues, 'Smart Payment Buttons')
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.marketplaceLogo, 'http://localhost:8889/wp-content/plugins/dokan/assets/images/dokan-logo.png')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.marketplaceLogo, 'http://localhost:8889/wp-content/plugins/dokan/assets/images/dokan-logo.png')
     await base.check(this.wooCommerce.settings.paypalMarketPlace.displayNoticeToConnectSeller)
     await base.check(this.wooCommerce.settings.paypalMarketPlace.sendAnnouncementToConnectSeller)
-    await base.clearandtype(this.wooCommerce.settings.paypalMarketPlace.sendAnnouncementInterval, '7')
+    await base.clearAndType(this.wooCommerce.settings.paypalMarketPlace.sendAnnouncementInterval, '7')
     await base.click(this.wooCommerce.settings.paypalMarketPlace.paypalMarketPlaceSaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
   },
 
   async setupDokanMangoPay() {
@@ -1533,12 +1667,12 @@ module.exports = {
     await base.click(this.wooCommerce.settings.setupDokanMangoPay)
     // setup dokan mangopay
     await base.check(this.wooCommerce.settings.dokanMangoPay.enableDisableMangoPayPayment)
-    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.title, 'MangoPay')
-    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.description, 'Pay via MangoPay')
+    await base.clearAndType(this.wooCommerce.settings.dokanMangoPay.title, 'MangoPay')
+    await base.clearAndType(this.wooCommerce.settings.dokanMangoPay.description, 'Pay via MangoPay')
     //api credentials
     await base.check(this.wooCommerce.settings.dokanMangoPay.mangoPaySandbox)
-    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.sandboxClientId, 'client_')
-    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.sandbboxapiKey, 'secret_')
+    await base.clearAndType(this.wooCommerce.settings.dokanMangoPay.sandboxClientId, 'client_')
+    await base.clearAndType(this.wooCommerce.settings.dokanMangoPay.sandBoxApiKey, 'secret_')
     // payment options
     await page.click(this.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCardsValues, 'CB/Visa/Mastercard')
@@ -1555,13 +1689,13 @@ module.exports = {
     await page.click(this.wooCommerce.settings.dokanMangoPay.businessRequirement)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanMangoPay.businessRequirementValues, 'Any')
     // advanced settings
-    await base.check(this.wooCommerce.settings.dokanMangoPay.displayNoticeToNonconnectedSellers)
-    await base.check(this.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonconnectedSellers)
-    await base.clearandtype(this.wooCommerce.settings.dokanMangoPay.announcementInterval, '7')
+    await base.check(this.wooCommerce.settings.dokanMangoPay.displayNoticeToNonConnectedSellers)
+    await base.check(this.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonConnectedSellers)
+    await base.clearAndType(this.wooCommerce.settings.dokanMangoPay.announcementInterval, '7')
     await base.click(this.wooCommerce.settings.dokanMangoPay.dokanMangopaySaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
   },
 
   async setupDokanRazorpay() {
@@ -1571,83 +1705,131 @@ module.exports = {
     await base.click(this.wooCommerce.settings.setupDokanRazorpay)
     //setup dokan razorpay
     await base.check(this.wooCommerce.settings.dokanRazorpay.enableDisableDokanRazorpay)
-    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.title, 'Razorpay')
-    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.description, 'Pay securely by Credit or Debit card or Internet Banking through Razorpay.')
+    await base.clearAndType(this.wooCommerce.settings.dokanRazorpay.title, 'Razorpay')
+    await base.clearAndType(this.wooCommerce.settings.dokanRazorpay.description, 'Pay securely by Credit or Debit card or Internet Banking through Razorpay.')
     // api credentials
     await base.check(this.wooCommerce.settings.dokanRazorpay.razorpaySandbox)
-    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.testKeyId, 'rzp_test')
-    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.testKeySecret, 'rzp_test')
+    await base.clearAndType(this.wooCommerce.settings.dokanRazorpay.testKeyId, 'rzp_test')
+    await base.clearAndType(this.wooCommerce.settings.dokanRazorpay.testKeySecret, 'rzp_test')
     await page.click(this.wooCommerce.settings.dokanRazorpay.disbursementMode)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.dokanRazorpay.disbursementModeValues, 'Delayed')
-    await base.check(this.wooCommerce.settings.dokanRazorpay.sellerPaysTheprocessingFee)
+    await base.check(this.wooCommerce.settings.dokanRazorpay.sellerPaysTheProcessingFee)
     await base.check(this.wooCommerce.settings.dokanRazorpay.displayNoticeToConnectSeller)
     await base.check(this.wooCommerce.settings.dokanRazorpay.sendAnnouncementToConnectSeller)
-    await base.clearandtype(this.wooCommerce.settings.dokanRazorpay.sendAnnouncementInterval, '7')
+    await base.clearAndType(this.wooCommerce.settings.dokanRazorpay.sendAnnouncementInterval, '7')
     await base.click(this.wooCommerce.settings.dokanRazorpay.dokanRazorpaySaveChanges)
 
-    let successmessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
-    expect(successmessage).toMatch('Your settings have been saved.')
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
+  },
+
+  async setupStripeExpress() {
+    await this.setCurrency('United States (US) dollar ($)')
+
+    await base.click(this.wooCommerce.settings.payments)
+    await base.click(this.wooCommerce.settings.setupDokanStripeExpress)
+
+    // stripe express
+    await base.check(this.wooCommerce.settings.stripeExpress.enableOrDisableStripeExpress)
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.title, 'Dokan Express Payment Methods')
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.description, 'Pay with your credit card via Stripe.')
+    // api credentials
+    await base.check(this.wooCommerce.settings.stripeExpress.testMode)
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.testPublishableKey, 'pk_test_')
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.testSecretKey, 'sk_test_')
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.testWebhookSecret, 'whsec_test_')
+    // payment and disbursement
+    await base.clickXpath(this.wooCommerce.settings.stripeExpress.choosePaymentMethods)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, 'Credit/Debit Card')
+    await base.clickXpath(this.wooCommerce.settings.stripeExpress.choosePaymentMethods)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, 'iDEAL')
+    await base.check(this.wooCommerce.settings.stripeExpress.takeProcessingFeesFromSellers)
+    await base.check(this.wooCommerce.settings.stripeExpress.savedCards)
+    await base.check(this.wooCommerce.settings.stripeExpress.capturePaymentsManually)
+    await page.click(this.wooCommerce.settings.stripeExpress.disburseFunds)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.disbursementModeValues, 'Delayed')
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.customerBankStatement, 'Dokan')
+    // payment request options (apple pay/google pay)
+    await base.check(this.wooCommerce.settings.stripeExpress.paymentRequestButtons)
+    await page.select(this.wooCommerce.settings.stripeExpress.buttonType, 'default')
+    await page.select(this.wooCommerce.settings.stripeExpress.buttonTheme, 'dark')
+    await base.clickXpath(this.wooCommerce.settings.stripeExpress.buttonLocations)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.buttonLocationsValues, 'Product')
+    await base.clickXpath(this.wooCommerce.settings.stripeExpress.buttonLocations)
+    await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.buttonLocationsValues, 'Checkout')
+    // advanced settings
+    await base.check(this.wooCommerce.settings.stripeExpress.displayNoticeToNonConnectedSellers)
+    await base.check(this.wooCommerce.settings.stripeExpress.sendAnnouncementToNonConnectedSellers)
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.announcementInterval, '7')
+    await base.click(this.wooCommerce.settings.stripeExpress.stripeExpressSaveChanges)
+
+    let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
   },
 
 
+  async addVendor(firstName, lastName, storeName, phoneNumber, email, userName, password, companyName, companyIdEuidNumber, vatOrTaxNumber, nameOfBank, bankIban,
+    street1, street2, city, zip, country, state, accountName, accountNumber, bankName, bankAddress, routingNumber, iban, swift, payPalEmail) {
 
+    await page.hover(this.aDashboard.dokan)
+    await page.waitForTimeout(1000)
+    await base.click(this.dokan.vendorsMenu)
 
+    //add new vendor
+    await page.click(this.dokan.vendors.addNewVendor)
+    // account info
+    await page.type(this.dokan.vendors.firstName, firstName)
+    await page.type(this.dokan.vendors.lastName, lastName)
+    await page.type(this.dokan.vendors.storeName, storeName)
+    await page.type(this.dokan.vendors.phoneNumber, phoneNumber)
+    await page.type(this.dokan.vendors.email, email)
+    await page.click(this.dokan.vendors.generatePassword)
+    await page.waitForTimeout(1000)
+    await base.clearAndType(this.dokan.vendors.password, password)
+    await page.type(this.dokan.vendors.username, userName)
+    await page.type(this.dokan.vendors.companyName, companyName)
+    await page.type(this.dokan.vendors.companyIdEuidNumber, companyIdEuidNumber)
+    await page.type(this.dokan.vendors.vatOrTaxNumber, vatOrTaxNumber)
+    await page.type(this.dokan.vendors.nameOfBank, nameOfBank)
+    await page.type(this.dokan.vendors.bankIban, bankIban)
+    await page.click(this.dokan.vendors.next)
 
+    await page.waitForSelector(this.dokan.vendors.street1)
+    // address  
+    await page.type(this.dokan.vendors.street1, street1)
+    await page.type(this.dokan.vendors.street2, street2)
+    await page.type(this.dokan.vendors.city, city)
+    await page.type(this.dokan.vendors.zip, zip)
+    await page.click(this.dokan.vendors.country)
+    await page.type(this.dokan.vendors.countryInput, country)
+    await page.keyboard.press('Enter')
+    await page.click(this.dokan.vendors.state)
+    await page.type(this.dokan.vendors.state, state)
+    await page.click(this.dokan.vendors.next)
 
+    await page.waitForSelector(this.dokan.vendors.accountName)
+    // payment options  
+    await page.type(this.dokan.vendors.accountName, accountName)
+    await page.type(this.dokan.vendors.accountNumber, accountNumber)
+    await page.type(this.dokan.vendors.bankName, bankName)
+    await page.type(this.dokan.vendors.bankAddress, bankAddress)
+    await page.type(this.dokan.vendors.routingNumber, routingNumber)
+    await page.type(this.dokan.vendors.iban, iban)
+    await page.type(this.dokan.vendors.swift, swift)
+    await page.type(this.dokan.vendors.payPalEmail, payPalEmail)
+    await page.click(this.dokan.vendors.enableSelling)
+    await page.click(this.dokan.vendors.publishProductDirectly)
+    await page.click(this.dokan.vendors.makeVendorFeature)
+    //create vendor
+    await page.click(this.dokan.vendors.createVendor)
+    await page.waitForTimeout(2000)
+    await base.click(this.dokan.vendors.editVendorInfo)
 
+    await page.waitForSelector(this.dokan.vendors.editVendor.email)
+    let vendorEmail = await base.getElementValue(this.dokan.vendors.editVendor.email)
+    expect(vendorEmail).toBe(email)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  },
 
 
 
@@ -1657,148 +1839,87 @@ module.exports = {
 
   /////////////////////////////////////  old methods ///////////////////////////////////////////////
 
-  async addvendor() {
-    await page.click(this.dokan)
+
+  async addProduct(productName, productPrize, ProductType) {
+    await page.hover(this.aDashboard.products)
+    await page.waitForTimeout(1000)
+    await base.click(this.products.addNew)
+
+    // add new product
+    await page.type(this.products.productName, productName)
+    await page.type(this.products.regularPrice, productPrize)
+    await page.click(this.products.publish)
+
+
+  },
+
+  async addCategory(categoryName) {
+    await page.click(this.aDashboard.products)
     await page.waitForTimeout(5000)
-    await page.click(this.vendors)
-    await page.waitForTimeout(2000)
-    await page.click(this.addNewVendor)
-    await page.waitForTimeout(2000)
+    await base.click(this.products.categories)
 
+    // add new category
+    await page.type(this.categoryName, categoryName)
+    await page.type(this.categorySlug, categoryName)
 
-    // account info
-    // await page.click(this.addNewVendor)
-    // await page.click(this.banner)
-    await page.type(this.vendorfirstName, 'rk');
-    await page.type(this.vendorlastName, 'sh');
-    await page.type(this.storeName, 'rksuperstore');
-    await page.type(this.storeUrl, '');
-    await page.type(this.phoneNumber, '2102222222');
-    await page.type(this.vendorEmail, 'rk@gmail.com');
-    await page.type(this.vendorUsername, 'rkvendor')
-    await page.click(this.generatePassword);
-    await page.waitForTimeout(500);
-    await base.clearandtype(this.vendorPassword, '01rksh01');
-    // await page.click(this.addressLink)
-    await page.click(this.next)
-    await page.waitForTimeout(2000)
-
-    // address
-    await page.type(this.street1, 'abc street');
-    // await page.type(this.street2, 'New York 2');
-    await page.type(this.city, 'New York');
-    await page.type(this.zip, '10001');
-    await page.click(this.country);
-    await page.type(this.countryInput, 'United States (US)');
-    await page.keyboard.press('Enter');
-    await page.click(this.state);
-    await page.type(this.state, 'New York');
-    // await page.click(this.paymentOptionlink)
-    await page.click(this.next)
-    await page.waitForTimeout(2000)
-
-    // payment options
-    await page.type(this.accountName, 'rkaccount');
-    await page.type(this.accountNumber, '1234');
-    await page.type(this.bankName, 'rkbank');
-    await page.type(this.bankAddress, 'rkaddress');
-    await page.type(this.routingNumber, '1111');
-    await page.type(this.iban, '1111');
-    await page.type(this.swift, '1111');
-    await page.type(this.payPalEmail, 'rk@gmail.com');
-    await page.click(this.enableSelling)
-    await page.click(this.publishProductDirectly)
-    await page.click(this.makeVendorFeature)
-
-    await page.click(this.createVendor)
-    // await page.click(this.addAnother)
-    await page.waitForTimeout(5000)
   },
 
 
+  // async addAttributes(attributeName, attributeValue) {
+  //   await page.click(this.aDashboard.products)
+  //   await page.waitForTimeout(5000)
+  //   await base.click(this.products.attributes)
 
-  async addproduct() {
-    await page.click(this.products);
-    await page.waitForTimeout(5000)
-    await page.click(this.addNew);
-    await page.waitForTimeout(5000)
-    // Simple product, Grouped product, External/Affiliate product, Variable product
-    for (let i = 0; i < this.productsName.length; i++) {
-      await page.type(this.productName, this.productsName[i]);
-      await page.waitForTimeout(500)
-      await page.type(this.regularPrice, this.prizes[i]);
+  //   // add new attribute
+  //   await page.type(this.attributes.attributeName, attributeName)
+  //   await page.type(this.attributes.attributeValue, attributeValue)
+  //   await page.click(this.attributes.addAttribute)
 
-      // await page.type(this.salePrice, category);
-      // await page.click(this.vendor);
-      await page.waitForTimeout(1000)
-      await page.click(this.publish);
-      await page.waitForTimeout(500)
-      await page.click(this.addNew);
-      await page.waitForTimeout(1000);
-    }
-  },
-
-  async addcategory() {
-    await page.click(this.products);
-    await page.waitForTimeout(5000)
-    await page.click(this.categories);
-    await page.waitForTimeout(5000)
-    for (category of this.productCategories) {
-      await page.type(this.categoryName, category);
-      await page.type(this.categorySlug, category);
-      await page.click(this.addNewCategory);
-      await page.waitForTimeout(2000);
-    }
-  },
-
-  // need to recheck
-  async addattributes() {
-    await page.click(this.products);
-    await page.waitForTimeout(5000)
-    await page.click(this.attributes);
-    await page.waitForTimeout(5000)
-    for (let i = 0; i < this.productAttributes.length; i++) {
-      await page.waitForTimeout(500);
-      await page.type(this.attributeName, this.productAttributes[i]);
-      await page.type(this.attributeSlug, this.productAttributes[i]);
-      await page.click(this.addAttribute);
-      // await page.waitForTimeout(1000)
-      await page.click(this.configureTerms(this.productAttributes[i]));
-
-      for (let j = 0; j < this.attributeValues[i].length; j++) {
-        await page.waitForTimeout(500);
-        await page.type(this.attributeValue, this.attributeValues[i][j]);
-        await page.type(this.attributeValueSlug, this.attributeValues[i][j]);
-        await page.click(this.addattributeValue);
-      }
-      await page.click(this.attributes);
-      // await page.waitForTimeout(1000)
-    }
-  },
-
-  async adminapprovewholesalerequest(customer) {
-
-    await page.click(this.dokan);
-    await page.waitForTimeout(2000);
-    await page.click(this.wholesaleCutomer);
-    await page.waitForTimeout(10000);
-    await page.click(this.wholesaleCustomerSlider(customer))
-    await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
+  //   await page.click(this.aDashboard.products)
+  //   await page.waitForTimeout(5000)
+  //   await base.click(this.products.attributes)
 
 
-    // await loginPage.adminlogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    // // await wp.createNewPost()
+  //   for (let i = 0 i < this.productAttributes.length i++) {
+  //     await page.waitForTimeout(500)
+  //     await page.type(this.attributeName, this.productAttributes[i])
+  //     await page.type(this.attributeSlug, this.productAttributes[i])
+  //     await page.click(this.addAttribute)
+  //     // await page.waitForTimeout(1000)
+  //     await page.click(this.configureTerms(this.productAttributes[i]))
 
-    // await wp.activatePlugin('http://wordpress.org/plugins/hello-dolly/')
-    // // await page.waitForTimeout(20000); // TODO: add page load complete to revome this line
-    // // clickButton('Posts')
-    // await wp.clickMenuItem('Posts')
-    // // await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
-    // // clickMenuItem('Wholesale Customer')
-    // // await page.waitForTimeout(2000); // TODO: add page load complete to revome this line
-    // // await page.waitForTimeout(4000); // TODO: add page load complete to revome this line
+  //     for (let j = 0 j < this.attributeValues[i].length j++) {
+  //       await page.waitForTimeout(500)
+  //       await page.type(this.attributeValue, this.attributeValues[i][j])
+  //       await page.type(this.attributeValueSlug, this.attributeValues[i][j])
+  //       await page.click(this.addAttributeValue)
+  //     }
+  //     await page.click(this.attributes)
+  //   }
+  // },
 
-  },
+  // async adminApproveWholesaleRequest(customer) {
+
+  //   await page.click(this.dokan)
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.wholesaleCustomer)
+  //   await page.waitForTimeout(10000)
+  //   await page.click(this.wholesaleCustomerSlider(customer))
+
+
+  //   // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+  //   // // await wp.createNewPost()
+
+  //   // await wp.activatePlugin('http://wordpress.org/plugins/hello-dolly/')
+  //   // // await page.waitForTimeout(20000) // TODO: add page load complete to remove this line
+  //   // // clickButton('Posts')
+  //   // await wp.clickMenuItem('Posts')
+  //   // // await page.waitForTimeout(2000) // TODO: add page load complete to remove this line
+  //   // // clickMenuItem('Wholesale Customer')
+  //   // // await page.waitForTimeout(2000) // TODO: add page load complete to remove this line
+  //   // // await page.waitForTimeout(4000) // TODO: add page load complete to remove this line
+
+  // },
 
 
 }

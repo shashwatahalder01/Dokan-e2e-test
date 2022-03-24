@@ -1,0 +1,12 @@
+{
+    "compilerOptions": {
+      // "checkJs": true,
+      "module": "commonjs",
+      "target": "es6"
+    },
+    "exclude": [
+        "node_modules",
+        "wp-content"
+    ]
+  }
+  

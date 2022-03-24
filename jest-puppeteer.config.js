@@ -37,8 +37,5 @@ module.exports = {
     // height: '100', // page height in pixels.  ??
     // timeout: 60000, // timeout in ms //Maximum time in milliseconds to wait for the browser instance to start. Defaults to 30000 (30 seconds). Pass 0 to disable timeout.
 
-    // , //
-    // , //
-    // , //
   },
 };

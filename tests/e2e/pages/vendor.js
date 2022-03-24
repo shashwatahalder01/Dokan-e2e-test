@@ -467,7 +467,7 @@ module.exports = {
     },
 
     //staff
-    staff: {
+    vStaff: {
         // add staff
         addNewStuff: ".dokan-btn",
         firstName: "#first_name",
@@ -1281,7 +1281,7 @@ module.exports = {
 
     // methods
 
-    async goToVendorDashbord() {
+    async goToVendorDashboard() {
         await page.goto(createURL('dashboard'))
 
         let dashboardIsVisible = await base.isVisible(page, this.vDashboard.dashboard)
@@ -1331,7 +1331,7 @@ module.exports = {
 
     //products
     //vendor create product
-    async addproduct(productName, productPrice, category) {
+    async addProduct(productName, productPrice, category) {
         await base.click(this.vDashboard.products);
         await page.click(this.product.addNewProduct);
         await page.type(this.product.productName, productName);
@@ -1346,7 +1346,7 @@ module.exports = {
     },
     //coupon
     //vendor create coupon
-    async addcoupon(couponTitle, couponAmount) {
+    async addCoupon(couponTitle, couponAmount) {
         await base.click(this.vDashboard.coupons);
         await base.click(this.vCoupon.addNewCoupon);
         await page.type(this.vCoupon.couponTitle, couponTitle);
@@ -1362,7 +1362,7 @@ module.exports = {
 
     //withdraw
     //vendor request withdraw 
-    async requestwithdraw(withdrawAmount, withdrawMethod) {
+    async requestWithdraw(withdrawAmount, withdrawMethod) {
         await base.click(this.vDashboard.withdraw);
         let minimumWithdrawAmount = await base.getElementText(this.vWithdraw.minimumWithdrawAmount)
         minimumWithdrawAmount = minimumWithdrawAmount.replace('$', '')
@@ -1381,7 +1381,7 @@ module.exports = {
 
     },
 
-    async cancelrequestwithdraw() {
+    async cancelRequestWithdraw() {
         await base.click(this.vDashboard.withdraw);
         await page.click(this.vWithdraw.cancelRequest);
 
@@ -1390,7 +1390,7 @@ module.exports = {
 
     },
 
-    async addautowithdrawdisbursementschedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
+    async addAutoWithdrawDisbursementSchedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
         await base.click(this.vDashboard.withdraw);
         await page.click(this.vWithdraw.editSchedule);
         await page.select(this.vWithdraw.preferredPaymentMethod, preferredPaymentMethod)
@@ -1402,7 +1402,7 @@ module.exports = {
         // await page.waitForTimeout(5000)
     },
 
-    // async adddefaultwithdrawpaymentmethods(preferredSchedule) {
+    // async addDefaultWithdrawPaymentMethods(preferredSchedule) {
     //     // TODO : locator issue
     //     await base.click(this.vDashboard.withdraw);
     //     // let a = page.$(this.vWithdraw.bankTransferSetup)
@@ -1414,7 +1414,7 @@ module.exports = {
     // },
 
 
-    async setstoresettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
+    async setStoreSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
         companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimunOrderAmount, percentage, supportButtonText,
         minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder
     ) {
@@ -1438,18 +1438,18 @@ module.exports = {
 
         // await page.waitForTimeout(6000)
 
-        await base.clearandtype(this.vStoreSettings.storeName, storeName)
-        await base.clearandtype(this.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
-        await base.clearandtype(this.vStoreSettings.phoneNo, phoneNo)
+        await base.clearAndType(this.vStoreSettings.storeName, storeName)
+        await base.clearAndType(this.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
+        await base.clearAndType(this.vStoreSettings.phoneNo, phoneNo)
         //address
         // await page.click(this.vStoreSettings.multipleLocation)
         // await page.type(this.vStoreSettings.locationName, locationName)
         // await page.click(this.vStoreSettings.addLocation)
         // await page.click(this.vStoreSettings.editLocation)
-        await base.clearandtype(this.vStoreSettings.street, street)
-        await base.clearandtype(this.vStoreSettings.street2, street2)
-        await base.clearandtype(this.vStoreSettings.city, city)
-        await base.clearandtype(this.vStoreSettings.postOrZipCode, postOrZipCode)
+        await base.clearAndType(this.vStoreSettings.street, street)
+        await base.clearAndType(this.vStoreSettings.street2, street2)
+        await base.clearAndType(this.vStoreSettings.city, city)
+        await base.clearAndType(this.vStoreSettings.postOrZipCode, postOrZipCode)
         await page.select(this.vStoreSettings.country, country)
         await page.select(this.vStoreSettings.state, state)
         // await page.type(this.vStoreSettings.saveLocation, saveLocation)
@@ -1458,17 +1458,17 @@ module.exports = {
         // await page.click(this.vStoreSettings.deleteSaveLocation)
 
         //company info
-        await base.clearandtype(this.vStoreSettings.companyName, companyName)
-        await base.clearandtype(this.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
-        await base.clearandtype(this.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
-        await base.clearandtype(this.vStoreSettings.nameOfBank, nameOfBank)
-        await base.clearandtype(this.vStoreSettings.bankIban, bankIban)
+        await base.clearAndType(this.vStoreSettings.companyName, companyName)
+        await base.clearAndType(this.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
+        await base.clearAndType(this.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
+        await base.clearAndType(this.vStoreSettings.nameOfBank, nameOfBank)
+        await base.clearAndType(this.vStoreSettings.bankIban, bankIban)
         //email
         // await page.click(this.vStoreSettings.email)
         // await page.click(this.vStoreSettings.moreProducts)
         //map
         // await page.click(this.vStoreSettings.map)
-        // await base.clearandtype(this.vStoreSettings.map, map)
+        // await base.clearAndType(this.vStoreSettings.map, map)
         // await page.waitForTimeout(2000)
         // await page.click(this.vStoreSettings.map1)
         // await page.click(this.vStoreSettings.mapFirstResult)
@@ -1477,8 +1477,8 @@ module.exports = {
 
         //discount
         await page.click(this.vStoreSettings.enableStoreWideDiscount)
-        await base.clearandtype(this.vStoreSettings.minimunOrderAmount, minimunOrderAmount)
-        await base.clearandtype(this.vStoreSettings.percentage, percentage)
+        await base.clearAndType(this.vStoreSettings.minimunOrderAmount, minimunOrderAmount)
+        await base.clearAndType(this.vStoreSettings.percentage, percentage)
         //biography
 
         //store support
@@ -1486,15 +1486,15 @@ module.exports = {
         await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
         await page.click(this.vStoreSettings.showSupportButtonInStore)
         await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
-        await base.clearandtype(this.vStoreSettings.supportButtonText, supportButtonText)
+        await base.clearAndType(this.vStoreSettings.supportButtonText, supportButtonText)
 
         // //min-max
         // await page.click(this.vStoreSettings.enableMinMaxQuantities)
-        // await base.clearandtype(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
-        // await base.clearandtype(this.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
+        // await base.clearAndType(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
+        // await base.clearAndType(this.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
         // await page.click(this.vStoreSettings.enableMinMaxAmount)
-        // await base.clearandtype(this.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
-        // await base.clearandtype(this.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
+        // await base.clearAndType(this.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
+        // await base.clearAndType(this.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
         // await page.click(this.vStoreSettings.selectAll)
 
         //update settings
@@ -1510,55 +1510,55 @@ module.exports = {
 
     },
 
-    async setpaymetnsettings() {
+    async setPaymentSettings() {
 
         await base.click(this.vDashboard.settings)
         await base.click(this.vSettings.payment)
 
         //paypal
-        await base.clearandtype(this.vPaymentSettings.paypal, paypal)
+        await base.clearAndType(this.vPaymentSettings.paypal, paypal)
 
         //bank transfer
-        await base.clearandtype(this.vPaymentSettings.bankAccountName, bankAccountName)
-        await base.clearandtype(this.vPaymentSettings.bankAccountNumber, bankAccountNumber)
-        await base.clearandtype(this.vPaymentSettings.bankName, bankName)
-        await base.clearandtype(this.vPaymentSettings.bankAddress, bankAddress)
-        await base.clearandtype(this.vPaymentSettings.bankRoutingNumber, bankRoutingNumber)
-        await base.clearandtype(this.vPaymentSettings.bankIban, bankIban)
-        await base.clearandtype(this.vPaymentSettings.bankSwiftCode, bankSwiftCode)
+        await base.clearAndType(this.vPaymentSettings.bankAccountName, bankAccountName)
+        await base.clearAndType(this.vPaymentSettings.bankAccountNumber, bankAccountNumber)
+        await base.clearAndType(this.vPaymentSettings.bankName, bankName)
+        await base.clearAndType(this.vPaymentSettings.bankAddress, bankAddress)
+        await base.clearAndType(this.vPaymentSettings.bankRoutingNumber, bankRoutingNumber)
+        await base.clearAndType(this.vPaymentSettings.bankIban, bankIban)
+        await base.clearAndType(this.vPaymentSettings.bankSwiftCode, bankSwiftCode)
 
 
         // //Stripe
         // await base.click(this.vPaymentSettings.ConnectWithStripe)
 
         // //paypal marketplace
-        // await base.clearandtype(this.vPaymentSettings.paypalMarketplace, paypalMarketplace)
+        // await base.clearAndType(this.vPaymentSettings.paypalMarketplace, paypalMarketplace)
         // await base.click(this.vPaymentSettings.paypalMarketplaceSigUp)
 
         //razorpay
         //     await base.click(this.vPaymentSettings.rzSignup)
         //  // existing account info
         //     await page.click(this.vPaymentSettings.rzIHaveAlreadyAnAccount)
-        //     await base.clearandtype(this.vPaymentSettings.rzAccountId, rzAccountId)
+        //     await base.clearAndType(this.vPaymentSettings.rzAccountId, rzAccountId)
         //     await page.click(this.vPaymentSettings.rzConnectExistingAccount)
         //  //new account info
-        //     await base.clearandtype(this.vPaymentSettings.rzAccountName, rzAccountName)
-        //     await base.clearandtype(this.vPaymentSettings.rzAccountEmail, rzAccountEmail)
-        //     await base.clearandtype(this.vPaymentSettings.rzYourCompanyName, rzYourCompanyName)
-        //     await base.clearandtype(this.vPaymentSettings.rzYourCompanyType, rzYourCompanyType)
-        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountName, rzBankAccountName)
-        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountNumber, rzBankAccountNumber)
-        //     await base.clearandtype(this.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
-        //     await base.clearandtype(this.vPaymentSettings.rzBankAccountType, rzBankAccountType)
+        //     await base.clearAndType(this.vPaymentSettings.rzAccountName, rzAccountName)
+        //     await base.clearAndType(this.vPaymentSettings.rzAccountEmail, rzAccountEmail)
+        //     await base.clearAndType(this.vPaymentSettings.rzYourCompanyName, rzYourCompanyName)
+        //     await base.clearAndType(this.vPaymentSettings.rzYourCompanyType, rzYourCompanyType)
+        //     await base.clearAndType(this.vPaymentSettings.rzBankAccountName, rzBankAccountName)
+        //     await base.clearAndType(this.vPaymentSettings.rzBankAccountNumber, rzBankAccountNumber)
+        //     await base.clearAndType(this.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
+        //     await base.clearAndType(this.vPaymentSettings.rzBankAccountType, rzBankAccountType)
         //     await base.click(this.vPaymentSettings.rzConnectAccount)
 
         //mangopay
 
         //custom payment method
-        await base.clearandtype(this.vPaymentSettings.customPayment, customPayment)
+        await base.clearAndType(this.vPaymentSettings.customPayment, customPayment)
 
         //skrill
-        await base.clearandtype(this.skrill.email, skrillEmail)
+        await base.clearAndType(this.skrill.email, skrillEmail)
 
         //update settings
         await page.click(this.vPaymentSettings.updateSettings)
@@ -1579,7 +1579,7 @@ module.exports = {
 
     },
 
-    async setsocialprofile(url) {
+    async setSocialProfile(url) {
         await base.click(this.vDashboard.settings)
         await base.click(this.vSettings.socialProfile)
 
@@ -1597,14 +1597,14 @@ module.exports = {
         expect(successmessage).toBe('Your information has been saved successfully')
     },
 
-    async setrmasettings(label, type, length, lengthValue, lengthDuration) {
+    async setRmaSettings(label, type, length, lengthValue, lengthDuration) {
         await base.click(this.vDashboard.settings)
         await base.click(this.vSettings.rma)
 
-        await base.clearandtype(this.vRmaSettings.label, label);
+        await base.clearAndType(this.vRmaSettings.label, label);
         await page.select(this.vRmaSettings.type, type);
         await page.select(this.vRmaSettings.length, length);
-        await base.clearandtype(this.vRmaSettings.lengthValue, lengthValue);
+        await base.clearAndType(this.vRmaSettings.lengthValue, lengthValue);
         await page.select(this.vRmaSettings.lengthDuration, lengthDuration);
         await base.click(this.vSettings.saveChanges)
 
@@ -1673,9 +1673,9 @@ module.exports = {
     },
 
     async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
-        await base.clearandtype(this.vendorDetails.firstName, firstName)
-        await base.clearandtype(this.vendorDetails.lastName, lastName)
-        await base.clearandtype(this.vendorDetails.email, email)
+        await base.clearAndType(this.vendorDetails.firstName, firstName)
+        await base.clearAndType(this.vendorDetails.lastName, lastName)
+        await base.clearAndType(this.vendorDetails.email, email)
         await page.type(this.vendorDetails.currentPassword, currentPassword)
         await page.type(this.vendorDetails.NewPassword, newPassword)
         await page.type(this.vendorDetails.confirmNewPassword, newPassword)

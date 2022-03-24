@@ -44,6 +44,12 @@ const mangopayAvailableDirectPaymentServices = ['Sofort*','Giropay*']
 const mangopayTransferFunds = ['On payment completed','On order completed','Delayed']
 const mangopayTypeOfVendors = ['Individuals','Business','Either']
 const mangopayBusinessRequirement = ['Organizations','Soletraders','Businesses','Any']
+const stripeExpressDisbursementMode = ['On payment completed','On order completed','Delayed']
+const stripeExpressPaymentMethods = ['Credit/Debit Card','iDEAL']
+const stripeExpressButtonType = ['default','buy','donate','book']
+const stripeExpressButtonTheme = ['dark','light','light-outline']
+const stripeExpressButtonLocations = ['Checkout','Product','Cart']
+const stripeExpressButtonSize = ['default','medium','large']
 
 //Dokan
 //admin
@@ -65,7 +71,7 @@ const monthlyScheduleDay = ['monday','tuesday','wednesday','thursday','friday']
 const biweeklyScheduleWeek = ['1','2']
 const biweeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
 const weeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
-//appreance settings
+//appearance settings
 const gMapApiKey = "AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY"
 const mapboxAccessToken = "pk.eyJ1Ijoic2hhc2h3YXRhIiwiYSI6ImNrdzV3bm43eTAxeDYzMG52b2lwanZ4MnkifQ.tb3LaMr3Wa_-YOj5MwkEUA"
 //privacy policy settings
@@ -106,13 +112,13 @@ const itemCondition= ['new','used']
 const actionType= ['normal','reverse']
 
 
-const vendorinfo = {
+const vendorInfo = {
    userEmail: faker.internet.email(),
    password: process.env.VENDOR_PASSWORD,
    firstName: faker.name.firstName(),
    lastName: faker.name.lastName(),
    shopName: faker.company.companyName(),
-   // shopurl: faker.company.companyName(),
+   // shopUrl: faker.company.companyName(),
    companyName: faker.company.companyName(),
    companyId: faker.random.alphaNumeric(5),
    vatNumber: faker.random.alphaNumeric(10),
@@ -139,7 +145,7 @@ const coupon = {
 
 // console.log(coupon)
 
-exports.vendorinfo = vendorinfo;
+exports.vendorInfo = vendorInfo;
 exports.product = product;
 exports.coupon = coupon;
 
@@ -150,9 +156,9 @@ exports.coupon = coupon;
 // max=5
 // console.log(Math.floor(Math.random() * (max - min + 1)) + min)
 
-console.log(Date.now())
+// console.log(Date.now())
 
-// console.log(date.toLocaleString('en-US '))
-let d= new Date()
-console.log(d.toLocaleString('en-US',{ dateStyle:'short', timeStyle:'medium'    }));   
-console.log('tests/e2e/screenshot/phpError'+Date.now()+ '.png')
+// // console.log(date.toLocaleString('en-US '))
+// let d= new Date()
+// console.log(d.toLocaleString('en-US',{ dateStyle:'short', timeStyle:'medium'    }));   
+// console.log('tests/e2e/screenshot/phpError'+Date.now()+ '.png')

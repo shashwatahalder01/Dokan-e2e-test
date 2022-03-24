@@ -305,7 +305,7 @@ module.exports = {
     },
 
     // clear input field and type
-    async clearandtype(selector, value) {
+    async clearAndType(selector, value) {
         await page.$eval(selector, el => el.value = '')
         await page.type(selector, value)
 
@@ -320,7 +320,7 @@ module.exports = {
         await browser.close()
     },
 
-    async opennewtab() {
+    async openNewTab() {
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
 
