@@ -21,81 +21,19 @@ module.exports = {
 
     async isVisible(page, selector) {
         return await page.evaluate((selector) => {
-            var e = document.querySelector(selector)
+            if (selector.startsWith('//')) {
+                var e = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+            } else {
+                var e = document.querySelector(selector)
+            }
             if (e) {
                 var style = window.getComputedStyle(e)
-
                 return style && style.display !== 'none' && style.visibility !== 'hidden' && style.opacity !== '0'
-            }
-            else {
+            } else {
                 return false
             }
         }, selector)
     },
-
-    //TODO: page.waitForXpath()
-    //TODO: page.waitForSelector()
-    // async click(selector) {
-    //     let element = await page.$(selector)
-    //     if ((await (await element.getProperty("type")).jsonValue() === "checkbox") && (await (await element.getProperty("checked")).jsonValue())) {
-
-    //         await page.click(selector)
-    //         await page.click(selector)
-    //     }
-    //     else{
-    //         await page.click(selector)
-    //     }
-    //     if (selector.startsWith('//')) {
-    //         await this.clickXpath(selector)
-    //     } else {
-    //         await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-    //     }
-    // },
-
-
-    // async click(selector) {
-    //     // await page.click(selector)
-    //     // await page.waitForNavigation({waitUntil: 'networkidle2'})
-    //     if (selector.startsWith('//')) {
-    //         await page.waitForXpath(selector)
-    //         await this.clickXpath(selector)
-    //     } else {
-    //         page.waitForSelector(selector)
-    //         page.click(selector)
-
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-    //         // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-    //     }
-    // },
-
-    //mkmkmkmkmkmkmkmkmkmkmkm
-    // You can wait on both simultaneously and handle whichever occurs first:
-
-    // await Promise.race([
-    //   page.waitForNavigation({ waitUntil: "networkidle0" }),
-    //   page.waitForSelector(".Error")
-    // ])
-
-    // age.waitForResponse( response => response.status() === 200 )   //mkmkmkmkmkmkmk
-
-    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   //mkmkmkmkmkmk
-
-    // Since v1.6.0 there's page.waitForResponse.  ///mkmkmkm
-
-    //mkmkmkmkmkmkmkmkmk
-    // akshaychauhan7737 commented on Nov 28, 2020
-    // Create promise object befor event trigger
-    // If you want to satisfy any one of the condition to wait use
-
-    // const watchDog2 = [
-    //                 page.waitForSelector('.twofa-form .error'),
-    //                 page.waitForNavigation({ waitUntil: 'networkidle2' })
-    // ]
-    // await continueButton.evaluate(continueButton => continueButton.click())
-    // await await Promise.race(watchDog2)
 
     async click(selector) {
         if (selector.startsWith('//')) {
@@ -108,6 +46,12 @@ module.exports = {
         }
     },
 
+    async clickXpath(selector) {
+        // await page.waitForXPath(selector)
+        let [element] = await page.$x(selector)
+        await element.click()
+    },
+
     async clickXpathAndWait(selector) {
         await page.waitForXPath(selector)
         let [element] = await page.$x(selector)
@@ -117,10 +61,30 @@ module.exports = {
         // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
-    async clickXpath(selector) {
-        // await page.waitForXPath(selector)
+    async waitAndClick(selector) {
+        if (selector.startsWith('//')) {
+            await page.waitForXPath(selector)
+            let [element] = await page.$x(selector)
+            await element.click()  // just click
+            // await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
+        } else {
+            await page.waitForSelector(selector)
+            await page.click(selector)  // just click
+            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
+        }
+    },
+
+    async hover(selector) {
+        await page.hover(selector)
+        await page.waitForTimeout(1000)
+
+    },
+
+    async hoverXpath(selector) {
         let [element] = await page.$x(selector)
-        await element.click()
+        await element.hover()
+        await page.waitForTimeout(1000)
+
     },
 
     async check(selector) {
@@ -147,8 +111,8 @@ module.exports = {
         }
     },
 
-    async waitVisibleandClick(selector) {
-        await page.waitForSelector(selector, {visible: true})
+    async waitVisibleAndClick(selector) {
+        await page.waitForSelector(selector, { visible: true })
         await element.click()
     },
 
@@ -169,7 +133,6 @@ module.exports = {
     async reload() {
         await page.reload({ waitUntil: 'networkidle2' })
     },
-
 
     // get text
     async getSelectorText(selector) {
@@ -234,7 +197,7 @@ module.exports = {
         return count
     },
 
-    // get dropdowm options  span dropdown
+    // get dropdown options  span dropdown
     async getDropdownOptions(selector) {
         let elements = await page.$$(selector)
         let options = []
@@ -300,7 +263,7 @@ module.exports = {
         return value
     },
     // clear input field
-    async clearinputfield(selector) {
+    async clearInputField(selector) {
         await page.$eval(selector, el => el.value = '')
     },
 
@@ -313,7 +276,7 @@ module.exports = {
 
 
     // close tab
-    async closetab() {
+    async closeTab() {
         // close new tab
         await page.close()
         // close browser or close all tab
@@ -357,11 +320,56 @@ module.exports = {
 
     },
 
+    async alert(action) {
+        page.on('dialog', async dialog => {
+            // console.log(dialog.message());
+
+            if (action == 'accept') {
+                await dialog.accept();
+
+            } else if (action == 'cancel') {
+                await dialog.dismiss();
+            }
+
+        });
+    }
+
+    //TODO: add function for grab console error
+
+
     // // get Title of a page
     // await page.title()
     // // Get url of current tab in puppeteer
     // await page.url()
     // // Content of page / Page Source
     // await page.content()
+
+
+        // Network handle methods
+
+    //option 1
+    // You can wait on both simultaneously and handle whichever occurs first:
+
+    // await Promise.race([
+    //   page.waitForNavigation({ waitUntil: "networkidle0" }),
+    //   page.waitForSelector(".Error")
+    // ])
+
+    // age.waitForResponse( response => response.status() === 200 )   //option 2
+
+    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   //option 3
+
+    // Since v1.6.0 there's page.waitForResponse.  ///option 4
+
+    //option 1 5
+    // Create promise object before event trigger
+    // If you want to satisfy any one of the condition to wait use
+
+    // const watchDog2 = [
+    //                 page.waitForSelector('.form .error'),
+    //                 page.waitForNavigation({ waitUntil: 'networkidle2' })
+    // ]
+    // await continueButton.evaluate(continueButton => continueButton.click())
+    // await await Promise.race(watchDog2)
 
 }

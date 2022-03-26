@@ -105,10 +105,10 @@ module.exports = {
         export: ".dokan-add-product-link > .dokan-btn:nth-child(3)",
 
         // product sub options
-        editproduct: ".row-actions > .edit > a",
+        editProduct: ".row-actions > .edit > a",
         deletePermanently: ".row-actions > .delete > a",
         view: ".row-actions > .view > a",
-        quickedit: ".row-actions > .item-inline-edit > a",
+        quickEdit: ".row-actions > .item-inline-edit > a",
         duplicate: ".row-actions > .duplicate > a",
 
 
@@ -119,7 +119,7 @@ module.exports = {
         productImage: ".dokan-feat-image-btn",
         productUploadProductImage: '#\\__wp-uploader-id-1',
         productAddGalleryImage: ".fa-plus",
-        productUploadalleryImage: "#\\__wp-uploader-id-4",
+        productUploadGalleryImage: "#\\__wp-uploader-id-4",
         productPrice: "#_regular_price",
         productDiscountedPrice: "#_sale_price",
         productDiscountedPriceSchedule: ".sale_schedule",
@@ -137,18 +137,18 @@ module.exports = {
         viewProduct: ".dokan-right > .dokan-btn",
         title: "#post_title",
         //permalink
-        premalinkEdit: ".edit-slug",
-        confirmPremalinkEdit: ".cancel",
-        cancelPremalinkEdit: ".save",
+        permalinkEdit: ".edit-slug",
+        confirmPermalinkEdit: ".cancel",
+        cancelPermalinkEdit: ".save",
         //image
         productImage: ".dokan-feat-image-btn",
         uploadProductImage: '#\\__wp-uploader-id-1',
         addGalleryImage: ".fa-plus",
-        uploadalleryImage: "#\\__wp-uploader-id-4",
+        uploadGalleryImage: "#\\__wp-uploader-id-4",
         //product type
         productType: "#product_type",
         downloadable: "#\\_downloadable",
-        vitual: "#\\_virtual",
+        virtual: "#\\_virtual",
         price: "#\\_regular_price",
         discountedPrice: "#\\_sale_price",
         discountedPriceSchedule: ".sale_schedule",
@@ -166,12 +166,12 @@ module.exports = {
         enableProductStockManagement: "#\\_manage_stock",
         stockQuantity: ".show_if_stock > .content-half-part:nth-child(1) > .dokan-form-control",
         lowStockThreshold: ".show_if_stock > .content-half-part:nth-child(2) > .dokan-form-control",
-        allowBackorders: "#\\_backorders",
+        allowBackOrders: "#\\_backorders",
         allowOnlyOneQuantityOfThisProductToBeBoughtInASingleOrder: "#\\_sold_individually",
         //geolocation
         sameAsStore: "#\\_dokan_geolocation_use_store_settings",
         productLocation: "#\\_dokan_geolocation_product_location",
-        productLocationFirstresult: ".gm-style > div:nth-child(2) > div:nth-child(2)",
+        productLocationFirstResult: ".gm-style > div:nth-child(2) > div:nth-child(2)",
         //add-ons
         addField: ".wc-pao-add-field",
         type: "#wc-pao-addon-content-type-0",
@@ -191,8 +191,8 @@ module.exports = {
         optionPriceType: ".wc-pao-addon-option-price-type",
         optionPrice: ".wc_input_price:nth-child(1)",
         addOption: ".wc-pao-add-option",
-        removOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
-        cacelRemoveOption: ".swal2-cancel",
+        removeOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
+        cancelRemoveOption: ".swal2-cancel",
         okRemoveOption: ".swal2-confirm",
         //shipping
         thisProductRequiresShipping: "#\\_disable_shipping",
@@ -212,7 +212,7 @@ module.exports = {
         customAttribute: "#predefined_attribute",
         addAttribute: ".add_new_attribute",
         visibleOnTheProductPage: "checkbox-item:nth-child(6) > input",
-        useForVariaion: ".show_if_variable > input",
+        useForVariation: ".show_if_variable > input",
         selectItems: "dokan-section-content > .content-half-part:nth-child(2) .select2-search__field",
         selectAll: ".plus",
         selectNone: ".minus",
@@ -225,8 +225,8 @@ module.exports = {
         confirmGo: ".do_variation_action",
         okSuccessAlertGo: ".do_variation_action",
         cancelGo: ".do_variation_action",
-        saveVariationchanges: ".save-variation-changes",
-        cancelVariationchanges: ".cancel-variation-changes",
+        saveVariationChanges: ".save-variation-changes",
+        cancelVariationChanges: ".cancel-variation-changes",
         defaultAttribute: ".dokan-variation-default-select > .dokan-form-control",
         //discount options
         enableBulkDiscount: "#\\_is_lot_discount",
@@ -261,18 +261,18 @@ module.exports = {
         advertiseThisProduct: "#dokan_advertise_single_product",
         confirmAdvertiseThisProduct: ".swal2-confirm",
         okSuccessAlertAdvertiseThisProduct: ".swal2-confirm",  //TODO:recheck
-        cancellAdvertiseThisProduct: ".swal2-cancel",
+        cancelAdvertiseThisProduct: ".swal2-cancel",
         // save product
         saveProduct: ".dokan-btn-lg",
     },
 
     //orders
     vOrders: {
-        //menues
+        //menus
         all: ".active:nth-child(1) > a",
         completed: ".list-inline > li:nth-child(2) > a",
         processing: ".list-inline > li:nth-child(3) > a",
-        onhold: ".list-inline > li:nth-child(4) > a",
+        onHold: ".list-inline > li:nth-child(4) > a",
         pending: ".list-inline > li:nth-child(5) > a",
         cancelled: ".list-inline > li:nth-child(6) > a",
         refunded: ".list-inline > li:nth-child(7) > a",
@@ -296,12 +296,12 @@ module.exports = {
         filter: ".dokan-btn",
 
         //edit subscription
-        subscribtion: "td > a > strong",
+        subscription: "td > a > strong",
         //edit subscription order status
-        editSubscribtionOrderStatus: ".dokan-edit-status > small",
-        subscribtionOrderStatus: "#order_status",
-        updateSubscribtionOrderStatus: ".dokan-btn:nth-child(5)",
-        cancelSubscribtionOrderStatus: ".dokan-btn-default",
+        editSubscriptionOrderStatus: ".dokan-edit-status > small",
+        subscriptionOrderStatus: "#order_status",
+        updateSubscriptionOrderStatus: ".dokan-btn:nth-child(5)",
+        cancelSubscriptionOrderStatus: ".dokan-btn-default",
         //downloadable product permission
         chooseADownloadableProduct: ".select2-search__field",
         grantAccess: ".grant_access",
@@ -314,7 +314,7 @@ module.exports = {
         billingInterval: "#\\_billing_interval",
         billingPeriod: "#\\_billing_period",
         nextPayment: "#next_payment",
-        nextPaymentminute: "#next_payment_hour",
+        nextPaymentHour: "#next_payment_hour",
         nextPaymentMinute: "#next_payment_minute",
         endDate: "#end",
         endDateHour: "#end_hour",
@@ -348,7 +348,7 @@ module.exports = {
         showOnStore: "#checkboxes-3",
         createCoupon: ".dokan-btn-danger",
 
-        //menues
+        //menus
         myCoupons: ".active:nth-child(1) > a",
         marketplaceCoupons: ".active:nth-child(2) > a",
 
@@ -358,7 +358,7 @@ module.exports = {
 
     //reports
     vReports: {
-        //menues
+        //menus
         overview: ".active:nth-child(1) > a",
         salesByDay: ".dokan_tabs > li:nth-child(2) > a",
         topSelling: ".dokan_tabs > li:nth-child(3) > a",
@@ -374,9 +374,9 @@ module.exports = {
     //deliveryTime
     vDeliveryTime: {
         //filter
-        deliveryTipeFilter: "#delivery-type-filter",
+        deliveryTimeFilter: "#delivery-type-filter",
         filter: ".dokan-btn",
-        // calander navigation
+        // calender navigation
         month: ".fc-dayGridMonth-button",
         week: ".fc-timeGridWeek-button",
         day: ".fc-timeGridDay-button",
@@ -395,13 +395,13 @@ module.exports = {
         trash: ".subsubsub > li:nth-child(4) > a",
 
         //bulk action
-        seleceAll: ".dokan-check-all",
+        selectAll: ".dokan-check-all",
         commentStatus: "select",
         commentStatusSubmit: ".dokan-btn",
 
-        //comment Actons
+        //comment Actions
         viewComment: ".approved:nth-child(1) > .col-link > a",
-        unapproveComment: ".approved:nth-child(1) li:nth-child(1) > .dokan-cmt-action",
+        unApproveComment: ".approved:nth-child(1) li:nth-child(1) > .dokan-cmt-action",
         SpamComment: "approved:nth-child(1) li:nth-child(2) > .dokan-cmt-action",
         trashComment: "approved:nth-child(1) li:nth-child(3) > .dokan-cmt-action"
     },
@@ -418,7 +418,7 @@ module.exports = {
 
         // auto disbursement schedule
         editSchedule: "#dokan-withdraw-display-schedule-popup",
-        croseIcon: ".mfp-close",
+        crossIcon: ".mfp-close",
         preferredPaymentMethod: "#preferred-payment-method",
         monthly: "#withdraw-schedule-monthly\\>",
         quarterly: "#withdraw-schedule-quarterly\\>",
@@ -444,7 +444,7 @@ module.exports = {
         //default payment setup links
         payPalSetup: "//strong[contains( text(), 'PayPal')]//..//..//button",
         bankTransferSetup: "//strong[contains( text(), 'Bank Transfer')]//..//..//button",
-        // custommethodSetup(methodName) { return `//strong[contains( text(), '${methodName}')]//..//..//button`},
+        // customMethodSetup(methodName) { return `//strong[contains( text(), '${methodName}')]//..//..//button`},
         customMethodSetup: (methodName) => `//strong[contains( text(), '${methodName}')]//..//..//button`,
         skrillSetup: "//strong[contains( text(), 'Skrill')]//..//..//button",
     },
@@ -495,8 +495,8 @@ module.exports = {
         ProductImage: ".dokan-feat-image-btn",
         uploadProductImage: '#\\__wp-uploader-id-1',
         addGalleryImage: ".fa-plus",
-        uploadalleryImage: "#\\__wp-uploader-id-4",
-        vitual: "#\\_virtual",
+        uploadGalleryImage: "#\\__wp-uploader-id-4",
+        virtual: "#\\_virtual",
         accommodationBooking: "#\\_is_dokan_accommodation",
         category: "#select2-product_cat-container ",
         categoryValues: ".select2-results ul li",
@@ -511,13 +511,13 @@ module.exports = {
         bookingDuration: "#\\_wc_booking_duration",
         bookingDurationUnit: "#\\_wc_booking_duration_unit",
 
-        calanderDisplayMode: "#\\_wc_booking_calendar_display_mode",
-        //checkboxs
+        calenderDisplayMode: "#\\_wc_booking_calendar_display_mode",
+        //checkboxes
         enableCalendarRangePicker: "#\\_wc_booking_enable_range_picker",
         requiresConfirmation: "#\\_wc_booking_requires_confirmation",
         canBeCancelled: "#\\_wc_booking_user_can_cancel",
-        bookingCanbeCancelledLimit: "#\\_wc_booking_cancel_limit",
-        bookingCanbeCancelledLimitUnit: "#\\_wc_booking_cancel_limit_unit",
+        bookingCanBeCancelledLimit: "#\\_wc_booking_cancel_limit",
+        bookingCanBeCancelledLimitUnit: "#\\_wc_booking_cancel_limit_unit",
         //shipping
         thisProductRequiresShipping: "#\\_disable_shipping",
         weight: "#\\_weight",
@@ -533,8 +533,8 @@ module.exports = {
         maxBookingsPerBlock: "#\\_wc_booking_qty",
         minimumBookingWindowIntoTheFutureDate: "#\\_wc_booking_min_date",
         minimumBookingWindowIntoTheFutureDateUnit: "#\\_wc_booking_min_date_unit",
-        maximumBookingwindowIntoTheFutureDate: "#\\_wc_booking_max_date",
-        maximumBookingwindowIntoTheFutureDateUnit: "#\\_wc_booking_max_date_unit",
+        maximumBookingWindowIntoTheFutureDate: "#\\_wc_booking_max_date",
+        maximumBookingWindowIntoTheFutureDateUnit: "#\\_wc_booking_max_date_unit",
         requireABufferPeriodOfMonthsBetweenBookings: "#\\_wc_booking_buffer_period",
         adjacentBuffering: "#\\_wc_booking_apply_adjacent_buffer",
         allDatesAre: "#\\_wc_booking_default_date_availability",
@@ -588,10 +588,10 @@ module.exports = {
         unlink: ".unlink_booking_person", //TODO: confirmation in alert
         //has resources
         hasResources: "#\\_wc_booking_has_resources",
-        //add resourse
+        //add resource
         label: "#\\_wc_booking_resource_label",
         resourcesAre: "#\\_wc_booking_resources_assignment",
-        addResouceId: ".add_resource_id",
+        addResourceId: ".add_resource_id",
         addResource: ".add_resource",
         resourceBaseCost: "td:nth-child(1) > input",
         resourceBlockCost: ".wc-metabox-content td:nth-child(2) > input",
@@ -610,7 +610,7 @@ module.exports = {
         //geolocation
         sameAsStore: "#\\_dokan_geolocation_use_store_settings",
         productLocation: "#\\_dokan_geolocation_product_location",
-        productLocationFirstresult: ".gm-style > div:nth-child(2) > div:nth-child(2)",
+        productLocationFirstResult: ".gm-style > div:nth-child(2) > div:nth-child(2)",
         //add-ons
         addField: ".wc-pao-add-field",
         type: "#wc-pao-addon-content-type-0",
@@ -632,8 +632,8 @@ module.exports = {
         optionPriceType: ".wc-pao-addon-option-price-type",
         optionPrice: ".wc_input_price:nth-child(1)",
         addOption: ".wc-pao-add-option",
-        removOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
-        cacelRemoveOption: ".swal2-cancel",
+        removeOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
+        cancelRemoveOption: ".swal2-cancel",
         okRemoveOption: ".swal2-confirm",
         //other Options
         productStatus: "#post_status",
@@ -645,14 +645,14 @@ module.exports = {
 
         //allBookingProduct
         allBookingProduct: ".dokan_tabs > li:nth-child(1) > a",
-        addNewbookingProduct: ".dokan-btn-theme",
-        addNewbooking: ".dokan-btn-theme",
-        //addbooking
+        addNewBookingProduct: ".dokan-btn-theme",
+        addNewBooking: ".dokan-btn-theme",
+        //addBooking
         customerId: "#select2-customer_id-container",
         selectABookableProduct: "#select2-bookable_product_id-container",
         createANewCorrespondingOrderForThisNewBooking: "p:nth-child(1) .checkbox",
         assignThisBookingToAnExistingOrderWithThisId: "p:nth-child(2) .checkbox",
-        bookingdOrderId: ".text",
+        bookingOrderId: ".text",
         DontCreateAnOrderForThisBooking: "p:nth-child(3) .checkbox",
         next: ".button-primary",
         //TODO: add new booking
@@ -677,29 +677,29 @@ module.exports = {
         UpdateOrderStatus: ".dokan-btn-success",
         cancelUpdateOrderStatus: "dokan-btn-default",
 
-        //calander
+        //calender
         calendar: ".dokan_tabs > li:nth-child(3) > a",
         calendarBookingsFilter: "#calendar-bookings-filter",
         month: "div:nth-child(2) > .dokan-form-control",
         year: "div:nth-child(3) > .dokan-form-control",
         previous: ".prev",
         next: ".next",
-        calanderDay: "//input[@placeholder='yyyy-mm-dd']",  //XPath
+        calenderDay: "//input[@placeholder='yyyy-mm-dd']",  //XPath
         dayView: ".day",
         monthView: ".month",
 
         //manage resources
         manageResources: ".dokan_tabs > li:nth-child(4) > a",
-        addNewResouce: ".dokan-right",
+        addNewResource: ".dokan-right",
         resourceName: ".swal2-input",
-        cancelAddNewResouce: ".swal2-cancel",
-        confirmAddNewResouce: ".swal2-confirm",
+        cancelAddNewResource: ".swal2-cancel",
+        confirmAddNewResource: ".swal2-confirm",
         editResource: "",
         removeResource: "",
         //edit resource
         resourceTitle: "#post_title",
         availableQuantity: "#\\_wc_booking_qty",
-        rangetypeResource: ".wc_booking_availability_type > select",
+        rangeTypeResource: ".wc_booking_availability_type > select",
         rangeFromResource: ".from_date > .date-picker",
         rangeToResource: ".to_date > .date-picker ",
         bookableResource: "td:nth-child(6) select",
@@ -714,7 +714,7 @@ module.exports = {
         backToAllNotice: ".dokan-btn",
         deleteAnnouncement: ".dokan-announcement-wrapper-item:nth-child(1) .fas",
         confirmDeleteAnnouncement: ".swal2-confirm",
-        canceldeleteAnnouncement: ".swal2-cancel",
+        cancelDeleteAnnouncement: ".swal2-cancel",
     },
 
     // tools
@@ -764,7 +764,7 @@ module.exports = {
         ProductImage: ".dokan-feat-image-btn",
         uploadProductImage: '#\\__wp-uploader-id-1',
         addGalleryImage: ".fa-plus",
-        uploadalleryImage: "#\\__wp-uploader-id-4",
+        uploadGalleryImage: "#\\__wp-uploader-id-4",
         category: "select2-product_cat-container",
         categoryValues: ".select2-results ul li",
         productTag: ".select2-search__field",
@@ -855,7 +855,7 @@ module.exports = {
     },
 
     // search similar product
-    vSerchSimilarProduct: {
+    vSearchSimilarProduct: {
         //search similar product spmv
         openSearchField: ".fa-caret-down",
         closeSearchField: ".fa-caret-up",
@@ -924,13 +924,13 @@ module.exports = {
         moreProducts: "input[name='setting_show_more_ptab']",
         //map
         map: "#dokan-map-add",
-        // map1: "#dokan-location-find-btn",//not interactable
+        // map1: "#dokan-location-find-btn",//not intractable
         // mapFirstResult: "#ui-id-4", //not working
         mapFirstResult: "#ui-id-3",
-        //store openning closing time
+        //store opening closing time
         storeOpeningClosingTime: "#dokan-store-time-enable",
         chooseBusinessDays: ".select2-container--below .select2-selection__rendered",
-        // TODO: need to improve locator days, openning and closing time,addrow,delete row
+        // TODO: need to improve locator days, opening and closing time,addRow,delete row
         monday: ".tabs > li:nth-child(1)",
         tuesday: ".tabs > li:nth-child(2)",
         wednesday: ".tabs > li:nth-child(3)",
@@ -941,7 +941,7 @@ module.exports = {
         openingTime: "#opening-time-sunday",
         closingTime: "#closing-time-sunday",
         addNewRow: "#store-tab-sunday .added-store-opening-time > .fa",
-        deleteOnerow: ".remove-store-closing-time > .fa",
+        deleteOneRow: ".remove-store-closing-time > .fa",
         storeOpenNotice: ".dokan-form-group:nth-child(19) .dokan-form-control",
         storeCloseNotice: ".dokan-form-group:nth-child(20) .dokan-form-control",
         //vacation
@@ -959,7 +959,7 @@ module.exports = {
         cancelDeleteSavedVacationSchedule: ".swal2-cancel",
         //discount
         enableStoreWideDiscount: "#lbl_setting_minimum_quantity",
-        minimunOrderAmount: "#setting_minimum_order_amount",
+        minimumOrderAmount: "#setting_minimum_order_amount",
         percentage: "#setting_order_percentage",
         //biography
         biography: "p",//TODO: improve
@@ -1158,7 +1158,7 @@ module.exports = {
     },
 
     //delivery time settings
-    vDeliveryTimeSettins: {
+    vDeliveryTimeSettings: {
         // delivery support
         homeDelivery: ".checkbox > label > input:nth-child(2)",
         storePickup: "#enable-store-location-pickup",
@@ -1198,19 +1198,19 @@ module.exports = {
         refundPolicy: ".dokan-form-group:nth-child(3) .dokan-form-control",
         saveSettings: ".dokan-btn-danger",
 
-        //Zonewise Shipping Settings
-        addshippingMethod: "p:nth-child(1) > a:nth-child(2)",
+        //ZoneWise Shipping Settings
+        addShippingMethod: "p:nth-child(1) > a:nth-child(2)",
         backToZoneList: "",
         edit: "",
         selectStates: "",
         limitZIPOrPostcodes: "",
-        addshippingMethod: "",
+        addShippingMethod: "",
         saveChanges: "",
         //ToDO: add more locators
 
         //previous shipping settings
         previousShippingSettings: "p:nth-child(2) > a",
-        backToZoneWiseShippingSeettings: ".dokan-page-help a",
+        backToZoneWiseShippingSettings: ".dokan-page-help a",
         enableShipping: "",
         enableShippingFunctionality: "",
         defaultShippingPrice: "",
@@ -1224,7 +1224,7 @@ module.exports = {
         shipTo: "",
         cost: "",
         addLocation: "",
-        previousShippingsaveSettings: "",
+        previousShippingSaveSettings: "",
 
 
     },
@@ -1243,10 +1243,10 @@ module.exports = {
         pinterest: "#settings\\[social\\]\\[pinterest\\]",
         linkedin: "#settings\\[social\\]\\[linkedin\\]",
         youtube: "#settings\\[social\\]\\[youtube\\]",
-        instragram: "#settings\\[social\\]\\[instagram\\]",
+        instagram: "#settings\\[social\\]\\[instagram\\]",
         flicker: "#settings\\[social\\]\\[flickr\\]",
         updateSettings: ".dokan-btn",
-        updateSettingssuccessmessage: ".dokan-alert.dokan-alert-success > p",
+        updateSettingsSuccessMessage: ".dokan-alert.dokan-alert-success > p",
     },
 
     //rma settings
@@ -1256,7 +1256,7 @@ module.exports = {
         length: "#dokan-warranty-length",
         lengthValue: "content-half-part:nth-child(4) > .dokan-form-control",
         lengthDuration: "#dokan-warranty-length-duration",
-        //TODO: add more locators add warrenty as addon and  refund reasons invoked from admin settings
+        //TODO: add more locators add warranty as addon and  refund reasons invoked from admin settings
 
         rmaPolicy: "p", //TODO: improve
         saveChanges: "#dokan-store-rma-form-submit",
@@ -1415,7 +1415,7 @@ module.exports = {
 
 
     async setStoreSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
-        companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimunOrderAmount, percentage, supportButtonText,
+        companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimumOrderAmount, percentage, supportButtonText,
         minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder
     ) {
 
@@ -1427,11 +1427,11 @@ module.exports = {
         // await page.click(this.vStoreSettings.banner)
         // await page.waitForTimeout(6000)
         // await base.clickXpath(this.vStoreSettings.selectFiles)
-        // await base.uploadImage(this.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avater.png')
+        // await base.uploadImage(this.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avatar.png')
         // await page.waitForTimeout(6000)
 
         // const [fileChooser] = await Promise.all([ page.waitForFileChooser(),base.clickXpath1(this.vStoreSettings.selectFiles)])
-        // await fileChooser.accept(['/Users/rk/Automation/Dokan_e2e_test/avater.png'])
+        // await fileChooser.accept(['/Users/rk/Automation/Dokan_e2e_test/avatar.png'])
 
         // await base.clickXpath(this.vStoreSettings.selectAndCrop)
         // await base.clickXpath(this.vStoreSettings.cropImage)
@@ -1472,12 +1472,12 @@ module.exports = {
         // await page.waitForTimeout(2000)
         // await page.click(this.vStoreSettings.map1)
         // await page.click(this.vStoreSettings.mapFirstResult)
-        //store openning closing time
+        //store opening closing time
         //vacation
 
         //discount
         await page.click(this.vStoreSettings.enableStoreWideDiscount)
-        await base.clearAndType(this.vStoreSettings.minimunOrderAmount, minimunOrderAmount)
+        await base.clearAndType(this.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
         await base.clearAndType(this.vStoreSettings.percentage, percentage)
         //biography
 
@@ -1501,12 +1501,12 @@ module.exports = {
         await page.click(this.vStoreSettings.updateSettings)
         await page.waitForTimeout(2000)
 
-        let successmessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingssuccessmessage)
-        expect(successmessage).toMatch('Your information has been saved successfully')
+        let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
 
     },
 
-    async setaddonsettings() {
+    async setAddonSettings() {
 
     },
 
@@ -1565,17 +1565,17 @@ module.exports = {
 
     },
 
-    async setverificationsettings() {
+    async setVerificationSettings() {
 
     },
 
 
 
-    async setdeliverytimesettings() {
+    async setDeliveryTimeSettings() {
 
     },
 
-    async setshippingsettings() {
+    async setShippingSettings() {
 
     },
 
@@ -1588,13 +1588,13 @@ module.exports = {
         await page.type(this.vSocialProfileSettings.pinterest, url);
         await page.type(this.vSocialProfileSettings.linkedin, url);
         await page.type(this.vSocialProfileSettings.youtube, url);
-        await page.type(this.vSocialProfileSettings.instragram, url);
+        await page.type(this.vSocialProfileSettings.instagram, url);
         await page.type(this.vSocialProfileSettings.flicker, url);
         await page.click(this.vSocialProfileSettings.updateSettings);
         await page.waitForTimeout(6000)
 
-        let successmessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingssuccessmessage)
-        expect(successmessage).toBe('Your information has been saved successfully')
+        let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toBe('Your information has been saved successfully')
     },
 
     async setRmaSettings(label, type, length, lengthValue, lengthDuration) {
@@ -1608,8 +1608,8 @@ module.exports = {
         await page.select(this.vRmaSettings.lengthDuration, lengthDuration);
         await base.click(this.vSettings.saveChanges)
 
-        let successmessage = await base.getSelectorText(this.vRmaSettings.updateSettingssuccessmessage)
-        expect(successmessage).toBe('Settings saved successfully')
+        let successMessage = await base.getSelectorText(this.vRmaSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toBe('Settings saved successfully')
 
     },
 
@@ -1634,8 +1634,8 @@ module.exports = {
 
     },
 
-    async addbookingproduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calanderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
-        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingwindowIntoTheFutureDate, maximumBookingwindowIntoTheFutureDateUnit,
+    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
+        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit,
         baseCost, blockCost) {
 
         await page.type(this.vBooking.productName, productName)
@@ -1647,15 +1647,15 @@ module.exports = {
         await page.type(this.vBooking.bookingDuration, bookingDuration)
         await page.select(this.vBooking.bookingDurationUnit, bookingDurationUnit)
 
-        await page.select(this.vBooking.calanderDisplayMode, calanderDisplayMode)
+        await page.select(this.vBooking.calenderDisplayMode, calenderDisplayMode)
         await page.select(this.vBooking.enableCalendarRangePicker, enableCalendarRangePicker)
 
         //availability
         await page.type(this.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
         await page.type(this.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
         await page.select(this.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
-        await page.type(this.vBooking.maximumBookingwindowIntoTheFutureDate, maximumBookingwindowIntoTheFutureDate)
-        await page.select(this.vBooking.maximumBookingwindowIntoTheFutureDateUnit, maximumBookingwindowIntoTheFutureDateUnit)
+        await page.type(this.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
+        await page.select(this.vBooking.maximumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDateUnit)
 
         //costs
         await page.type(this.vBooking.baseCost, baseCost)
@@ -1666,10 +1666,10 @@ module.exports = {
     },
 
     async searchSimilarProduct(productName) {
-        await page.click(this.vSerchSimilarProduct.search)
-        await page.type(this.vDasvSerchSimilarProducthboard.search, productName)
-        await base.click(this.vSerchSimilarProduct.search)
-        await page.click(this.vSerchSimilarProduct.search)
+        await page.click(this.vSearchSimilarProduct.search)
+        await page.type(this.SearchSimilarProduct.search, productName)
+        await base.click(this.vSearchSimilarProduct.search)
+        await page.click(this.vSearchSimilarProduct.search)
     },
 
     async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {

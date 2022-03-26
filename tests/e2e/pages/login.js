@@ -6,7 +6,7 @@ module.exports = {
     // locators
 
     frontend: {
-        //TODO: rechack all fronted locators
+        //TODO: recheck all fronted locators
         // frontend homepage
         home: '.nav-menu > li:nth-child(1) > a',
         cart: '.nav-menu > li:nth-child(2) > a',
@@ -85,28 +85,28 @@ module.exports = {
     //     await base.click(this.register);
     // },
 
-    // async vendorRegister(userEmail, password, firstName, lastName, shopName, shopUrl, companyName, companyId, vatNumber, bankName, bankIban, phone) {
-    //     // await page.goto(this.baseUrl + '/my-account');
-    //     // await page.goto(createURL('my-account/'));
-    //     // await page.waitForTimeout(4000);
-    //     await page.click(this.myAccount)
-    //     await page.waitForTimeout(80000);
-    //     await page.type(this.regEmail, userEmail)
-    //     // await page.type(this.regPassword, password);
-    //     await page.click(this.regVendor)
-    //     await page.type(this.firstName, firstName);
-    //     await page.type(this.lastName, lastName);
-    //     await page.type(this.shopName, shopName);
-    //     // await page.type(this.shopUrl, shopUrl);
-    //     await page.click(this.shopUrl);
-    //     await page.type(this.companyName, companyName);
-    //     await page.type(this.companyId, companyId);
-    //     await page.type(this.vatNumber, vatNumber);
-    //     await page.type(this.bankName, bankName);
-    //     await page.type(this.bankIban, bankIban);
-    //     await page.type(this.phone, phone);
-    //     await base.click(this.register);
-    // },
+    async vendorRegister(userEmail, password, firstName, lastName, shopName, shopUrl, companyName, companyId, vatNumber, bankName, bankIban, phone) {
+        // await page.goto(this.baseUrl + '/my-account');
+        // await page.goto(createURL('my-account/'));
+        // await page.waitForTimeout(4000);
+        await page.click(this.myAccount)
+        await page.waitForTimeout(80000);
+        await page.type(this.regEmail, userEmail)
+        // await page.type(this.regPassword, password);
+        await page.click(this.regVendor)
+        await page.type(this.firstName, firstName);
+        await page.type(this.lastName, lastName);
+        await page.type(this.shopName, shopName);
+        // await page.type(this.shopUrl, shopUrl);
+        await page.click(this.shopUrl);
+        await page.type(this.companyName, companyName);
+        await page.type(this.companyId, companyId);
+        await page.type(this.vatNumber, vatNumber);
+        await page.type(this.bankName, bankName);
+        await page.type(this.bankIban, bankIban);
+        await page.type(this.phone, phone);
+        await base.click(this.register);
+    },
 
     // async customerLogout() {
     //     await page.click(this.customerLogout)
@@ -158,6 +158,7 @@ module.exports = {
 
     async adminLogin(username, password) {
         await base.goto('wp-admin')
+        
         let res = await base.isVisible(page, this.admin.email)
         if (res) {
             await page.type(this.admin.email, username)

@@ -4,7 +4,15 @@
   "SCRIPT_DEBUG": "true",
   "plugins": [
     "weDevsOfficial/dokan#develop",
-    "woocommerce/woocommerce#trunk"
+    "woocommerce/woocommerce#trunk",
+    "./wp-content/plugins/woocommerce-bookings/",
+    "./wp-content/plugins/woocommerce-product-addons/",
+    "./wp-content/plugins/woocommerce-simple-auctions/",
+    "./wp-content/plugins/woocommerce-subscriptions/",
+    "./wp-content/plugins/elementor/",
+    "./wp-content/plugins/elementor-pro/",
+    "./wp-content/plugins/email-log/",
+    "./wp-content/plugins/loco-translate/"
   ],
   "themes": [
     "https://downloads.wordpress.org/theme/storefront.latest-stable.zip" 

@@ -1,7 +1,7 @@
 const { createURL, clickMenuItem, clickOnMoreMenuItem } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
+const helper = require("../../e2e/utils/helpers.js")
 const loginPage = require('../pages/login.js')
-const { setPaymentSettings } = require("./vendor.js")
 
 
 
@@ -87,13 +87,13 @@ module.exports = {
       next: '.button.button-primary.button-hero',
       //account info
       addNewVendor: '.page-title-action',
-      vendorPicture: '//div[@class="supports-drag-drop" and @style="position: relative"]//div[@class="moxie-shim moxie-shim-html5"]//input',
-      selectFiles: '//div[@class="supports-drag-drop" and @style="position: relative"]//button[@class="browser button button-hero"]',
-      banner: '', //TODO: add locator 
+      // vendorPicture: '//div[@class="supports-drag-drop" and @style="position: relative"]//div[@class="moxie-shim moxie-shim-html5"]//input',
+      // selectFiles: '//div[@class="supports-drag-drop" and @style="position: relative"]//button[@class="browser button button-hero"]',
+      // banner: '', //TODO: add locator 
       firstName: '#first-name',
       lastName: '#last-name',
       storeName: '#store-name',
-      storeUrl: '#user-nicename', //TODO: there may be another locator for display name
+      storeUrl: '#user-nicename',
       phoneNumber: '#store-phone',
       email: '#store-email',
       username: '#user-login',
@@ -417,7 +417,7 @@ module.exports = {
       //privacy policy
       enablePrivacyPolicy: "#dokan_privacy\\[enable_privacy\\]",
       privacyPage: "#dokan_privacy\\[privacy_page\\]",
-      privacyPolicy: "#dokan_privacy\\[privacy_policy\\]",
+      privacyPolicyMessage: "#dokan_privacy\\[privacy_policy\\]",
       privacyPolicySaveChanges: "#submit",
 
       //live search
@@ -639,7 +639,6 @@ module.exports = {
 
       //add tax
       taxTable: ".wc_tax_rates",
-      taxTable: ".wc_tax_rates.wc_input_table.widefat", //TODO: remove one of them
       insertRow: ".plus",
       taxRate: ".rate input",
       taxRateSaveChanges: ".woocommerce-save-button",
@@ -647,15 +646,20 @@ module.exports = {
       //shipping
       addShippingZone: ".page-title-action",
       zoneName: "#zone_name",
-      zoneRegions: ".select2-search__field",
+      // zoneRegions: ".select2-search__field",
+      zoneRegions: "#zone_locations",
+      shippingZoneCell: (shippingZone) => `//a[contains(text(), '${shippingZone}')]/..`,
+      editShippingZone: (shippingZone) => `//a[contains(text(), '${shippingZone}')]/..//div//a[contains(text(), 'Edit')]`,
+      deleteShippingZone: (shippingZone) => `//a[contains(text(), '${shippingZone}')]/..//div//a[contains(text(), 'Delete')]`,
       addShippingMethods: ".wc-shipping-zone-add-method",
-      // shippingMethod:"select:nth-child(2)",
       shippingMethod: ".wc-shipping-zone-method-selector select",
       addShippingMethod: "#btn-ok",
-      createdShippingMethod: ".wc-shipping-zone-method-rows.ui-sortable",
-      editShippingMethod: '.row-actions .wc-shipping-zone-method-settings',
-      // editShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]//..//a[@class='wc-shipping-zone-method-settings']`,
-      deleteShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]//..//a[@class='wc-shipping-zone-method-delete']`,
+      // createdShippingMethod: ".wc-shipping-zone-method-rows.ui-sortable",
+      // editShippingMethod: '.row-actions .wc-shipping-zone-method-settings',
+      shippingMethodCell: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]/..`,
+      editShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]/..//div//a[contains(text(), 'Edit')]`,
+      deleteShippingMethod: (shippingMethodName) => `//a[contains(text(),'${shippingMethodName}')]/..//div//a[contains(text(), 'Delete')]`,
+
       //edit shipping methods
       //flat rate
       flatRateMethodTitle: "#woocommerce_flat_rate_title",
@@ -671,40 +675,42 @@ module.exports = {
       localPickupTaxStatus: "#woocommerce_local_pickup_tax_status",
       localPickupCost: "#woocommerce_local_pickup_cost",
       //dokan table rate shipping
-      dokanTableRateShippingMethodTitle: "#woocommerce_dokan_distance_rate_shipping_title",
+      dokanTableRateShippingMethodTitle: "#woocommerce_dokan_table_rate_shipping_title",
       //dokan distance rate shipping
-      dokanDistanceRateShippingMethodTitle: "#woocommerce_dokan_table_rate_shipping_title",
+      dokanDistanceRateShippingMethodTitle: "#woocommerce_dokan_distance_rate_shipping_title",
       //vendor shipping
       vendorShippingMethodTitle: "#woocommerce_dokan_vendor_shipping_title",
       vendorShippingTaxStatus: "#woocommerce_dokan_vendor_shipping_tax_status",
 
       //shipping method save changes
       shippingMethodSaveChanges: "#btn-ok",
+      //shipping zone save changes
+      shippingZoneSaveChanges: ".button.wc-shipping-zone-method-save",
 
 
       //payments
       //enable methods
-      enableDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//span",
-      enableCheckPayments: "//a[contains(text(),'Check payments')]//..//..//span",
-      enableCashOnDelivery: "//a[contains(text(),'Cash on delivery')]//..//..//span",
-      enableDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//td[@class='status']//span",
-      enableDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//td[@class='status']//span",
-      enableDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//td[@class='status']//span",
-      enableDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//td[@class='status']//span",
-      enableDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//td[@class='status']//span",
-      enableDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//td[@class='status']//span",
-      enableDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]//..//..//td[@class='status']//span",
+      enableDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]/../..//span",
+      enableCheckPayments: "//a[contains(text(),'Check payments')]/../..//span",
+      enableCashOnDelivery: "//a[contains(text(),'Cash on delivery')]/../..//span",
+      enableDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]/../..//td[@class='status']//span",
+      enableDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]/../..//td[@class='status']//span",
+      enableDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]/../..//td[@class='status']//span",
+      enableDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]/../..//td[@class='status']//span",
+      enableDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]/../..//td[@class='status']//span",
+      enableDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]/../..//td[@class='status']//span",
+      enableDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]/../..//td[@class='status']//span",
       // setup or manage payment methods
-      setupDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]//..//..//td[@class='action']//a",
-      setupCheckPayments: "//a[contains(text(),'Check payments')]//..//..//td[@class='action']//a",
-      setupCashOnDelivery: "//a[contains(text(),'Cash on delivery')]//..//..//td[@class='action']//a",
-      setupDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]//..//..//td[@class='action']//a",
-      setupDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]//..//..//td[@class='action']//a",
-      setupDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]//..//..//td[@class='action']//a",
-      setupDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]//..//..//td[@class='action']//a",
-      setupDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]//..//..//td[@class='action']//a",
-      setupDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]//..//..//td[@class='action']//a",
-      setupDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]//..//..//td[@class='action']//a",
+      setupDirectBankTransfer: "//a[contains(text(),'Direct bank transfer')]/../..//td[@class='action']//a",
+      setupCheckPayments: "//a[contains(text(),'Check payments')]/../..//td[@class='action']//a",
+      setupCashOnDelivery: "//a[contains(text(),'Cash on delivery')]/../..//td[@class='action']//a",
+      setupDokanWirecardConnect: "//a[contains(text(),'Dokan Wirecard Connect')]/../..//td[@class='action']//a",
+      setupDokanPayPalAdaptivePayments: "//a[contains(text(),'Dokan PayPal Adaptive Payments')]/../..//td[@class='action']//a",
+      setupDokanPayPalMarketplace: "//a[contains(text(),'Dokan PayPal Marketplace')]/../..//td[@class='action']//a",
+      setupDokanStripeConnect: "//a[contains(text(),'Dokan Stripe Connect')]/../..//td[@class='action']//a",
+      setupDokanMangoPay: "//a[contains(text(),'Dokan MangoPay')]/../..//td[@class='action']//a",
+      setupDokanRazorpay: "//a[contains(text(),'Dokan Razorpay')]/../..//td[@class='action']//a",
+      setupDokanStripeExpress: "//a[contains(text(),'Dokan Stripe Express')]/../..//td[@class='action']//a",
       paymentMethodsSaveChanges: ".woocommerce-save-button",
 
       //stripe
@@ -813,7 +819,7 @@ module.exports = {
         testSecretKey: "#woocommerce_dokan_stripe_express_test_secret_key",
         testWebhookSecret: "#woocommerce_dokan_stripe_express_test_webhook_key",
         // Payment and Disbursement
-        choosePaymentMethods: "//select[@id='woocommerce_dokan_stripe_express_enabled_payment_methods']//..//span[@class='select2-selection select2-selection--multiple']",
+        choosePaymentMethods: "//select[@id='woocommerce_dokan_stripe_express_enabled_payment_methods']/..//span[@class='select2-selection select2-selection--multiple']",
         // choosePaymentMethods: ".select2-search__field",
         choosePaymentMethodsValues: ".select2-results ul li",
         takeProcessingFeesFromSellers: "#woocommerce_dokan_stripe_express_sellers_pay_processing_fee",
@@ -826,7 +832,7 @@ module.exports = {
         paymentRequestButtons: "#woocommerce_dokan_stripe_express_payment_request",
         buttonType: "#woocommerce_dokan_stripe_express_payment_request_button_type",
         buttonTheme: "#woocommerce_dokan_stripe_express_payment_request_button_theme",
-        buttonLocations: "//select[@id='woocommerce_dokan_stripe_express_payment_request_button_locations']//..//span[@class='select2-selection select2-selection--multiple']",
+        buttonLocations: "//select[@id='woocommerce_dokan_stripe_express_payment_request_button_locations']/..//span[@class='select2-selection select2-selection--multiple']",
         buttonLocationsValues: ".select2-results ul li",
         buttonSize: "#woocommerce_dokan_stripe_express_payment_request_button_size",
         // Advanced Settings
@@ -853,46 +859,146 @@ module.exports = {
     //TODO: recheck all locators
     products: '.menu-icon-product > .wp-menu-name',
     // product menus
-    allProductsMenu:'#menu-posts-product .wp-first-item > .wp-first-item',
+    allProductsMenu: '#menu-posts-product .wp-first-item > .wp-first-item',
     addNewMenu: '#menu-posts-product li:nth-child(3) > a',
     categoriesMenu: '#menu-posts-product li:nth-child(4) > a',
-    tagsMenu:"#menu-posts-product li:nth-child(5) > a",
+    tagsMenu: "#menu-posts-product li:nth-child(5) > a",
     attributesMenu: '#menu-posts-product li:nth-child(7) > a',
-    addonsMenu:'#menu-posts-product li:nth-child(6) > a',
 
-    addNewOnePage: '.page-title-action',
+    // add new product
     productName: '#title',
+    //product data
     productType: '#product-type',
-    virtual: '#_virtual',
-    downloadable: '#_downloadable',
-    regularPrice: '#_regular_price',
-    salePrice: '#_sale_price',
-    salePriceDateFrom: '#_sale_price_dates_from',
-    salePriceDateTo: '#_sale_price_dates_to',
+    virtual: '#\\_virtual',
+    downloadable: '#\\_downloadable',
+    // add new product sub menus
+    general: '.general_options > a',
+    inventory: '.inventory_options > a',
+    shipping: '.shipping_options > a',
+    linkedProducts: '.linked_product_options > a',
+    attributes: '.attribute_options > a',
+    variations: '.variations_options > a',
+    advanced: '.advanced_options > a',
+
+    // General
+    regularPrice: '#\\_regular_price',
+    salePrice: '#\\_sale_price',
+    salePriceDateFrom: '#\\_sale_price_dates_from',
+    salePriceDateTo: '#\\_sale_price_dates_to',
+    addDownloadableFiles: '.insert',
+    fileName: '.file_name > .input_text',
+    fileUrl: '.file_url > .input_text',
+    chooseFile: '.upload_file_button',
+    UploadFile: "",//TODO:add locator
+    downloadLimit: '#\\_download_limit',
+    downloadExpiry: "#\\_download_expiry",
+    taxStatus: "#\\_tax_status",
+    taxClass: "#\\_tax_class",
+    enableWholesale: "#enable_wholesale",
+    wholesalePrice: "#wholesale_price",
+    minimumQuantityForWholesale: "#wholesale_quantity",
+    enableMinMaxRule: "#product_wise_activation",
+    minimumQuantityToOrder: "#min_quantity",
+    maximumQuantityToOrder: "#max_quantity",
+    minimumAmountToOrder: "#min_amount",
+    maximumAmountToOrder: "#max_amount",
+    orderRules: "#\\_donot_count",
+    categoryRules: "#ignore_from_cat",
+    // external product
+    productUrl: '#\\_product_url',
+    button_text: '#\\_button_text',
+    // Dokan subscription 
+    numberOfProducts: '#\\_no_of_product',
+    packValidity: '#\\_pack_validity',
+    advertisementSlot: '#\\_dokan_advertisement_slot_count',
+    expireAfterDays: '#\\_dokan_advertisement_validity',
+    dokanSubscriptionAdminCommissionType: '#\\_subscription_product_admin_commission_type',
+    dokanSubscriptionAdminCommissionSingle: '.show_if_product_pack #admin_commission',
+    dokanSubscriptionAdminCommissionCombined: '.subscription_additional_fee > .input-text',
+    allowedProductTypes: '.form-field:nth-child(9) .select2-search__field',
+    allowedCategoriesUncategorized: '.form-field:nth-child(10) .select2-search__field',
+    restrictGalleryImageUpload: '#\\_enable_gallery_restriction',
+    recurringPayment: '#\\_enable_recurring_payment',
+    billingCycleRange: '#\\_dokan_subscription_period_interval',
+    billingCyclePeriodInterval: '#\\_dokan_subscription_period',
+    billingCycleStop: '#\\_dokan_subscription_length',
+    enableTrial: '#dokan_subscription_enable_trial',
+    trialPeriodRange: '.dokan-subscription-range',
+    trialPeriodPeriod: '.dokan_subscription_trial_period > select:nth-child(3)',
+    // inventory
+    sku: '#\\_sku',
+    manageStock: '#\\_manage_stock',
+    stockQuantity: '#\\_stock',
+    allowBackOrders: '#\\_backorders',
+    lowStockThreshold: '#\\_low_stock_amount',
+    stockStatus: '#\\_stock_status',
+    soldIndividually: '#\\_sold_individually',
+    //shipping
+    weightKg: '#\\_weight',
+    length: '#product_length',
+    width: '#product_width',
+    height: '#product_height',
+    shippingClass: '#product_shipping_class',
+    // linked Products
+    //TODO: update locators
+    upSells: ".options_group:nth-child(2) > .form-field:nth-child(1) .select2-search__field",
+    crossSells: ".form-field:nth-child(2) .select2-search__field",
+    // attributes
+    customProductAttribute: '.attribute_taxonomy',
+    addAttribute: '.add_attribute',
+    attributeName: '.woocommerce_attribute:nth-child(1) .attribute_name > .attribute_name',
+    attributeValues: '.woocommerce_attribute:nth-child(1) textarea',
+    selectAll: '.minus',
+    selectNone: '.select_all_attributes',
+    addNewAttribute: '.fr', //TODO: update locator
+    visibleOnTheProductPage: '.woocommerce_attribute:nth-child(1) td > label > .checkbox',
+    usedForVariations: '.woocommerce_attribute:nth-child(1) .enable_variation .checkbox',
+    saveAttributes: '.save_attributes',
+    // variations
+    //TODO: add more locators
+    addVariations: '#field_to_edit',
+    go: '.bulk_edit',  //TODO: have to handle default js alert
+    // advanced
+    purchaseNote: '#\\_purchase_note',
+    menuOrder: '#menu_order',
+    enableReviews: '#comment_status',
+    adminCommissionType: '#\\_per_product_admin_commission_type',
+    adminCommissionSingle: '.show_if_simple #admin_commission',
+    adminCommissionCombined: '.additional_fee > .input-text',
+    //vendor
     vendor: '#dokan_product_author_override',
+    //category
+    unCategorized: '#in-product_cat-15',// TODO: need to update
+    //tags
+    tagInput: '#new-tag-product_tag',
+    addTag: '.tagadd',
+    //publish
+    saveDraft: '#save-post',
+    preview: '#post-preview',
     publish: '#publish',
 
 
-    // categories
-    //TODO: recheck all locators
-    
-    categoryName: "#tag-name",
-    categorySlug: "#tag-slug",
-    addNewCategory: "#submit",
 
-    tags: 'a[href="edit-tags.php?taxonomy=product_tag&post_type=product"]',
+    // // categories
+    // //TODO: recheck all locators
 
-    // attributes
-    //TODO: recheck all locators
-    
-    attributeName: "#attribute_label",
-    attributeSlug: "#attribute_name",
-    addAttribute: "#submit",
-    configureTerms(attributeName) {
-      return `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`
-    },
-    attributeValue: "#tag-name",
-    attributeValueSlug: "#tag-slug",
+    // categoryName: "#tag-name",
+    // categorySlug: "#tag-slug",
+    // addNewCategory: "#submit",
+
+    // tags: 'a[href="edit-tags.php?taxonomy=product_tag&post_type=product"]',
+
+    // // attributes
+    // //TODO: recheck all locators
+
+    // attributeName: "#attribute_label",
+    // attributeSlug: "#attribute_name",
+    // addAttribute: "#submit",
+    // configureTerms(attributeName) {
+    //   return `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`
+    // },
+    // attributeValue: "#tag-name",
+    // attributeValueSlug: "#tag-slug",
   },
   //bookings
   bookings: {},
@@ -1084,8 +1190,7 @@ module.exports = {
   async goToDokanSettings() {
     // await page.goto(createURL('wp-admin/admin.php?page=dokan#/settings'))
 
-    await page.hover(this.aDashboard.dokan)
-    await page.waitForTimeout(1000)
+    await base.hover(this.aDashboard.dokan)
     await base.click(this.dokan.settingsMenu)
 
     const url = await page.url()
@@ -1095,16 +1200,28 @@ module.exports = {
   async goToWooCommerceSettings() {
     // await page.goto(createURL('wp-admin/admin.php?page=wc-settings'))
 
-    await page.hover(this.aDashboard.wooCommerce)
-    await page.waitForTimeout(1000)
+    await base.hover(this.aDashboard.wooCommerce)
     await base.click(this.wooCommerce.settingsMenu)
 
     const url = await page.url()
     expect(url).toMatch('wp-admin/admin.php?page=wc-settings') //TODO: 1.update url  2.update assertion
   },
 
+  async setPermalinkSettings() {
+
+    //set permalinks settings
+    await base.click(this.settings.permalinks)
+    await page.click(this.settings.postName)
+    await page.click(this.settings.customBase)
+    await page.click(this.settings.permalinkSaveChanges)
+
+    let permalinkSuccessMessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
+    expect(permalinkSuccessMessage).toMatch('Permalink structure updated.')
+
+  },
+
   async setWpSettings() {
-    await page.hover(this.aDashboard.settings)
+    await base.hover(this.aDashboard.settings)
 
     //set general settings
     await base.click(this.settings.general)
@@ -1117,14 +1234,8 @@ module.exports = {
     let successMessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Settings saved.')
 
-    //set permalinks settings
-    await base.click(this.settings.permalinks)
-    await page.click(this.settings.postName)
-    await page.click(this.settings.customBase)
-    await page.click(this.settings.permalinkSaveChanges)
+    await this.setPermalinkSettings()
 
-    let permalinkSuccessMessage = await base.getSelectorText(this.settings.updatedSuccessMessage)
-    expect(permalinkSuccessMessage).toMatch('Permalink structure updated.')
   },
 
   async setDokanGeneralSettings() {
@@ -1215,7 +1326,7 @@ module.exports = {
 
     await page.click(this.dokan.settings.showMapOnStorePage)
     await base.check(this.dokan.settings.mapApiSourceGoogleMaps)
-    await base.clearAndType(this.dokan.settings.googleMapApiKey, 'apikey')
+    await base.clearAndType(this.dokan.settings.googleMapApiKey, 'apiKey')
     await page.click(this.dokan.settings.storeHeaderTemplate2)
     await page.click(this.dokan.settings.storeHeaderTemplate1)
     await base.clearAndType(this.dokan.settings.storeBannerWidth, '625')
@@ -1411,87 +1522,6 @@ module.exports = {
     await this.setDokanVendorSubscriptionSettings()
   },
 
-  async setWoocommerceSettings() {
-    await this.goToWooCommerceSettings()
-    // await this.enableTax()
-    await this.addStandardTaxRate()
-
-    //add shipping region
-    // await base.click(this.wooCommerce.settings.shipping)
-    // await base.click(this.wooCommerce.settings.addShippingZone)
-    // await base.clearAndType(this.wooCommerce.settings.zoneName, 'US')
-    // await page.click(this.wooCommerce.settings.zoneRegions)
-    // // await page.type(this.wooCommerce.settings.zoneRegions, 'United States (US)')
-    // await page.select('#zone_locations','country:US')
-    // // 'country:US'
-    // await page.keyboard.press('Enter')
-
-
-    //flat rate
-    // await page.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
-    // await base.click(this.wooCommerce.settings.addShippingMethod)
-    // // await page.waitForTimeout(5000)
-    // await page.hover(this.wooCommerce.settings.createdShippingMethod)
-    // await page.waitForTimeout(1000)
-    // await page.click(this.wooCommerce.settings.editShippingMethod)
-    // // await base.clickXpath(this.wooCommerce.settings.editShippingMethod('Flat Rate'))
-    // await base.clearAndType(this.wooCommerce.settings.flatRateMethodTitle, 'Flat Rate admin')
-    // await page.select(this.wooCommerce.settings.flatRateTaxStatus, 'taxable')
-    // await base.clearAndType(this.wooCommerce.settings.flatRateCost, '20')
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-    // await page.waitForTimeout(4000)
-
-    // await page.click(this.wooCommerce.settings.deleteShippingMethod('Flat Rate'))
-
-
-    // //free shipping
-    // await base.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'free_shipping')
-    // await page.click(this.wooCommerce.settings.addShippingMethod)
-    // await page.click(this.wooCommerce.settings.editShippingMethod('Free Shipping'))
-    // await base.clearAndType(this.wooCommerce.settings.freeShippingTitle, 'Free Shipping admin')
-    // await page.select(this.wooCommerce.settings.freeShippingRequires, 'min_amount')
-    // await base.clearAndType(this.wooCommerce.settings.freeShippingMinimumOrderAmount, '200')
-    // await base.check(this.wooCommerce.settings.freeShippingCouponsDiscounts)
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-
-    // //local pickup
-    // await base.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'local_pickup')
-    // await page.click(this.wooCommerce.settings.addShippingMethod)
-    // await page.click(this.wooCommerce.settings.editShippingMethod('Local Pickup'))
-    // await base.clearAndType(this.wooCommerce.settings.localPickupTitle, 'Local Pickup admin')
-    // await page.select(this.wooCommerce.settings.localPickupTaxStatus, 'taxable')
-    // await base.clearAndType(this.wooCommerce.settings.localPickupCost, '20')
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-
-    // //dokan table rate shipping
-    // await base.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
-    // await page.click(this.wooCommerce.settings.addShippingMethod)
-    // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Table Rate'))
-    // await base.clearAndType(this.wooCommerce.settings.dokanTableRateShippingMethodTitle, '	Vendor Table Rate admin')
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-
-    // //dokan distance rate shipping
-    // await base.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
-    // await page.click(this.wooCommerce.settings.addShippingMethod)
-    // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Distance Rate'))
-    // await base.clearAndType(this.wooCommerce.settings.dokanDistanceRateShippingMethodTitle, 'Vendor Distance Rate admin')
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-
-    // //vendor shipping
-    // await base.click(this.wooCommerce.settings.addShippingMethods)
-    // await page.select(this.wooCommerce.settings.shippingMethod, 'flat_rate')
-    // await page.click(this.wooCommerce.settings.addShippingMethod)
-    // await page.click(this.wooCommerce.settings.editShippingMethod('Vendor Shipping'))
-    // await base.clearAndType(this.wooCommerce.settings.vendorShippingMethodTitle, 'Vendor Shipping admin')
-    // await page.select(this.wooCommerce.settings.vendorShippingTaxStatus, 'taxable')
-    // await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-  },
-
   async enableTax() {
     // enable tax
     await base.check(this.wooCommerce.settings.enableTaxes)
@@ -1503,6 +1533,10 @@ module.exports = {
   },
 
   async addStandardTaxRate() {
+
+    //enable tax
+    await this.enableTax()
+
     // set tax rate
     await base.click(this.wooCommerce.settings.tax)
     await base.click(this.wooCommerce.settings.standardRates)
@@ -1522,24 +1556,133 @@ module.exports = {
 
   },
 
-  async addShippingMethod(shippingMethod, shippingMethodName, shippingMethodCustomTitle, taxStatus) {
-    await base.click(this.wooCommerce.settings.addShippingMethods)
-    await page.select(this.wooCommerce.settings.shippingMethod, shippingMethod)
-    await page.click(this.wooCommerce.settings.addShippingMethod)
-    await page.click(this.wooCommerce.settings.editShippingMethod(shippingMethodName))
-    await base.clearAndType(this.wooCommerce.settings.vendorShippingMethodTitle, shippingMethodCustomTitle)
-    await page.select(this.wooCommerce.settings.vendorShippingTaxStatus, taxStatus)
+  async addShippingMethod(shippingZone, shippingCountry, selectShippingMethod, shippingMethod) {
+
+    await base.click(this.wooCommerce.settings.shipping)
+
+    let zoneIsVisible = await base.isVisible(page, this.wooCommerce.settings.shippingZoneCell(shippingZone))
+    if (zoneIsVisible === false) {
+      //add shipping zone
+      await base.click(this.wooCommerce.settings.addShippingZone)
+      await base.clearAndType(this.wooCommerce.settings.zoneName, shippingZone)
+      // await page.select(this.wooCommerce.settings.zoneRegions, shippingCountry)
+      await page.click(this.wooCommerce.settings.zoneRegions)
+      await page.type(this.wooCommerce.settings.zoneRegions, 'United States (US)')
+      await page.keyboard.press('Enter')
+    } else {
+      // edit shipping zone
+      await base.hoverXpath(this.wooCommerce.settings.shippingZoneCell(shippingZone))
+      await base.click(this.wooCommerce.settings.editShippingMethod(shippingZone))
+    }
+
+    let methodIsVisible = await base.isVisible(page, this.wooCommerce.settings.shippingMethodCell(helper.replaceAndCapitalize(shippingMethod)))
+    if (methodIsVisible === false) {
+      // add shipping method
+      await page.click(this.wooCommerce.settings.addShippingMethods)
+      await page.select(this.wooCommerce.settings.shippingMethod, selectShippingMethod)
+      await base.click(this.wooCommerce.settings.addShippingMethod)
+      await page.waitForTimeout(1000)
+      //set shipping method options
+      await base.hoverXpath(this.wooCommerce.settings.shippingMethodCell(shippingMethod))
+      await base.clickXpath(this.wooCommerce.settings.editShippingMethod(shippingMethod))
+    } else {
+
+      //edit shipping method
+      await base.hoverXpath(this.wooCommerce.settings.shippingMethodCell(shippingMethod))
+      await base.clickXpath(this.wooCommerce.settings.editShippingMethod(shippingMethod))
+
+    }
+
+    switch (selectShippingMethod) {
+      case 'flat_rate':
+        //flat rate
+        await base.clearAndType(this.wooCommerce.settings.flatRateMethodTitle, shippingMethod)
+        await page.select(this.wooCommerce.settings.flatRateTaxStatus, 'taxable')
+        await base.clearAndType(this.wooCommerce.settings.flatRateCost, '20')
+        break;
+
+      case 'free_shipping':
+        //free shipping
+        await base.clearAndType(this.wooCommerce.settings.freeShippingTitle, shippingMethod)
+        // await page.select(this.wooCommerce.settings.freeShippingRequires, 'min_amount')
+        // await base.clearAndType(this.wooCommerce.settings.freeShippingMinimumOrderAmount, '200')
+        // await base.check(this.wooCommerce.settings.freeShippingCouponsDiscounts)
+        break;
+
+      case 'local_pickup':
+        //local pickup
+        await base.clearAndType(this.wooCommerce.settings.localPickupTitle, shippingMethod)
+        await page.select(this.wooCommerce.settings.localPickupTaxStatus, 'taxable')
+        await base.clearAndType(this.wooCommerce.settings.localPickupCost, '20')
+        break;
+
+      case 'dokan_table_rate_shipping':
+        //dokan table rate shipping
+        await base.clearAndType(this.wooCommerce.settings.dokanTableRateShippingMethodTitle, shippingMethod)
+        break;
+
+      case 'dokan_distance_rate_shipping':
+        //dokan distance rate shipping
+        await base.clearAndType(this.wooCommerce.settings.dokanDistanceRateShippingMethodTitle, shippingMethod)
+        break;
+
+      case 'dokan_vendor_shipping':
+        //vendor shipping
+        await base.clearAndType(this.wooCommerce.settings.vendorShippingMethodTitle, shippingMethod)
+        await page.select(this.wooCommerce.settings.vendorShippingTaxStatus, 'taxable')
+
+      default:
+        break;
+    }
+
+
     await page.click(this.wooCommerce.settings.shippingMethodSaveChanges)
-    // TODO: add switch case for different shipping methods
-
-    //TODO: add assertion
+    await page.waitForTimeout(1000)
+    let shippingMethodIsVisible = await base.isVisible(page, this.wooCommerce.settings.shippingMethodCell(shippingMethod))
+    expect(shippingMethodIsVisible).toBe(true)
 
   },
 
-  async deleteShippingMethod(shippingMethodName) {
-    await page.click(this.wooCommerce.settings.deleteShippingMethod(shippingMethodName))
-    //TODO: add assertion
+  async deleteShippingZone(shippingZone) {
+    await base.click(this.wooCommerce.settings.shipping)
+
+    await base.hoverXpath(this.wooCommerce.settings.shippingZoneCell(shippingZone))
+    await base.alert('accept')
+    await base.clickXpath(this.wooCommerce.settings.deleteShippingZone(shippingZone))
+    await page.waitForTimeout(1000)
+
+    let shippingZoneIsVisible = await base.isVisible(page, this.wooCommerce.settings.shippingZoneCell(shippingZone))
+    expect(shippingZoneIsVisible).toBe(false)
   },
+
+  async deleteShippingMethod(shippingZone, shippingMethod) {
+    await base.click(this.wooCommerce.settings.shipping)
+
+    await base.hoverXpath(this.wooCommerce.settings.shippingZoneCell(shippingZone))
+    await base.click(this.wooCommerce.settings.editShippingZone(shippingZone))
+    await base.hoverXpath(this.wooCommerce.settings.shippingMethodCell(shippingMethod))
+    await base.clickXpath(this.wooCommerce.settings.deleteShippingMethod(shippingMethod))
+    await page.click(this.wooCommerce.settings.shippingZoneSaveChanges)
+
+    let shippingMethodIsVisible = await base.isVisible(page, this.wooCommerce.settings.shippingMethodCell(shippingMethod))
+    expect(shippingMethodIsVisible).toBe(false)
+  },
+
+  async setWoocommerceSettings() {
+    await this.goToWooCommerceSettings()
+    await this.addStandardTaxRate()
+    await this.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+    await this.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
+    // await this.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
+    // await this.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+    // await this.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+    await this.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
+
+    // await this.deleteShippingZone('US')
+    // await this.deleteShippingMethod('US', 'Flat rate')
+  },
+
+
 
   // payment methods
 
@@ -1737,7 +1880,7 @@ module.exports = {
     await base.check(this.wooCommerce.settings.stripeExpress.testMode)
     await base.clearAndType(this.wooCommerce.settings.stripeExpress.testPublishableKey, 'pk_test_')
     await base.clearAndType(this.wooCommerce.settings.stripeExpress.testSecretKey, 'sk_test_')
-    await base.clearAndType(this.wooCommerce.settings.stripeExpress.testWebhookSecret, 'whsec_test_')
+    await base.clearAndType(this.wooCommerce.settings.stripeExpress.testWebhookSecret, 'webHook_test_')
     // payment and disbursement
     await base.clickXpath(this.wooCommerce.settings.stripeExpress.choosePaymentMethods)
     await base.setDropdownOptionSpan(this.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, 'Credit/Debit Card')
@@ -1765,14 +1908,14 @@ module.exports = {
 
     let successMessage = await base.getSelectorText(this.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
+
   },
 
 
   async addVendor(firstName, lastName, storeName, phoneNumber, email, userName, password, companyName, companyIdEuidNumber, vatOrTaxNumber, nameOfBank, bankIban,
     street1, street2, city, zip, country, state, accountName, accountNumber, bankName, bankAddress, routingNumber, iban, swift, payPalEmail) {
 
-    await page.hover(this.aDashboard.dokan)
-    await page.waitForTimeout(1000)
+    await base.hover(this.aDashboard.dokan)
     await base.click(this.dokan.vendorsMenu)
 
     //add new vendor
@@ -1840,18 +1983,81 @@ module.exports = {
   /////////////////////////////////////  old methods ///////////////////////////////////////////////
 
 
-  async addProduct(productName, productPrize, ProductType) {
-    await page.hover(this.aDashboard.products)
-    await page.waitForTimeout(1000)
-    await base.click(this.products.addNew)
+  async simpleProduct(productName, productPrice) {
 
-    // add new product
-    await page.type(this.products.productName, productName)
-    await page.type(this.products.regularPrice, productPrize)
-    await page.click(this.products.publish)
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    await page.type(this.products.productName, 'simple_' + productName)
+    await page.select(this.products.productType, 'simple')
+    await page.type(this.products.regularPrice, productPrice)
+
+    //category
+    await page.click(this.products.unCategorized)
+
+    //vendor
+    await page.select(this.products.vendor, '1')
+
+    //publish
+    await base.click(this.products.publish)
 
 
   },
+
+  async addProduct(productName, productPrice, ProductType) {
+
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    await page.select(this.products.productType, ProductType)
+    await page.type(this.products.regularPrice, productPrice)
+
+    switch (ProductType) {
+      case 'simple':
+        await page.type(this.products.productName, 'simple ' + productName)
+        break;
+      case 'variable':
+        // code block
+        break;
+      case 'external':
+        // code block
+        break;
+      case 'grouped':
+        // code block
+        break;
+      case 'product_pack':
+        await page.type(this.products.productName, 'Dokan Sub ' + productName)
+
+        await page.type(this.products.numberOfProducts, '-1')
+        await page.type(this.products.packValidity, '0')
+        await page.type(this.products.advertisementSlot, '-1')
+        await page.type(this.products.expireAfterDays, '-1')
+        await page.click(this.products.recurringPayment)
+        break;
+      default:
+        break;
+    }
+
+    //category
+    await page.click(this.products.unCategorized)
+
+    //vendor
+    await page.select(this.products.vendor, '1')
+
+    //publish
+    await base.click(this.products.publish)
+  },
+
+
+
+
+
+
+
+
+
+
+
 
   async addCategory(categoryName) {
     await page.click(this.aDashboard.products)

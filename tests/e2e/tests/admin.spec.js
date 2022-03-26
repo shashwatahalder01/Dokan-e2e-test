@@ -64,22 +64,122 @@ describe('admin functionality test', () => {
     // },timeout);
 
 
-    it('admin add product', async () => {
-        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await loginPage.adminLogin('admin', 'password')
-        await adminPage.addProduct()
-    },timeout);
-
-    // it('admin can add test settings', async () => {
+    // it('admin add product', async () => {
     //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
     //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.setWpSettings()
-    //     await adminPage.setDokanSettings()
-    //     await adminPage.setWoocommerceSettings()
-    //     await adminPage.setPaymentSettings()
+    //     await adminPage.addProduct(data.product.name,data.product.price,'simple')
+    //     //   await loginPage.addProduct(data.dokanSubscription,data.product.price,'product_pack')
     // },timeout);
 
-    // //settings
+    it('admin can add test settings', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.setWpSettings()
+        await adminPage.setWoocommerceSettings()
+        await adminPage.setPaymentSettings()
+        await adminPage.setDokanSettings()
+    }, timeout);
+
+    //settings
+
+    // //tax settings
+    // it('admin can set standard tax rate', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    // }, timeout);
+
+    // //shipping settings
+    // it('admin can set flat rate shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+    // }, timeout);
+    // it('admin can set free shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
+    // }, timeout);
+    // it('admin can set local pickup shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
+    // }, timeout);
+    // it('admin can set table rate shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+    // }, timeout);
+    // it('admin can set  distance rate shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+    // }, timeout);
+    // it('admin can set vendor shipping', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.addStandardTaxRate()
+    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
+    // }, timeout);
+
+    // //payment
+    // it('admin can add basic payment methods', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupBasicPaymentMethods()
+    // }, timeout);
+
+
+    // it('admin can add strip payment method', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupStripeConnect()
+    // }, timeout);
+
+    // it('admin can add paypal marketplace payment method', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupPaypalMarketPlace()
+    // }, timeout);
+
+    // it('admin can add dokan mangopay payment method', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupDokanMangoPay()
+    // },timeout);
+
+    // it('admin can add dokan razorpay payment method', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupDokanRazorpay()
+    // },timeout);
+
+    // it('admin can add strip express payment method', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.goToWooCommerceSettings()
+    //     await adminPage.setupStripeExpress()
+    // }, timeout);
+
+
+    //dokan settings
 
     // it('admin can set dokan general settings', async () => {
     //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -179,49 +279,7 @@ describe('admin functionality test', () => {
     //     await adminPage.setDokanVendorSubscriptionSettings()
     // }, timeout);
 
-    // //payment
-    // it('admin can add basic payment methods', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupBasicPaymentMethods()
-    // }, timeout);
 
-
-    // it('admin can add strip payment method', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupStripeConnect()
-    // }, timeout);
-
-    // it('admin can add paypal marketplace payment method', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupPaypalMarketPlace()
-    // }, timeout);
-
-    // it('admin can add dokan mangopay payment method', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupDokanMangoPay()
-    // },timeout);
-
-    // it('admin can add dokan razorpay payment method', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupDokanRazorpay()
-    // },timeout);
-
-    // it('admin can add strip express payment method', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupStripeExpress()
-    // }, timeout);
 
 
 

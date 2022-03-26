@@ -1,30 +1,13 @@
 
+
+
 module.exports = {
+// replace '_' to space & capitalize first letter of string
+replaceAndCapitalize: (string) => string.replace('dokan','vendor').replace('_',' ').replace(/^\w{1}/, letter => letter.toUpperCase())
 
+// replace '_' to space & capitalize first letter of each word
+// replaceAndCapitalizeEachWord: (string) => string.replace('_',' ').replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase())
 
-//    async goto(url) {
-//     await page.goto(url, { waitUntil: 'load' });
-// await page.goto(url, { waitUntil: 'domcontentloaded' });
-// await page.goto(url, { waitUntil: 'networkidle0' });
-// await page.goto(url, { waitUntil: 'networkidle2' });
-// await page.goto(url, {'timeout': 10000, 'waitUntil':'load'});
-
-//         }
-    
-// click = (selector) => {
-    // await page.waitForNavigation({waitUntil: 'networkidle0',});
-      
-//     await page.waitForSelector(selector)
-//     await page.click(selector)
-// },
-
-// type = (selector, string ) => {
-//     await page.$eval(selector, el => el.value = '');
-//     await page.type(selector, string);
-//     // or
-//     // await page.$eval(selector, el => el.value = string);  
-// },
 
 }
 
-// const custom = require('../utils/custom_method.js');

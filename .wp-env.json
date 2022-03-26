@@ -1,11 +1,12 @@
 {
-  "phpVersion": "7.4",
+  "phpVersion": "8.0",
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
   "plugins": [
     "./wp-content/plugins/dokan/",
     "./wp-content/plugins/dokan-pro/",
     "./wp-content/plugins/woocommerce/"
+
   ],
   "themes": [
     "./wp-content/themes/storefront/" 

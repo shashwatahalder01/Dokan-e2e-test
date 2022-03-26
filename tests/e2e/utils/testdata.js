@@ -2,9 +2,9 @@
 const { faker } = require('@faker-js/faker');
 const { wooCommerce } = require('../pages/admin');
 
-// productsName: ["Plain Cotton Tshirt", "The moon Thsirt", "Summer Thirt"],
+// productsName: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],
 // prizes: [100, 150, 250],
-// tshirts: ["Plain Cotton Tshirt", "The moon Thsirt", "Summer Thirt"],
+// tshirt: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],
 // parentCategories: [
 //   "Electronic Devices",
 //   "Electronic Accessories",
@@ -76,7 +76,7 @@ const gMapApiKey = "AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY"
 const mapboxAccessToken = "pk.eyJ1Ijoic2hhc2h3YXRhIiwiYSI6ImNrdzV3bm43eTAxeDYzMG52b2lwanZ4MnkifQ.tb3LaMr3Wa_-YOj5MwkEUA"
 //privacy policy settings
 const privacyPolicy = ['2','3','4','5','6','7','8','9','10']
-//getsupport settings
+//getSupport settings
 const displayOnSingleProductPage = ['above_tab','inside_tab','dont_show']
 //rma settings
 const rmaOrderStatus = ['wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed']
@@ -97,16 +97,33 @@ const showSpmvProducts = ['show_all','min_price','max_price','top_rated_vendor']
 const subscription = ['2','4','5','6','8','9','10','11','15','-1']
 const productStatus = ['publish','pending','draft']
 
+// products
+const productTypes = ['simple','grouped', 'external', 'variable', 'product_pack']
+const productTaxStatus = ['taxable','shipping','none']
+const productTaxClass = ['taxable','reduced-rate','zero-rate']
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //vendor
-const withdrawPaymentmethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
+const withdrawPaymentMethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
 const reserveBalance = ['0','5','10','15','50','100','200','300','500','1000','2000','3000','5000','10000']
 
 //rma settings
 const rmaType=['no_warranty','included_warranty','addon_warranty']
-const rmalength=['limited','lifetime']
-const rmalengthDuration =['days','weeks','months','years']
+const rmaLength=['limited','lifetime']
+const rmaLengthDuration =['days','weeks','months','years']
 //auction
 const itemCondition= ['new','used']
 const actionType= ['normal','reverse']
@@ -140,6 +157,8 @@ const coupon = {
 
 }
 
+
+const dokanSubscription = 'Dokan_Sub'+ faker.random.arrayElement(['Gold','Silver','Platinum','Premium']) + faker.random.alpha({ count: 5, upcase: true })
 
 
 
