@@ -23,24 +23,7 @@ describe('admin functionality test', () => {
     //    await browser.close()
     //  });
 
-    //////////////////////////// need to review ///////////////////////////////
 
-
-
-
-    // it('admin add categories', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addCategory()
-    // });
-
-    // it('admin add attributes', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addAttributes()
-    // });
-
-
-
-    /////////////////////////////////////////////////////////////// reviewed ///////////////////////////////
 
     // it('admin can login', async () => {
     //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -62,23 +45,76 @@ describe('admin functionality test', () => {
     //         'bankAddress', '111111111111', '1111111111111', '11111111111', data.vendorInfo.userEmail)
 
     // },timeout);
-
-
-    // it('admin add product', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.addProduct(data.product.name,data.product.price,'simple')
-    //     //   await loginPage.addProduct(data.dokanSubscription,data.product.price,'product_pack')
-    // },timeout);
-
-    it('admin can add test settings', async () => {
+ 
+    it('admin can add simple product', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
-        await adminPage.setWpSettings()
-        await adminPage.setWoocommerceSettings()
-        await adminPage.setPaymentSettings()
-        await adminPage.setDokanSettings()
+        await adminPage.addSimpleProduct(data.product.name, data.product.price, 'Uncategorized', 'NYshop')
     }, timeout);
+
+    it.skip('admin can add variable product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        // await adminPage.addVariableProduct(data.product.name, data.product.price, 'Uncategorized', 'NYshop','size',['s','l','m'])
+    }, timeout);
+
+    it('admin can add simple subscription product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.addSimpleSubscription(data.product.name, data.product.price, 'Uncategorized', 'NYshop')
+    }, timeout);
+
+    it.skip('admin can add variable subscription product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        // await adminPage.addVariableSubscription(data.product.name, data.product.price, 'Uncategorized', 'NYshop','size',['s','l','m'])
+    }, timeout);
+
+    it('admin can add external product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.addExternalProduct(data.product.name, data.product.price, 'Uncategorized', 'NYshop')
+    }, timeout);
+    it('admin can add dokan subscription product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.addDokanSubscription(data.dokanSubscription.name, data.dokanSubscription.price, 'Uncategorized', 'admin')
+    }, timeout);
+
+    it('admin can add auction product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.addAuctionProduct(data.product.name, data.product.price, 'Uncategorized', 'NYshop')
+    }, timeout);
+
+    it('admin can add booking product', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.addBookingProduct(data.product.name, data.product.price, 'Uncategorized', 'NYshop')
+    }, timeout);
+
+
+    // it('admin can add categories', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.addCategory('Shirts')
+    // }, timeout);
+
+    // it('admin can add attributes', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.addAttributes('Color', ["Red", "Blue", "Black", "Yellow"])
+    // }, timeout);
+
+
+    // it('admin can add test settings', async () => {
+    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin('admin', 'password')
+    //     await adminPage.setWpSettings()
+    //     await adminPage.setWoocommerceSettings()
+    //     await adminPage.setPaymentSettings()
+    //     await adminPage.setDokanSettings()
+    // }, timeout);
 
     //settings
 

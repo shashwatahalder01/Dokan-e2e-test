@@ -13,7 +13,7 @@
 //TODO: remove timeout
 
 
-// TODO: NEDD TO ADD MULTPLE VALUES TO THE SAME FIELD scenarios
+// TODO: Need TO ADD Multiple VALUES TO THE SAME FIELD scenarios
 
 // TODO: make select option more robust e.g. stripe express choose payment: 1. by keyboard press and input filed 2. by using setdropdownsapn custom method
 //TODO: Need to handle run multiselect again will remove the last selected option [multi select span]
@@ -22,3 +22,5 @@
 
 
 //TODO: replace fixed data all over the codebase
+
+//TODO: if argument exits 

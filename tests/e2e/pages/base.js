@@ -22,7 +22,7 @@ module.exports = {
     async isVisible(page, selector) {
         return await page.evaluate((selector) => {
             if (selector.startsWith('//')) {
-                var e = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue;
+                var e = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
             } else {
                 var e = document.querySelector(selector)
             }
@@ -74,6 +74,11 @@ module.exports = {
         }
     },
 
+    async waitVisibleAndClick(selector) {
+        await page.waitForSelector(selector, { visible: true })
+        await page.click(selector)
+    },
+
     async hover(selector) {
         await page.hover(selector)
         await page.waitForTimeout(1000)
@@ -102,6 +107,17 @@ module.exports = {
 
     },
 
+    async scrollIntoView(selector) {  //TODO: don't work
+        if (selector.startsWith('//')) {
+            let [element] = await page.$x(selector)
+            await page.evaluate((element) => { element.scrollIntoView() }, element)
+        } else {
+            // console.log('css selector')
+            let element = await page.$(selector)
+            await page.evaluate((element) => { element.scrollIntoView() }, element)
+        }
+    },
+
     async deleteIfExists(selector) {
         if (await page.$x(selector) !== null) {
             let [element] = await page.$x(selector)
@@ -111,14 +127,42 @@ module.exports = {
         }
     },
 
-    async waitVisibleAndClick(selector) {
-        await page.waitForSelector(selector, { visible: true })
-        await element.click()
-    },
+
 
     async select(selector, value) {
         await page.waitForSelector(selector)
         await page.select(selector, value)
+    },
+
+    async selectByText(selector, text) {  // TODO: don't work fix this
+
+        // let optionValue = await page.$$eval('option', options => options.find(o => o.innerText == text)?.value)
+        // let optionValue = await page.$$eval('option', options => options.find(o => o.innerText === 'NYshop')?.value) //TODO:working
+        // console.log(optionValue)
+        // await page.select(selector, optionValue)
+
+        // await page.evaluate((selector,text) => {
+        //     const example = document.querySelector(selector)
+        //     const example_options = example.querySelectorAll('option')
+        //     const selected_option = [...example_options].find(option => option.text === text)
+        //     selected_option.selected = true
+        // })
+
+        await page.evaluate(() => { $(`${selector} option:contains('${text}')`)[0].selected = true })
+    },
+
+    // or 
+
+    async selectOptionByText(selectSelector, OptionSelector, textContent) {
+        let elements = await page.$$(OptionSelector)
+        for (let element of elements) {
+            const text = await page.evaluate(element => element.textContent, element)
+            if (textContent.toLowerCase() == (text.trim()).toLowerCase()) {
+                let value = await (await element.getProperty('value')).jsonValue()
+                // console.log(value)
+                await page.select(selectSelector, value)
+            }
+        }
     },
 
     async uploadImage(selector, image) {
@@ -193,7 +237,7 @@ module.exports = {
 
     async getCount(selector) {
         let count = await page.$$eval(selector, ele => ele.length)
-        console.log(count)
+        // console.log(count)
         return count
     },
 
@@ -213,7 +257,7 @@ module.exports = {
 
     async getMultipleElementTexts(selector) {
         let texts = await page.$$eval(selector, elements => elements.map(item => item.textContent))
-        console.log(texts)
+        // console.log(texts)
         return texts
     },
 
@@ -249,17 +293,10 @@ module.exports = {
     // },
 
 
-
-
-    // or select dropdown
-    async setSelect(selector, value) {
-        await page.select(selector, value)
-    },
-
     // get value
     async getValue(selector) {
         let value = await page.$eval(selector, (element) => element.value)
-        console.log(value)
+        // console.log(value)
         return value
     },
     // clear input field
@@ -322,16 +359,25 @@ module.exports = {
 
     async alert(action) {
         page.on('dialog', async dialog => {
-            // console.log(dialog.message());
+            // console.log(dialog.message())
 
             if (action == 'accept') {
-                await dialog.accept();
+                await dialog.accept()
 
             } else if (action == 'cancel') {
-                await dialog.dismiss();
+                await dialog.dismiss()
             }
 
-        });
+        })
+    },
+
+    async alertWithValue(value) {
+        page.on('dialog', async dialog => {
+            // console.log(dialog.message())
+            // await dialog.accept()
+
+        })
+        page.evaluate(() => alert('500'))
     }
 
     //TODO: add function for grab console error
@@ -345,7 +391,7 @@ module.exports = {
     // await page.content()
 
 
-        // Network handle methods
+    // Network handle methods
 
     //option 1
     // You can wait on both simultaneously and handle whichever occurs first:

@@ -1,6 +1,5 @@
 
 const { faker } = require('@faker-js/faker');
-const { wooCommerce } = require('../pages/admin');
 
 // productsName: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],
 // prizes: [100, 150, 250],
@@ -32,101 +31,98 @@ const { wooCommerce } = require('../pages/admin');
 
 // wooCommerce
 //shipping
-const shippingMethods = ['flat_rate','free_shipping','local_pickup','dokan_table_rate_shipping','dokan_distance_rate_shipping','dokan_vendor_shipping']
-const taxStatus = ['taxable','none']
-const freeShippingRequires = ['coupon','min_amount','either','both']
+const shippingMethods = ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping', 'dokan_vendor_shipping']
+const taxStatus = ['taxable', 'none']
+const freeShippingRequires = ['coupon', 'min_amount', 'either', 'both']
 //payment
-const razorpayDisbursementMode = ['Immediate','On Order Complete','Delayed']
-const payPalMarketplaceDisbursementMode = ['Immediate','On Order Complete','Delayed']
-const payPalMarketplacePaymentButtonType = ['Smart Payment Buttons','Standard Button']
-const mangopayAvailableCreditCards = ['CB/Visa/Mastercard','Maestro*','Bancontact/Mister Cash','Przelewy24*','Diners*','PayLib','iDeal*','MasterPass*','Bankwire Direct*']
-const mangopayAvailableDirectPaymentServices = ['Sofort*','Giropay*']
-const mangopayTransferFunds = ['On payment completed','On order completed','Delayed']
-const mangopayTypeOfVendors = ['Individuals','Business','Either']
-const mangopayBusinessRequirement = ['Organizations','Soletraders','Businesses','Any']
-const stripeExpressDisbursementMode = ['On payment completed','On order completed','Delayed']
-const stripeExpressPaymentMethods = ['Credit/Debit Card','iDEAL']
-const stripeExpressButtonType = ['default','buy','donate','book']
-const stripeExpressButtonTheme = ['dark','light','light-outline']
-const stripeExpressButtonLocations = ['Checkout','Product','Cart']
-const stripeExpressButtonSize = ['default','medium','large']
+const razorpayDisbursementMode = ['Immediate', 'On Order Complete', 'Delayed']
+const payPalMarketplaceDisbursementMode = ['Immediate', 'On Order Complete', 'Delayed']
+const payPalMarketplacePaymentButtonType = ['Smart Payment Buttons', 'Standard Button']
+const mangopayAvailableCreditCards = ['CB/Visa/Mastercard', 'Maestro*', 'Bancontact/Mister Cash', 'Przelewy24*', 'Diners*', 'PayLib', 'iDeal*', 'MasterPass*', 'Bankwire Direct*']
+const mangopayAvailableDirectPaymentServices = ['Sofort*', 'Giropay*']
+const mangopayTransferFunds = ['On payment completed', 'On order completed', 'Delayed']
+const mangopayTypeOfVendors = ['Individuals', 'Business', 'Either']
+const mangopayBusinessRequirement = ['Organizations', 'Soletraders', 'Businesses', 'Any']
+const stripeExpressDisbursementMode = ['On payment completed', 'On order completed', 'Delayed']
+const stripeExpressPaymentMethods = ['Credit/Debit Card', 'iDEAL']
+const stripeExpressButtonType = ['default', 'buy', 'donate', 'book']
+const stripeExpressButtonTheme = ['dark', 'light', 'light-outline']
+const stripeExpressButtonLocations = ['Checkout', 'Product', 'Cart']
+const stripeExpressButtonSize = ['default', 'medium', 'large']
 
 //Dokan
 //admin
 //general settings
 const sellingProductTypes = ['sell_both', 'sell_physical', 'sell_digital']
-const storeCategory = ['none','Single','Multiple']
+const storeCategory = ['none', 'Single', 'Multiple']
 //selling options settings
-const commissionType = ['flat','percentage','combine']
-const shippingFeeRecipient = ['seller','admin']
-const taxFeeRecipient = ['seller','admin']
-const newProductStatus = ['publish','pending']
-const productCategory = ['single','multiple']
+const commissionType = ['flat', 'percentage', 'combine']
+const shippingFeeRecipient = ['seller', 'admin']
+const taxFeeRecipient = ['seller', 'admin']
+const newProductStatus = ['publish', 'pending']
+const productCategory = ['single', 'multiple']
 //withdraw
-const quarterlyScheduleMonth = ['january','february','march']
-const quarterlyScheduleWeek = ['1','2','3','L']
-const quarterlyScheduleDay = ['monday','tuesday','wednesday','thursday','friday']
-const monthlyScheduleWeek = ['1','2','3','L']
-const monthlyScheduleDay = ['monday','tuesday','wednesday','thursday','friday']
-const biweeklyScheduleWeek = ['1','2']
-const biweeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
-const weeklyScheduleDay = ['saturday','sunday','monday','tuesday','wednesday','thursday','friday']
+const quarterlyScheduleMonth = ['january', 'february', 'march']
+const quarterlyScheduleWeek = ['1', '2', '3', 'L']
+const quarterlyScheduleDay = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+const monthlyScheduleWeek = ['1', '2', '3', 'L']
+const monthlyScheduleDay = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+const biweeklyScheduleWeek = ['1', '2']
+const biweeklyScheduleDay = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']
+const weeklyScheduleDay = ['saturday', 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday']
 //appearance settings
 const gMapApiKey = "AIzaSyCiSPh9A7SYaO2sbZQ4qQo11AWyYB3UFvY"
 const mapboxAccessToken = "pk.eyJ1Ijoic2hhc2h3YXRhIiwiYSI6ImNrdzV3bm43eTAxeDYzMG52b2lwanZ4MnkifQ.tb3LaMr3Wa_-YOj5MwkEUA"
 //privacy policy settings
-const privacyPolicy = ['2','3','4','5','6','7','8','9','10']
+const privacyPolicy = ['2', '3', '4', '5', '6', '7', '8', '9', '10']
 //getSupport settings
-const displayOnSingleProductPage = ['above_tab','inside_tab','dont_show']
+const displayOnSingleProductPage = ['above_tab', 'inside_tab', 'dont_show']
 //rma settings
-const rmaOrderStatus = ['wc-pending','wc-processing','wc-on-hold','wc-completed','wc-cancelled','wc-refunded','wc-failed']
-const enableRefundRequests = ['yes','no']
-const enableCouponRequests = ['yes','no']
+const rmaOrderStatus = ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed']
+const enableRefundRequests = ['yes', 'no']
+const enableCouponRequests = ['yes', 'no']
 //wholesale customer settings
-const needApprovalForCustomer = ['yes','no']
+const needApprovalForCustomer = ['yes', 'no']
 //delivery time settings
-const storeOpeningClosingTime = ['12:00 AM','11:30 PM'] //TODO: has more elements -> generate using function
+const storeOpeningClosingTime = ['12:00 AM', '11:30 PM'] //TODO: has more elements -> generate using function
 //geolocation settings
-const locationMapPosition = ['top','left','right']
-const showMap = ['all','store_listing','shop']
-const radiusSearchUnit = ['km','miles']
+const locationMapPosition = ['top', 'left', 'right']
+const showMap = ['all', 'store_listing', 'shop']
+const radiusSearchUnit = ['km', 'miles']
 //spmv settings
-const availableVendorSectionDisplayPosition = ['below_tabs','inside_tabs','after_tabs']
-const showSpmvProducts = ['show_all','min_price','max_price','top_rated_vendor']
+const availableVendorSectionDisplayPosition = ['below_tabs', 'inside_tabs', 'after_tabs']
+const showSpmvProducts = ['show_all', 'min_price', 'max_price', 'top_rated_vendor']
 //vendor subscription settings
-const subscription = ['2','4','5','6','8','9','10','11','15','-1']
-const productStatus = ['publish','pending','draft']
+const subscription = ['2', '4', '5', '6', '8', '9', '10', '11', '15', '-1']
+const productStatus = ['publish', 'pending', 'draft']
 
 // products
-const productTypes = ['simple','grouped', 'external', 'variable', 'product_pack']
-const productTaxStatus = ['taxable','shipping','none']
-const productTaxClass = ['taxable','reduced-rate','zero-rate']
-
-
-
-
-
-
-
-
-
-
-
-
+const productTypes = ['simple', 'grouped', 'external', 'variable', 'product_pack', 'subscription', 'variable-subscription', 'booking', 'auction']
+const productTaxStatus = ['taxable', 'shipping', 'none']
+const productTaxClass = ['taxable', 'reduced-rate', 'zero-rate']
+const subscriptionExpire = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20', '21', '22', '23', '24']
+const subscriptionPeriodInterval = ['0', '1', '2', '3', '4', '5', '6']
+const subscriptionPeriod = ['day', 'week', 'month', 'year']
+const subscriptionTrialPeriod = ['day', 'week', 'month', 'year']
+const auctionItemCondition = ['new', 'used']
+const auctionType = ['normal', 'reverse']
+const bookingDurationType = ['fixed','customer']
+const bookingDurationUnit = ['month', 'day', 'hour', 'minute']
+const calenderDisplayMode = ['','always_visible']
 
 
 
 //vendor
 const withdrawPaymentMethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
-const reserveBalance = ['0','5','10','15','50','100','200','300','500','1000','2000','3000','5000','10000']
+const reserveBalance = ['0', '5', '10', '15', '50', '100', '200', '300', '500', '1000', '2000', '3000', '5000', '10000']
 
 //rma settings
-const rmaType=['no_warranty','included_warranty','addon_warranty']
-const rmaLength=['limited','lifetime']
-const rmaLengthDuration =['days','weeks','months','years']
+const rmaType = ['no_warranty', 'included_warranty', 'addon_warranty']
+const rmaLength = ['limited', 'lifetime']
+const rmaLengthDuration = ['days', 'weeks', 'months', 'years']
 //auction
-const itemCondition= ['new','used']
-const actionType= ['normal','reverse']
+const itemCondition = ['new', 'used']
+const actionType = ['normal', 'reverse']
 
 
 const vendorInfo = {
@@ -146,9 +142,20 @@ const vendorInfo = {
 
 const product = {
    name: faker.commerce.productName(),
-   price: faker.commerce.price(),
+   price: faker.commerce.price(100, 200, 2),
    category: 'Uncategorized'
 }
+
+const dokanSubscription = {
+   name: faker.random.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium']) + faker.random.alpha({ count: 5, upcase: true }) + '_',
+   price: faker.commerce.price(),
+}
+
+const auctionProduct = {
+   price: faker.commerce.price(10, 100, 0),
+
+}
+
 
 const coupon = {
    // amount:faker.datatype.number({ min: 1, max: 99}),
@@ -158,7 +165,6 @@ const coupon = {
 }
 
 
-const dokanSubscription = 'Dokan_Sub'+ faker.random.arrayElement(['Gold','Silver','Platinum','Premium']) + faker.random.alpha({ count: 5, upcase: true })
 
 
 
@@ -167,6 +173,8 @@ const dokanSubscription = 'Dokan_Sub'+ faker.random.arrayElement(['Gold','Silver
 exports.vendorInfo = vendorInfo;
 exports.product = product;
 exports.coupon = coupon;
+exports.dokanSubscription = dokanSubscription;
+exports.auctionProduct = auctionProduct;
 
 
 

@@ -854,151 +854,212 @@ module.exports = {
 
   //products
   products: {
-
-    // products
-    //TODO: recheck all locators
-    products: '.menu-icon-product > .wp-menu-name',
-    // product menus
+    //TODO: update all menu locators
+    //products menus
     allProductsMenu: '#menu-posts-product .wp-first-item > .wp-first-item',
     addNewMenu: '#menu-posts-product li:nth-child(3) > a',
     categoriesMenu: '#menu-posts-product li:nth-child(4) > a',
     tagsMenu: "#menu-posts-product li:nth-child(5) > a",
-    attributesMenu: '#menu-posts-product li:nth-child(7) > a',
+    attributesMenu: '#menu-posts-product li:nth-child(6) > a',
 
-    // add new product
-    productName: '#title',
-    //product data
-    productType: '#product-type',
-    virtual: '#\\_virtual',
-    downloadable: '#\\_downloadable',
-    // add new product sub menus
-    general: '.general_options > a',
-    inventory: '.inventory_options > a',
-    shipping: '.shipping_options > a',
-    linkedProducts: '.linked_product_options > a',
-    attributes: '.attribute_options > a',
-    variations: '.variations_options > a',
-    advanced: '.advanced_options > a',
+    //product
+    product: {
+      //add new product
+      productName: '#title',
+      //product data
+      productType: '#product-type',
+      virtual: '#\\_virtual',
+      downloadable: '#\\_downloadable',
+      //add new product sub menus
+      general: '.general_options > a',
+      inventory: '.inventory_options > a',
+      shipping: '.shipping_options > a',
+      linkedProducts: '.linked_product_options > a',
+      attributes: '.attribute_options > a',
+      variations: '.variations_options > a',
+      advanced: '.advanced_options > a',
+      auction: '.auction_tab_options > a',
+      bookingAvailability: '.bookings_availability_options > a',
+      bookingCosts: '.bookings_pricing_options > a',
 
-    // General
-    regularPrice: '#\\_regular_price',
-    salePrice: '#\\_sale_price',
-    salePriceDateFrom: '#\\_sale_price_dates_from',
-    salePriceDateTo: '#\\_sale_price_dates_to',
-    addDownloadableFiles: '.insert',
-    fileName: '.file_name > .input_text',
-    fileUrl: '.file_url > .input_text',
-    chooseFile: '.upload_file_button',
-    UploadFile: "",//TODO:add locator
-    downloadLimit: '#\\_download_limit',
-    downloadExpiry: "#\\_download_expiry",
-    taxStatus: "#\\_tax_status",
-    taxClass: "#\\_tax_class",
-    enableWholesale: "#enable_wholesale",
-    wholesalePrice: "#wholesale_price",
-    minimumQuantityForWholesale: "#wholesale_quantity",
-    enableMinMaxRule: "#product_wise_activation",
-    minimumQuantityToOrder: "#min_quantity",
-    maximumQuantityToOrder: "#max_quantity",
-    minimumAmountToOrder: "#min_amount",
-    maximumAmountToOrder: "#max_amount",
-    orderRules: "#\\_donot_count",
-    categoryRules: "#ignore_from_cat",
-    // external product
-    productUrl: '#\\_product_url',
-    button_text: '#\\_button_text',
-    // Dokan subscription 
-    numberOfProducts: '#\\_no_of_product',
-    packValidity: '#\\_pack_validity',
-    advertisementSlot: '#\\_dokan_advertisement_slot_count',
-    expireAfterDays: '#\\_dokan_advertisement_validity',
-    dokanSubscriptionAdminCommissionType: '#\\_subscription_product_admin_commission_type',
-    dokanSubscriptionAdminCommissionSingle: '.show_if_product_pack #admin_commission',
-    dokanSubscriptionAdminCommissionCombined: '.subscription_additional_fee > .input-text',
-    allowedProductTypes: '.form-field:nth-child(9) .select2-search__field',
-    allowedCategoriesUncategorized: '.form-field:nth-child(10) .select2-search__field',
-    restrictGalleryImageUpload: '#\\_enable_gallery_restriction',
-    recurringPayment: '#\\_enable_recurring_payment',
-    billingCycleRange: '#\\_dokan_subscription_period_interval',
-    billingCyclePeriodInterval: '#\\_dokan_subscription_period',
-    billingCycleStop: '#\\_dokan_subscription_length',
-    enableTrial: '#dokan_subscription_enable_trial',
-    trialPeriodRange: '.dokan-subscription-range',
-    trialPeriodPeriod: '.dokan_subscription_trial_period > select:nth-child(3)',
-    // inventory
-    sku: '#\\_sku',
-    manageStock: '#\\_manage_stock',
-    stockQuantity: '#\\_stock',
-    allowBackOrders: '#\\_backorders',
-    lowStockThreshold: '#\\_low_stock_amount',
-    stockStatus: '#\\_stock_status',
-    soldIndividually: '#\\_sold_individually',
-    //shipping
-    weightKg: '#\\_weight',
-    length: '#product_length',
-    width: '#product_width',
-    height: '#product_height',
-    shippingClass: '#product_shipping_class',
-    // linked Products
-    //TODO: update locators
-    upSells: ".options_group:nth-child(2) > .form-field:nth-child(1) .select2-search__field",
-    crossSells: ".form-field:nth-child(2) .select2-search__field",
+      //General
+      regularPrice: '#\\_regular_price',
+      salePrice: '#\\_sale_price',
+      salePriceDateFrom: '#\\_sale_price_dates_from',
+      salePriceDateTo: '#\\_sale_price_dates_to',
+      addDownloadableFiles: '.insert',
+      fileName: '.file_name > .input_text',
+      fileUrl: '.file_url > .input_text',
+      chooseFile: '.upload_file_button',
+      UploadFile: "",//TODO:add locator
+      downloadLimit: '#\\_download_limit',
+      downloadExpiry: "#\\_download_expiry",
+      taxStatus: "#\\_tax_status",
+      taxClass: "#\\_tax_class",
+      enableWholesale: "#enable_wholesale",
+      wholesalePrice: "#wholesale_price",
+      minimumQuantityForWholesale: "#wholesale_quantity",
+      enableMinMaxRule: "#product_wise_activation",
+      minimumQuantityToOrder: "#min_quantity",
+      maximumQuantityToOrder: "#max_quantity",
+      minimumAmountToOrder: "#min_amount",
+      maximumAmountToOrder: "#max_amount",
+      orderRules: "#\\_donot_count",
+      categoryRules: "#ignore_from_cat",
+      //external product
+      productUrl: '#\\_product_url',
+      buttonText: '#\\_button_text',
+      //simple subscription
+      subscriptionPrice: '#\\_subscription_price',
+      subscriptionPeriodInterval: '#\\_subscription_period_interval',
+      subscriptionPeriod: '#\\_subscription_period',
+      expireAfter: '#\\_subscription_length',
+      signUpFee: '#\\_subscription_sign_up_fee',
+      subscriptionTrialLength: '#\\_subscription_trial_length',
+      subscriptionTrialPeriod: '#\\_subscription_trial_period',
+      //dokan subscription 
+      numberOfProducts: '#\\_no_of_product',
+      packValidity: '#\\_pack_validity',
+      advertisementSlot: '#\\_dokan_advertisement_slot_count',
+      expireAfterDays: '#\\_dokan_advertisement_validity',
+      dokanSubscriptionAdminCommissionType: '#\\_subscription_product_admin_commission_type',
+      dokanSubscriptionAdminCommissionSingle: '.show_if_product_pack #admin_commission',
+      dokanSubscriptionAdminCommissionCombined: '.subscription_additional_fee > .input-text',
+      allowedProductTypes: '.form-field:nth-child(9) .select2-search__field',
+      allowedCategoriesUncategorized: '.form-field:nth-child(10) .select2-search__field',
+      restrictGalleryImageUpload: '#\\_enable_gallery_restriction',
+      recurringPayment: '#\\_enable_recurring_payment',
+      billingCycleRange: '#\\_dokan_subscription_period_interval',
+      billingCyclePeriodInterval: '#\\_dokan_subscription_period',
+      billingCycleStop: '#\\_dokan_subscription_length',
+      enableTrial: '#dokan_subscription_enable_trial',
+      trialPeriodRange: '.dokan-subscription-range',
+      trialPeriodPeriod: '.dokan_subscription_trial_period > select:nth-child(3)',
+      //action
+      itemCondition: '#\\_auction_item_condition',
+      auctionType: '#\\_auction_type',
+      proxyBidding: '#\\_auction_proxy',
+      startPrice: '#\\_auction_start_price',
+      bidIncrement: '#\\_auction_bid_increment',
+      reservePrice: '#\\_auction_reserved_price',
+      buyItNowPrice: '.form-field:nth-child(7) > #\\_regular_price',
+      auctionDatesFrom: '#\\_auction_dates_from',
+      auctionDatesTo: '#\\_auction_dates_to',
+      //booking
+      bookingDurationType: '#\\_wc_booking_duration_type',
+      bookingDuration: '#\\_wc_booking_duration',
+      bookingDurationMin: '#\\_wc_booking_min_duration',
+      bookingDurationMax: '#\\_wc_booking_max_duration',
+      bookingDurationUnit: '#\\_wc_booking_duration_unit',
+      calendarDisplayMode: '#\\_wc_booking_calendar_display_mode',
+      requiresConfirmation: '#\\_wc_booking_requires_confirmation',
+      canBeCancelled: '#\\_wc_booking_user_can_cancel',
+      //booking availability
+      MaxBookingsPerBlock: '#\\_wc_booking_qty',
+      MinimumBlockBookableMinDate: '#\\_wc_booking_min_date',
+      MinimumBlockBookableMinDateUnit: '#\\_wc_booking_min_date_unit',
+      MaximumBlockBookableMaxDate: '#\\_wc_booking_max_date',
+      MaximumBlockBookableMaxDateUnit: '#\\_wc_booking_max_date_unit',
+      RequireABufferPeriodOf: '#\\_wc_booking_buffer_period',
+      AdjacentBuffering: '#\\_wc_booking_apply_adjacent_buffer',
+      AllDatesAre: '#\\_wc_booking_default_date_availability',
+      CheckRulesAgainst: '#\\_wc_booking_check_availability_against',
+      RestrictSelectableDay: '#\\_wc_booking_has_restricted_days',
+      //booking costs
+      baseCost: '#\\_wc_booking_cost',
+      blockCost: '#\\_wc_booking_block_cost',
+      displayCost: '#\\_wc_display_cost',
+
+      //inventory
+      sku: '#\\_sku',
+      manageStock: '#\\_manage_stock',
+      stockQuantity: '#\\_stock',
+      allowBackOrders: '#\\_backorders',
+      lowStockThreshold: '#\\_low_stock_amount',
+      stockStatus: '#\\_stock_status',
+      soldIndividually: '#\\_sold_individually',
+      //shipping
+      weightKg: '#\\_weight',
+      length: '#product_length',
+      width: '#product_width',
+      height: '#product_height',
+      shippingClass: '#product_shipping_class',
+      //linked Products
+      //TODO: update locators
+      upSells: ".options_group:nth-child(2) > .form-field:nth-child(1) .select2-search__field",
+      crossSells: ".form-field:nth-child(2) .select2-search__field",
+      //attributes
+      customProductAttribute: '.attribute_taxonomy',
+      addAttribute: '.add_attribute',
+      attributeName: '.woocommerce_attribute:nth-child(1) .attribute_name > .attribute_name',
+      attributeValues: '.woocommerce_attribute:nth-child(1) textarea',
+      selectAll: '.select_all_attributes',
+      selectNone: '.minus',
+      addNewAttribute: '.fr', //TODO: update locator
+      visibleOnTheProductPage: '.woocommerce_attribute:nth-child(1) td > label > .checkbox',
+      usedForVariations: '.woocommerce_attribute:nth-child(1) .enable_variation .checkbox',
+      saveAttributes: '.save_attributes',
+      //variations
+      //TODO: add more locators
+      addVariations: '#field_to_edit',
+      go: '.bulk_edit',  //TODO: have to handle default js alert
+      //advanced
+      purchaseNote: '#\\_purchase_note',
+      menuOrder: '#menu_order',
+      enableReviews: '#comment_status',
+      adminCommissionType: '#\\_per_product_admin_commission_type',
+      adminCommissionSingle: '.show_if_simple #admin_commission',
+      adminCommissionCombined: '.additional_fee > .input-text',
+      //vendor
+      vendor: '#dokan_product_author_override',
+      vendorOptions: "#dokan_product_author_override > option",
+
+      //category
+      category: (categoryName) => `//label[contains(text(), ' ${categoryName}')]/input`,
+      //tags
+      tagInput: '#new-tag-product_tag',
+      addTag: '.tagadd',
+      //publish
+      saveDraft: '#save-post',
+      preview: '#post-preview',
+      publish: '#publish',
+      // publish: '.button.button-primary.button-large',
+      updatedSuccessMessage: ".updated.notice.notice-success",
+
+    },
+
+
+    // categories
+    category: {
+      name: "#tag-name",
+      slug: "#tag-slug",
+      parentCategory: "#parent",
+      description: "#tag-description",
+      commissionType: "#per_category_admin_commission_type",
+      adminCommissionFromThisCategory: ".wc_input_price:nth-child(2)",
+      displayType: "#display_type",
+      uploadOrAddImage: ".upload_image_button",
+      addNewCategory: "#submit",
+      categoryCell: (categoryName) => `//td[contains(text(), '${categoryName.toLowerCase()}')]/..`,
+    },
+
     // attributes
-    customProductAttribute: '.attribute_taxonomy',
-    addAttribute: '.add_attribute',
-    attributeName: '.woocommerce_attribute:nth-child(1) .attribute_name > .attribute_name',
-    attributeValues: '.woocommerce_attribute:nth-child(1) textarea',
-    selectAll: '.minus',
-    selectNone: '.select_all_attributes',
-    addNewAttribute: '.fr', //TODO: update locator
-    visibleOnTheProductPage: '.woocommerce_attribute:nth-child(1) td > label > .checkbox',
-    usedForVariations: '.woocommerce_attribute:nth-child(1) .enable_variation .checkbox',
-    saveAttributes: '.save_attributes',
-    // variations
-    //TODO: add more locators
-    addVariations: '#field_to_edit',
-    go: '.bulk_edit',  //TODO: have to handle default js alert
-    // advanced
-    purchaseNote: '#\\_purchase_note',
-    menuOrder: '#menu_order',
-    enableReviews: '#comment_status',
-    adminCommissionType: '#\\_per_product_admin_commission_type',
-    adminCommissionSingle: '.show_if_simple #admin_commission',
-    adminCommissionCombined: '.additional_fee > .input-text',
-    //vendor
-    vendor: '#dokan_product_author_override',
-    //category
-    unCategorized: '#in-product_cat-15',// TODO: need to update
-    //tags
-    tagInput: '#new-tag-product_tag',
-    addTag: '.tagadd',
-    //publish
-    saveDraft: '#save-post',
-    preview: '#post-preview',
-    publish: '#publish',
+    attribute: {
+      name: "#attribute_label",
+      slug: "#attribute_name",
+      enableArchives: "#attribute_public",
+      defaultSortOrder: "#attribute_orderby",
+      addAttribute: "#submit",
+      attributeCell: (attributeName) => `//td[contains(text(), '${attributeName.toLowerCase()}')]/..`,
+      configureTerms: (attributeName) => `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`,
+      // terms
+      attributeTerm: "#tag-name",
+      attributeTermSlug: "#tag-slug",
+      description: "#tag-description",
+      addAttributeTerm: "#submit",
+      attributeTermCell: (attributeTerm) => `//td[contains(text(), '${attributeTerm.toLowerCase()}')]/..`,
+    },
 
-
-
-    // // categories
-    // //TODO: recheck all locators
-
-    // categoryName: "#tag-name",
-    // categorySlug: "#tag-slug",
-    // addNewCategory: "#submit",
-
-    // tags: 'a[href="edit-tags.php?taxonomy=product_tag&post_type=product"]',
-
-    // // attributes
-    // //TODO: recheck all locators
-
-    // attributeName: "#attribute_label",
-    // attributeSlug: "#attribute_name",
-    // addAttribute: "#submit",
-    // configureTerms(attributeName) {
-    //   return `//td[contains(text(), '${attributeName.toLowerCase()}')]/..//a[normalize-space()="Configure terms"]`
-    // },
-    // attributeValue: "#tag-name",
-    // attributeValueSlug: "#tag-slug",
   },
   //bookings
   bookings: {},
@@ -1974,157 +2035,299 @@ module.exports = {
 
   },
 
-
-
-
-
-
-
-  /////////////////////////////////////  old methods ///////////////////////////////////////////////
-
-
-  async simpleProduct(productName, productPrice) {
-
-    await base.hover(this.aDashboard.products)
-    await base.click(this.products.addNewMenu)
-
-    await page.type(this.products.productName, 'simple_' + productName)
-    await page.select(this.products.productType, 'simple')
-    await page.type(this.products.regularPrice, productPrice)
-
-    //category
-    await page.click(this.products.unCategorized)
-
-    //vendor
-    await page.select(this.products.vendor, '1')
-
-    //publish
-    await base.click(this.products.publish)
-
-
-  },
-
-  async addProduct(productName, productPrice, ProductType) {
-
-    await base.hover(this.aDashboard.products)
-    await base.click(this.products.addNewMenu)
-
-    await page.select(this.products.productType, ProductType)
-    await page.type(this.products.regularPrice, productPrice)
-
-    switch (ProductType) {
-      case 'simple':
-        await page.type(this.products.productName, 'simple ' + productName)
-        break;
-      case 'variable':
-        // code block
-        break;
-      case 'external':
-        // code block
-        break;
-      case 'grouped':
-        // code block
-        break;
-      case 'product_pack':
-        await page.type(this.products.productName, 'Dokan Sub ' + productName)
-
-        await page.type(this.products.numberOfProducts, '-1')
-        await page.type(this.products.packValidity, '0')
-        await page.type(this.products.advertisementSlot, '-1')
-        await page.type(this.products.expireAfterDays, '-1')
-        await page.click(this.products.recurringPayment)
-        break;
-      default:
-        break;
-    }
-
-    //category
-    await page.click(this.products.unCategorized)
-
-    //vendor
-    await page.select(this.products.vendor, '1')
-
-    //publish
-    await base.click(this.products.publish)
-  },
-
-
-
-
-
-
-
-
-
-
-
-
   async addCategory(categoryName) {
-    await page.click(this.aDashboard.products)
-    await page.waitForTimeout(5000)
-    await base.click(this.products.categories)
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.categoriesMenu)
 
-    // add new category
-    await page.type(this.categoryName, categoryName)
-    await page.type(this.categorySlug, categoryName)
+    let categoryIsVisible = await base.isVisible(page, this.products.category.categoryCell(categoryName))
+    if (!categoryIsVisible) {
 
+      // add new category
+      await page.type(this.products.category.name, categoryName)
+      await page.type(this.products.category.slug, categoryName)
+      await page.click(this.products.category.addNewCategory)
+      await page.waitForTimeout(1000)
+
+      let categoryIsVisible = await base.isVisible(page, this.products.category.categoryCell(categoryName))
+      expect(categoryIsVisible).toBe(true)
+    }
   },
 
 
-  // async addAttributes(attributeName, attributeValue) {
-  //   await page.click(this.aDashboard.products)
-  //   await page.waitForTimeout(5000)
-  //   await base.click(this.products.attributes)
+  async addAttributes(attributeName, attributeTerms) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.attributesMenu)
 
-  //   // add new attribute
-  //   await page.type(this.attributes.attributeName, attributeName)
-  //   await page.type(this.attributes.attributeValue, attributeValue)
-  //   await page.click(this.attributes.addAttribute)
+    let attributeIsVisible = await base.isVisible(page, this.products.attribute.attributeCell(attributeName))
+    if (!attributeIsVisible) {
+      // add new attribute
+      await page.type(this.products.attribute.name, attributeName)
+      await page.type(this.products.attribute.slug, attributeName)
+      await page.click(this.products.attribute.addAttribute)
+      await page.waitForTimeout(1000)
 
-  //   await page.click(this.aDashboard.products)
-  //   await page.waitForTimeout(5000)
-  //   await base.click(this.products.attributes)
+      let attributeIsVisible = await base.isVisible(page, this.products.attribute.attributeCell(attributeName))
+      expect(attributeIsVisible).toBe(true)
+
+      await base.click(this.products.attribute.configureTerms(attributeName))
+
+      // add new term
+      for (let attributeTerm of attributeTerms) {
+        await page.type(this.products.attribute.attributeTerm, attributeTerm)
+        await page.type(this.products.attribute.attributeTermSlug, attributeTerm)
+        await page.click(this.products.attribute.addAttributeTerm)
+        await page.waitForTimeout(1000)
+
+        let attributeTermIsVisible = await base.isVisible(page, this.products.attribute.attributeTermCell(attributeTerm))
+        expect(attributeTermIsVisible).toBe(true)
+      }
+    }
+  },
 
 
-  //   for (let i = 0 i < this.productAttributes.length i++) {
-  //     await page.waitForTimeout(500)
-  //     await page.type(this.attributeName, this.productAttributes[i])
-  //     await page.type(this.attributeSlug, this.productAttributes[i])
-  //     await page.click(this.addAttribute)
-  //     // await page.waitForTimeout(1000)
-  //     await page.click(this.configureTerms(this.productAttributes[i]))
 
-  //     for (let j = 0 j < this.attributeValues[i].length j++) {
-  //       await page.waitForTimeout(500)
-  //       await page.type(this.attributeValue, this.attributeValues[i][j])
-  //       await page.type(this.attributeValueSlug, this.attributeValues[i][j])
-  //       await page.click(this.addAttributeValue)
-  //     }
-  //     await page.click(this.attributes)
-  //   }
+
+  async addSimpleProduct(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new simple product
+    await page.select(this.products.product.productType, 'simple')
+    await page.type(this.products.product.regularPrice, productPrice)
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'simple_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+  },
+
+  // async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
+  //   await base.hover(this.aDashboard.products)
+  //   await base.click(this.products.addNewMenu)
+
+  //   // add new variable product
+  //   await page.select(this.products.product.productType, 'variable')
+
+  //   await page.click(this.products.product.attributes)
+  //   // await page.waitForTimeout(1000)
+
+  //   // add attributes
+  //   await page.select(this.products.product.customProductAttribute, `pa_${attribute}`)
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.products.product.addAttribute)
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.products.product.selectAll)
+  //   await page.click(this.products.product.usedForVariations)
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.products.product.saveAttributes)
+  //   await page.waitForTimeout(2000)
+
+  //   //TODO: need to update js alert 
+  //   // add variations
+  //   await page.click(this.products.product.variations)
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.products.product.variations)
+  //   await page.waitForTimeout(2000)
+  //   await page.select(this.products.product.addVariations, 'link_all_variations')
+  //   await page.waitForTimeout(2000)
+  //   await base.alert('accept')
+  //   await page.click(this.products.product.go)
+  //   await page.waitForTimeout(2000)
+
+  //   await page.select(this.products.product.addVariations, 'variable_regular_price')
+  //   await page.waitForTimeout(2000)
+  //   await page.click(this.products.product.go)
+  //   await base.alertWithValue(120)
+  //   await page.waitForTimeout(2000)
+
+  //   //category
+  //   await base.clickXpath(this.products.product.category(categoryName))
+  //   //vendor
+  //   // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+  //   await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+  //   // name
+  //   await page.type(this.products.product.productName, 'variable_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+  //   //publish
+  //   await base.click(this.products.product.publish)
+  //   await page.waitForTimeout(2000)
+
+  //   let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+  //   expect(productCreateSuccessMessage).toMatch('Product published. ')
   // },
 
+  async addSimpleSubscription(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new simple subscription
+    await page.select(this.products.product.productType, 'subscription')
+    await page.type(this.products.product.subscriptionPrice, productPrice)
+    await page.select(this.products.product.subscriptionPeriodInterval, '1')
+    await page.select(this.products.product.subscriptionPeriod, 'month')
+    await page.select(this.products.product.expireAfter, '0')
+    await page.type(this.products.product.subscriptionTrialLength, '0')
+    await page.select(this.products.product.subscriptionTrialPeriod, 'day')
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'subscription_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+
+  },
+
+  async addVariableSubscription(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
+  },
+
+  async addGroupProduct(productName, productPrice, categoryName, vendor) {
+  },
+
+  async addExternalProduct(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new external product
+    await page.select(this.products.product.productType, 'external')
+    await page.type(this.products.product.productUrl, 'http://localhost:8889/shop/uncategorized/subscription_handcrafted-granite-chicken/')
+    await page.type(this.products.product.buttonText, 'Buy product')
+    await page.type(this.products.product.regularPrice, productPrice)
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'external_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+
+  },
+
+  async addDokanSubscription(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new simple product
+    await page.select(this.products.product.productType, 'product_pack')
+    await page.type(this.products.product.regularPrice, productPrice)
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    // subscription details
+    await page.type(this.products.product.numberOfProducts, '-1')
+    await page.type(this.products.product.packValidity, '0')
+    await page.type(this.products.product.advertisementSlot, '-1')
+    await page.type(this.products.product.expireAfterDays, '-1')
+    await page.click(this.products.product.recurringPayment)
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'Dokan Sub_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+  },
+
+  async addAuctionProduct(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new auction product
+    await page.select(this.products.product.productType, 'auction')
+
+    await page.select(this.products.product.itemCondition, 'new')
+    await page.select(this.products.product.auctionType, 'normal')
+    await page.type(this.products.product.startPrice, productPrice)
+    await page.type(this.products.product.bidIncrement, '50')
+    await page.type(this.products.product.reservePrice, productPrice + 400)
+    await page.type(this.products.product.buyItNowPrice, productPrice + 900)
+    await page.type(this.products.product.auctionDatesFrom, '2022-03-27 23:12')
+    await page.type(this.products.product.auctionDatesTo, '2022-03-31 23:13')
+
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'Auction_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+  },
+
+  async addBookingProduct(productName, productPrice, categoryName, vendor) {
+    await base.hover(this.aDashboard.products)
+    await base.click(this.products.addNewMenu)
+
+    // add new booking product
+    await page.select(this.products.product.productType, 'booking')
+    await page.select(this.products.product.bookingDurationType, 'customer')
+    // await page.waitForTimeout(2000)
+    await base.clearAndType(this.products.product.bookingDurationMax, '7')
+    await page.select(this.products.product.calendarDisplayMode, 'always_visible')
+
+    //availability
+    // await base.click(this.products.product.availability)
+
+    //costs
+    await page.click(this.products.product.bookingCosts)
+    await page.waitForTimeout(1000)
+    await base.clearAndType(this.products.product.baseCost, productPrice)
+    await base.clearAndType(this.products.product.blockCost, '20')
+
+
+    //category
+    await base.clickXpath(this.products.product.category(categoryName))
+    //vendor
+    // await base.selectByText(this.products.product.vendor, vendor)//TODO: replace below line with this
+    await base.selectOptionByText(this.products.product.vendor, this.products.product.vendorOptions, vendor)
+    // name
+    await page.type(this.products.product.productName, 'booking_' + productName) // TODO: publish element is blocked by other element that's why name is filled later
+    //publish
+    await base.click(this.products.product.publish)
+    await page.waitForTimeout(2000)
+
+    let productCreateSuccessMessage = await base.getSelectorText(this.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch('Product published. ')
+  },
+
+
+
+
+
+
+
+
   // async adminApproveWholesaleRequest(customer) {
-
   //   await page.click(this.dokan)
-  //   await page.waitForTimeout(2000)
   //   await page.click(this.wholesaleCustomer)
-  //   await page.waitForTimeout(10000)
   //   await page.click(this.wholesaleCustomerSlider(customer))
-
-
-  //   // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-  //   // // await wp.createNewPost()
-
-  //   // await wp.activatePlugin('http://wordpress.org/plugins/hello-dolly/')
-  //   // // await page.waitForTimeout(20000) // TODO: add page load complete to remove this line
-  //   // // clickButton('Posts')
-  //   // await wp.clickMenuItem('Posts')
-  //   // // await page.waitForTimeout(2000) // TODO: add page load complete to remove this line
-  //   // // clickMenuItem('Wholesale Customer')
-  //   // // await page.waitForTimeout(2000) // TODO: add page load complete to remove this line
-  //   // // await page.waitForTimeout(4000) // TODO: add page load complete to remove this line
-
   // },
 
 
