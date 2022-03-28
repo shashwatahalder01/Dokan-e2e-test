@@ -74,6 +74,14 @@ module.exports = {
         }
     },
 
+    async waitForSelector(selector) {
+        if (selector.startsWith('//')) {
+            await page.waitForXPath(selector)
+        } else {
+            await page.waitForSelector(selector)
+        }
+    },
+
     async waitVisibleAndClick(selector) {
         await page.waitForSelector(selector, { visible: true })
         await page.click(selector)
@@ -180,10 +188,19 @@ module.exports = {
 
     // get text
     async getSelectorText(selector) {
-        let text = await page.$eval(selector, (element) => element.textContent)
-        // let text =  await page.$eval(this.label, el => el.innerText)
-        // console.log(text)
-        return text
+        if (selector.startsWith('//')) {
+            await page.waitForXPath(selector)
+            let [element] = await page.$x(selector)
+            let text =  element.textContent //TODO: don't work need to update
+            // console.log(text)
+            return text
+        } else {
+            await page.waitForSelector(selector)
+            let text = await page.$eval(selector, (element) => element.textContent)
+            // let text =  await page.$eval(this.label, el => el.innerText)
+            // console.log(text)
+            return text
+        }
     },
 
     // get element text
@@ -304,6 +321,11 @@ module.exports = {
         await page.$eval(selector, el => el.value = '')
     },
 
+    async type(selector, value){
+        let [element] = await page.$x(selector)
+        await element.type(value)
+    },
+
     // clear input field and type
     async clearAndType(selector, value) {
         await page.$eval(selector, el => el.value = '')
@@ -329,6 +351,39 @@ module.exports = {
         // await page2.bringToFront() 
         // const page = page2
     },
+
+
+    // iframe
+    async switchToIframe(selector) {
+        await page.waitForSelector(selector)
+        const frameHandle = await page.$(selector)
+        const iframe = await frameHandle.contentFrame()
+        return iframe
+      },
+    
+      async iframeClearAndType(iframe, selector, value) {
+        await iframe.$eval(selector, el => el.textContent = '')
+        // await iframe.$eval(selector, el => el.value = '')
+        await iframe.type(selector, value)
+    
+      },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     async checkPHPError() {
         // let pageContent = await page.content()
@@ -381,6 +436,31 @@ module.exports = {
     }
 
     //TODO: add function for grab console error
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
     // // get Title of a page
