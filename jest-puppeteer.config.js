@@ -4,12 +4,12 @@ module.exports = {
     // slowMo: 250, // slow down by 250ms
     // slowMo: 200, // slow down by 250ms
     // slowMo: 150, // slow down by 250ms
-    // slowMo: 100, // slow down by 250ms
-    // slowMo: 50, // slow down by 250ms
-    // slowMo: 40, // slow down by 250ms
-    slowMo: 30, // slow down by 250ms
-    // slowMo: 20, // slow down by 250ms
-    // slowMo: 10, // slow down by 250ms
+    // slowMo: 100, // slow down by 10000ms
+    // slowMo: 50, // slow down by 5000ms
+    // slowMo: 40, // slow down by 40000ms
+    slowMo: 30, // slow down by 30000s
+    // slowMo: 20, // slow down by 20000ms
+    // slowMo: 10, // slow down by 10000ms
 
     // headless: process.env.HEADLESS !== 'false',
     // slowMo: process.env.SLOWMO ? process.env.SLOWMO : 0,
