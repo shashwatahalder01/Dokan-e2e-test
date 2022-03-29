@@ -8,7 +8,8 @@
     "./wp-content/plugins/woocommerce/",
     "./wp-content/plugins/woocommerce-bookings/",
     "./wp-content/plugins/woocommerce-product-addons/",
-    "./wp-content/plugins/woocommerce-subscriptions/"
+    "./wp-content/plugins/woocommerce-subscriptions/",
+    "./wp-content/plugins/woocommerce-simple-auctions/"
 
   ],
   "themes": [

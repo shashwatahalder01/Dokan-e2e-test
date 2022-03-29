@@ -1,5 +1,6 @@
-const { createURL } = require("@wordpress/e2e-test-utils");
-const base = require("../pages/base.js");
+const { createURL } = require("@wordpress/e2e-test-utils")
+const base = require("../pages/base.js")
+const helper = require("../../e2e/utils/helpers.js")
 
 module.exports = {
     // locators
@@ -127,7 +128,8 @@ module.exports = {
         productScheduleTo: ".dokan-end-date",
         productScheduleCancel: ".cancel_sale_schedule.dokan-hide",
         productCategory: "#select2-product_cat-container",
-        productCategoryValues: ".select2-results ul li",  // TODO: create dropdown locator like this (ul > li or ul li)
+        productCategoryInput: ".select2-search--dropdown > .select2-search__field",
+        productCategoryValues: ".select2-results ul li",
         productTags: '.select2-search__field',
         productDescription: 'textarea[placeholder="Enter some short description about this product..."]',
         createProduct: "#dokan-create-new-product-btn",
@@ -410,6 +412,7 @@ module.exports = {
     vWithdraw: {
         // manual withdraw request
         minimumWithdrawAmount: "bdi",
+        balance: "//p[contains(text(),'Your Balance:')]//a//span[@class='woocommerce-Price-amount amount']",
         requestWithdraw: "#dokan-request-withdraw-button",
         withdrawAmount: "#withdraw-amount",
         withdrawMethod: "#withdraw-method",
@@ -436,17 +439,9 @@ module.exports = {
         withdrawDashboard: ".dokan-btn:nth-child(2)",
 
         //default payment methods
-        payPalMakeDefault: "//strong[contains( text(), 'PayPal')]//..//..//button",
-        bankTransferMakeDefault: "//strong[contains( text(), 'Bank Transfer')]//..//..//button",
-        // customMethodMakeDefault(methodName) { return `//strong[contains( text(), '${methodName}')]//..//..//button`},
-        customMethodMakeDefault: (methodName) => `//strong[contains( text(), '${methodName}')]//..//..//button`,
-        skrillMakeDefault: "//strong[contains( text(), 'Skrill')]//..//..//button",
+        customMethodMakeDefault: (methodName) => `//strong[contains( text(), '${methodName}')]/../..//button[contains(@class, 'dokan-btn')]`,
         //default payment setup links
-        payPalSetup: "//strong[contains( text(), 'PayPal')]//..//..//button",
-        bankTransferSetup: "//strong[contains( text(), 'Bank Transfer')]//..//..//button",
-        // customMethodSetup(methodName) { return `//strong[contains( text(), '${methodName}')]//..//..//button`},
-        customMethodSetup: (methodName) => `//strong[contains( text(), '${methodName}')]//..//..//button`,
-        skrillSetup: "//strong[contains( text(), 'Skrill')]//..//..//button",
+        customMethodSetup: (methodName) => `//strong[contains( text(), '${methodName}')]/../..//a[@class='dokan-btn']`,
     },
 
     //return request
@@ -888,13 +883,12 @@ module.exports = {
         // uploadBanner: "#\\__wp-uploader-id-1",
         profilePicture: ".dokan-pro-gravatar-drag",
         // uploadProfilePicture: "#\\__wp-uploader-id-4",
-
-        // selectFiles: "//div[@style='position: relative;']//button[@class='browser button button-hero']",
-        selectFiles: "//div[@style='position: relative;']//button[contains(text(),'Select Files')]",
-        // selectAndCrop: "//div[@style='position: relative;']//button[@class='button media-button button-primary button-large media-button-select']",
-        selectAndCrop: "//div[@style='position: relative;']//button[contains(text(),'Select and Crop')]",
-        // cropImage: "//div[@style='position: relative;']//button[@class='button media-button button-primary button-large media-button-insert']",
-        cropImage: "//div[@style='position: relative;']//button[contains(text(),'Crop image')]",
+        // selectFiles: "//div[@style='position: relative']//button[@class='browser button button-hero']",
+        selectFiles: "//div[@style='position: relative']//button[contains(text(),'Select Files')]",
+        // selectAndCrop: "//div[@style='position: relative']//button[@class='button media-button button-primary button-large media-button-select']",
+        selectAndCrop: "//div[@style='position: relative']//button[contains(text(),'Select and Crop')]",
+        // cropImage: "//div[@style='position: relative']//button[@class='button media-button button-primary button-large media-button-insert']",
+        cropImage: "//div[@style='position: relative']//button[contains(text(),'Crop image')]",
 
         storeName: "#dokan_store_name",
         storeProductsPerPage: "#dokan_store_ppp",
@@ -1281,139 +1275,234 @@ module.exports = {
 
     // methods
 
+
+
+    //-------------------------------------------------- navigation ---------------------------------------------------//
+
+
+
     async goToVendorDashboard() {
         await page.goto(createURL('dashboard'))
 
-        let dashboardIsVisible = await base.isVisible(page, this.vDashboard.dashboard)
-        expect(dashboardIsVisible).toBe(true)
-
+        const url = await page.url()
+        expect(url).toMatch('dashboard')
     },
 
+    //-------------------------------------------------- setup wizard ---------------------------------------------------//
+
     // async vendorSetupWizard(storeProductsPerPage, street, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment) {
-    //     await page.click(this.vSetup.letsGo);
-    //     // await page.waitForTimeout(3000);
+    //     await page.click(this.vSetup.letsGo)
+    //     // await page.waitForTimeout(3000)
 
-    //     await page.type(this.vSetup.storeProductsPerPage, storeProductsPerPage);
-    //     await page.type(this.vSetup.street, street);
-    //     await page.type(this.vSetup.street2, street2);
-    //     await page.type(this.vSetup.city, city);
-    //     await page.type(this.vSetup.zipCode, zipCode);
-    //     await page.type(this.vSetup.state, state);
-    //     await page.click(this.vSetup.country);
-    //     await page.type(this.vSetup.countryInput, country);
-    //     await page.click(this.vSetup.email);
-    //     await page.click(this.vSetup.continueStoreSetup);
-    //     // await page.waitForTimeout(3000);
+    //     await page.type(this.vSetup.storeProductsPerPage, storeProductsPerPage)
+    //     await page.type(this.vSetup.street, street)
+    //     await page.type(this.vSetup.street2, street2)
+    //     await page.type(this.vSetup.city, city)
+    //     await page.type(this.vSetup.zipCode, zipCode)
+    //     await page.type(this.vSetup.state, state)
+    //     await page.click(this.vSetup.country)
+    //     await page.type(this.vSetup.countryInput, country)
+    //     await page.click(this.vSetup.email)
+    //     await page.click(this.vSetup.continueStoreSetup)
+    //     // await page.waitForTimeout(3000)
 
 
-    //     await page.type(this.vSetup.paypal, paypal);
-    //     await page.type(this.vSetup.bankAccountName, bankAccountName);
-    //     await page.type(this.vSetup.bankAccountNumber, bankAccountNumber);
-    //     await page.type(this.vSetup.bankName, bankName);
-    //     await page.type(this.vSetup.bankAddress, bankAddress);
-    //     await page.type(this.vSetup.bankRoutingNumber, bankRoutingNumber);
-    //     await page.type(this.vSetup.bankIban, bankIban);
-    //     await page.type(this.vSetup.bankSwiftCode, bankSwiftCode);
+    //     await page.type(this.vSetup.paypal, paypal)
+    //     await page.type(this.vSetup.bankAccountName, bankAccountName)
+    //     await page.type(this.vSetup.bankAccountNumber, bankAccountNumber)
+    //     await page.type(this.vSetup.bankName, bankName)
+    //     await page.type(this.vSetup.bankAddress, bankAddress)
+    //     await page.type(this.vSetup.bankRoutingNumber, bankRoutingNumber)
+    //     await page.type(this.vSetup.bankIban, bankIban)
+    //     await page.type(this.vSetup.bankSwiftCode, bankSwiftCode)
 
-    //     await page.type(this.vSetup.customPayment, customPayment);
+    //     await page.type(this.vSetup.customPayment, customPayment)
 
     //     // TODO: stripe connect
     //     // TODO: paypal marketplace
-    //     await page.click(this.vSetup.continuePaymentSetup);
-    //     // await page.waitForTimeout(3000);
+    //     await page.click(this.vSetup.continuePaymentSetup)
+    //     // await page.waitForTimeout(3000)
 
-    //     await page.click(this.vSetup.goToStoreDashboard);
-    //     // await page.waitForTimeout(5000);
+    //     await page.click(this.vSetup.goToStoreDashboard)
+    //     // await page.waitForTimeout(5000)
 
     // },
 
 
 
-    //products
-    //vendor create product
-    async addProduct(productName, productPrice, category) {
-        await base.click(this.vDashboard.products);
-        await page.click(this.product.addNewProduct);
-        await page.type(this.product.productName, productName);
-        await page.type(this.product.productPrice, productPrice);
-        await page.click(this.product.productCategory);
-        // await base.getMultipleElementTexts(this.product.productCategoryValues)
-        await base.setDropdownOptionSpan(this.product.productCategoryValues, category)
+    //-------------------------------------------------- products ---------------------------------------------------//
+
+
+
+    //vendor add product
+    async addSimpleProduct(productName, productPrice, category) {
+        await base.click(this.vDashboard.products)
+        await page.click(this.product.addNewProduct)
+        await page.type(this.product.productName, productName)
+        await page.type(this.product.productPrice, productPrice)
+        await page.click(this.product.productCategory)
+        await page.type(this.product.productCategoryInput, category)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(this.product.productCategoryValues, category)
         await base.click(this.product.createProduct)
 
         let createdProduct = await base.getElementValue(this.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase());
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
     },
-    //coupon
-    //vendor create coupon
+
+    //vendor add auction product
+    async addAuctionProduct(productName, productShortDescription, category, itemCondition, actionType, startPrice, bidIncrement, reservedPrice, buyItNowPrice, auctionStartDate, auctionEndDate) {
+
+        await base.click(this.vDashboard.auction)
+
+        await base.click(this.vAction.addNewActionProduct)
+        await page.type(this.vAction.productName, productName)
+        await page.type(this.vAction.productShortDescription, productShortDescription)
+        await page.click(this.vAction.productCategory)
+        await base.setDropdownOptionSpan(this.vAction.productCategoryValues, category)
+        await page.select(this.vAction.itemCondition, itemCondition)
+        await page.select(this.vAction.actionType, actionType)
+        await page.type(this.vAction.startPrice, startPrice)
+        await page.type(this.vAction.bidIncrement, bidIncrement)
+        await page.type(this.vAction.reservedPrice, reservedPrice)
+        await page.type(this.vAction.buyItNowPrice, buyItNowPrice)
+        await page.type(this.vAction.auctionStartDate, auctionStartDate)
+        await page.type(this.vAction.auctionEndDate, auctionEndDate)
+        await page.click(this.vAction.addAuctionProduct)
+
+    },
+
+    //vendor add booking product
+    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
+        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit,
+        baseCost, blockCost) {
+
+        await page.type(this.vBooking.productName, productName)
+        await page.click(this.vBooking.category)
+        await base.setDropdownOptionSpan(this.vBooking.categoryValues, category)
+
+        // general Booking options
+        await page.select(this.vBooking.bookingDurationType, bookingDurationType)
+        await page.type(this.vBooking.bookingDuration, bookingDuration)
+        await page.select(this.vBooking.bookingDurationUnit, bookingDurationUnit)
+
+        await page.select(this.vBooking.calenderDisplayMode, calenderDisplayMode)
+        await page.select(this.vBooking.enableCalendarRangePicker, enableCalendarRangePicker)
+
+        //availability
+        await page.type(this.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
+        await page.type(this.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
+        await page.select(this.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
+        await page.type(this.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
+        await page.select(this.vBooking.maximumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDateUnit)
+
+        //costs
+        await page.type(this.vBooking.baseCost, baseCost)
+        await page.type(this.vBooking.blockCost, blockCost)
+
+        await base.click(this.vBooking.saveProduct)
+
+    },
+
+    async searchSimilarProduct(productName) {
+        await page.click(this.vSearchSimilarProduct.search)
+        await page.type(this.SearchSimilarProduct.search, productName)
+        await base.click(this.vSearchSimilarProduct.search)
+        await page.click(this.vSearchSimilarProduct.search)
+    },
+
+
+
+    //-------------------------------------------------- coupons ---------------------------------------------------//
+
+
+
+    //vendor add coupon
     async addCoupon(couponTitle, couponAmount) {
-        await base.click(this.vDashboard.coupons);
-        await base.click(this.vCoupon.addNewCoupon);
-        await page.type(this.vCoupon.couponTitle, couponTitle);
-        await page.type(this.vCoupon.amount, couponAmount);
-        await page.click(this.vCoupon.selectAll);
-        await page.click(this.vCoupon.applyForNewProducts);
-        await page.click(this.vCoupon.showOnStore);
-        await base.click(this.vCoupon.createCoupon);
+        await base.click(this.vDashboard.coupons)
+        await base.click(this.vCoupon.addNewCoupon)
+        await page.type(this.vCoupon.couponTitle, couponTitle)
+        await page.type(this.vCoupon.amount, couponAmount)
+        await page.click(this.vCoupon.selectAll)
+        await page.click(this.vCoupon.applyForNewProducts)
+        await page.click(this.vCoupon.showOnStore)
+        await base.click(this.vCoupon.createCoupon)
 
         let createdCoupon = await base.getElementText(this.vCoupon.createdCoupon)
-        expect(createdCoupon.toLowerCase()).toBe(couponTitle.toLowerCase());
+        expect(createdCoupon.toLowerCase()).toBe(couponTitle.toLowerCase())
     },
 
-    //withdraw
+
+
+    //-------------------------------------------------- withdraw ---------------------------------------------------//
+
+
+
     //vendor request withdraw 
     async requestWithdraw(withdrawAmount, withdrawMethod) {
-        await base.click(this.vDashboard.withdraw);
+        await base.click(this.vDashboard.withdraw)
         let minimumWithdrawAmount = await base.getElementText(this.vWithdraw.minimumWithdrawAmount)
         minimumWithdrawAmount = minimumWithdrawAmount.replace('$', '')
         // console.log(minimumWithdrawAmount)
-        await page.click(this.vWithdraw.requestWithdraw);
-        let balance = await base.getValue(this.vWithdraw.withdrawAmount)
-        if (Number(balance) > Number(minimumWithdrawAmount)) {
-            await page.type(this.vWithdraw.withdrawAmount, minimumWithdrawAmount);
-            // await base.setDropdownOption(this.withdraw.withdrawMethod, withdrawMethod);
-            await base.click(this.vWithdraw.submitRequest);
-        }
-        //TODO: handle else condition
-        // await base.reload()
-        let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
-        expect(canRequestIsVisible).toBe(true)
+        let balance = await base.getElementText(this.vWithdraw.balance)
+        balance = balance.replace('$', '')
+        // console.log(balance)
 
+        try {
+            if (Number(balance) > Number(minimumWithdrawAmount)) {
+                await page.click(this.vWithdraw.requestWithdraw)
+                await page.type(this.vWithdraw.withdrawAmount, minimumWithdrawAmount)
+                // await base.setDropdownOption(this.withdraw.withdrawMethod, withdrawMethod)
+                await base.click(this.vWithdraw.submitRequest)
+
+                let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
+                expect(canRequestIsVisible).toBe(true)
+
+            } else {
+                throw "Vendor balance is less than minimum withdraw amount"
+            }
+        } catch (err) {
+            console.log(err)
+        }
     },
 
+    //vendor cancel withdraw request
     async cancelRequestWithdraw() {
-        await base.click(this.vDashboard.withdraw);
-        await page.click(this.vWithdraw.cancelRequest);
+        await base.click(this.vDashboard.withdraw)
+        await page.click(this.vWithdraw.cancelRequest)
 
         let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
         expect(canRequestIsVisible).toBe(false)
 
     },
 
+    //vendor add auto withdraw disbursement schedule
     async addAutoWithdrawDisbursementSchedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
-        await base.click(this.vDashboard.withdraw);
-        await page.click(this.vWithdraw.editSchedule);
+        await base.click(this.vDashboard.withdraw)
+        await page.click(this.vWithdraw.editSchedule)
         await page.select(this.vWithdraw.preferredPaymentMethod, preferredPaymentMethod)
-        await page.click(this.vWithdraw[preferredSchedule]);
+        await page.click(this.vWithdraw[preferredSchedule])
         // let length = await base.getCount(this.withdraw.onlyWhenBalanceIs)
         await page.select(this.vWithdraw.onlyWhenBalanceIs, minimumWithdrawAmount)
         await page.select(this.vWithdraw.maintainAReserveBalance, reserveBalance)
-        await page.click(this.vWithdraw.changeSchedule);
-        // await page.waitForTimeout(5000)
+        await page.click(this.vWithdraw.changeSchedule)
     },
 
-    // async addDefaultWithdrawPaymentMethods(preferredSchedule) {
-    //     // TODO : locator issue
-    //     await base.click(this.vDashboard.withdraw);
-    //     // let a = page.$(this.vWithdraw.bankTransferSetup)
-    //     // a.click()
-    //     // await page.waitForXPath(this.vWithdraw.customMethodSetup('qwerty'));
-    //     // await page.hover(this.vWithdraw.customMethodSetup('qwerty'));
-    //     // await page.click(this.vWithdraw.customMethodSetup('qwerty'));
-    //     // await page.waitForTimeout(5000);
-    // },
+    // vendor add default withdraw payment methods
+    async addDefaultWithdrawPaymentMethods(preferredSchedule) {
+        // TODO : locator issue
+        await base.click(this.vDashboard.withdraw)
+        await base.click(this.vWithdraw.customMethodMakeDefault(preferredSchedule))
+        // await base.click(this.vWithdraw.customMethodSetup(preferredSchedule))
+        await page.waitForTimeout(5000)
+    },
 
 
+    //-------------------------------------------------- vendor settings ---------------------------------------------------//
+
+
+
+    //vendor set store settings
     async setStoreSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
         companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimumOrderAmount, percentage, supportButtonText,
         minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder
@@ -1423,93 +1512,95 @@ module.exports = {
         // await base.click(this.vSettings.store)
 
 
-        // await page.click(this.vStoreSettings.banner)
-        // await page.click(this.vStoreSettings.banner)
-        // await page.waitForTimeout(6000)
-        // await base.clickXpath(this.vStoreSettings.selectFiles)
-        // await base.uploadImage(this.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avatar.png')
-        // await page.waitForTimeout(6000)
+        await page.click(this.vStoreSettings.banner)
+        await page.click(this.vStoreSettings.banner)
+        await page.waitForTimeout(6000)
+        await base.clickXpath(this.vStoreSettings.selectFiles)
+        await base.uploadImage(this.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avatar.png')
+        await page.waitForTimeout(6000)
 
-        // const [fileChooser] = await Promise.all([ page.waitForFileChooser(),base.clickXpath1(this.vStoreSettings.selectFiles)])
-        // await fileChooser.accept(['/Users/rk/Automation/Dokan_e2e_test/avatar.png'])
+        const [fileChooser] = await Promise.all([page.waitForFileChooser(), base.clickXpath1(this.vStoreSettings.selectFiles)])
+        await fileChooser.accept(['./tests/e2e/utils/sampleData/avatar.png'])
 
-        // await base.clickXpath(this.vStoreSettings.selectAndCrop)
-        // await base.clickXpath(this.vStoreSettings.cropImage)
+        await base.clickXpath(this.vStoreSettings.selectAndCrop)
+        await base.clickXpath(this.vStoreSettings.cropImage)
 
-        // await page.waitForTimeout(6000)
+        await page.waitForTimeout(6000)
 
-        await base.clearAndType(this.vStoreSettings.storeName, storeName)
-        await base.clearAndType(this.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
-        await base.clearAndType(this.vStoreSettings.phoneNo, phoneNo)
-        //address
-        // await page.click(this.vStoreSettings.multipleLocation)
-        // await page.type(this.vStoreSettings.locationName, locationName)
-        // await page.click(this.vStoreSettings.addLocation)
-        // await page.click(this.vStoreSettings.editLocation)
-        await base.clearAndType(this.vStoreSettings.street, street)
-        await base.clearAndType(this.vStoreSettings.street2, street2)
-        await base.clearAndType(this.vStoreSettings.city, city)
-        await base.clearAndType(this.vStoreSettings.postOrZipCode, postOrZipCode)
-        await page.select(this.vStoreSettings.country, country)
-        await page.select(this.vStoreSettings.state, state)
-        // await page.type(this.vStoreSettings.saveLocation, saveLocation)
-        // await page.click(this.vStoreSettings.saveLocation)
-        // await page.click(this.vStoreSettings.cancelSaveLocation)
-        // await page.click(this.vStoreSettings.deleteSaveLocation)
+        // await base.clearAndType(this.vStoreSettings.storeName, storeName)
+        // await base.clearAndType(this.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
+        // await base.clearAndType(this.vStoreSettings.phoneNo, phoneNo)
+        // //address
+        // // await page.click(this.vStoreSettings.multipleLocation)
+        // // await page.type(this.vStoreSettings.locationName, locationName)
+        // // await page.click(this.vStoreSettings.addLocation)
+        // // await page.click(this.vStoreSettings.editLocation)
+        // await base.clearAndType(this.vStoreSettings.street, street)
+        // await base.clearAndType(this.vStoreSettings.street2, street2)
+        // await base.clearAndType(this.vStoreSettings.city, city)
+        // await base.clearAndType(this.vStoreSettings.postOrZipCode, postOrZipCode)
+        // await page.select(this.vStoreSettings.country, country)
+        // await page.select(this.vStoreSettings.state, state)
+        // // await page.type(this.vStoreSettings.saveLocation, saveLocation)
+        // // await page.click(this.vStoreSettings.saveLocation)
+        // // await page.click(this.vStoreSettings.cancelSaveLocation)
+        // // await page.click(this.vStoreSettings.deleteSaveLocation)
 
-        //company info
-        await base.clearAndType(this.vStoreSettings.companyName, companyName)
-        await base.clearAndType(this.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
-        await base.clearAndType(this.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
-        await base.clearAndType(this.vStoreSettings.nameOfBank, nameOfBank)
-        await base.clearAndType(this.vStoreSettings.bankIban, bankIban)
-        //email
-        // await page.click(this.vStoreSettings.email)
-        // await page.click(this.vStoreSettings.moreProducts)
-        //map
-        // await page.click(this.vStoreSettings.map)
-        // await base.clearAndType(this.vStoreSettings.map, map)
+        // //company info
+        // await base.clearAndType(this.vStoreSettings.companyName, companyName)
+        // await base.clearAndType(this.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
+        // await base.clearAndType(this.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
+        // await base.clearAndType(this.vStoreSettings.nameOfBank, nameOfBank)
+        // await base.clearAndType(this.vStoreSettings.bankIban, bankIban)
+        // //email
+        // // await page.click(this.vStoreSettings.email)
+        // // await page.click(this.vStoreSettings.moreProducts)
+        // //map
+        // // await page.click(this.vStoreSettings.map)
+        // // await base.clearAndType(this.vStoreSettings.map, map)
+        // // await page.waitForTimeout(2000)
+        // // await page.click(this.vStoreSettings.map1)
+        // // await page.click(this.vStoreSettings.mapFirstResult)
+        // //store opening closing time
+        // //vacation
+
+        // //discount
+        // await page.click(this.vStoreSettings.enableStoreWideDiscount)
+        // await base.clearAndType(this.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
+        // await base.clearAndType(this.vStoreSettings.percentage, percentage)
+        // //biography
+
+        // //store support
+        // await page.click(this.vStoreSettings.showSupportButtonInStore)
+        // await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
+        // await page.click(this.vStoreSettings.showSupportButtonInStore)
+        // await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
+        // await base.clearAndType(this.vStoreSettings.supportButtonText, supportButtonText)
+
+        // // //min-max
+        // // await page.click(this.vStoreSettings.enableMinMaxQuantities)
+        // // await base.clearAndType(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
+        // // await base.clearAndType(this.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
+        // // await page.click(this.vStoreSettings.enableMinMaxAmount)
+        // // await base.clearAndType(this.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
+        // // await base.clearAndType(this.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
+        // // await page.click(this.vStoreSettings.selectAll)
+
+        // //update settings
+        // await page.click(this.vStoreSettings.updateSettings)
         // await page.waitForTimeout(2000)
-        // await page.click(this.vStoreSettings.map1)
-        // await page.click(this.vStoreSettings.mapFirstResult)
-        //store opening closing time
-        //vacation
 
-        //discount
-        await page.click(this.vStoreSettings.enableStoreWideDiscount)
-        await base.clearAndType(this.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
-        await base.clearAndType(this.vStoreSettings.percentage, percentage)
-        //biography
-
-        //store support
-        await page.click(this.vStoreSettings.showSupportButtonInStore)
-        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
-        await page.click(this.vStoreSettings.showSupportButtonInStore)
-        await page.click(this.vStoreSettings.showSupportButtonInSingleProduct)
-        await base.clearAndType(this.vStoreSettings.supportButtonText, supportButtonText)
-
-        // //min-max
-        // await page.click(this.vStoreSettings.enableMinMaxQuantities)
-        // await base.clearAndType(this.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
-        // await base.clearAndType(this.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
-        // await page.click(this.vStoreSettings.enableMinMaxAmount)
-        // await base.clearAndType(this.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
-        // await base.clearAndType(this.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
-        // await page.click(this.vStoreSettings.selectAll)
-
-        //update settings
-        await page.click(this.vStoreSettings.updateSettings)
-        await page.waitForTimeout(2000)
-
-        let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        // let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
+        // expect(successMessage).toMatch('Your information has been saved successfully')
 
     },
 
+    //vendor set addon settings
     async setAddonSettings() {
 
     },
 
+    //vendor set payment settings
     async setPaymentSettings() {
 
         await base.click(this.vDashboard.settings)
@@ -1565,47 +1656,50 @@ module.exports = {
 
     },
 
+    //vendor set verification settings
     async setVerificationSettings() {
 
     },
 
 
-
+    //vendor set delivery settings
     async setDeliveryTimeSettings() {
 
     },
 
+    //vendor set shipping settings
     async setShippingSettings() {
 
     },
 
+    //vendor set social profile settings
     async setSocialProfile(url) {
         await base.click(this.vDashboard.settings)
         await base.click(this.vSettings.socialProfile)
 
-        await page.type(this.vSocialProfileSettings.facebook, url);
-        await page.type(this.vSocialProfileSettings.twitter, url);
-        await page.type(this.vSocialProfileSettings.pinterest, url);
-        await page.type(this.vSocialProfileSettings.linkedin, url);
-        await page.type(this.vSocialProfileSettings.youtube, url);
-        await page.type(this.vSocialProfileSettings.instagram, url);
-        await page.type(this.vSocialProfileSettings.flicker, url);
-        await page.click(this.vSocialProfileSettings.updateSettings);
-        await page.waitForTimeout(6000)
+        await base.clearAndType(this.vSocialProfileSettings.facebook, url)
+        await base.clearAndType(this.vSocialProfileSettings.twitter, url)
+        await base.clearAndType(this.vSocialProfileSettings.pinterest, url)
+        await base.clearAndType(this.vSocialProfileSettings.linkedin, url)
+        await base.clearAndType(this.vSocialProfileSettings.youtube, url)
+        await base.clearAndType(this.vSocialProfileSettings.instagram, url)
+        await base.clearAndType(this.vSocialProfileSettings.flicker, url)
+        await base.click(this.vSocialProfileSettings.updateSettings)
 
         let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
         expect(successMessage).toBe('Your information has been saved successfully')
     },
 
+    //vendor set rma settings
     async setRmaSettings(label, type, length, lengthValue, lengthDuration) {
         await base.click(this.vDashboard.settings)
         await base.click(this.vSettings.rma)
 
-        await base.clearAndType(this.vRmaSettings.label, label);
-        await page.select(this.vRmaSettings.type, type);
-        await page.select(this.vRmaSettings.length, length);
-        await base.clearAndType(this.vRmaSettings.lengthValue, lengthValue);
-        await page.select(this.vRmaSettings.lengthDuration, lengthDuration);
+        await base.clearAndType(this.vRmaSettings.label, label)
+        await page.select(this.vRmaSettings.type, type)
+        await page.select(this.vRmaSettings.length, length)
+        await base.clearAndType(this.vRmaSettings.lengthValue, lengthValue)
+        await page.select(this.vRmaSettings.lengthDuration, lengthDuration)
         await base.click(this.vSettings.saveChanges)
 
         let successMessage = await base.getSelectorText(this.vRmaSettings.updateSettingsSuccessMessage)
@@ -1613,65 +1707,7 @@ module.exports = {
 
     },
 
-    async addAuctionProduct(productName, productShortDescription, category, itemCondition, actionType, startPrice, bidIncrement, reservedPrice, buyItNowPrice, auctionStartDate, auctionEndDate) {
-
-        await base.click(this.vDashboard.auction)
-
-        await base.click(this.vAction.addNewActionProduct)
-        await page.type(this.vAction.productName, productName)
-        await page.type(this.vAction.productShortDescription, productShortDescription)
-        await page.click(this.vAction.productCategory);
-        await base.setDropdownOptionSpan(this.vAction.productCategoryValues, category)
-        await page.select(this.vAction.itemCondition, itemCondition)
-        await page.select(this.vAction.actionType, actionType)
-        await page.type(this.vAction.startPrice, startPrice)
-        await page.type(this.vAction.bidIncrement, bidIncrement)
-        await page.type(this.vAction.reservedPrice, reservedPrice)
-        await page.type(this.vAction.buyItNowPrice, buyItNowPrice)
-        await page.type(this.vAction.auctionStartDate, auctionStartDate)
-        await page.type(this.vAction.auctionEndDate, auctionEndDate)
-        await page.click(this.vAction.addAuctionProduct)
-
-    },
-
-    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
-        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit,
-        baseCost, blockCost) {
-
-        await page.type(this.vBooking.productName, productName)
-        await page.click(this.vBooking.category);
-        await base.setDropdownOptionSpan(this.vBooking.categoryValues, category)
-
-        // general Booking options
-        await page.select(this.vBooking.bookingDurationType, bookingDurationType)
-        await page.type(this.vBooking.bookingDuration, bookingDuration)
-        await page.select(this.vBooking.bookingDurationUnit, bookingDurationUnit)
-
-        await page.select(this.vBooking.calenderDisplayMode, calenderDisplayMode)
-        await page.select(this.vBooking.enableCalendarRangePicker, enableCalendarRangePicker)
-
-        //availability
-        await page.type(this.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
-        await page.type(this.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
-        await page.select(this.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
-        await page.type(this.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
-        await page.select(this.vBooking.maximumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDateUnit)
-
-        //costs
-        await page.type(this.vBooking.baseCost, baseCost)
-        await page.type(this.vBooking.blockCost, blockCost)
-
-        await base.click(this.vBooking.saveProduct)
-
-    },
-
-    async searchSimilarProduct(productName) {
-        await page.click(this.vSearchSimilarProduct.search)
-        await page.type(this.SearchSimilarProduct.search, productName)
-        await base.click(this.vSearchSimilarProduct.search)
-        await page.click(this.vSearchSimilarProduct.search)
-    },
-
+    //vendor add vendor details
     async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
         await base.clearAndType(this.vendorDetails.firstName, firstName)
         await base.clearAndType(this.vendorDetails.lastName, lastName)
@@ -1683,4 +1719,4 @@ module.exports = {
 
     },
 
-};
+}

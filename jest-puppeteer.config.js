@@ -35,7 +35,7 @@ module.exports = {
     // defaultViewport: '1120x1680', //  viewport for each page. Defaults to an 800x600 viewport.  ??
     // width: '100', // page width in pixels.    ??
     // height: '100', // page height in pixels.  ??
-    // timeout: 60000, // timeout in ms //Maximum time in milliseconds to wait for the browser instance to start. Defaults to 30000 (30 seconds). Pass 0 to disable timeout.
+    timeout: 600000, // timeout in ms //Maximum time in milliseconds to wait for the browser instance to start. Defaults to 30000 (30 seconds). Pass 0 to disable timeout.
 
   },
 };

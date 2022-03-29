@@ -127,9 +127,11 @@ const actionType = ['normal', 'reverse']
 
 const vendorInfo = {
    userEmail: faker.internet.email(),
-   password: process.env.VENDOR_PASSWORD,
-   firstName: faker.name.firstName(),
-   lastName: faker.name.lastName(),
+   // password: process.env.VENDOR_PASSWORD,
+   password: 'O1dokan01',
+   firstName: faker.name.firstName('male'),
+   lastName: faker.name.lastName('male'),
+   userName: faker.name.firstName('male'),
    shopName: faker.company.companyName(),
    // shopUrl: faker.company.companyName(),
    companyName: faker.company.companyName(),
@@ -137,7 +139,20 @@ const vendorInfo = {
    vatNumber: faker.random.alphaNumeric(10),
    bankName: faker.address.state(),
    bankIban: faker.finance.iban(),
-   phone: faker.phone.phoneNumber(),
+   phone: faker.phone.phoneNumber('(###) ###-####'),
+   street1: 'abc street',
+   street2: 'xyz street',
+   country: 'United States (US)',
+   city: 'New York',
+   zipCode: '10006',
+   state: 'New York',
+   accountName: 'accountName',
+   accountNumber: 'accountNumber',
+   bankName: 'bankName',
+   bankAddress: 'bankAddress',
+   routingNumber:'111111111111',
+   swiftCode:'111111111111',
+   iban:'111111111111',
 }
 
 const product = {
@@ -147,7 +162,7 @@ const product = {
 }
 
 const dokanSubscription = {
-   name: faker.random.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium']) + faker.random.alpha({ count: 5, upcase: true }) + '_',
+   name: faker.random.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium']) + '_' + faker.random.alpha({ count: 5, upcase: true }),
    price: faker.commerce.price(),
 }
 
@@ -189,3 +204,9 @@ exports.auctionProduct = auctionProduct;
 // let d= new Date()
 // console.log(d.toLocaleString('en-US',{ dateStyle:'short', timeStyle:'medium'    }));   
 // console.log('tests/e2e/screenshot/phpError'+Date.now()+ '.png')
+
+
+
+// console.log(vendorInfo)
+
+

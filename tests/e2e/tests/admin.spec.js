@@ -4,7 +4,7 @@ const adminPage = require('../pages/admin.js');
 const data = require('../utils/testData.js')
 const timeout = 600000
 
-// jest.retryTimes(3);
+jest.retryTimes(2);
 
 describe('admin functionality test', () => {
 
@@ -23,7 +23,14 @@ describe('admin functionality test', () => {
     //    await browser.close()
     //  });
 
-
+    it('admin can add test settings', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        // await adminPage.setWpSettings()
+        // await adminPage.setWoocommerceSettings()
+        // await adminPage.setPaymentSettings()
+        await adminPage.setDokanSettings()
+    }, timeout);
 
     it('admin can login', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -40,12 +47,12 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.addVendor(data.vendorInfo.firstName, data.vendorInfo.lastName, data.vendorInfo.shopName, data.vendorInfo.phone, data.vendorInfo.userEmail
-            , data.vendorInfo.firstName, '01dokan01', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban,
-            'abc street', 'xyz street', 'New York', '10006', 'United States (US)', 'New York', 'accountName', 'accountNumber', 'bankName',
-            'bankAddress', '111111111111', '1111111111111', '11111111111', data.vendorInfo.userEmail)
+            , data.vendorInfo.userName, data.vendorInfo.password, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban,
+            data.vendorInfo.street1, data.vendorInfo.street2, data.vendorInfo.city, data.vendorInfo.zipCode, data.vendorInfo.country, data.vendorInfo.state, data.vendorInfo.accountName, data.vendorInfo.accountNumber,
+            data.vendorInfo.bankName, data.vendorInfo.bankAddress, data.vendorInfo.routingNumber, data.vendorInfo.swiftCode, data.vendorInfo.iban, data.vendorInfo.userEmail)
 
-    },timeout);
- 
+    }, timeout);
+
     it('admin can add simple product', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
@@ -108,15 +115,6 @@ describe('admin functionality test', () => {
     }, timeout);
 
 
-    it.only('admin can add test settings', async () => {
-        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await loginPage.adminLogin('admin', 'password')
-        // await adminPage.setWpSettings()
-        // await adminPage.setWoocommerceSettings()
-        // await adminPage.setPaymentSettings()
-        await adminPage.setDokanSettings()
-    }, timeout);
-
     //settings
 
     //tax settings
@@ -124,7 +122,7 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
+        // await adminPage.addStandardTaxRate()
     }, timeout);
 
     //shipping settings
@@ -132,7 +130,6 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
     }, timeout);
 
@@ -140,7 +137,6 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
     }, timeout);
 
@@ -148,7 +144,6 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
     }, timeout);
 
@@ -156,15 +151,13 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
     }, timeout);
 
-    it('admin can set  distance rate shipping', async () => {
+    it('admin can set distance rate shipping', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
     }, timeout);
 
@@ -172,7 +165,6 @@ describe('admin functionality test', () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
-        await adminPage.addStandardTaxRate()
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
     }, timeout);
 
@@ -203,14 +195,14 @@ describe('admin functionality test', () => {
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
         await adminPage.setupDokanMangoPay()
-    },timeout);
+    }, timeout);
 
     it('admin can add dokan razorpay payment method', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToWooCommerceSettings()
         await adminPage.setupDokanRazorpay()
-    },timeout);
+    }, timeout);
 
     it('admin can add strip express payment method', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -227,7 +219,7 @@ describe('admin functionality test', () => {
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToDokanSettings()
         await adminPage.setDokanGeneralSettings()
-    }, timeout);   
+    }, timeout);
 
     it('admin can set dokan selling settings', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -276,7 +268,7 @@ describe('admin functionality test', () => {
         await loginPage.adminLogin('admin', 'password')
         await adminPage.goToDokanSettings()
         await adminPage.setDokanWholesaleSettings()
-    }, timeout);    
+    }, timeout);
 
     it('admin can set dokan eu compliance settings', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
@@ -327,11 +319,11 @@ describe('admin functionality test', () => {
         await adminPage.setDokanVendorSubscriptionSettings()
     }, timeout);
 
-    // it('admin approve wholesale request', async () => {
-    //     // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-    //     await loginPage.adminLogin('admin', 'password')
-    //     await adminPage.adminApproveWholesaleRequest('Tamia')
-    // }, timeout);
+    it.skip('admin approve wholesale request', async () => {
+        // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
+        await loginPage.adminLogin('admin', 'password')
+        await adminPage.adminApproveWholesaleRequest('Tamia')
+    }, timeout);
 
 
 

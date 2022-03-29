@@ -48,6 +48,7 @@ module.exports = {
 
     async clickXpath(selector) {
         // await page.waitForXPath(selector)
+        // console.log(selector)
         let [element] = await page.$x(selector)
         await element.click()
     },
@@ -134,8 +135,6 @@ module.exports = {
             return
         }
     },
-
-
 
     async select(selector, value) {
         await page.waitForSelector(selector)
@@ -230,9 +229,11 @@ module.exports = {
     //get element 
     async getElement(selector) {
         if (selector.startsWith('//')) {
+            await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             return element
         } else {
+            await page.waitForSelector(selector)
             let element = await page.$(selector)
             return element
         }
@@ -368,6 +369,12 @@ module.exports = {
     
       },
 
+      // get base url
+      async getBaseUrl() {
+          let url = await page.url()
+        //   return url.match(/^https?:\/\/[^#?\/]+/)[0] //using regex
+          return new URL(url).origin //using Web API's built-in URL
+      },
 
 
 

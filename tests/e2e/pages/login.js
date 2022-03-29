@@ -1,5 +1,7 @@
+const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
-// import { createURL, adminLogin, loginUser, isCurrentURL } from '@wordpress/e2e-test-utils'
+const vendorPage = require("../pages/vendor.js")
+
 
 module.exports = {
 
@@ -111,13 +113,14 @@ module.exports = {
     // async customerLogout() {
     //     await page.click(this.customerLogout)
     // },
-    // async vendorLogout() {
-    //     await vendorPage.goToVendorDashboard()
-    //     await base.click(this.vendorLogout)
 
-    //     let homeIsVisible = await base.isVisible(page, this.home)
-    //     expect(homeIsVisible).toBe(true)
-    // },
+    async vendorLogout() {
+        await vendorPage.goToVendorDashboard()
+        await base.click(this.frontend.vendorLogout)
+
+        let homeIsVisible = await base.isVisible(page, this.frontend.home)
+        expect(homeIsVisible).toBe(true)
+    },
 
     // async switchToAdmin(username, password) {
     //     // await base.openNewTab()
@@ -135,7 +138,7 @@ module.exports = {
     /////////////////////////////////////////  reviewed  ///////////////////////////////////////////////
 
     async login(username, password) {
-        // await this.loginFromWpAdmin('Nannie', '01dokan01')
+        // await this.loginFromWpAdmin('vendor1', '01dokan01')
         // await this.loginFromWpAdmin('customer1', '01dokan01')
         await this.loginFromWPLoginDashboard(username, password)
     },
@@ -148,11 +151,8 @@ module.exports = {
             await page.type(this.admin.password, password)
             await base.click(this.admin.login)
 
-            let homeIsVisible = await base.isVisible(page, this.home)
+            let homeIsVisible = await base.isVisible(page, this.frontend.home)
             expect(homeIsVisible).toBe(true)
-        }
-        else {
-            return
         }
     },
 
@@ -168,15 +168,11 @@ module.exports = {
             let dashboardIsVisible = await base.isVisible(page, this.admin.dashboardMenu)
             expect(dashboardIsVisible).toBe(true)
         }
-        else {
-            return
-        }
     },
 
 
     async adminLogout() {
         await page.hover(this.admin.userMenu)
-        await page.waitForTimeout(1000)
         await base.click(this.admin.logout)
 
         let successMessage = await base.getSelectorText(this.admin.logoutSuccessMessage)
