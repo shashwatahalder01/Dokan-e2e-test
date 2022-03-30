@@ -23,7 +23,7 @@ describe('admin functionality test', () => {
     //    await browser.close()
     //  });
 
-    it('admin can add test settings', async () => {
+    it.skip('admin can add test settings', async () => {
         // await loginPage.adminLogin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogin('admin', 'password')
         // await adminPage.setWpSettings()

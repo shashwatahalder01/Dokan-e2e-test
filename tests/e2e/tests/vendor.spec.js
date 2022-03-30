@@ -41,11 +41,39 @@ it('vendor can logout', async () => {
    await loginPage.vendorLogout() // TODO: shift to vendor page
 },timeout);
 
-it('vendor can add product', async () => {
+it('vendor can add simple product', async () => {
    // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
    await loginPage.login('vendor1', '01dokan01')
    await vendorPage.goToVendorDashboard()
-   await vendorPage.addSimpleProduct(data.product.name, data.product.price, 'Uncategorized')
+   await vendorPage.addSimpleProduct(data.product.name + ('Simple') , data.product.price, 'Uncategorized')
+},timeout);
+
+it('vendor can add variable product', async () => {
+   // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   await loginPage.login('vendor1', '01dokan01')
+   await vendorPage.goToVendorDashboard()
+   await vendorPage.addVariableProduct(data.product.name + '(Variable)', data.product.price, 'Uncategorized','size',['s','l','m'])
+},timeout);
+
+it('vendor can add simple subscription product', async () => {
+   // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   await loginPage.login('vendor1', '01dokan01')
+   await vendorPage.goToVendorDashboard()
+   await vendorPage.addSimpleSubscription(data.product.name + '(Subscription)', data.product.price, 'Uncategorized')
+},timeout);
+
+it('vendor can add variable subscription product', async () => {
+   // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   await loginPage.login('vendor1', '01dokan01')
+   await vendorPage.goToVendorDashboard()
+   await vendorPage.addVariableSubscription(data.product.name + '(Variable subscription)', data.product.price, 'Uncategorized','size',['s','l','m'])
+},timeout);
+
+it('vendor can add external product', async () => {
+   // await loginPage.login(process.env.VENDOR_EMAIL, process.env.VENDOR_PASSWORD)
+   await loginPage.login('vendor1', '01dokan01')
+   await vendorPage.goToVendorDashboard()
+   await vendorPage.addExternalProduct(data.product.name + '(External)', data.product.price, 'Uncategorized')
 },timeout);
 
 it('vendor can add coupon', async () => {
@@ -54,13 +82,13 @@ it('vendor can add coupon', async () => {
    await vendorPage.addCoupon(data.coupon.title, data.coupon.amount)
 },timeout);
 
-it('vendor can request withdraw', async () => {
+it.only('vendor can request withdraw', async () => {
    await loginPage.login('vendor1', '01dokan01')
    await vendorPage.goToVendorDashboard()
    await vendorPage.requestWithdraw()
 },timeout);
 
-it('vendor can cancel request withdraw', async () => {
+it.skip('vendor can cancel request withdraw', async () => {
    await loginPage.login('vendor1', '01dokan01')
    await vendorPage.goToVendorDashboard()
    await vendorPage.cancelRequestWithdraw()
@@ -82,10 +110,10 @@ it.skip('vendor can add default withdraw payment methods ', async () => {
 it.skip('vendor can setup default withdraw payment methods ', async () => {
    await loginPage.login('vendor1', '01dokan01')
    await vendorPage.goToVendorDashboard()
-   await vendorPage.setupefaultWithdrawPaymentMethods('weekly')
+   await vendorPage.setupDefaultWithdrawPaymentMethods('weekly')
 },timeout);
 
-it.only('vendor can set store settings ', async () => {
+it.skip('vendor can set store settings ', async () => {
    // jest.setTimeout(10 * 1000); 
    await loginPage.login('vendor1', '01dokan01')
    await vendorPage.goToVendorDashboard()

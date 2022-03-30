@@ -159,6 +159,17 @@ module.exports = {
         scheduleCancel: ".cancel_sale_schedule",
         category: "#select2-product_cat-container",
         tags: ".select2-search__field",
+        //external product
+        productUrl: '#\\_product_url',
+        buttonText: '#\\_button_text',
+        //simple subscription
+        subscriptionPrice: '#\\_subscription_price',
+        subscriptionPeriodInterval: '#\\_subscription_period_interval',
+        subscriptionPeriod: '#\\_subscription_period',
+        expireAfter: '#\\_subscription_length',
+        signUpFee: '#\\_subscription_sign_up_fee',
+        subscriptionTrialLength: '#\\_subscription_trial_length',
+        subscriptionTrialPeriod: '#\\_subscription_trial_period',
         //description
         shortDescription: "p", //TODO:
         description: "p", //TODO:
@@ -211,22 +222,25 @@ module.exports = {
         upSells: ".content-half-part:nth-child(1) > .select2 .select2-search__field",
         crossSells: ".dokan-section-content > .content-half-part:nth-child(2) .select2-search__field",
         //attribute
-        customAttribute: "#predefined_attribute",
+        customProductAttribute: "#predefined_attribute",
         addAttribute: ".add_new_attribute",
         visibleOnTheProductPage: "checkbox-item:nth-child(6) > input",
-        useForVariation: ".show_if_variable > input",
+        usedForVariations: ".show_if_variable > input",
         selectItems: "dokan-section-content > .content-half-part:nth-child(2) .select2-search__field",
         selectAll: ".plus",
         selectNone: ".minus",
         removeAttribute: ".dokan-product-remove-attribute",
         confirmRemoveAttribute: ".swal2-confirm",
         cancelRemoveAttribute: ".swal2-cancel",
-        saveAttribute: ".dokan-save-attribute",
-        addVariation: "#field_to_edit",
+        saveAttributes: ".dokan-save-attribute",
+        addVariations: "#field_to_edit",
         go: ".do_variation_action",
-        confirmGo: ".do_variation_action",
-        okSuccessAlertGo: ".do_variation_action",
-        cancelGo: ".do_variation_action",
+        confirmGo: ".swal2-confirm",
+        okSuccessAlertGo: ".swal2-confirm",
+        cancelGo: ".swal2-cancel.swal2-styled",
+        variationPrice: ".swal2-popup.swal2-modal.swal2-show .swal2-input",
+        okVariationPrice: ".swal2-confirm",
+        cancelVariationPrice: ".swal2-cancel",
         saveVariationChanges: ".save-variation-changes",
         cancelVariationChanges: ".cancel-variation-changes",
         defaultAttribute: ".dokan-variation-default-select > .dokan-form-control",
@@ -253,7 +267,7 @@ module.exports = {
         minimumAmount: "#min_amount",
         maximumAmount: "#max_amount",
         orderRulesDoNotCount: "#\\_donot_count",
-        CategoryRulesExclude: "#ignore_from_cat",
+        categoryRulesExclude: "#ignore_from_cat",
         //other Options
         productStatus: "#post_status",
         visibility: "#\\_visibility",
@@ -266,6 +280,7 @@ module.exports = {
         cancelAdvertiseThisProduct: ".swal2-cancel",
         // save product
         saveProduct: ".dokan-btn-lg",
+        updatedSuccessMessage: ".dokan-message"
     },
 
     //orders
@@ -1334,20 +1349,187 @@ module.exports = {
 
 
 
-    //vendor add product
+    //vendor add simple product
     async addSimpleProduct(productName, productPrice, category) {
         await base.click(this.vDashboard.products)
+
+        //add new simple product
         await page.click(this.product.addNewProduct)
         await page.type(this.product.productName, productName)
         await page.type(this.product.productPrice, productPrice)
         await page.click(this.product.productCategory)
         await page.type(this.product.productCategoryInput, category)
         await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(this.product.productCategoryValues, category)
         await base.click(this.product.createProduct)
 
         let createdProduct = await base.getElementValue(this.product.title)
         expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+    },
+
+    //vendor add variable product
+    async addVariableProduct(productName, productPrice, category, attribute, attributeTerms) {
+        await base.click(this.vDashboard.products)
+
+        //add new variable product
+        await page.click(this.product.addNewProduct)
+        await page.type(this.product.productName, productName)
+        await page.type(this.product.productPrice, productPrice)
+        await page.click(this.product.productCategory)
+        await page.type(this.product.productCategoryInput, category)
+        await page.keyboard.press('Enter')
+        await base.click(this.product.createProduct)
+
+        let createdProduct = await base.getElementValue(this.product.title)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+
+        //edit product
+        await page.select(this.product.productType, 'variable')
+        //add variation
+        await page.select(this.product.customProductAttribute, `pa_${attribute}`)
+        await page.waitForTimeout(1000)
+        await page.click(this.product.addAttribute)
+        await base.waitForSelector(this.product.selectAll)
+        await page.click(this.product.selectAll)
+        await page.click(this.product.usedForVariations)
+        await base.waitForSelector(this.product.saveAttributes)
+        await page.click(this.product.saveAttributes)
+
+        await base.waitForSelector(this.product.addVariations)
+        await page.select(this.product.addVariations, 'link_all_variations')
+        await page.waitForTimeout(1000)
+        await page.click(this.product.go)
+        await base.waitForSelector(this.product.confirmGo)
+        await page.click(this.product.confirmGo)
+        await page.waitForTimeout(1000)
+        await page.click(this.product.okSuccessAlertGo)
+        await page.waitForTimeout(1000)
+
+        await page.select(this.product.addVariations, 'variable_regular_price')
+        await page.waitForTimeout(1000)
+        await page.click(this.product.go)
+        await base.waitForSelector(this.product.variationPrice)
+        await page.type(this.product.variationPrice, '100')
+        await page.click(this.product.okVariationPrice)
+
+        await base.waitForSelector(this.product.saveProduct)
+        await base.click(this.product.saveProduct)
+        await page.waitForTimeout(1000)
+
+        let productCreateSuccessMessage = await base.getSelectorText(this.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+    },
+
+    //vendor add simple subscription product
+    async addSimpleSubscription(productName, productPrice, category) {
+        await base.click(this.vDashboard.products)
+
+        //add new simple subscription product
+        await page.click(this.product.addNewProduct)
+        await page.type(this.product.productName, productName)
+        await page.type(this.product.productPrice, productPrice)
+        await page.click(this.product.productCategory)
+        await page.type(this.product.productCategoryInput, category)
+        await page.keyboard.press('Enter')
+        await base.click(this.product.createProduct)
+
+        let createdProduct = await base.getElementValue(this.product.title)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+
+        //edit product
+        await page.select(this.product.productType, 'subscription')
+        await page.type(this.product.subscriptionPrice, productPrice)
+        await page.select(this.product.subscriptionPeriodInterval, '1')
+        await page.select(this.product.subscriptionPeriod, 'month')
+        await page.select(this.product.expireAfter, '0')
+        await page.type(this.product.subscriptionTrialLength, '0')
+        await page.select(this.product.subscriptionTrialPeriod, 'day')
+
+        await base.click(this.product.saveProduct)
+
+        let productCreateSuccessMessage = await base.getSelectorText(this.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+    },
+
+    //vendor add variable subscription product
+    async addVariableSubscription(productName, productPrice, category, attribute, attributeTerms) {
+        await base.click(this.vDashboard.products)
+
+        //add new variable subscription product
+        await page.click(this.product.addNewProduct)
+        await page.type(this.product.productName, productName)
+        await page.type(this.product.productPrice, productPrice)
+        await page.click(this.product.productCategory)
+        await page.type(this.product.productCategoryInput, category)
+        await page.keyboard.press('Enter')
+        await base.click(this.product.createProduct)
+
+        let createdProduct = await base.getElementValue(this.product.title)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+
+        //edit product
+        await page.select(this.product.productType, 'variable-subscription')
+        await page.waitForTimeout(1000)
+
+        //add variation
+        await page.select(this.product.customProductAttribute, `pa_${attribute}`)
+        await page.click(this.product.addAttribute)
+        await base.waitForSelector(this.product.selectAll)
+        await page.click(this.product.selectAll)
+        await page.click(this.product.usedForVariations)
+        await base.waitForSelector(this.product.saveAttributes)
+        await page.click(this.product.saveAttributes)
+
+        await base.waitForSelector(this.product.addVariations)
+        await page.select(this.product.addVariations, 'link_all_variations')
+        await page.waitForTimeout(1000)
+        await page.click(this.product.go)
+        await base.waitForSelector(this.product.confirmGo)
+        await page.click(this.product.confirmGo)
+        await page.waitForTimeout(1000)
+        await page.click(this.product.okSuccessAlertGo)
+        await page.waitForTimeout(1000)
+
+        await page.select(this.product.addVariations, 'variable_regular_price')
+        await page.waitForTimeout(1000)
+        await page.click(this.product.go)
+        await base.waitForSelector(this.product.variationPrice)
+        await page.type(this.product.variationPrice, '100')
+        await page.click(this.product.okVariationPrice)
+
+        await base.waitForSelector(this.product.saveProduct)
+        await base.click(this.product.saveProduct)
+        await page.waitForTimeout(1000)
+
+        let productCreateSuccessMessage = await base.getSelectorText(this.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+    },
+
+    //vendor add external product
+    async addExternalProduct(productName, productPrice, category) {
+        await base.click(this.vDashboard.products)
+
+        //add new external product
+        await page.click(this.product.addNewProduct)
+        await page.type(this.product.productName, productName)
+        await page.type(this.product.productPrice, productPrice)
+        await page.click(this.product.productCategory)
+        await page.type(this.product.productCategoryInput, category)
+        await page.keyboard.press('Enter')
+        await base.click(this.product.createProduct)
+
+        let createdProduct = await base.getElementValue(this.product.title)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+
+        //edit product
+        await page.select(this.product.productType, 'external')
+        await page.type(this.product.productUrl, await base.getBaseUrl() + '/shop/uncategorized/subscription_handcrafted-granite-chicken/')
+        await page.type(this.product.buttonText, 'Buy product')
+        await page.type(this.product.price, productPrice)
+
+        await base.click(this.product.saveProduct)
+
+        let productCreateSuccessMessage = await base.getSelectorText(this.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
     },
 
     //vendor add auction product
@@ -1448,21 +1630,19 @@ module.exports = {
         balance = balance.replace('$', '')
         // console.log(balance)
 
+        if (Number(balance) > Number(minimumWithdrawAmount)) {
+            await page.click(this.vWithdraw.requestWithdraw)
+            await page.type(this.vWithdraw.withdrawAmount, minimumWithdrawAmount)
+            // await base.setDropdownOption(this.withdraw.withdrawMethod, withdrawMethod)
+            await base.click(this.vWithdraw.submitRequest)
+        }
         try {
-            if (Number(balance) > Number(minimumWithdrawAmount)) {
-                await page.click(this.vWithdraw.requestWithdraw)
-                await page.type(this.vWithdraw.withdrawAmount, minimumWithdrawAmount)
-                // await base.setDropdownOption(this.withdraw.withdrawMethod, withdrawMethod)
-                await base.click(this.vWithdraw.submitRequest)
+            let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
+            expect(canRequestIsVisible).toBe(true)
 
-                let canRequestIsVisible = await base.isVisible(page, this.vWithdraw.cancelRequest)
-                expect(canRequestIsVisible).toBe(true)
-
-            } else {
-                throw "Vendor balance is less than minimum withdraw amount"
-            }
         } catch (err) {
-            console.log(err)
+            // console.error(err)
+            throw Error("Vendor balance is less than minimum withdraw amount")
         }
     },
 
@@ -1558,7 +1738,7 @@ module.exports = {
         // //map
         // // await page.click(this.vStoreSettings.map)
         // // await base.clearAndType(this.vStoreSettings.map, map)
-        // // await page.waitForTimeout(2000)
+        // // await page.waitForTimeout(1000)
         // // await page.click(this.vStoreSettings.map1)
         // // await page.click(this.vStoreSettings.mapFirstResult)
         // //store opening closing time
@@ -1588,7 +1768,7 @@ module.exports = {
 
         // //update settings
         // await page.click(this.vStoreSettings.updateSettings)
-        // await page.waitForTimeout(2000)
+        // await page.waitForTimeout(1000)
 
         // let successMessage = await base.getSelectorText(this.vSocialProfileSettings.updateSettingsSuccessMessage)
         // expect(successMessage).toMatch('Your information has been saved successfully')

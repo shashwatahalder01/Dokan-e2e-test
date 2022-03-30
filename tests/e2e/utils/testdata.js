@@ -109,9 +109,6 @@ const auctionType = ['normal', 'reverse']
 const bookingDurationType = ['fixed','customer']
 const bookingDurationUnit = ['month', 'day', 'hour', 'minute']
 const calenderDisplayMode = ['','always_visible']
-
-
-
 //vendor
 const withdrawPaymentMethods = ['paypal', 'bank', 'dokan_custom', 'skrill']
 const reserveBalance = ['0', '5', '10', '15', '50', '100', '200', '300', '500', '1000', '2000', '3000', '5000', '10000']
@@ -208,5 +205,7 @@ exports.auctionProduct = auctionProduct;
 
 
 // console.log(vendorInfo)
+
+
 
 

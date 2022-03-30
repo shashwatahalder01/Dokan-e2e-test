@@ -19,4 +19,4 @@
 //TODO: add cleanup function  category attribute shipping method
 //TODO: replace selectOptionByText to selectByText : correct selectByText method
 //TODO: remove waitForTimeout & waitForSelector where possible
-// TODO
+// TODO: add category & attribute before variable product
