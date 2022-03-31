@@ -1,6 +1,6 @@
 //TODO: deleteIfExists() recursion is not working
 //TODO: press enter instead of using a new locator
-//TODO; add press enter in map location in appearance, store  settings, product location
+//TODO add press enter in map location in appearance, store  settings, product location
 //TODO: npm install puppeteer-firefox
 //TODO: Add required necessary steps
 //TODO: remove  timeout
@@ -20,3 +20,12 @@
 //TODO: replace selectOptionByText to selectByText : correct selectByText method
 //TODO: remove waitForTimeout & waitForSelector where possible
 // TODO: add category & attribute before variable product
+//TODO: use jest toThrow or equivalent
+//TODO: add switch user function
+//TODO: product structure deleted wordpress.js, testData, locator.js, demo
+//TODO: global timeout
+//TODO: improve production price , fraction value needed
+//TODO: add reporter
+//TODO: jest detailed errors
+//TODO: grab console errors
+//TODO: shift toMatch with toBe jest expect

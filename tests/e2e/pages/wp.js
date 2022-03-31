@@ -1,40 +1,20 @@
-const base = require("../pages/base.js");
+const base = require("../pages/base.js")
 
 module.exports = {
-
-
-    // data
-    user_databaseName: 'wp',
-    user_name: 'root',
-    user_password: '01shashwata01',
-    user_databaseHost: 'localhost',
-    user_tablePrifix: 'wp_',
-
-    //admin data 
-    user_siteTitle: 'wp_site',
-    user_adminUsername: 'admin',
-    user_admin_password: 'admin',
-    user_admin_email: 'shashwata@wedevs.com',
-
-
-    //plugin_path
-    helloDolloy: 'data/hello-dolly.1.7.2.zip',
-
 
     // locators
 
     continue: '#language-continue',
-    letsgo: '.button.button-large',
+    letsGo: '.button.button-large',
 
     // wp database connect
-    databaseNamae: '#dbname',
+    databaseName: '#dbname',
     username: '#uname',
     password: '#pwd',
     databaseHost: '#dbhost',
     tablePrefix: '#prefix',
     submit: 'input[value="Submit"]',
-
-    // runtheinstallation: '', ?????
+    // runTheInstallation: '',
 
     // admin setup
     siteTitle: '#weblog_title',
@@ -45,12 +25,12 @@ module.exports = {
     searchEngineVisibility: '#blog_public',
     installWordPress: '#submit',
 
-    setup_login: '.button.button-large',
+    setupLogin: '.button.button-large',
 
 
-    // admin signin
-    usernmaorEmail: '#user_login',
-    adminlogin_Password: '#user_pass',
+    // admin signIn
+    userNameOrEmail: '#user_login',
+    adminLoginPassword: '#user_pass',
     rememberme: '#rememberme',
     wp_login: '#wp-submit',
 
@@ -70,14 +50,18 @@ module.exports = {
 
 
     // plugin
+    //plugins menus
+    installedPlugins: '//a[text()="Installed Plugins"]',
 
-    plugin: 'a[class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-plugins"] div[class="wp-menu-name"]',
-    addnew: '.page-title-action',
+    //add new plugins
+    addNew: '.page-title-action',
     searchPlugin: '#search-plugins',
-    uploadPlugin: 'a[role="button"]',
+    uploadPlugin: '.upload',
     chooseFile: '#pluginzip',
     installNow: '#install-plugin-submit',
     activatePlugin: '.button.button-primary',
+    activateCustomPlugin: (plugin) => `//strong[normalize-space()="${plugin}"]/..//div//span[@class="activate"]`,
+
 
     activateCustomPlugin(plugin) {
         return `//strong[normalize-space()="${plugin}"]/..//div//span[@class="activate"]`
@@ -86,7 +70,7 @@ module.exports = {
     // users
     users: 'a[class="wp-has-submenu wp-not-current-submenu menu-top menu-icon-users"] div[class="wp-menu-name"]',
     // users: 'a[class="wp-has-submenu wp-has-current-submenu wp-menu-open menu-top menu-icon-users"] div[class="wp-menu-name"]',
-    addNewusers: 'a[href="user-new.php"]',
+    addNewUsers: 'a[href="user-new.php"]',
     username: '#user_login',
     email: '#email',
     firstName: '#first_name',
@@ -101,60 +85,52 @@ module.exports = {
 
     // methods
     wp_setup() {
-        I.click(this.continue);
-        I.wait(1);
-        I.click(this.letsgo);
-        I.wait(2);
-        I.fillField(this.databaseNamae, this.user_databaseName);
-        I.fillField(this.username, this.user_name);
-        I.fillField(this.password, this.user_password);
-        // I.fillField(this.databaseHost,this.user_databaseHost);
-        // I.fillField(this.tablePrefix,this.user_tablePrifix);
-        I.click(this.submit);
-        I.wait(30)
+        page.click(this.continue)
+        page.click(this.letsGo)
+        page.type(this.databaseName, this.user_databaseName)
+        page.type(this.username, this.user_name)
+        page.type(this.password, this.user_password)
+        // page.type(this.databaseHost,this.user_databaseHost)
+        // page.type(this.tablePrefix,this.user_tablePrifix)
+        page.click(this.submit)
     },
 
     admin_setup() {
-        // I.click(this.continue);
-        // I.wait(1);
-        // I.fillField(this.siteTitle,this.user_siteTitle);
-        // I.fillField(this.adminUsername,this.user_adminUsername);
-        // I.fillField(this.adminPassword,this.user_admin_password);
-        // I.click(this.confirmWeakPassword)
-        // I.fillField(this.user_email,this.user_admin_email);
-        // I.click(this.installWordPress)
-        // I.wait(40)
-        I.click(this.logsetup_loginin)
+        // page.click(this.continue)
+        // page.type(this.siteTitle,this.user_siteTitle)
+        // page.type(this.adminUsername,this.user_adminUsername)
+        // page.type(this.adminPassword,this.user_admin_password)
+        // page.click(this.confirmWeakPassword)
+        // page.type(this.user_email,this.user_admin_email)
+        // page.click(this.installWordPress)
+        page.click(this.setupLogin)
     },
 
     login() {
-        I.amOnPage('/');
-        I.fillField(this.usernmaorEmail, this.user_adminUsername);
-        I.fillField(this.adminlogin_Password, this.user_admin_password);
-        I.click(this.rememberme)
-        I.click(this.wp_login)
+        page.goto('/')
+        page.type(this.userNameOrEmail, this.user_adminUsername)
+        page.type(this.adminLoginPassword, this.user_admin_password)
+        page.click(this.rememberme)
+        page.click(this.wp_login)
 
     },
 
 
-    addRemotePlugin() {
+    addRemotePlugin() { },
 
-    },
     addLocalPlugin() {
-        I.click(this.plugin)
-        // I.click(this.addnew)
-        // I.click(this.uploadPlugin)
-        // I.attachFile(this.chooseFile, this.helloDolloy)
-        // I.click(this.installNow)
-        // I.click(this.activatePlugin)
-        // I.click(this.activateCustomPlugin('Hello Dolly'))
-        I.wait(20)
-
+        page.click(this.plugin)
+        page.click(this.addNew)
+        page.click(this.uploadPlugin)
+        page.attachFile(this.chooseFile, this.helloDolly)
+        page.click(this.installNow)
+        page.click(this.activatePlugin)
+        page.click(this.activateCustomPlugin('Hello Dolly'))
     },
 
-    activateCustomPluggin() {
-        I.click(this.plugin)
-        I.click(this.activateCustomPlugin('Hello Dolly'))
+    activateCustomPlugin() {
+        page.click(this.plugin)
+        page.click(this.activateCustomPlugin('Hello Dolly'))
     },
 
 }

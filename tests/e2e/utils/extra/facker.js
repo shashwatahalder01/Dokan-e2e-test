@@ -1,8 +1,5 @@
 
-const { faker } = require('@faker-js/faker');
-
-
-
+const { faker } = require('@faker-js/faker')
 
 
 const randomFindName = faker.name.findName()
@@ -50,15 +47,6 @@ const randomProductDescription = faker.commerce.productDescription()
 const randomProductAdjective = faker.commerce.productAdjective()
 const randomProductMaterial = faker.commerce.productMaterial()
 
-console.log(randomProduct)
-console.log(randomProductName)
-console.log(randomPrice)
-// console.log(randomProductDescription)
-// console.log(randomProductAdjective)
-// console.log(randomProductMaterial)
-// console.log()
-
-
 
 
 const randomCompanyName = faker.company.companyName()
@@ -74,16 +62,6 @@ const randomNumber = faker.datatype.number({ min: 1000000 })
 const randomUuid = faker.datatype.uuid()
 const randomAlphaNumeric = faker.random.alphaNumeric(10)
 
-// console.log(randomNumber)
-// console.log(randomUuid)
-// console.log(randomAlphaNumeric)
-// console.log(randomCompanySuffixes)
-// console.log(randomCompanySuffix)
-// console.log(randomBs)
-// console.log(randomCatchPhraseNoun)
-console.log(randomBsNoun)
-console.log(randomBsBsAdjective)
-console.log(randomBsBuzz)
 
 const randomAccount = faker.finance.account()
 const randomAccountName = faker.finance.accountName()
@@ -91,39 +69,12 @@ const randomRoutingNumber = faker.finance.routingNumber()
 const randomCreditCardNumber = faker.finance.creditCardNumber()
 const randomIban = faker.finance.iban()
 const randomBic = faker.finance.bic()
-// const randomAmount = faker.finance.amount()
+const randomAmount = faker.finance.amount()
 
 
-// console.log(randomAccount)
-// console.log(randomAccountName)
-// console.log(randomRoutingNumber)
-// console.log(randomCreditCardNumber)
-// console.log(randomIban)
-// console.log(randomBic)
-// console.log(randomAmount)
-
-
-
-
-
-
-// const randomName = faker.name.findName()
+const randomName = faker.name.findName()
 // const randomCard = faker.helpers.createCard()
-
-// const randomAvatar = faker.image.avatar()
-
-
-// console.log(randomName)
-// console.log(randomFirstName)
-// console.log(randomLastName)
-// console.log(randomPhone)
-// console.log(randomEmail)
-// // console.log(randomCard)
-// console.log(randomCity)
-// console.log(randomProduct)
-// console.log(randomCompanyName)
-// console.log(randomAmount)
-// console.log(randomAvatar)
+const randomAvatar = faker.image.avatar()
 
 
 const randomWord = faker.lorem.word()
@@ -135,9 +86,5 @@ const randomParagraph = faker.lorem.paragraph()
 const randomParagraphs = faker.lorem.paragraphs()
 const randomText = faker.lorem.text()
 const randomLines = faker.lorem.lines()
-
-
-
-const random = faker.lorem.word()
 
 

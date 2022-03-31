@@ -1,182 +1,122 @@
 const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
+const selector = require("../pages/selectors.js")
+const adminPage = require("../pages/admin.js")
 const vendorPage = require("../pages/vendor.js")
+const customerPage = require("../pages/customer.js")
 
 
 module.exports = {
 
-    // locators
 
-    frontend: {
-        //TODO: recheck all fronted locators
-        // frontend homepage
-        home: '.nav-menu > li:nth-child(1) > a',
-        cart: '.nav-menu > li:nth-child(2) > a',
-        checkout: '.nav-menu > li:nth-child(3) > a',
-        dashboard: '.nav-menu > li:nth-child(4) > a',
-        myAccount: '.nav-menu > li:nth-child(5) > a',
-        myOrders: '.nav-menu > li:nth-child(6) > a',
-        shop: '.nav-menu > li:nth-child(8) > a',
-        storeList: '.nav-menu > li:nth-child(9) > a',
-
-        // frontend user login
-        username: '#username',
-        userPassword: '#password',
-        rememberMe: '#rememberme',
-        logIn: 'button[value="Log in"]',
-        lostPassword: 'woocommerce-LostPassword > a',
-
-        // user registration
-
-        // customer registration
-        regEmail: '#reg_email',
-        regPassword: '#reg_password',
-        regCustomer: 'input[value="customer"]', // radio btn
-
-        // vendor registration
-        regVendor: 'input[value="seller"]',  // radio btn
-        firstName: '#first-name',
-        lastName: '#last-name',
-        shopName: '#company-name',
-        shopUrl: '#seller-url',
-        companyName: '#dokan-company-name',
-        companyId: '#dokan-company-id-number',
-        vatNumber: '#dokan-vat-number',
-        bankName: '#dokan-bank-name',
-        bankIban: '#dokan-bank-iban',
-        phone: '#shop-phone',
-        subscriptionPack: '#dokan-subscription-pack',
-
-        //register btn
-        register: 'button[value="Register"]',
-
-        // user logout
-        customerLogout: '.woocommerce-MyAccount-navigation-link--customer-logout > a',
-        vendorLogout: 'a:nth-child(3)',
-        vendorLogout: '.fa-power-off', //TODO: delete one of the above
-
-        // user forget password
-        resetPasswordEmail: '#user_login',
-        resetPasswordBtn: 'button[value="Reset password"]',
-    },
-
-    admin: {
-        // admin login
-        email: '#user_login',
-        password: '#user_pass',
-        rememberMe: '#rememberme',
-        login: '#wp-submit',
-        dashboardMenu: ".wp-first-item > .wp-menu-name",
-        dashboardText: ".wrap h1",
-        // admin logout
-        userMenu: '#wp-admin-bar-my-account a',
-        logout: '#wp-admin-bar-logout a',
-        //logout message
-        logoutSuccessMessage: "#login p",
-    },
-
-
-    //////////////////////////// need to review ///////////////////////////
-
-    // async customerRegister(username, password) {
-    //     // await page.goto(this.baseUrl + '/my-account');
-    //     await page.click(this.myAccount)
-    //     await page.type(this.regEmail, username)
-    //     await page.type(this.regPassword, password);
-    //     await page.click(this.regCustomer);
-    //     await base.click(this.register);
-    // },
-
-    async vendorRegister(userEmail, password, firstName, lastName, shopName, shopUrl, companyName, companyId, vatNumber, bankName, bankIban, phone) {
-        // await page.goto(this.baseUrl + '/my-account');
-        // await page.goto(createURL('my-account/'));
-        // await page.waitForTimeout(4000);
-        await page.click(this.myAccount)
-        await page.waitForTimeout(80000);
-        await page.type(this.regEmail, userEmail)
-        // await page.type(this.regPassword, password);
-        await page.click(this.regVendor)
-        await page.type(this.firstName, firstName);
-        await page.type(this.lastName, lastName);
-        await page.type(this.shopName, shopName);
-        // await page.type(this.shopUrl, shopUrl);
-        await page.click(this.shopUrl);
-        await page.type(this.companyName, companyName);
-        await page.type(this.companyId, companyId);
-        await page.type(this.vatNumber, vatNumber);
-        await page.type(this.bankName, bankName);
-        await page.type(this.bankIban, bankIban);
-        await page.type(this.phone, phone);
-        await base.click(this.register);
-    },
-
-    // async customerLogout() {
-    //     await page.click(this.customerLogout)
-    // },
-
-    async vendorLogout() {
-        await vendorPage.goToVendorDashboard()
-        await base.click(this.frontend.vendorLogout)
-
-        let homeIsVisible = await base.isVisible(page, this.frontend.home)
-        expect(homeIsVisible).toBe(true)
-    },
-
-    // async switchToAdmin(username, password) {
-    //     // await base.openNewTab()
-    //     await this.adminLogin(username, password)
-    // },
-
-    // async loginFrontend(username, password) {
-    //     await page.goto(this.baseUrl + '/my-account');
-    //     await page.type(this.username, username)
-    //     await page.type(this.userPassword, password);
-    //     await page.click(this.logIn);
-    // },
-
-
-    /////////////////////////////////////////  reviewed  ///////////////////////////////////////////////
-
+    // user login
     async login(username, password) {
-        // await this.loginFromWpAdmin('vendor1', '01dokan01')
-        // await this.loginFromWpAdmin('customer1', '01dokan01')
         await this.loginFromWPLoginDashboard(username, password)
     },
 
-    async loginFromWPLoginDashboard(username, password) {
-        await base.goto('wp-admin')
-        let res = await base.isVisible(page, this.admin.email)
-        if (res) {
-            await page.type(this.admin.email, username)
-            await page.type(this.admin.password, password)
-            await base.click(this.admin.login)
+    async loginFrontend(username, password) {
+        await base.goto("my-account")
+        await page.type(selector.frontend.username, username)
+        await page.type(selector.frontend.userPassword, password)
+        await base.click(selector.frontend.logIn)
+        //TODO: add assertion
+        let homeIsVisible = await base.isVisible(page, selector.frontend.home)
+        expect(homeIsVisible).toBe(true)
+    },
 
-            let homeIsVisible = await base.isVisible(page, this.frontend.home)
+    //login user form WP login dashboard
+    async loginFromWPLoginDashboard(username, password) {
+        await base.goto("wp-admin")
+        let res = await base.isVisible(page, selector.backend.email)
+        if (res) {
+            await page.type(selector.backend.email, username)
+            await page.type(selector.backend.password, password)
+            await base.click(selector.backend.login)
+
+            let homeIsVisible = await base.isVisible(page, selector.frontend.home)
             expect(homeIsVisible).toBe(true)
         }
     },
 
-    async adminLogin(username, password) {
-        await base.goto('wp-admin')
-        
-        let res = await base.isVisible(page, this.admin.email)
-        if (res) {
-            await page.type(this.admin.email, username)
-            await page.type(this.admin.password, password)
-            await base.click(this.admin.login)
+    async customerLogout() {
+        await customerPage.goToMyAccount()
+        await base.click(selector.frontend.customerLogout)
 
-            let dashboardIsVisible = await base.isVisible(page, this.admin.dashboardMenu)
+        let homeIsVisible = await base.isVisible(page, selector.frontend.home)
+        expect(homeIsVisible).toBe(true)
+    },
+
+    // vendor logout
+    async vendorLogout() {
+        await vendorPage.goToVendorDashboard()
+        await base.click(selector.frontend.vendorLogout)
+
+        let homeIsVisible = await base.isVisible(page, selector.frontend.home)
+        expect(homeIsVisible).toBe(true)
+    },
+
+
+
+    //admin login
+    async adminLogin(username, password) {
+        await base.goto("wp-admin")
+        let res = await base.isVisible(page, selector.backend.email)
+        if (res) {
+            await page.type(selector.backend.email, username)
+            await page.type(selector.backend.password, password)
+            await base.click(selector.backend.login)
+
+            let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
             expect(dashboardIsVisible).toBe(true)
         }
     },
 
-
+    //admin logout
     async adminLogout() {
-        await page.hover(this.admin.userMenu)
-        await base.click(this.admin.logout)
+        await base.hover(selector.backend.userMenu)
+        await base.click(selector.backend.logout)
 
-        let successMessage = await base.getSelectorText(this.admin.logoutSuccessMessage)
-        expect(successMessage).toMatch('You are now logged out.')
+        let successMessage = await base.getSelectorText(selector.backend.logoutSuccessMessage)
+        expect(successMessage).toMatch("You are now logged out.")
+    },
+
+    //switch to admin from customer or vendor
+    async switchToAdmin(username, password) {
+        await base.goto("my-account")
+        let dashboardIsVisible = await base.isVisible(page, selector.frontend.goToVendorDashboard)
+        if (dashboardIsVisible) {
+            await this.vendorLogout()
+        }
+        else {
+            await this.customerLogout()
+        }
+        await this.adminLogin(username, password)
+    },
+
+    //switch to vendor from admin or customer
+    async switchToVendor(username, password) {
+        await base.goto("wp-admin")
+        let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
+        if (dashboardIsVisible) {
+            await this.adminLogout()
+        }
+        else {
+            await this.customerLogout()
+        }
+        await this.login(username, password)
+    },
+
+    //switch to customer from admin or vendor
+    async switchToCustomer(username, password) {
+        await base.goto("wp-admin")
+        let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
+        if (dashboardIsVisible) {
+            await this.adminLogout()
+        }
+        else {
+            await this.vendorLogout()
+        }
+        await this.login(username, password)
     },
 
 

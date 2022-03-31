@@ -131,7 +131,15 @@ dist
 
 
 
+# custom files
 # packages & plugins
 wp-content/
 artifacts/
+jest-stare/
+allure-results/
+#js config
+jsconfig.json
+
+
+
 
