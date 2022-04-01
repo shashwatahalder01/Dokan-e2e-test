@@ -8,18 +8,18 @@ const customerPage = require("../pages/customer.js")
 
 module.exports = {
 
-
     // user login
     async login(username, password) {
         await this.loginFromWPLoginDashboard(username, password)
     },
 
+    //login from frontend
     async loginFrontend(username, password) {
         await base.goto("my-account")
         await page.type(selector.frontend.username, username)
         await page.type(selector.frontend.userPassword, password)
         await base.click(selector.frontend.logIn)
-        //TODO: add assertion
+
         let homeIsVisible = await base.isVisible(page, selector.frontend.home)
         expect(homeIsVisible).toBe(true)
     },

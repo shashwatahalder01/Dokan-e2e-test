@@ -20,11 +20,11 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSettings()
     },timeout)
 
-    it.only('admin can login', async () => {
+    it('admin can login', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     },timeout)
 
-    it.only('admin can logout', async () => {
+    it('admin can logout', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await loginPage.adminLogout()
     },timeout)
@@ -38,7 +38,7 @@ describe('admin functionality test', () => {
 
     },timeout)
 
-    it.only('admin can add simple product', async () => {
+    it('admin can add simple product', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.product.vendor[1])
     },timeout)
@@ -260,7 +260,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSpmvSettings()
     },timeout)
 
-    it('admin can set dokan vendor subscription settings', async () => {
+    it.only('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanVendorSubscriptionSettings()

@@ -17,14 +17,15 @@ describe('customer functionality test', () => {
     //////////////////////////// need to review ///////////////////////////////
 
 
-    it.only('customer register', async () => {
-        await loginPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+    it('customer register', async () => {
+        await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+        await loginPage.customerLogout()
     }, timeout)
 
 
     it('customer login', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await loginPage.switchToAdmin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // await loginPage.switchToAdmin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     }, timeout)
 
 
@@ -77,13 +78,13 @@ describe('customer functionality test', () => {
 
     /////////////////////////////////////////////////////////////// reviewed ///////////////////////////////
 
-    it.skip('customer add billing details', async () => {
+    it('customer add billing details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToMyAccount()
         await customerPage.addBillingAddress('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
     }, timeout)
 
-    it.skip('customer add shipping details', async () => {
+    it('customer add shipping details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToMyAccount()
         await customerPage.addShippingAddress('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')

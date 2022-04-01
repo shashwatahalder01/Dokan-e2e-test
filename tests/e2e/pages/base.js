@@ -7,14 +7,14 @@ const { createURL } = require("@wordpress/e2e-test-utils")
 module.exports = {
 
     //check whether element is ready or not
-    async isLocatorReady(element, page) {
+    async isLocatorReady(selector, page) {
         const isVisibleHandle = await page.evaluateHandle((e) => {
             const style = window.getComputedStyle(e)
             return (style && style.display !== 'none' &&
                 style.visibility !== 'hidden' && style.opacity !== '0')
-        }, element)
+        }, selector)
         var visible = await isVisibleHandle.jsonValue()
-        const box = await element.boxModel()
+        const box = await selector.boxModel()
         if (visible && box) {
             return true
         }
@@ -25,9 +25,9 @@ module.exports = {
     async isVisible(page, selector) {
         return await page.evaluate((selector) => {
             if (selector.startsWith('//')) {
-                let element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+                var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
             } else {
-                let element = document.querySelector(selector)
+                var element = document.querySelector(selector)
             }
             if (element) {
                 let style = window.getComputedStyle(element)
@@ -119,7 +119,9 @@ module.exports = {
             let [element] = await page.$x(selector)
             await element.hover()
         } else {
-            await page.hover(selector)
+            let element = await page.$(selector)
+            await element.hover()
+            // await page.hover(selector)
         }
         await page.waitForTimeout(1000)
     },
@@ -310,26 +312,32 @@ module.exports = {
     async clearInputField(selector) {
         await page.$eval(selector, el => el.value = '')
     },
+    // or
+    async clearInputField(selector) {
+        await page.click(selector, { clickCount: 3 })
+        await page.keyboard.press('Backspace')
+
+    },
 
     async type(selector, value) {
         let [element] = await page.$x(selector)
         await element.type(value)
     },
 
-    // clear input field and type
-    async clearAndType(selector, value) {
-        let element = this.getElement(selector)
-        await page.evaluate(element => element.value = '', element)
-        await element.type(value)
-    },
+    // // clear input field and type //TODO: update for xpath
+    // async clearAndType(selector, value) {
+    //     let element = this.getElement(selector)
+    //     await page.evaluate(element, element => element.value = '')
+    //     await element.type(value)
+    // },
 
     // or
 
-    // // clear input field and type
-    // async clearAndType(selector, value) {
-    //     await page.$eval(selector, el => el.value = '')
-    //     await page.type(selector, value)
-    // },
+    // clear input field and type
+    async clearAndType(selector, value) {
+        await page.$eval(selector, el => el.value = '')
+        await page.type(selector, value)
+    },
 
     //scroll element into view
     async scrollIntoView(selector) {  //TODO: don't work
@@ -562,5 +570,21 @@ module.exports = {
     // ]
     // await continueButton.evaluate(continueButton => continueButton.click())
     // await await Promise.race(watchDog2)
+
+
+
+
+    // I have figure it out. It seems that I've been using page.hover(selector) in a wrong way. This is only an action for page to do on the dom.
+    // The code should look like this
+
+    // const hoverScreenshot = async (page, dataHook, directory) => {
+    //   await page.hover(`[data-hook="${dataHook}`)
+    //   const element = await page.$(`[data-hook="${dataHook}`);
+    //   await page.waitFor(50);
+    //   await element.screenshot({
+    //     omitBackground: true,
+    //     path: `e2e/screenshots/${directory}/${dataHook}-hover.png`
+    //   });
+    // })
 
 }

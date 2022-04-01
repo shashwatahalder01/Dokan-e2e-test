@@ -114,7 +114,7 @@ module.exports = {
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//
 
-   customerInfo:{
+   customerInfo: {
       userEmail: faker.internet.email(),
       password: process.env.CUSTOMER_PASSWORD,
       firstName: faker.name.firstName('male'),
@@ -151,23 +151,24 @@ module.exports = {
       iban: faker.random.alphaNumeric(10),
    },
 
-   vendorSetupWizard:{
-      storeProductsPerPage:'12',
+   vendorSetupWizard: {
+      storeProductsPerPage: '12',
       street1: 'abc street',
       street2: 'xyz street',
       country: 'United States (US)',
       city: 'New York',
       zipCode: '10006',
       state: 'New York',
-      paypal:faker.internet.email(),
-      bankAccountName:'accountName', 
-      bankAccountNumber:faker.random.alphaNumeric(10), 
-      bankName:'bankName', 
-      bankAddress:'bankAddress', 
-      bankRoutingNumber:faker.random.alphaNumeric(10),
+      paypal: faker.internet.email(),
+      bankAccountName: 'accountName',
+      bankAccountNumber: faker.random.alphaNumeric(10),
+      bankName: 'bankName',
+      bankAddress: 'bankAddress',
+      bankRoutingNumber: faker.random.alphaNumeric(10),
       bankIban: faker.random.alphaNumeric(10),
-      bankSwiftCode:faker.random.alphaNumeric(10),
-      customPayment:'1234567890'
+      bankSwiftCode: faker.random.alphaNumeric(10),
+      customPayment: '1234567890',
+      skrill: faker.internet.email(),
    },
 
    product: {
@@ -185,7 +186,7 @@ module.exports = {
       price: faker.commerce.price(100, 200, 2),
       auctionPrice: faker.commerce.price(10, 100, 0),
       category: 'Uncategorized',
-      categories: faker.random.arrayElement(["Electronic Devices","Electronic Accessories","Men's Fashion","Clothings","Women's Fashion"]),
+      categories: faker.random.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
       attribute: 'size',
       attributeTerms: ['s', 'l', 'm'],
       vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1]
@@ -215,9 +216,11 @@ module.exports = {
    productsName: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],
    prizes: [100, 150, 250],
    tshirt: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],
-   parentCategories: ["Electronic Devices","Electronic Accessories","Men's Fashion","Clothings","Women's Fashion"],
-   productCategories: ["SmartPhones","Laptops","Accessories","Shirts","T-Shirts","Polo Shirts","Jeans","Pants","Shoes","Bags",],
+   parentCategories: ["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"],
+   productCategories: ["SmartPhones", "Laptops", "Accessories", "Shirts", "T-Shirts", "Polo Shirts", "Jeans", "Pants", "Shoes", "Bags",],
    productAttributes: ["Size", "Color"],
-   attributeValues: [["S", "M", "L", "XL", "XXL"],["Red", "Blue", "Black", "Yellow", "White", "Deep blue"], ],
+   attributeValues: [["S", "M", "L", "XL", "XXL"], ["Red", "Blue", "Black", "Yellow", "White", "Deep blue"],],
+
+
 }
 

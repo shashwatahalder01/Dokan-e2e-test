@@ -56,7 +56,7 @@ module.exports = {
                 setupWizardData.zipCode,
                 setupWizardData.country,
                 setupWizardData.state,
-                // setupWizardData.paypal,
+                setupWizardData.paypal,
                 setupWizardData.bankAccountName,
                 setupWizardData.bankAccountNumber,
                 setupWizardData.bankName,
@@ -65,6 +65,7 @@ module.exports = {
                 setupWizardData.bankIban,
                 setupWizardData.bankSwiftCode,
                 setupWizardData.customPayment,
+                setupWizardData.skrill,
             )
         }
         else {
@@ -75,7 +76,7 @@ module.exports = {
         }
     },
 
-    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment) {
+    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment,skrill) {
         await page.click(selector.vendor.vSetup.letsGo)
 
         await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, storeProductsPerPage)
@@ -91,15 +92,18 @@ module.exports = {
         await page.click(selector.vendor.vSetup.email)
         await base.click(selector.vendor.vSetup.continueStoreSetup)
 
-        await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
-        await base.clearAndType(selector.vendor.vSetup.bankAccountName, bankAccountName)
-        await base.clearAndType(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
-        await base.clearAndType(selector.vendor.vSetup.bankName, bankName)
-        await base.clearAndType(selector.vendor.vSetup.bankAddress, bankAddress)
-        await base.clearAndType(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
-        await base.clearAndType(selector.vendor.vSetup.bankIban, bankIban)
-        await base.clearAndType(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
-        await base.clearAndType(selector.vendor.vSetup.customPayment, customPayment)
+        await base.type(selector.vendor.vSetup.paypal, paypal)
+        await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
+        await base.type(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
+        await base.type(selector.vendor.vSetup.bankName, bankName)
+        await base.type(selector.vendor.vSetup.bankAddress, bankAddress)
+        await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
+        await base.type(selector.vendor.vSetup.bankIban, bankIban)
+        await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
+        await base.type(selector.vendor.vSetup.customPayment, customPayment)
+        console.log(selector.vendor.vSetup.skrill)
+
+        await base.type(selector.vendor.vSetup.skrill, skrill)
         // TODO: stripe connect
         // TODO: paypal marketplace
         await base.click(selector.vendor.vSetup.continuePaymentSetup)

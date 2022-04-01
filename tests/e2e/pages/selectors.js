@@ -313,55 +313,30 @@ module.exports = {
     //dokan settings
     settings: {
       //setting menus
-      // general: ".nav-tab:nth-child(2)",
       general: '//a[@class="nav-tab" and contains(text(),"General")]',
-      // sellingOptions: ".nav-tab:nth-child(3)",
       sellingOptions: '//a[@class="nav-tab" and contains(text(),"Selling Options")]',
-      // withdrawOptions: ".nav-tab:nth-child(4)",
       withdrawOptions: '//a[@class="nav-tab" and contains(text(),"Withdraw Options")]',
-      // pageSettings: ".nav-tab:nth-child(5)",
       pageSettings: '//a[@class="nav-tab" and contains(text(),"Page Settings")]',
-      // appearance: ".nav-tab:nth-child(6)",
       appearance: '//a[@class="nav-tab" and contains(text(),"Appearance")]',
-      // privacyPolicy: ".nav-tab:nth-child(7)",
       privacyPolicy: '//a[@class="nav-tab" and contains(text(),"Privacy Policy")]',
-      // liveSearch: ".nav-tab:nth-child(8)",
       liveSearch: '//a[@class="nav-tab" and contains(text(),"Live Search")]',
-      // storeSupport: ".nav-tab:nth-child(9)",
       storeSupport: '//a[@class="nav-tab" and contains(text(),"Store Support")]',
-      // sellerVerification: ".nav-tab:nth-child(10)",
       sellerVerification: '//a[@class="nav-tab" and contains(text(),"Seller Verification")]',
-      // verificationSmsGateways: ".nav-tab:nth-child(11)",
       verificationSmsGateways: '//a[@class="nav-tab" and contains(text(),"Verification SMS Gateways")]',
-      // emailVerification: ".nav-tab:nth-child(12)",
       emailVerification: '//a[@class="nav-tab" and contains(text(),"Email Verification")]',
-      // socialApi: ".nav-tab:nth-child(13)",
       socialApi: '//a[@class="nav-tab" and contains(text(),"Social API")]',
-      // shippingStatus: ".nav-tab:nth-child(14)",
       shippingStatus: '//a[@class="nav-tab" and contains(text(),"Shipping Status")]',
-      // colors: ".nav-tab:nth-child(15)",
       colors: '//a[@class="nav-tab" and contains(text(),"Colors")]',
-      // liveChat: ".nav-tab:nth-child(16)",
       liveChat: '//a[@class="nav-tab" and contains(text(),"Live Chat")]',
-      // rma: ".nav-tab:nth-child(17)",
       rma: '//a[@class="nav-tab" and contains(text(),"RMA")]',
-      // wholesale: ".nav-tab:nth-child(18)",
       wholesale: '//a[@class="nav-tab" and contains(text(),"Wholesale")]',
-      // euComplianceFields: ".nav-tab:nth-child(19)",
       euComplianceFields: '//a[@class="nav-tab" and contains(text(),"EU Compliance Fields")]',
-      // deliveryTime: ".nav-tab:nth-child(20)",
       deliveryTime: '//a[@class="nav-tab" and contains(text(),"Delivery Time")]',
-      // productAdvertising: ".nav-tab:nth-child(21)",
       productAdvertising: '//a[@class="nav-tab" and contains(text(),"Product Advertising")]',
-      // geolocation: ".nav-tab:nth-child(22)",
       geolocation: '//a[@class="nav-tab" and contains(text(),"Geolocation")]',
-      // productReportAbuse: ".nav-tab:nth-child(23)",
       productReportAbuse: '//a[@class="nav-tab" and contains(text(),"Product Report Abuse")]',
-      // singleProductMultiVendor: ".nav-tab:nth-child(24)",
       singleProductMultiVendor: '//a[@class="nav-tab" and contains(text(),"Single Product MultiVendor")]',
-      // vendorAnalytics: ".nav-tab:nth-child(25)",
       vendorAnalytics: '//a[@class="nav-tab" and contains(text(),"Vendor Analytics")]',
-      // vendorSubscription: ".nav-tab:nth-child(26)",
       vendorSubscription: '//a[@class="nav-tab" and contains(text(),"Vendor Subscription")]',
 
       //general
@@ -651,21 +626,15 @@ module.exports = {
   //woocommerce
   wooCommerce: {
     //woocommerce menu
-    // settingsMenu: "#toplevel_page_woocommerce li:nth-child(6) > a",
     settingsMenu: "//li[contains(@class,'toplevel_page_woocommerce')]//a[text()='Settings']",
 
     //woocommerce settings
     settings: {
       //settings menu
-      // general: ".nav-tab:nth-child(1)",
       general: '//a[contains(@class,"nav-tab") and text()="General"]',
-      // products: ".nav-tab:nth-child(2)",
       products: '//a[contains(@class,"nav-tab") and text()="Products"]',
-      // tax: ".nav-tab:nth-child(3)",
       tax: '//a[contains(@class,"nav-tab") and text()="Tax"]',
-      // shipping: ".nav-tab:nth-child(4)",
       shipping: '//a[contains(@class,"nav-tab") and text()="Shipping"]',
-      // payments: ".nav-tab:nth-child(5)",
       payments: '//a[contains(@class,"nav-tab") and text()="Payments"]',
 
       //general
@@ -929,17 +898,11 @@ module.exports = {
   //products
   products: {
     //products menus
-    // allProductsMenu: '#menu-posts-product .wp-first-item > .wp-first-item',
     allProductsMenu: '//li[@id="menu-posts-product"]//a[text()="All Products"]',
-    // addNewMenu: '#menu-posts-product li:nth-child(3) > a',
     addNewMenu: '//li[@id="menu-posts-product"]//a[text()="Add New"]',
-    // categoriesMenu: '#menu-posts-product li:nth-child(4) > a',
     categoriesMenu: '//li[@id="menu-posts-product"]//a[text()="Categories"]',
-    // tagsMenu: "#menu-posts-product li:nth-child(5) > a",
     tagsMenu: '//li[@id="menu-posts-product"]//a[text()="Tags"]',
-    // addOnsMenu: '#menu-posts-product li:nth-child(6) > a',
     addOnsMenu: '//li[@id="menu-posts-product"]//a[text()="Add-ons"]',
-    // attributesMenu: '#menu-posts-product li:nth-child(7) > a',
     attributesMenu: '//li[@id="menu-posts-product"]//a[text()="Attributes"]',
 
     //product
@@ -1289,19 +1252,12 @@ module.exports = {
   //settings
   settings: {
     // settings menus
-    // general: "#menu-settings .wp-first-item > .wp-first-item",
     general: "//li[@id='menu-settings']//a[text()='General']",
-    // writing: "#menu-settings li:nth-child(3) > a",
     writing: "//li[@id='menu-settings']//a[text()='Writing']",
-    // reading: "#menu-settings li:nth-child(4) > a",
     reading: "//li[@id='menu-settings']//a[text()='Reading']",
-    // discussion: "#menu-settings li:nth-child(5) > a",
     discussion: "//li[@id='menu-settings']//a[text()='Discussion']",
-    // media: "#menu-settings li:nth-child(6) > a",
     media: "//li[@id='menu-settings']//a[text()='Media']",
-    // permalinks: "#menu-settings li:nth-child(7) > a",
     permalinks: "//li[@id='menu-settings']//a[text()='Permalinks']",
-    // privacy: "#menu-settings li:nth-child(8) > a",
     privacy: "//li[@id='menu-settings']//a[text()='Privacy']",
 
     // general settings
@@ -1390,7 +1346,7 @@ module.exports = {
         bankAccountName: "//input[@placeholder='Your bank account name']",
         bankAccountNumber: "//input[@placeholder='Your bank account number']",
         bankName: "//input[@placeholder='Name of bank']",
-        bankAddress: "//input[@placeholder='Address of your bank']",
+        bankAddress: "//textarea[@placeholder='Address of your bank']",
         bankRoutingNumber: "//input[@placeholder='Routing number']",
         bankIban: "//input[@placeholder='IBAN']",
         bankSwiftCode: "//input[@placeholder='Swift code']",
@@ -1408,7 +1364,7 @@ module.exports = {
         skipTheStepPaymentSetup: '.payment-step-skip-btn',
 
         //last step
-        goToStoreDashboard: '.wc-setup-actions step > .button',
+        goToStoreDashboard: '.wc-setup-actions.step .button',
         returnToMarketplace: '.wc-return-to-dashboard',
     },
 

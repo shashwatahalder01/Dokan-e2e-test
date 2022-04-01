@@ -34,7 +34,6 @@ module.exports = {
     await base.click(selector.admin.wooCommerce.settingsMenu)
 
     const url = await page.url()
-    console.log(url)
     expect(url).toMatch('wp-admin/admin.php?page=wc-settings') 
   },
 
@@ -990,6 +989,8 @@ module.exports = {
   //admin add simple product
   async addSimpleProduct(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
+    // await page.click(selector.admin.aDashboard.products)
+    // await page.waitForTimeout(2000)
     await base.click(selector.admin.products.addNewMenu)
 
     // add new simple product

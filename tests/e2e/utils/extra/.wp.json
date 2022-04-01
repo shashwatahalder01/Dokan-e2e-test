@@ -21,6 +21,10 @@
   },
     "mappings": {
         "./wp-content/plugins/": "${workspaceFolder}/"
+    },
+    "pathMappings": {
+      "./wp-content/plugins": "${workspaceFolder}/"
     }
   
 }
+
