@@ -18,7 +18,7 @@ describe('vendor functionality test', () => {
          await loginPage.vendorLogout()
       },timeout)
 
-   it.only('vendor can login', async () => {
+   it('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       // await loginPage.switchToAdmin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
    },timeout)
@@ -116,13 +116,19 @@ describe('vendor functionality test', () => {
       )
    },timeout)
 
+   it.only('vendor can set shipping  settings ', async () => {
+      await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+      await vendorPage.goToVendorDashboard()
+      await vendorPage.setShippingSettings('US', 'Flat Rate', 'flat_rate')
+   },timeout)
+
    it('vendor can set social profile settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.setSocialProfile(data.urls)
    },timeout)
 
-   it.skip('vendor can set rma settings ', async () => {
+   it('vendor can set rma settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')

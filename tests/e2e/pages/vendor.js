@@ -25,7 +25,7 @@ module.exports = {
     //-------------------------------------------------- setup wizard ---------------------------------------------------//
 
     //vendor registration
-    async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, withSetupWizard,setupWizardData) {
+    async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, withSetupWizard, setupWizardData) {
         await base.goto("my-account")
         await page.type(selector.vendor.vRegistration.regEmail, userEmail)
         await page.type(selector.vendor.vRegistration.regPassword, password)
@@ -41,8 +41,8 @@ module.exports = {
         await page.type(selector.vendor.vRegistration.bankName, bankName)
         await page.type(selector.vendor.vRegistration.bankIban, bankIban)
         await page.type(selector.vendor.vRegistration.phone, phone)
-        // let subscriptionPackISVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest) 
-        // if(subscriptionPackISVisible){
+        // let subscriptionPackIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest) 
+        // if(subscriptionPackIsVisible){
         // await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
         // }
         await base.click(selector.vendor.vRegistration.register)
@@ -76,7 +76,7 @@ module.exports = {
         }
     },
 
-    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment,skrill) {
+    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment, skrill) {
         await page.click(selector.vendor.vSetup.letsGo)
 
         await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, storeProductsPerPage)
@@ -646,8 +646,88 @@ module.exports = {
 
     },
 
+    //set shipping policies
+    async setShippingPolicies(processingTime, shippingPolicy, refundPolicy) {
+
+        await base.click(selector.vendor.vShippingSettings.clickHereToAddShippingPolicies)
+        await page.waitForTimeout(5000)
+        await page.select(selector.vendor.vShippingSettings.processingTime, processingTime)
+        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy)
+        await base.type(selector.vendor.vShippingSettings.refundPolicy, refundPolicy)
+        await base.click(selector.vendor.vShippingSettings.shippingPoliciesSaveSettings)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toBe('Settings save successfully')
+
+    },
+
     //vendor set shipping settings
-    async setShippingSettings() {
+    async setShippingSettings(shippingZone, shippingMethod, selectShippingMethod) {
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.shipping)
+
+        // await this.setShippingPolicies('3', 'shipping policy', 'refund policy')
+
+        // edit shipping zone
+        await base.hover(selector.vendor.vShippingSettings.shippingZoneCell(shippingZone))
+        await base.clickXpath(selector.vendor.vShippingSettings.editShippingZone(shippingZone))
+        await page.waitForTimeout(5000)
+
+        let methodIsVisible = await base.isVisible(page, selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
+        if (!methodIsVisible) {
+            await base.clickXpath(selector.vendor.vShippingSettings.addShippingMethod)
+            await page.waitForTimeout(2000)
+            await page.select(selector.vendor.vShippingSettings.shippingMethod, selectShippingMethod)
+            await page.click(selector.vendor.vShippingSettings.shippingMethodPopupAddShippingMethod)
+            await page.waitForTimeout(3000)
+        }
+
+        //edit shipping method
+        await base.hover(selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
+        await base.clickXpath(selector.vendor.vShippingSettings.editShippingMethod(shippingMethod))
+
+        switch (selectShippingMethod) {
+            case 'flat_rate':
+                //flat rate
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateMethodTitle, shippingMethod)
+                await page.select(selector.vendor.vShippingSettings.flatRateTaxStatus, 'taxable')
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateCost, '20')
+                break
+
+            case 'free_shipping':
+                //free shipping
+                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingTitle, shippingMethod)
+                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingMinimumOrderAmount, '200')
+                break
+
+            case 'local_pickup':
+                //local pickup
+                await base.clearAndType(selector.vendor.vShippingSettings.localPickupTitle, shippingMethod)
+                await page.select(selector.vendor.vShippingSettings.localPickupTaxStatus, 'taxable')
+                await base.clearAndType(selector.vendor.vShippingSettings.localPickupCost, '20')
+                break
+
+            case 'dokan_table_rate_shipping':
+                //dokan table rate shipping
+                //TODO: add setup
+                break
+
+            case 'dokan_distance_rate_shipping':
+                //dokan distance rate shipping
+                //TODO: add setup
+                break
+
+            default:
+                break
+        }
+
+        await page.click(selector.vendor.vShippingSettings.shippingSettingsSaveSettings)
+        await page.waitForTimeout(4000)
+        await base.clickXpath(selector.vendor.vShippingSettings.saveChanges)
+        await page.waitForTimeout(4000)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toBe('Zone settings save successfully ×')
 
     },
 
@@ -663,7 +743,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.vSocialProfileSettings.youtube, urls.youtube)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.instagram, urls.instagram)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.flicker, urls.flickr)
-        await page.click(selector.vendor.vSocialProfileSettings.updateSettings)
+        // await page.click(selector.vendor.vSocialProfileSettings.updateSettings) //TODO: save settings button click don't work
         await page.keyboard.press('Enter')
 
         let successMessage = await base.getSelectorText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
@@ -672,17 +752,29 @@ module.exports = {
 
     //vendor set rma settings
     async setRmaSettings(label, type, length, lengthValue, lengthDuration) {
+        //TODO: admin need to enable rma settings switch to admin & enable
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.rma)
 
         await base.clearAndType(selector.vendor.vRmaSettings.label, label)
+        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.type, type)
+        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.length, length)
-        await base.clearAndType(selector.vendor.vRmaSettings.lengthValue, lengthValue)
+        await page.waitForTimeout(1000)
+        await base.type(selector.vendor.vRmaSettings.lengthValue, lengthValue)
+        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
-        await base.click(selector.vendor.vSettings.saveChanges)
 
-        let successMessage = await base.getSelectorText(selector.vendor.vRmaSettings.updateSettingsSuccessMessage)
+        let refundReasonIsVisible = await base.isVisible(page, selector.vendor.vRmaSettings.refundReasons)
+        if (refundReasonIsVisible) {
+            await base.clickMultiple(selector.vendor.vRmaSettings.refundReasons)
+        }
+        let iframe = await base.switchToIframe(selector.vendor.vRmaSettings.refundPolicyIframe)
+        await base.iframeClearAndType(iframe, selector.vendor.vRmaSettings.refundPolicyHtmlBody, 'Refund Policy Vendor')
+        await page.click(selector.vendor.vSettings.saveChanges)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vRmaSettings.rmaSaveChanges)
         expect(successMessage).toBe('Settings saved successfully')
 
     },

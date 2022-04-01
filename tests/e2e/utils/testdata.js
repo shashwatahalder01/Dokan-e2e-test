@@ -110,6 +110,11 @@ module.exports = {
    itemCondition: ['new', 'used'],
    actionType: ['normal', 'reverse'],
 
+   //vendor
+   //shipping policy
+   shippingPolicy: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], // TODO: replace with select text values
+   vendorShippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping'],
+
 
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//

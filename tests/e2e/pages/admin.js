@@ -14,7 +14,7 @@ module.exports = {
     await await page.goto(createURL('wp-admin/index.php'))
 
     const url = await page.url()
-    expect(url).toMatch('wp-admin/index.php') 
+    expect(url).toMatch('wp-admin/index.php')
   },
 
   async goToDokanSettings() {
@@ -24,7 +24,7 @@ module.exports = {
     await base.click(selector.admin.dokan.settingsMenu)
 
     const url = await page.url()
-    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings') 
+    expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings')
   },
 
   async goToWooCommerceSettings() {
@@ -34,7 +34,7 @@ module.exports = {
     await base.click(selector.admin.wooCommerce.settingsMenu)
 
     const url = await page.url()
-    expect(url).toMatch('wp-admin/admin.php?page=wc-settings') 
+    expect(url).toMatch('wp-admin/admin.php?page=wc-settings')
   },
 
 
@@ -441,6 +441,7 @@ module.exports = {
 
   //admin add standard tax rate
   async addStandardTaxRate() {
+    await this.goToWooCommerceSettings()
 
     //enable tax
     await this.enableTax()
@@ -472,8 +473,9 @@ module.exports = {
   //admin setup wooCommerce settings
   async setWoocommerceSettings() {
     await this.goToWooCommerceSettings()
-    // await this.addStandardTaxRate()
-    // await this.setCurrencyOptions()
+    await this.enablePasswordInputField()
+    await this.addStandardTaxRate()
+    await this.setCurrencyOptions()
     await this.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
     await this.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
     await this.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
@@ -482,6 +484,19 @@ module.exports = {
     await this.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
     await this.deleteShippingMethod('US', 'Flat rate')
     await this.deleteShippingZone('US')
+
+  },
+
+
+  //enable password field
+  async enablePasswordInputField() {
+    await this.goToWooCommerceSettings()
+    await base.click(selector.admin.wooCommerce.settings.accounts)
+    await base.uncheck(selector.admin.wooCommerce.settings.automaticPasswordGeneration)
+    await base.click(selector.admin.wooCommerce.settings.accountSaveChanges)
+
+    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
 
   },
 
@@ -733,7 +748,7 @@ module.exports = {
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.paypalMarketPlace.disbursementModeValues, 'Delayed')
     await page.click(selector.admin.wooCommerce.settings.paypalMarketPlace.paymentButtonType)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.paypalMarketPlace.paymentButtonTypeValues, 'Smart Payment Buttons')
-    await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.marketplaceLogo, await base.getBaseUrl()+'/wp-content/plugins/dokan/assets/images/dokan-logo.png')
+    await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.marketplaceLogo, await base.getBaseUrl() + '/wp-content/plugins/dokan/assets/images/dokan-logo.png')
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.displayNoticeToConnectSeller)
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.sendAnnouncementToConnectSeller)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.sendAnnouncementInterval, '7')
@@ -1083,7 +1098,7 @@ module.exports = {
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
-    await page.type(selector.admin.products.product.productName,productName) // TODO: publish element is blocked by other element that's why name is filled later
+    await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
     await base.click(selector.admin.products.product.publish)
 
@@ -1106,7 +1121,7 @@ module.exports = {
 
     // add new external product
     await page.select(selector.admin.products.product.productType, 'external')
-    await page.type(selector.admin.products.product.productUrl, await base.getBaseUrl()+'/shop/uncategorized/subscription_handcrafted-granite-chicken/')
+    await page.type(selector.admin.products.product.productUrl, await base.getBaseUrl() + '/shop/uncategorized/subscription_handcrafted-granite-chicken/')
     await page.type(selector.admin.products.product.buttonText, 'Buy product')
     await page.type(selector.admin.products.product.regularPrice, productPrice)
     //category

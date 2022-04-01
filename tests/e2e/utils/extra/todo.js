@@ -29,3 +29,4 @@
 //TODO: jest detailed errors
 //TODO: grab console errors
 //TODO: shift toMatch with toBe jest expect
+//TODO: clear and type for xpath element , handle all actions for xpath element and css element

@@ -12,12 +12,12 @@ describe('admin functionality test', () => {
    // beforeEach(async () => {})
    // afterEach(async () => {await browser.close()})
 
-    it.skip('admin can add test settings', async () => {
+    it.only('admin can add test settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.setWpSettings()
+        // await adminPage.setWpSettings()
         await adminPage.setWoocommerceSettings()
-        await adminPage.setPaymentSettings()
-        await adminPage.setDokanSettings()
+        // await adminPage.setPaymentSettings()
+        // await adminPage.setDokanSettings()
     },timeout)
 
     it('admin can login', async () => {
@@ -260,7 +260,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSpmvSettings()
     },timeout)
 
-    it.only('admin can set dokan vendor subscription settings', async () => {
+    it('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanVendorSubscriptionSettings()

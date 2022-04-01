@@ -140,6 +140,15 @@ module.exports = {
             await page.click(selector)
         }
     },
+    // uncheck checkbox, if unchecked then skip
+    async uncheck(selector) {
+        let element = await page.$(selector)
+        // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'))
+        const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
+        if (isCheckBoxChecked) {
+            await page.click(selector)
+        }
+    },
 
     //wait for select element then set value based on options value
     async select(selector, value) {
@@ -212,6 +221,14 @@ module.exports = {
         }
     },
 
+    //click multiple elements with same selector/class/xpath
+    async clickMultiple(selector) {
+        let elements = await this.getElements(selector)
+        for (let element of elements) {
+            await element.click()
+        }
+    },
+
     //get element handle for xpath or css selector 
     async getElement(selector) {
         if (selector.startsWith('//')) {
@@ -255,8 +272,8 @@ module.exports = {
         return elements
     },
 
-    // get element length
-    async getElementLength(selector) {
+    // get element count
+    async getElementCount(selector) {
         let elements = await page.$$(selector)
         let length = elements.length
         // console.log(length)
