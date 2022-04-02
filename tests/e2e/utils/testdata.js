@@ -114,7 +114,17 @@ module.exports = {
    //shipping policy
    shippingPolicy: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], // TODO: replace with select text values
    vendorShippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping'],
-
+   flatRateCalculationType: ['class', 'order'],
+   flatRateCalculationType: ['item', 'line','class'], // TODO: replace with select text values, one option missing
+   tableRateTaxIncludedInShippingCosts: ['yes', 'no'],
+   distanceRateTransportationMode: ['driving', 'walking', 'Bicycling'],
+   distanceRateAvoid: ['none', 'tolls','highways','ferries'],
+   distanceRateDistanceUnit: ['metric', 'imperial'],
+   //addon
+   addonType: ['multiple_choice', 'checkbox','custom_text', 'custom_textarea','file_upload', 'custom_price','input_multiplier', 'heading'],
+   addonDisplayAs: ['select', 'radiobutton', 'images'],
+   addonFormatTitle: ['label', 'heading', 'hide'],
+   addonOptionPriceType: ['flat_fee', 'quantity_based','percentage_based'],
 
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//

@@ -476,6 +476,17 @@ module.exports = {
         await page.waitForTimeout(5000)
     },
 
+    //vendor add vendor details
+    async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
+        await base.clearAndType(selector.vendor.vendorDetails.firstName, firstName)
+        await base.clearAndType(selector.vendor.vendorDetails.lastName, lastName)
+        await base.clearAndType(selector.vendor.vendorDetails.email, email)
+        await page.type(selector.vendor.vendorDetails.currentPassword, currentPassword)
+        await page.type(selector.vendor.vendorDetails.NewPassword, newPassword)
+        await page.type(selector.vendor.vendorDetails.confirmNewPassword, newPassword)
+        await page.click(selector.vendor.vendorDetails.saveChanges)
+
+    },
 
     //-------------------------------------------------- vendor settings ---------------------------------------------------//
 
@@ -635,30 +646,200 @@ module.exports = {
 
     },
 
-    //vendor set verification settings
-    async setVerificationSettings() {
+    async addAddon() {
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.addons)
 
+        await base.click(selector.vendor.vAddonSettings.createNewAddon)
+        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
+        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
+        await page.click(selector.vendor.vAddonSettings.productCategories,)
+        await base.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
+        await page.keyboard.press('Enter')
+        await base.click(selector.vendor.vAddonSettings.publish)
+        
+        //Add-on fields
+        await page.click(selector.vendor.vAddonSettings.addField)
+        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
+        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
+        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
+        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
+        await page.click(selector.vendor.vAddonSettings.enableDescription)
+        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
+        await page.click(selector.vendor.vAddonSettings.requiredField)
+        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
+        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
+        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
+        await base.click(selector.vendor.vAddonSettings.update)
+        
+        let successMessage = await base.getSelectorText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
+        expect(successMessage).toMatch('Add-on saved successfully')
     },
 
+    async sendIdVerificationRequest() {
+        // await base.goto('dashboard/settings/verification/')
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.verification)
+        await page.waitForTimeout(2000)
+
+        //id verification
+        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
+        if (cancelRequestIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
+            await page.waitForTimeout(2000)
+        }
+        await page.click(selector.vendor.vVerificationSettings.startIdVerification)
+        await page.waitForTimeout(1000)
+        let previousUploadedImageIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.previousUploadedPhoto)
+        if (previousUploadedImageIsVisible) {
+            await base.hover(selector.vendor.vVerificationSettings.previousUploadedPhoto)
+            await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedPhoto)
+            await page.waitForTimeout(2000)
+        }
+        await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
+        await page.click(selector.vendor.vVerificationSettings.uploadPhoto)
+        await page.waitForTimeout(2000)
+        let uploadedMediaIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.uploadedMedia)
+        if (uploadedMediaIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await page.waitForTimeout(1000)
+        } else {
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+        }
+        await base.clickXpath(selector.vendor.vVerificationSettings.select)
+        await page.click(selector.vendor.vVerificationSettings.submitId)
+        await page.waitForTimeout(2000)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vVerificationSettings.idUpdateSuccessMessage)
+        expect(successMessage).toMatch('Your ID verification request is Sent and pending approval')
+    },
+
+    async sendAddressVerificationRequest() {
+        // await base.goto('dashboard/settings/verification/')
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.verification)
+        await page.waitForTimeout(2000)
+
+        //company verification
+        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
+        if (cancelRequestIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
+            await page.waitForTimeout(1000)
+        }
+        await page.click(selector.vendor.vVerificationSettings.startAddressVerification)
+        await page.waitForTimeout(1000)
+        await base.clearAndType(selector.vendor.vVerificationSettings.street, 'abc street')
+        await base.clearAndType(selector.vendor.vVerificationSettings.street2, 'xyz street')
+        await base.clearAndType(selector.vendor.vVerificationSettings.city, 'New York')
+        await base.clearAndType(selector.vendor.vVerificationSettings.postOrZipCode, '10006')
+        await base.select(selector.vendor.vVerificationSettings.country, 'US')
+        await base.select(selector.vendor.vVerificationSettings.state, 'NY')
+        await page.click(selector.vendor.vVerificationSettings.submitAddress)
+        await page.waitForTimeout(2000)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
+        expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
+    },
+
+    async sendCompanyVerificationRequest() {
+        // await base.goto('dashboard/settings/verification/')
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.verification)
+        await page.waitForTimeout(2000)
+
+        //company verification
+        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
+        if (cancelRequestIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
+            await page.waitForTimeout(1000)
+        }
+        await page.click(selector.vendor.vVerificationSettings.startCompanyVerification)
+        await page.waitForTimeout(1000)
+        await page.click(selector.vendor.vVerificationSettings.uploadFiles)
+        await page.waitForTimeout(2000)
+        let uploadedMediaIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.uploadedMedia)
+        if (uploadedMediaIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await page.waitForTimeout(1000)
+        } else {
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+        }
+        await base.clickXpath(selector.vendor.vVerificationSettings.select)
+        await page.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
+        await page.waitForTimeout(2000)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vVerificationSettings.companyInfoUpdateSuccessMessage)
+        expect(successMessage).toMatch('Your company verification request is sent and pending approval')
+    },
+
+    //vendor set verification settings
+    async setVerificationSettings() {
+        await base.goto('dashboard/settings/verification/')
+        await this.sendIdVerificationRequest()
+        await base.goto('dashboard/settings/verification/')
+        await this.sendAddressVerificationRequest()
+        await base.goto('dashboard/settings/verification/')
+        await this.sendCompanyVerificationRequest()
+    },
 
     //vendor set delivery settings
     async setDeliveryTimeSettings() {
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.deliveryTime)
 
+        //delivery support
+        await base.check(selector.vendor.vDeliveryTimeSettings.homeDelivery)
+        await base.check(selector.vendor.vDeliveryTimeSettings.storePickup)
+        await base.clearAndType(selector.vendor.vDeliveryTimeSettings.deliveryBlockedBuffer, '0')
+
+        // let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+        let days = ['sunday',] //TODO: not working for multiple days
+        for (let day of days) {
+            //checkbox
+            await base.check(selector.vendor.vDeliveryTimeSettings.deliveryDayCheckbox(day))
+            //tab
+            await base.clickXpath(selector.vendor.vDeliveryTimeSettings.deliveryDayTab(day))
+            //individual day settings
+            await base.select(selector.vendor.vDeliveryTimeSettings.openingTime(day), '06:00 AM')
+            await base.select(selector.vendor.vDeliveryTimeSettings.closingTime(day), '12:00 PM')
+
+            await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.timeSlot(day), '300')
+            await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), '100')
+            // await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.timeSlot, '30')
+            // await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.orderPerSlot, '10')
+        }
+        await base.click(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Delivery settings has been saved successfully!')
+    },
+
+
+
+    //-------------------------------------------------- vendor shipping settings ---------------------------------------------------//
+
+
+
+    //vendor set all shipping settings
+    async setALLShippingSettings() {
+        await this.goToVendorDashboard()
+        await this.setShippingSettings('US', 'Flat Rate', 'flat_rate')
+        await this.setShippingSettings('US', 'Free Shipping', 'free_shipping')
+        await this.setShippingSettings('US', 'Local Pickup', 'local_pickup')
+        await this.setShippingSettings('US', 'Table Rate', 'dokan_table_rate_shipping')
+        await this.setShippingSettings('US', 'Distance Rate', 'dokan_distance_rate_shipping')
     },
 
     //set shipping policies
     async setShippingPolicies(processingTime, shippingPolicy, refundPolicy) {
-
         await base.click(selector.vendor.vShippingSettings.clickHereToAddShippingPolicies)
-        await page.waitForTimeout(5000)
-        await page.select(selector.vendor.vShippingSettings.processingTime, processingTime)
-        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy)
-        await base.type(selector.vendor.vShippingSettings.refundPolicy, refundPolicy)
+        await page.select(selector.vendor.vShippingSettings.processingTime, processingTime)//TODO:locator don't work
+        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy)//TODO:locator don't work
+        await base.type(selector.vendor.vShippingSettings.refundPolicy, refundPolicy)//TODO:locator don't work
         await base.click(selector.vendor.vShippingSettings.shippingPoliciesSaveSettings)
 
         let successMessage = await base.getSelectorText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toBe('Settings save successfully')
-
+        expect(successMessage).toMatch('Settings save successfully')
     },
 
     //vendor set shipping settings
@@ -666,12 +847,12 @@ module.exports = {
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.shipping)
 
-        // await this.setShippingPolicies('3', 'shipping policy', 'refund policy')
+        // await this.setShippingPolicies('3', 'shipping policy', 'refund policy') //TODO:locator don't work
 
         // edit shipping zone
         await base.hover(selector.vendor.vShippingSettings.shippingZoneCell(shippingZone))
         await base.clickXpath(selector.vendor.vShippingSettings.editShippingZone(shippingZone))
-        await page.waitForTimeout(5000)
+        await page.waitForTimeout(3000)
 
         let methodIsVisible = await base.isVisible(page, selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
         if (!methodIsVisible) {
@@ -679,19 +860,22 @@ module.exports = {
             await page.waitForTimeout(2000)
             await page.select(selector.vendor.vShippingSettings.shippingMethod, selectShippingMethod)
             await page.click(selector.vendor.vShippingSettings.shippingMethodPopupAddShippingMethod)
-            await page.waitForTimeout(3000)
+            await page.waitForTimeout(2000)
         }
 
         //edit shipping method
         await base.hover(selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
         await base.clickXpath(selector.vendor.vShippingSettings.editShippingMethod(shippingMethod))
+        await page.waitForTimeout(2000)
 
         switch (selectShippingMethod) {
             case 'flat_rate':
                 //flat rate
                 await base.clearAndType(selector.vendor.vShippingSettings.flatRateMethodTitle, shippingMethod)
-                await page.select(selector.vendor.vShippingSettings.flatRateTaxStatus, 'taxable')
                 await base.clearAndType(selector.vendor.vShippingSettings.flatRateCost, '20')
+                await page.select(selector.vendor.vShippingSettings.flatRateTaxStatus, 'taxable')
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, 'Flat rate')
+                await page.select(selector.vendor.vShippingSettings.flatRateCalculationType, 'class')
                 break
 
             case 'free_shipping':
@@ -703,32 +887,61 @@ module.exports = {
             case 'local_pickup':
                 //local pickup
                 await base.clearAndType(selector.vendor.vShippingSettings.localPickupTitle, shippingMethod)
-                await page.select(selector.vendor.vShippingSettings.localPickupTaxStatus, 'taxable')
                 await base.clearAndType(selector.vendor.vShippingSettings.localPickupCost, '20')
+                await page.select(selector.vendor.vShippingSettings.localPickupTaxStatus, 'taxable')
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, 'Local Pickup')
                 break
 
             case 'dokan_table_rate_shipping':
                 //dokan table rate shipping
-                //TODO: add setup
-                break
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMethodTitle, shippingMethod)
+                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxStatus, 'taxable')
+                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxIncludedInShippingCosts, 'no')
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFee, '10')
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumShippingCost, '200')
+                //rates
+                // await page.select(selector.vendor.vShippingSettings.tableRateShippingCalculationType, 'item')
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFeePerOrder, '10')
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMinimumCostPerOrder, '10')
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumCostPerOrder, '200')
+
+                await base.clickXpath(selector.vendor.vShippingSettings.tableRateShippingUpdateSettings)
+                let tableRateSuccessMessage = await base.getSelectorText(selector.vendor.vShippingSettings.tableRateShippingUpdateSettingsSuccessMessage)
+                expect(tableRateSuccessMessage).toMatch('Table rates has been saved successfully!')
+                return
 
             case 'dokan_distance_rate_shipping':
                 //dokan distance rate shipping
-                //TODO: add setup
-                break
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingMethodTitle, shippingMethod)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTaxStatus, 'taxable')
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTransportationMode, 'driving')
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingAvoid, 'none')
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingDistanceUnit, 'metric')
+                await base.check(selector.vendor.vShippingSettings.distanceRateShippingShowDistance)
+                await base.check(selector.vendor.vShippingSettings.distanceRateShippingShowDuration)
+                //shipping address
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress1, 'abc street')
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress2, 'xyz street')
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingCity, 'New York')
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingZipOrPostalCode, '10006')
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingStateOrProvince, 'New York')
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingCountry, 'United States (US)')
+
+                await base.clickXpath(selector.vendor.vShippingSettings.distanceRateShippingUpdateSettings)
+                let distanceRateSuccessMessage = await base.getSelectorText(selector.vendor.vShippingSettings.distanceRateShippingUpdateSettingsSuccessMessage)
+                expect(distanceRateSuccessMessage).toMatch('Distance rates has been saved successfully!')
+                return
 
             default:
                 break
         }
 
         await page.click(selector.vendor.vShippingSettings.shippingSettingsSaveSettings)
-        await page.waitForTimeout(4000)
+        await page.waitForTimeout(1000)
         await base.clickXpath(selector.vendor.vShippingSettings.saveChanges)
-        await page.waitForTimeout(4000)
 
         let successMessage = await base.getSelectorText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toBe('Zone settings save successfully ×')
-
+        expect(successMessage).toMatch('Zone settings save successfully')
     },
 
     //vendor set social profile settings
@@ -747,7 +960,7 @@ module.exports = {
         await page.keyboard.press('Enter')
 
         let successMessage = await base.getSelectorText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toBe('Your information has been saved successfully')
+        expect(successMessage).toMatch('Your information has been saved successfully')
     },
 
     //vendor set rma settings
@@ -757,13 +970,9 @@ module.exports = {
         await base.click(selector.vendor.vSettings.rma)
 
         await base.clearAndType(selector.vendor.vRmaSettings.label, label)
-        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.type, type)
-        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.length, length)
-        await page.waitForTimeout(1000)
         await base.type(selector.vendor.vRmaSettings.lengthValue, lengthValue)
-        await page.waitForTimeout(1000)
         await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(page, selector.vendor.vRmaSettings.refundReasons)
@@ -772,23 +981,13 @@ module.exports = {
         }
         let iframe = await base.switchToIframe(selector.vendor.vRmaSettings.refundPolicyIframe)
         await base.iframeClearAndType(iframe, selector.vendor.vRmaSettings.refundPolicyHtmlBody, 'Refund Policy Vendor')
-        await page.click(selector.vendor.vSettings.saveChanges)
+        await page.click(selector.vendor.vRmaSettings.rmaSaveChanges)
 
-        let successMessage = await base.getSelectorText(selector.vendor.vRmaSettings.rmaSaveChanges)
-        expect(successMessage).toBe('Settings saved successfully')
-
-    },
-
-    //vendor add vendor details
-    async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
-        await base.clearAndType(selector.vendor.vendorDetails.firstName, firstName)
-        await base.clearAndType(selector.vendor.vendorDetails.lastName, lastName)
-        await base.clearAndType(selector.vendor.vendorDetails.email, email)
-        await page.type(selector.vendor.vendorDetails.currentPassword, currentPassword)
-        await page.type(selector.vendor.vendorDetails.NewPassword, newPassword)
-        await page.type(selector.vendor.vendorDetails.confirmNewPassword, newPassword)
-        await page.click(selector.vendor.vendorDetails.saveChanges)
+        let successMessage = await base.getSelectorText(selector.vendor.vRmaSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Settings saved successfully')
 
     },
+
+
 
 }

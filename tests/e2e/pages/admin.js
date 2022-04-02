@@ -450,7 +450,7 @@ module.exports = {
     await base.click(selector.admin.wooCommerce.settings.tax)
     await base.click(selector.admin.wooCommerce.settings.standardRates)
     let taxIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.taxRate)
-    if (taxIsVisible === false) {
+    if (!taxIsVisible) {
       await page.click(selector.admin.wooCommerce.settings.insertRow)
     }
     await base.clearAndType(selector.admin.wooCommerce.settings.taxRate, '5')

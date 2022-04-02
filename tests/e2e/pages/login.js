@@ -10,18 +10,24 @@ module.exports = {
 
     // user login
     async login(username, password) {
+        // await this.loginFrontend(username, password)
         await this.loginFromWPLoginDashboard(username, password)
     },
 
     //login from frontend
     async loginFrontend(username, password) {
         await base.goto("my-account")
-        await page.type(selector.frontend.username, username)
-        await page.type(selector.frontend.userPassword, password)
-        await base.click(selector.frontend.logIn)
+        let res = await base.isVisible(page, selector.frontend.username)
+        if (res) {
+            await page.type(selector.frontend.username, username)
+            await page.type(selector.frontend.userPassword, password)
+            await base.click(selector.frontend.logIn)
 
-        let homeIsVisible = await base.isVisible(page, selector.frontend.home)
-        expect(homeIsVisible).toBe(true)
+            // let homeIsVisible = await base.isVisible(page, selector.frontend.home) //TODO: customer assertion
+            // expect(homeIsVisible).toBe(true)
+            let vendorDashboardIsVisible = await base.isVisible(page, selector.vendor.vDashboard.dashboard)  //vendor assertion
+            expect(vendorDashboardIsVisible).toBe(true)
+        }
     },
 
     //login user form WP login dashboard
@@ -38,6 +44,7 @@ module.exports = {
         }
     },
 
+    //customer logout
     async customerLogout() {
         await customerPage.goToMyAccount()
         await base.click(selector.frontend.customerLogout)
@@ -54,8 +61,6 @@ module.exports = {
         let homeIsVisible = await base.isVisible(page, selector.frontend.home)
         expect(homeIsVisible).toBe(true)
     },
-
-
 
     //admin login
     async adminLogin(username, password) {
@@ -118,7 +123,5 @@ module.exports = {
         }
         await this.login(username, password)
     },
-
-
 
 }

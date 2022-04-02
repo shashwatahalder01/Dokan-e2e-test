@@ -5,9 +5,9 @@ module.exports = {
     slowMo: process.env.SLOWMO ? process.env.SLOWMO : 0, // slow down test execution by provided seconds
     devtools: process.env.DEVTOOLS !== 'false', // Enable devtools
     args: [
-      // "--no-sandbox", // Disables the sandbox for all process types that are normally sandBoxed. 
+      "--no-sandbox", // Disables the sandbox for all process types that are normally sandBoxed. 
       "--start-fullscreen",  // Browser windowSize
-      // "--disable-gpu",
+      "--disable-gpu",
       // "--ignore-certificate-errors",
       // "--window-size=1920,1080",
       // "--start-maximized",

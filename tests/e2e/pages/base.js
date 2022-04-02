@@ -1,5 +1,5 @@
 
-// const puppeteer = require('puppeteer')
+const puppeteer = require('puppeteer')
 const { createURL } = require("@wordpress/e2e-test-utils")
 
 
@@ -126,34 +126,62 @@ module.exports = {
         await page.waitForTimeout(1000)
     },
 
+    // //check checkbox, if checked uncheck then check
+    // async check(selector) {
+    //     let element = await page.$(selector)
+    //     // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'))
+    //     const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
+    //     if (isCheckBoxChecked) {
+    //         await page.click(selector)
+    //         await page.waitForTimeout(10)
+    //         await page.click(selector)
+    //     }
+    //     else {
+    //         await page.click(selector)
+    //     }
+    // },
+
+    // //or
+
     //check checkbox, if checked uncheck then check
     async check(selector) {
-        let element = await page.$(selector)
-        // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'))
+        let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
-            await page.click(selector)
+            await element.click()
             await page.waitForTimeout(10)
-            await page.click(selector)
+            await element.click()
         }
         else {
-            await page.click(selector)
+            await element.click()
         }
     },
+
+
+    // // uncheck checkbox, if unchecked then skip
+    // async uncheck(selector) {
+    //     let element = await page.$(selector)
+    //     const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
+    //     if (isCheckBoxChecked) {
+    //         await page.click(selector)
+    //     }
+    // },
+
+    // //or
+
     // uncheck checkbox, if unchecked then skip
     async uncheck(selector) {
         let element = await page.$(selector)
-        // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'))
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
-            await page.click(selector)
+            await element.click()
         }
     },
 
     //wait for select element then set value based on options value
     async select(selector, value) {
-        await page.waitForSelector(selector)
-        await page.select(selector, value)
+        let element = await this.getElement(selector)
+        await element.select(value)
     },
 
     //set value based on select options text
@@ -190,8 +218,10 @@ module.exports = {
 
     //upload image via file chooser
     async uploadImage(selector, image) {
-        const [fileChooser] = await Promise.all([page.waitForFileChooser(), this.click(selector)])
+        let element = await this.getElement(selector)
+        const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
         await fileChooser.accept([image])
+        await page.waitForTimeout(3000)
     },
 
     //goto subUrl
@@ -330,7 +360,7 @@ module.exports = {
         await page.$eval(selector, el => el.value = '')
     },
     // or
-    async clearInputField(selector) {
+    async clearInputField1(selector) {
         await page.click(selector, { clickCount: 3 })
         await page.keyboard.press('Backspace')
 
@@ -341,12 +371,14 @@ module.exports = {
         await element.type(value)
     },
 
-    // // clear input field and type //TODO: update for xpath
-    // async clearAndType(selector, value) {
-    //     let element = this.getElement(selector)
-    //     await page.evaluate(element, element => element.value = '')
-    //     await element.type(value)
-    // },
+    // clear input field and type 
+    async clearAndType1(selector, value) {
+        let element = await this.getElement(selector)
+        // await element.focus()
+        await element.click({ clickCount: 3 })
+        await page.keyboard.press('Backspace')
+        await element.type(value)
+    },
 
     // or
 
@@ -548,7 +580,10 @@ module.exports = {
 
 
 
+    // let [element] = await page.$(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
+    // await page.evaluate(element => element.scrollIntoView(), element)
 
+    // await page.$eval(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings, element => element.scrollIntoView());
 
 
 

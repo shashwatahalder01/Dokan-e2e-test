@@ -9,7 +9,10 @@ module.exports = {
 
     // returns a random number between min (inclusive) and max (exclusive)
     getRandomArbitrary: (min, max) => Math.random() * (max - min) + min,
-    
+
+    //random number between 0 and 1000
+    randomNumber: () => Math.floor(Math.random() * 1000),
+
     // opens the url in the default browser 
     openUrl: (url) => open('url'),
 

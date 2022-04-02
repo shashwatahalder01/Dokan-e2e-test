@@ -102,7 +102,6 @@ describe('customer functionality test', () => {
         await customerPage.addProductToCartFromShop('Handmade Plastic Table (Simple)')
         await customerPage.goToCartFromShop()
         await customerPage.applyCoupon('VC_HHYZ')
-
     }, timeout)
 
     it.skip('customer can buy product', async () => {

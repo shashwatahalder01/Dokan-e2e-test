@@ -14,10 +14,10 @@ describe('admin functionality test', () => {
 
     it.only('admin can add test settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // await adminPage.setWpSettings()
+        await adminPage.setWpSettings()
         await adminPage.setWoocommerceSettings()
-        // await adminPage.setPaymentSettings()
-        // await adminPage.setDokanSettings()
+        await adminPage.setPaymentSettings()
+        await adminPage.setDokanSettings()
     },timeout)
 
     it('admin can login', async () => {
@@ -77,7 +77,6 @@ describe('admin functionality test', () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addBookingProduct(data.product.name.booking, data.product.price, data.product.category, data.product.vendor[1])
     },timeout)
-
 
     it('admin can add categories', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
