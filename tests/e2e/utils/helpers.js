@@ -8,7 +8,10 @@ module.exports = {
     replaceAndCapitalizeEachWord: (string) => string.replace('_', ' ').replace(/(^\w{1})|(\s+\w{1})/g, letter => letter.toUpperCase()),
 
     // returns a random number between min (inclusive) and max (exclusive)
-    getRandomArbitrary: (min, max) => Math.random() * (max - min) + min,
+    getRandomArbitrary: (min, max) => Math.random() * (max - min) + min, 
+    
+    // returns a random integer number between min (inclusive) and max (exclusive)
+    getRandomArbitraryInteger: (min, max) => Math.floor(Math.random() * (max - min) + min),
 
     //random number between 0 and 1000
     randomNumber: () => Math.floor(Math.random() * 1000),
@@ -18,6 +21,17 @@ module.exports = {
 
     // opens test report in the default browser 
     openReport: () => open('./jest-stare/index.html'),
+
+    //current day
+    currentDate: (new Date()).toLocaleDateString('en-CA'),
+
+    // add two days
+    addDays: (date, days) => {
+        var result = new Date(date)
+        result.setDate(result.getDate() + days)
+        return result.toLocaleDateString('en-CA')
+    },
     
 }
+
 

@@ -109,23 +109,28 @@ describe('vendor functionality test', () => {
 
    // vendor settings
 
-   it.skip('vendor can set store settings ', async () => {
+   it.only('vendor can set store settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
+      // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
       await vendorPage.setStoreSettings('NYshop', '12', '0123456789', 'abc street', 'xyz street2', 'New York', '1006', 'US', 'NY', 'companyName',
          'companyIdOrEuidNumber', '123456', 'nameOfBank', '123456789XVB', 'New York', '200', '10', 'Get Support',
-         '1', '20', '10', '1000000'
-      )
+         '1', '20', '10', '1000000')
    }, timeout)
 
-
-   it('vendor can add addon request ', async () => {
+   it('vendor can add addons', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.addAddon()
    }, timeout)
 
-   it.only('vendor can send id verification request ', async () => {
+   it.skip('vendor can edit addon request ', async () => {
+      await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+      await vendorPage.goToVendorDashboard()
+      await vendorPage.editAddon('Add-ons Group #370')
+   }, timeout)
+
+   it('vendor can send id verification request ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.sendIdVerificationRequest()

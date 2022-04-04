@@ -30,3 +30,6 @@
 //TODO: grab console errors
 //TODO: shift toMatch with toBe jest expect
 //TODO: clear and type for xpath element , handle all actions for xpath element and css element
+//TODO: remove redundant locator
+//TODO: make function for already updated image f
+//TODO: make concrete assertion instead of ui level : see switchUser in login page

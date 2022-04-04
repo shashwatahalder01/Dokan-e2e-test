@@ -2211,18 +2211,20 @@ module.exports = {
 
         //store settings
         vStoreSettings: {
+            //wp image upload
+            wpUploadFiles: "#menu-item-upload",
+            uploadedMedia: ".attachment-preview",
+            selectFiles: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']",
+            select: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]",
+            crop: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]",
+            //banner and profile image
             banner: ".dokan-banner-drag",
-            // banner: "//a[normalize-space()='Upload banner']",
-            // uploadBanner: "#\\__wp-uploader-id-1",
+            bannerImage: ".dokan-banner-img",
+            removeBannerImage: ".close.dokan-remove-banner-image",
             profilePicture: ".dokan-pro-gravatar-drag",
-            // uploadProfilePicture: "#\\__wp-uploader-id-4",
-            // selectFiles: "//div[@style='position: relative']//button[@class='browser button button-hero']",
-            selectFiles: "//div[@style='position: relative']//button[contains(text(),'Select Files')]",
-            // selectAndCrop: "//div[@style='position: relative']//button[@class='button media-button button-primary button-large media-button-select']",
-            selectAndCrop: "//div[@style='position: relative']//button[contains(text(),'Select and Crop')]",
-            // cropImage: "//div[@style='position: relative']//button[@class='button media-button button-primary button-large media-button-insert']",
-            cropImage: "//div[@style='position: relative']//button[contains(text(),'Crop image')]",
-
+            profilePictureImage: ".dokan-gravatar-img",
+            removeProfilePictureImage: ".dokan-close.dokan-remove-gravatar-image",
+            //basic store info
             storeName: "#dokan_store_name",
             storeProductsPerPage: "#dokan_store_ppp",
             phoneNo: "#setting_phone",
@@ -2247,41 +2249,38 @@ module.exports = {
             nameOfBank: "#setting_bank_name",
             bankIban: "#setting_bank_iban",
             //email
-            email: "input[name='setting_show_email']",
-            moreProducts: "input[name='setting_show_more_ptab']",
+            email: "//label[contains(text(), 'Email')]/..//input[@type='checkbox']",
+            moreProducts: "//label[contains(text(), 'More products')]/..//input[@type='checkbox']",
             //map
             map: "#dokan-map-add",
-            // map1: "#dokan-location-find-btn",//not intractable
-            // mapFirstResult: "#ui-id-4", //not working
             mapFirstResult: "#ui-id-3",
+            //terms and conditions
+            termsAndConditions: "//label[contains(text(), 'Terms and Conditions')]/..//input[@type='checkbox']",
+            termsAndConditionsIframe: '#dokan_tnc_text iframe',
+            termsAndConditionsHtmlBody: '#tinymce',
             //store opening closing time
             storeOpeningClosingTime: "#dokan-store-time-enable",
-            chooseBusinessDays: ".select2-container--below .select2-selection__rendered",
-            // TODO: need to improve locator days, opening and closing time, addRow, delete row
-            monday: ".tabs > li:nth-child(1)",  //TODO: make unique locator
-            tuesday: ".tabs > li:nth-child(2)", //TODO: make unique locator
-            wednesday: ".tabs > li:nth-child(3)", //TODO: make unique locator
-            thursday: ".tabs > li:nth-child(4)", //TODO: make unique locator
-            friday: ".tabs > li:nth-child(5)", //TODO: make unique locator
-            saturday: ".tabs > li:nth-child(6)", //TODO: make unique locator
-            sunday: ".tabs > li:nth-child(7)", //TODO: make unique locator
-            openingTime: "#opening-time-sunday",
-            closingTime: "#closing-time-sunday",
-            addNewRow: "#store-tab-sunday .added-store-opening-time > .fa",
+            // chooseBusinessDays: ".select2-container--below .select2-selection__rendered",
+            chooseBusinessDays: "//label[contains(text(),'Choose Business Days')]/..//input[contains(@class,'select2-search__field')]",
+            businessDaysTab: (day) => `//ul[@class='tabs']//li[@rel='store-tab-${day}']`,
+            openingTime: (day) => `#opening-time-${day}`,
+            closingTime: (day) => `#closing-time-${day}`,
+            addNewRow: (day) =>`#store-tab-${day} .added-store-opening-time > .fa`,
             deleteOneRow: ".remove-store-closing-time > .fa",
-            storeOpenNotice: ".dokan-form-group:nth-child(19) .dokan-form-control", //TODO: make unique locator
-            storeCloseNotice: ".dokan-form-group:nth-child(20) .dokan-form-control", //TODO: make unique locator
+            storeOpenNotice: "//input[@name='dokan_store_open_notice']", 
+            storeCloseNotice: "//input[@name='dokan_store_close_notice']", 
             //vacation
             goToVacation: "#dokan-seller-vacation-activate",
-            closingStyle: "label > .form-control",
-            dateRangeFrom: "#dokan-seller-vacation-date-from",
-            dateRangeTo: "#dokan-seller-vacation-date-to",
-            setVacationMessage: ".dokan-form-group:nth-child(2) #dokan-seller-vacation-message",  //TODO: make unique locator
-            saveEdit: "#dokan-seller-vacation-save-edit > span",
-            cancelEdit: "#dokan-seller-vacation-cancel-edit",
-            setVacationMessage: ".dokan-form-group:nth-child(2) #dokan-seller-vacation-message",  //TODO: make unique locator
-            editSavedVacationSchedule: "tr:nth-child(1) > .dokan-seller-vacation-list-action .fas",  //TODO: make unique locator
-            deleteSavedVacationSchedule: "tr:nth-child(1) .dokan-seller-vacation-remove-schedule", //TODO: make unique locator
+            closingStyle: "label .form-control",
+            vacationDateRangeFrom: "#dokan-seller-vacation-date-from",
+            vacationDateRangeTo: "#dokan-seller-vacation-date-to",
+            setVacationMessage: "//div[@id='dokan-seller-vacation-vacation-dates']//textarea[@id='dokan-seller-vacation-message']",
+            saveVacationEdit: "#dokan-seller-vacation-save-edit span",
+            cancelVacationEdit: "#dokan-seller-vacation-cancel-edit",
+            noVacationIsSet: "//td[contains( text(),'No vacation is set')]",
+            vacationRow: "//td[@class='dokan-seller-vacation-list-action']/..",
+            editSavedVacationSchedule: ".dokan-seller-vacation-list-action .fas",  
+            deleteSavedVacationSchedule: ".dokan-seller-vacation-remove-schedule", 
             confirmDeleteSavedVacationSchedule: ".swal2-confirm",
             cancelDeleteSavedVacationSchedule: ".swal2-cancel",
             //discount
@@ -2289,7 +2288,8 @@ module.exports = {
             minimumOrderAmount: "#setting_minimum_order_amount",
             percentage: "#setting_order_percentage",
             //biography
-            biography: "p",//TODO: improve
+            biographyIframe: '#wp-vendor_biography-wrap iframe',
+            biographyHtmlBody: '#tinymce',
             //store support
             showSupportButtonInStore: "#support_checkbox",
             showSupportButtonInSingleProduct: "#support_checkbox_product",
@@ -2301,7 +2301,8 @@ module.exports = {
             enableMinMaxAmount: "#enable_vendor_min_max_amount",
             minimumAmountToPlaceAnOrder: "#min_amount_to_order",
             maximumAmountToPlaceAnOrder: "#max_amount_to_order",
-            selectProducts: ".select2-search:nth-child(1) > .select2-search__field",  //TODO: make unique locator
+            // selectProducts: ".select2-search:nth-child(1) > .select2-search__field", 
+            selectProducts: "//label[contains(text(), 'Select Products')]/..//input[contains(@class,'select2-search__field')]",
             selectAll: ".dokan-min-max-product-select-all",
             clear: ".dokan-min-max-product-clear-all",
             selectCategory: "#product_cat",
@@ -2315,11 +2316,12 @@ module.exports = {
         vAddonSettings: {
             createNewAddon: ".dokan-pa-all-addons .dokan-btn",
             createNew: "//a[normalize-space()='Create New']",
+            editAddon: (addon) => `//a[contains(text(), '${addon}')]/..//a[contains(text(), 'Edit')]`,
+            deleteAddon: (addon) => `//a[contains(text(), '${addon}')]/..//a[contains(text(), 'Delete')]`,
             backToAddonLists: ".back-to-addon-lists-btn",
             name: "#addon-reference",
             priority: "#addon-priority",
             productCategories: ".select2-search__field",
-            //TODO: locators may need to be updated addons
             //add-ons
             addField: ".wc-pao-add-field",
             type: ".wc-pao-addon-type-select",
@@ -2451,7 +2453,7 @@ module.exports = {
         },
 
         //verification settings
-        vVerificationSettings: {
+        vDashboardvVerificationSettings: {
 
             //wp image upload
             wpUploadFiles: "#menu-item-upload",

@@ -1,4 +1,4 @@
-const { createURL } = require("@wordpress/e2e-test-utils")
+const { createURL, switchUserToAdmin, switchUserToTest, loginUser } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const adminPage = require("../pages/admin.js")
@@ -122,6 +122,17 @@ module.exports = {
             await this.vendorLogout()
         }
         await this.login(username, password)
+    },
+
+
+    async switchUser(userName, password) { 
+        let currentUser = await base.getCurrentUser()
+        if (currentUser !== userName) {
+            await loginUser(userName, password)
+            let loggedInUser = await base.getCurrentUser() //TODO: replace all login assertions with this
+            expect(loggedInUser).toBe(userName)
+            console.log(currentUser,loggedInUser,userName)
+        }
     },
 
 }

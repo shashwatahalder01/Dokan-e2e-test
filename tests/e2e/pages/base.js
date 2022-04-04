@@ -1,5 +1,5 @@
 
-const puppeteer = require('puppeteer')
+// const puppeteer = require('puppeteer')
 const { createURL } = require("@wordpress/e2e-test-utils")
 
 
@@ -367,8 +367,10 @@ module.exports = {
     },
 
     async type(selector, value) {
-        let [element] = await page.$x(selector)
+        let element = await this.getElement(selector)
         await element.type(value)
+        // let [element] = await page.$x(selector)
+        // await element.type(value)
     },
 
     // clear input field and type 
@@ -529,11 +531,85 @@ module.exports = {
     },
 
 
+    // upload image
+    async wpUploadFile(filePath) {
+        //wp image upload
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
+        let uploadedMedia = ".attachment-preview"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
+        await page.waitForTimeout(1000)
+        let uploadedMediaIsVisible = await this.isVisible(page, uploadedMedia)
+        if (uploadedMediaIsVisible) {
+            await this.clickXpath(wpUploadFiles)
+            // await page.click(uploadedMedia)   
+            await page.waitForTimeout(1000)
+        }
+        // else {
+        await this.uploadImage(selectFiles, filePath)
+        await this.clickXpath(select)
+        await page.waitForTimeout(2000)
+        let cropIsVisible = await this.isVisible(page, crop)
+        if (cropIsVisible) {
+            await this.clickXpath(crop)
+            await page.waitForTimeout(3000)
+        }
+        // }
+    },
+
+    // upload image if no image is uploaded
+    async wpUploadFileIfNotUploaded(filePath) {
+        //wp image upload
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
+        let uploadedMedia = ".attachment-preview"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
+
+        let uploadedMediaIsVisible = await this.isVisible(page, uploadedMedia)
+        if (uploadedMediaIsVisible) {
+            // await page.click(wpUploadFiles)
+            await page.click(uploadedMedia)
+            await page.waitForTimeout(1000)
+        }
+        else {
+            await this.uploadImage(selectFiles, filePath)
+            await this.clickXpath(select)
+            await page.waitForTimeout(1000)
+            let cropIsVisible = await this.isVisible(page, crop)
+            if (cropIsVisible) {
+                await this.clickXpath(crop)
+                await page.waitForTimeout(1000)
+            }
+        }
+    },
+
+    // remove previous uploaded image if exists
+    async removePreviousUploadedImage(previousUploadedImageSelector, removePreviousUploadedImageSelector) {
+        let previousUploadedImageIsVisible = await this.isVisible(page, previousUploadedImageSelector)
+        if (previousUploadedImageIsVisible) {
+            await this.hover(previousUploadedImageSelector)
+            await page.click(removePreviousUploadedImageSelector)
+            await page.waitForTimeout(2000)
+        }
+    },
+
+    async getCurrentUser() {
+        const cookies = await page.cookies();
+        const cookie = cookies.find(c => {
+          var _c$name;
+          return !!(c !== null && c !== void 0 && (_c$name = c.name) !== null && _c$name !== void 0 && _c$name.startsWith('wordpress_logged_in_'));
+        });
+        if (!(cookie !== null && cookie !== void 0 && cookie.value)) {
+          return;
+        }
+        return decodeURIComponent(cookie.value).split('|')[0];
+      }
 
 
 
-
-
+    
 
 
 

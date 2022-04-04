@@ -125,6 +125,8 @@ module.exports = {
    addonDisplayAs: ['select', 'radiobutton', 'images'],
    addonFormatTitle: ['label', 'heading', 'hide'],
    addonOptionPriceType: ['flat_fee', 'quantity_based','percentage_based'],
+   //vendor store settings
+   vacationClosingStyle: ['instantly','datewise'],
 
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//

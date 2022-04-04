@@ -3,6 +3,9 @@ const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
 
+
+
+
 module.exports = {
 
 
@@ -495,100 +498,173 @@ module.exports = {
     //vendor set store settings
     async setStoreSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
         companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimumOrderAmount, percentage, supportButtonText,
-        minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder
-    ) {
+        minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder) {
 
         await base.click(selector.vendor.vDashboard.settings)
-        // await base.click(selector.vendor.vSettings.store)
 
-
+        //upload banner and profile picture  
+        await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.bannerImage, selector.vendor.vStoreSettings.removeBannerImage)
         await page.click(selector.vendor.vStoreSettings.banner)
-        await page.click(selector.vendor.vStoreSettings.banner)
-        await page.waitForTimeout(6000)
-        await base.clickXpath(selector.vendor.vStoreSettings.selectFiles)
-        await base.uploadImage(selector.vendor.vStoreSettings.selectFiles, '/Users/rk/Automation/Dokan_e2e_test/avatar.png')
-        await page.waitForTimeout(6000)
+        await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
+        await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
+        await page.click(selector.vendor.vStoreSettings.profilePicture)
+        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar.png')
+        // store basic info
+        await base.clearAndType(selector.vendor.vStoreSettings.storeName, storeName)
+        await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
+        await base.clearAndType(selector.vendor.vStoreSettings.phoneNo, phoneNo)
+        //address
+        await base.clearAndType(selector.vendor.vStoreSettings.street, street)
+        await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
+        await base.clearAndType(selector.vendor.vStoreSettings.city, city)
+        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
+        await page.select(selector.vendor.vStoreSettings.country, country)
+        await page.select(selector.vendor.vStoreSettings.state, state)
+        //company info
+        await base.clearAndType(selector.vendor.vStoreSettings.companyName, companyName)
+        await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
+        await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
+        await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, nameOfBank)
+        await base.clearAndType(selector.vendor.vStoreSettings.bankIban, bankIban)
+        //email
+        await base.check(selector.vendor.vStoreSettings.email)
+        //show more products
+        await base.check(selector.vendor.vStoreSettings.moreProducts)
+        //map
+        await page.click(selector.vendor.vStoreSettings.map)
+        await base.clearAndType(selector.vendor.vStoreSettings.map, map)
+        await page.waitForTimeout(1000)
+        await page.keyboard.press('ArrowDown')
+        await page.keyboard.press('Enter')
+        //terms and conditions
+        await base.check(selector.vendor.vStoreSettings.termsAndConditions)
+        let termsAndConditionsIframe = await base.switchToIframe(selector.vendor.vStoreSettings.termsAndConditionsIframe)
+        await base.iframeClearAndType(termsAndConditionsIframe, selector.vendor.vStoreSettings.termsAndConditionsHtmlBody, 'Terms and Conditions Vendors')
+        //store opening closing time
+        await base.check(selector.vendor.vStoreSettings.storeOpeningClosingTime)
+        await page.waitForTimeout(1000)
+        let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
+        for (let day of days) {
+            await base.clickXpath(selector.vendor.vStoreSettings.chooseBusinessDays)
+            await page.waitForTimeout(2000)
+            await base.type(selector.vendor.vStoreSettings.chooseBusinessDays, day)
+            await page.keyboard.press('Enter')
+            await base.clickXpath(selector.vendor.vStoreSettings.businessDaysTab(day))
+            await page.waitForTimeout(1000)
+            //individual day settings
+            await base.waitForSelector(selector.vendor.vStoreSettings.openingTime(day))
+            await base.clearAndType(selector.vendor.vStoreSettings.openingTime(day), '06:00 AM')
+            await base.clearAndType(selector.vendor.vStoreSettings.closingTime(day), '11:30 PM')
+        }
+        //vacation
+        let noVacationIsSetIsVisible = await base.isVisible(page, selector.vendor.vStoreSettings.noVacationIsSet)
+        if (!noVacationIsSetIsVisible) {
+            await base.hover(selector.vendor.vStoreSettings.vacationRow)
+            await page.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
+            await page.click(selector.vendor.vStoreSettings.confirmDeleteSavedVacationSchedule)
+        }
+        let vacationDayFrom = helper.addDays(helper.currentDate, helper.getRandomArbitraryInteger(31, 365))
+        let vacationDayTo = helper.addDays(vacationDayFrom, 31)
+        await base.check(selector.vendor.vStoreSettings.goToVacation)
+        await base.select(selector.vendor.vStoreSettings.closingStyle, 'datewise')
+        await base.type(selector.vendor.vStoreSettings.vacationDateRangeFrom, vacationDayFrom)
+        await base.type(selector.vendor.vStoreSettings.vacationDateRangeTo, vacationDayTo)
+        await base.type(selector.vendor.vStoreSettings.setVacationMessage, 'We are currently out of order')
+        await page.click(selector.vendor.vStoreSettings.saveVacationEdit)
+        //discount
+        await base.check(selector.vendor.vStoreSettings.enableStoreWideDiscount)
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
+        await base.clearAndType(selector.vendor.vStoreSettings.percentage, percentage)
+        //biography
+        let biographyIframe = await base.switchToIframe(selector.vendor.vStoreSettings.biographyIframe)
+        await base.iframeClearAndType(biographyIframe, selector.vendor.vStoreSettings.biographyHtmlBody, 'Vendor biography')
+        //store support
+        await base.check(selector.vendor.vStoreSettings.showSupportButtonInStore)
+        await base.check(selector.vendor.vStoreSettings.showSupportButtonInSingleProduct)
+        await base.clearAndType(selector.vendor.vStoreSettings.supportButtonText, supportButtonText)
+        //min-max
+        await base.check(selector.vendor.vStoreSettings.enableMinMaxQuantities)
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
+        await base.clearAndType(selector.vendor.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
+        await base.check(selector.vendor.vStoreSettings.enableMinMaxAmount)
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
+        await base.clearAndType(selector.vendor.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
+        await page.click(selector.vendor.vStoreSettings.clear)
+        await page.click(selector.vendor.vStoreSettings.selectAll)
+        await base.selectOptionByText(selector.vendor.vStoreSettings.selectCategory, 'Uncategorized')
 
-        const [fileChooser] = await Promise.all([page.waitForFileChooser(), base.clickXpath1(selector.vendor.vStoreSettings.selectFiles)])
-        await fileChooser.accept(['./tests/e2e/utils/sampleData/avatar.png'])
+        //update settings
+        await page.click(selector.vendor.vStoreSettings.updateSettings)
 
-        await base.clickXpath(selector.vendor.vStoreSettings.selectAndCrop)
-        await base.clickXpath(selector.vendor.vStoreSettings.cropImage)
-
-        await page.waitForTimeout(6000)
-
-        // await base.clearAndType(selector.vendor.vStoreSettings.storeName, storeName)
-        // await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
-        // await base.clearAndType(selector.vendor.vStoreSettings.phoneNo, phoneNo)
-        // //address
-        // // await page.click(selector.vendor.vStoreSettings.multipleLocation)
-        // // await page.type(selector.vendor.vStoreSettings.locationName, locationName)
-        // // await page.click(selector.vendor.vStoreSettings.addLocation)
-        // // await page.click(selector.vendor.vStoreSettings.editLocation)
-        // await base.clearAndType(selector.vendor.vStoreSettings.street, street)
-        // await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
-        // await base.clearAndType(selector.vendor.vStoreSettings.city, city)
-        // await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
-        // await page.select(selector.vendor.vStoreSettings.country, country)
-        // await page.select(selector.vendor.vStoreSettings.state, state)
-        // // await page.type(selector.vendor.vStoreSettings.saveLocation, saveLocation)
-        // // await page.click(selector.vendor.vStoreSettings.saveLocation)
-        // // await page.click(selector.vendor.vStoreSettings.cancelSaveLocation)
-        // // await page.click(selector.vendor.vStoreSettings.deleteSaveLocation)
-
-        // //company info
-        // await base.clearAndType(selector.vendor.vStoreSettings.companyName, companyName)
-        // await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
-        // await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
-        // await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, nameOfBank)
-        // await base.clearAndType(selector.vendor.vStoreSettings.bankIban, bankIban)
-        // //email
-        // // await page.click(selector.vendor.vStoreSettings.email)
-        // // await page.click(selector.vendor.vStoreSettings.moreProducts)
-        // //map
-        // // await page.click(selector.vendor.vStoreSettings.map)
-        // // await base.clearAndType(selector.vendor.vStoreSettings.map, map)
-        // // await page.waitForTimeout(1000)
-        // // await page.click(selector.vendor.vStoreSettings.map1)
-        // // await page.click(selector.vendor.vStoreSettings.mapFirstResult)
-        // //store opening closing time
-        // //vacation
-
-        // //discount
-        // await page.click(selector.vendor.vStoreSettings.enableStoreWideDiscount)
-        // await base.clearAndType(selector.vendor.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
-        // await base.clearAndType(selector.vendor.vStoreSettings.percentage, percentage)
-        // //biography
-
-        // //store support
-        // await page.click(selector.vendor.vStoreSettings.showSupportButtonInStore)
-        // await page.click(selector.vendor.vStoreSettings.showSupportButtonInSingleProduct)
-        // await page.click(selector.vendor.vStoreSettings.showSupportButtonInStore)
-        // await page.click(selector.vendor.vStoreSettings.showSupportButtonInSingleProduct)
-        // await base.clearAndType(selector.vendor.vStoreSettings.supportButtonText, supportButtonText)
-
-        // // //min-max
-        // // await page.click(selector.vendor.vStoreSettings.enableMinMaxQuantities)
-        // // await base.clearAndType(selector.vendor.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
-        // // await base.clearAndType(selector.vendor.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
-        // // await page.click(selector.vendor.vStoreSettings.enableMinMaxAmount)
-        // // await base.clearAndType(selector.vendor.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
-        // // await base.clearAndType(selector.vendor.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
-        // // await page.click(selector.vendor.vStoreSettings.selectAll)
-
-        // //update settings
-        // await page.click(selector.vendor.vStoreSettings.updateSettings)
-        // await page.waitForTimeout(1000)
-
-        // let successMessage = await base.getSelectorText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
-        // expect(successMessage).toMatch('Your information has been saved successfully')
+        let successMessage = await base.getSelectorText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
 
     },
 
-    //vendor set addon settings
-    async setAddonSettings() {
 
+    //vendor add addons
+    async addAddon() {
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.addons)
+
+        //add addon
+        await base.click(selector.vendor.vAddonSettings.createNewAddon)
+        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
+        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
+        await page.click(selector.vendor.vAddonSettings.productCategories,)
+        await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
+        await page.keyboard.press('Enter')
+
+        //Add-on fields
+        await page.click(selector.vendor.vAddonSettings.addField)
+        await base.waitForSelector(selector.vendor.vAddonSettings.type)
+        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
+        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
+        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
+        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
+        await page.click(selector.vendor.vAddonSettings.enableDescription)
+        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
+        await page.click(selector.vendor.vAddonSettings.requiredField)
+        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
+        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
+        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
+        await base.click(selector.vendor.vAddonSettings.publish)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
+        expect(successMessage).toMatch('Add-on saved successfully')
     },
+    //vendor edit addons
+    async editAddon(addon) {
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.addons)
+
+        //add addon
+        await base.click(selector.vendor.vAddonSettings.editAddon(addon))
+        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
+        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
+        await page.click(selector.vendor.vAddonSettings.productCategories,)
+        await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
+        await page.keyboard.press('Enter')
+
+        //Add-on fields
+        await page.click(selector.vendor.vAddonSettings.addField)
+        await base.waitForSelector(selector.vendor.vAddonSettings.type)
+        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
+        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
+        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
+        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
+        await page.click(selector.vendor.vAddonSettings.enableDescription)
+        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
+        await page.click(selector.vendor.vAddonSettings.requiredField)
+        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
+        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
+        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
+        await base.click(selector.vendor.vAddonSettings.update)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
+        expect(successMessage).toMatch('Add-on saved successfully')
+    },
+
 
     //vendor set payment settings
     async setPaymentSettings() {
@@ -646,36 +722,7 @@ module.exports = {
 
     },
 
-    async addAddon() {
-        await base.click(selector.vendor.vDashboard.settings)
-        await base.click(selector.vendor.vSettings.addons)
-
-        await base.click(selector.vendor.vAddonSettings.createNewAddon)
-        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
-        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
-        await page.click(selector.vendor.vAddonSettings.productCategories,)
-        await base.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
-        await page.keyboard.press('Enter')
-        await base.click(selector.vendor.vAddonSettings.publish)
-        
-        //Add-on fields
-        await page.click(selector.vendor.vAddonSettings.addField)
-        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
-        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
-        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
-        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
-        await page.click(selector.vendor.vAddonSettings.enableDescription)
-        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
-        await page.click(selector.vendor.vAddonSettings.requiredField)
-        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
-        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
-        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
-        await base.click(selector.vendor.vAddonSettings.update)
-        
-        let successMessage = await base.getSelectorText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
-        expect(successMessage).toMatch('Add-on saved successfully')
-    },
-
+    //vendor send id verification request
     async sendIdVerificationRequest() {
         // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
@@ -714,6 +761,7 @@ module.exports = {
         expect(successMessage).toMatch('Your ID verification request is Sent and pending approval')
     },
 
+    //vendor send address verification request
     async sendAddressVerificationRequest() {
         // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
@@ -741,6 +789,7 @@ module.exports = {
         expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
     },
 
+    //vendor send company verification request
     async sendCompanyVerificationRequest() {
         // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
@@ -844,6 +893,7 @@ module.exports = {
 
     //vendor set shipping settings
     async setShippingSettings(shippingZone, shippingMethod, selectShippingMethod) {
+        //TODO: admin need to enable shipping settings switch to admin & enable
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.shipping)
 
@@ -987,7 +1037,6 @@ module.exports = {
         expect(successMessage).toMatch('Settings saved successfully')
 
     },
-
 
 
 }
