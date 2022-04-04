@@ -1,46 +1,43 @@
-const { createURL, switchUserToAdmin, switchUserToTest, loginUser } = require("@wordpress/e2e-test-utils")
+const { loginUser } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const adminPage = require("../pages/admin.js")
 const vendorPage = require("../pages/vendor.js")
 const customerPage = require("../pages/customer.js")
 
-
 module.exports = {
 
     // user login
     async login(username, password) {
-        // await this.loginFrontend(username, password)
-        await this.loginFromWPLoginDashboard(username, password)
+        await this.loginFrontend(username, password)
+        // await this.loginBackend(username, password)
     },
 
     //login from frontend
     async loginFrontend(username, password) {
         await base.goto("my-account")
-        let res = await base.isVisible(page, selector.frontend.username)
-        if (res) {
+        let emailField = await base.isVisible(page, selector.frontend.username)
+        if (emailField) {
             await page.type(selector.frontend.username, username)
             await page.type(selector.frontend.userPassword, password)
             await base.click(selector.frontend.logIn)
 
-            // let homeIsVisible = await base.isVisible(page, selector.frontend.home) //TODO: customer assertion
-            // expect(homeIsVisible).toBe(true)
-            let vendorDashboardIsVisible = await base.isVisible(page, selector.vendor.vDashboard.dashboard)  //vendor assertion
-            expect(vendorDashboardIsVisible).toBe(true)
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(username)
         }
     },
 
     //login user form WP login dashboard
-    async loginFromWPLoginDashboard(username, password) {
+    async loginBackend(username, password) {
         await base.goto("wp-admin")
-        let res = await base.isVisible(page, selector.backend.email)
-        if (res) {
+        let emailField = await base.isVisible(page, selector.backend.email)
+        if (emailField) {
             await page.type(selector.backend.email, username)
             await page.type(selector.backend.password, password)
             await base.click(selector.backend.login)
 
-            let homeIsVisible = await base.isVisible(page, selector.frontend.home)
-            expect(homeIsVisible).toBe(true)
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(username)
         }
     },
 
@@ -65,14 +62,14 @@ module.exports = {
     //admin login
     async adminLogin(username, password) {
         await base.goto("wp-admin")
-        let res = await base.isVisible(page, selector.backend.email)
-        if (res) {
+        let emailField = await base.isVisible(page, selector.backend.email)
+        if (emailField) {
             await page.type(selector.backend.email, username)
             await page.type(selector.backend.password, password)
             await base.click(selector.backend.login)
 
-            let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
-            expect(dashboardIsVisible).toBe(true)
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(username)
         }
     },
 
@@ -85,53 +82,13 @@ module.exports = {
         expect(successMessage).toMatch("You are now logged out.")
     },
 
-    //switch to admin from customer or vendor
-    async switchToAdmin(username, password) {
-        await base.goto("my-account")
-        let dashboardIsVisible = await base.isVisible(page, selector.frontend.goToVendorDashboard)
-        if (dashboardIsVisible) {
-            await this.vendorLogout()
-        }
-        else {
-            await this.customerLogout()
-        }
-        await this.adminLogin(username, password)
-    },
-
-    //switch to vendor from admin or customer
-    async switchToVendor(username, password) {
-        await base.goto("wp-admin")
-        let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
-        if (dashboardIsVisible) {
-            await this.adminLogout()
-        }
-        else {
-            await this.customerLogout()
-        }
-        await this.login(username, password)
-    },
-
-    //switch to customer from admin or vendor
-    async switchToCustomer(username, password) {
-        await base.goto("wp-admin")
-        let dashboardIsVisible = await base.isVisible(page, selector.backend.dashboardMenu)
-        if (dashboardIsVisible) {
-            await this.adminLogout()
-        }
-        else {
-            await this.vendorLogout()
-        }
-        await this.login(username, password)
-    },
-
-
-    async switchUser(userName, password) { 
+    //switcher user
+    async switchUser(username, password) {
         let currentUser = await base.getCurrentUser()
-        if (currentUser !== userName) {
-            await loginUser(userName, password)
-            let loggedInUser = await base.getCurrentUser() //TODO: replace all login assertions with this
-            expect(loggedInUser).toBe(userName)
-            console.log(currentUser,loggedInUser,userName)
+        if (currentUser !== username) {
+            await loginUser(username, password)
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(username)
         }
     },
 

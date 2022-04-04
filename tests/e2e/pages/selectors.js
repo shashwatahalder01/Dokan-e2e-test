@@ -853,18 +853,18 @@ module.exports = {
                 },
 
                 stripeExpress: {
-                    // Stripe Express
+                    //stripe express
                     enableOrDisableStripeExpress: "#woocommerce_dokan_stripe_express_enabled",
                     title: "#woocommerce_dokan_stripe_express_title",
                     description: "#woocommerce_dokan_stripe_express_description",
-                    // API Credentials
+                    //api credentials
                     testMode: "#woocommerce_dokan_stripe_express_testmode",
                     testPublishableKey: "#woocommerce_dokan_stripe_express_test_publishable_key",
                     testSecretKey: "#woocommerce_dokan_stripe_express_test_secret_key",
                     testWebhookSecret: "#woocommerce_dokan_stripe_express_test_webhook_key",
-                    // Payment and Disbursement
+                    //payment and disbursement
                     choosePaymentMethods: "//select[@id='woocommerce_dokan_stripe_express_enabled_payment_methods']/..//span[@class='select2-selection select2-selection--multiple']",
-                    // choosePaymentMethods: ".select2-search__field",
+                    //choosePaymentMethods: ".select2-search__field",
                     choosePaymentMethodsValues: ".select2-results ul li",
                     takeProcessingFeesFromSellers: "#woocommerce_dokan_stripe_express_sellers_pay_processing_fee",
                     savedCards: "#woocommerce_dokan_stripe_express_saved_cards",
@@ -872,14 +872,14 @@ module.exports = {
                     disburseFunds: "#select2-woocommerce_dokan_stripe_express_disburse_mode-container",
                     disbursementModeValues: ".select2-results ul li",
                     customerBankStatement: "#woocommerce_dokan_stripe_express_statement_descriptor",
-                    // Payment Request Options (Apple Pay / Google Pay)
+                    //payment request options (Apple Pay / Google Pay)
                     paymentRequestButtons: "#woocommerce_dokan_stripe_express_payment_request",
                     buttonType: "#woocommerce_dokan_stripe_express_payment_request_button_type",
                     buttonTheme: "#woocommerce_dokan_stripe_express_payment_request_button_theme",
                     buttonLocations: "//select[@id='woocommerce_dokan_stripe_express_payment_request_button_locations']/..//span[@class='select2-selection select2-selection--multiple']",
                     buttonLocationsValues: ".select2-results ul li",
                     buttonSize: "#woocommerce_dokan_stripe_express_payment_request_button_size",
-                    // Advanced Settings
+                    //advanced settings
                     displayNoticeToNonConnectedSellers: "#woocommerce_dokan_stripe_express_notice_on_vendor_dashboard",
                     sendAnnouncementToNonConnectedSellers: "#woocommerce_dokan_stripe_express_announcement_to_sellers",
                     announcementInterval: "#woocommerce_dokan_stripe_express_notice_interval",
@@ -982,7 +982,7 @@ module.exports = {
                 trialPeriodRange: '.dokan-subscription-range',
                 trialPeriodPeriod: '.dokan_subscription_trial_period > select:nth-child(3)',  //TODO: make unique locator
 
-                //action
+                //auction
                 itemCondition: '#\\_auction_item_condition',
                 auctionType: '#\\_auction_type',
                 proxyBidding: '#\\_auction_proxy',
@@ -1603,17 +1603,16 @@ module.exports = {
         //orders
         vOrders: {
             //menus
-            //TODO: make locators unique
-            all: ".active:nth-child(1) > a",  //TODO: make unique locator
-            completed: ".list-inline > li:nth-child(2) > a",  //TODO: make unique locator
-            processing: ".list-inline > li:nth-child(3) > a",  //TODO: make unique locator
-            onHold: ".list-inline > li:nth-child(4) > a",  //TODO: make unique locator
-            pending: ".list-inline > li:nth-child(5) > a",  //TODO: make unique locator
-            cancelled: ".list-inline > li:nth-child(6) > a",  //TODO: make unique locator
-            refunded: ".list-inline > li:nth-child(7) > a",  //TODO: make unique locator
-            failed: ".list-inline > li:nth-child(8) > a",  //TODO: make unique locator
-            exportAll: ".dokan-btn-sm:nth-child(3)",  //TODO: make unique locator
-            exportFiltered: ".dokan-right .dokan-btn:nth-child(4)",  //TODO: make unique locator
+            all: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'All')]",  
+            completed: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Completed')]",  
+            processing: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Processing')]",  
+            onHold: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'On-hold')]",  
+            pending: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Pending')]",  
+            cancelled: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Cancelled')]",  
+            refunded: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Refunded')]",  
+            failed: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Failed')]",  
+            exportAll: "//input[@name='dokan_order_export_all']",  
+            exportFiltered: "//input[@name='dokan_order_export_filtered']", 
             //filter
             filterByDate: "#order_date_filter",
             filterByRegisteredCustomer: ".page-template-default",
@@ -1675,17 +1674,17 @@ module.exports = {
             expireDate: "#dokan-expire",
             excludeSaleItems: "#checkboxes-2",
             minimumAmount: "#minium_ammount",
-            product: ".dokan-form-group:nth-child(14) .select2-search__field",  //TODO: make unique locator
+            product: "//label[contains(text(), 'Product')]/..//input[@class='select2-search__field']", 
             selectAll: ".dokan-coupon-product-select-all",
             clear: ".dokan-coupon-product-clear-all",
             applyForNewProducts: "#apply_new_products",
-            excludeProducts: ".dokan-form-group:nth-child(16) .select2-search__field",  //TODO: make unique locator
+            excludeProducts: "//label[contains(text(), 'Exclude products')]/..//input[@class='select2-search__field']",
             showOnStore: "#checkboxes-3",
             createCoupon: ".dokan-btn-danger",
 
             //menus
-            myCoupons: ".active:nth-child(1) > a",  //TODO: make unique locator
-            marketplaceCoupons: ".active:nth-child(2) > a",  //TODO: make unique locator
+            myCoupons: "//ul[@class='dokan_tabs']//a[contains(text(), 'My Coupons')]",  
+            marketplaceCoupons: "//ul[@class='dokan_tabs']//a[contains(text(), 'Marketplace Coupons')]", 
 
             //coupon dashboard
             createdCoupon: ".coupon-code.column-primary strong span"
@@ -1693,13 +1692,12 @@ module.exports = {
 
         //reports
         vReports: {
-            //TODO: make locators unique
             //menus
-            overview: ".active:nth-child(1) > a",   //TODO: make unique locator
-            salesByDay: ".dokan_tabs > li:nth-child(2) > a",  //TODO: make unique locator
-            topSelling: ".dokan_tabs > li:nth-child(3) > a",  //TODO: make unique locator
-            topEarning: ".dokan_tabs > li:nth-child(4) > a",  //TODO: make unique locator
-            statement: ".dokan_tabs > li:nth-child(5) > a",  //TODO: make unique locator
+            overview: "//ul[@class='dokan_tabs']//a[contains(text(), 'Overview')]",   
+            salesByDay: "//ul[@class='dokan_tabs']//a[contains(text(), 'Sales by day')]",  
+            topSelling: "//ul[@class='dokan_tabs']//a[contains(text(), 'Top selling')]",  
+            topEarning: "//ul[@class='dokan_tabs']//a[contains(text(), 'Top earning')]",  
+            statement: "//ul[@class='dokan_tabs']//a[contains(text(), 'Statement')]",  
             exportStatements: ".dokan-right",
             //filter
             startDate: "#from",
@@ -1724,12 +1722,11 @@ module.exports = {
 
         //review
         vReviews: {
-            //TODO: make locators unique
             //menus
-            approved: ".active:nth-child(1) > a",   //TODO: make unique locator
-            pending: ".subsubsub > li:nth-child(2) > a",  //TODO: make unique locator
-            spam: ".subsubsub > li:nth-child(3) > a",   //TODO: make unique locator
-            trash: ".subsubsub > li:nth-child(4) > a",  //TODO: make unique locator
+            approved: "//div[@id='dokan-comments_menu']//a[contains(text(), 'Approved')]",   
+            pending: "//div[@id='dokan-comments_menu']//a[contains(text(), 'Pending')]",  
+            spam: "//div[@id='dokan-comments_menu']//a[contains(text(), 'Spam')]",   
+            trash: "//div[@id='dokan-comments_menu']//a[contains(text(), 'Trash')]",  
 
             //bulk action
             selectAll: ".dokan-check-all",
@@ -2014,7 +2011,7 @@ module.exports = {
             year: "div:nth-child(3) > .dokan-form-control",   //TODO: make unique locator
             previous: ".prev",
             next: ".next",
-            calenderDay: "//input[@placeholder='yyyy-mm-dd']",  //XPath
+            calenderDay: "//input[@placeholder='yyyy-mm-dd']",  
             dayView: ".day",
             monthView: ".month",
 
@@ -2042,7 +2039,7 @@ module.exports = {
         vAnnouncement: {
             seeMore: "p > a",
             backToAllNotice: ".dokan-btn",
-            deleteAnnouncement: ".dokan-announcement-wrapper-item:nth-child(1) .fas",   //TODO: make unique locator
+            deleteAnnouncement: ".remove_announcement .fas", 
             confirmDeleteAnnouncement: ".swal2-confirm",
             cancelDeleteAnnouncement: ".swal2-cancel",
         },
@@ -2050,13 +2047,13 @@ module.exports = {
         // tools
         vTools: {
             //menus
-            import: ".active > .active",
-            export: ".dokan_tabs > li:nth-child(2) > a",  //TODO: make unique locator
+            import: "//ul[@class='dokan_tabs']//a[contains(text(),'Import')]",
+            export: "//ul[@class='dokan_tabs']//a[contains(text(),'Export')]",  
 
             //import
             //xml
-            chooseXml: "#import p:nth-child(1) > input",  //TODO: make unique locator
-            importXml: "p:nth-child(2) > .btn",  //TODO: make unique locator
+            chooseXml: "//form[@enctype='multipart/form-data']//input[@type='file']",
+            importXml: "//input[@value='Import']",  
             //csv
             importCsv: "#import > .dokan-btn",
             chooseCsv: "#upload",
@@ -2071,23 +2068,22 @@ module.exports = {
             all: "#export_all",
             product: "#export_product",
             variation: "#export_variation_product",
-            exportXml: "p:nth-child(4) > .btn",   //TODO: make unique locator
+            exportXml: "//input[@value='Export']",   
             //csv
             exportCsv: "#export > .dokan-btn",
             exportCustomMeta: "#woocommerce-exporter-meta",
             generateCsv: ".woocommerce-exporter-button",
         },
 
-        //action
-        vAction: {
+        //auction
+        vAuction: {
             //menus
-            all: ".active:nth-child(1) > a",  //TODO: make unique locator
-            online: ".dokan-listing-filter > li:nth-child(2) > a",  //TODO: make unique locator
-            pending: ".dokan-listing-filter > li:nth-child(3) > a",  //TODO: make unique locator
-            review: "",
-            draft: ".dokan-listing-filter > li:nth-child(4) > a",  //TODO: make unique locator
+            all: "//ul[contains(@class,'dokan-listing-filter')]//a[contains(text(),'All')]",  
+            online: "//ul[contains(@class,'dokan-listing-filter')]//a[contains(text(),'Online')]",  
+            pendingReview: "//ul[contains(@class,'dokan-listing-filter')]//a[contains(text(),'Pending Review')]",  
+            draft: "//ul[contains(@class,'dokan-listing-filter')]//a[contains(text(),'Draft')]",
 
-            // create action product
+            // create auction product
             addNewActionProduct: ".dokan-btn-theme",
             productName: "#post-title",
             productShortDescription: "#content > .col-full",
@@ -2102,7 +2098,7 @@ module.exports = {
             virtual: "#\\_virtual",
             //general options
             itemCondition: "#\\_auction_item_condition",
-            actionType: "#\\_auction_type",
+            auctionType: "#\\_auction_type",
             enableProxyBiddingForThisAuctionProduct: ".dokan-form-group > .checkbox > label",
             startPrice: "#\\_auction_start_price",
             bidIncrement: "#\\_auction_bid_increment",
@@ -2125,13 +2121,17 @@ module.exports = {
             //tax
             taxStatus: "#\\_tax_status",
             taxClass: "#\\_tax_class",
+            //short description
+            productShortDescription: "#post-excerpt", 
             //description
-            productShortDescription: "", //TODO: add locator
+            productDescriptionIframe: ".dokan-auction-post-content iframe",
+            productDescriptionHtmlBody: "#tinymce",
+
             //add auction
             addAuctionProduct: ".dokan-btn-theme",
             //TODO: add more locators
 
-            //action activity
+            //auction activity
             actionActivity: ".button-ml > .dokan-btn",
             backToActions: ".entry-title > #auction-clear-filter-button",
             //filter
@@ -2141,21 +2141,21 @@ module.exports = {
             filterReset: "div > #auction-clear-filter-button",
             //search
             searchAuctionActivity: ".dokan-form-control",
-            search: ".dokan-btn:nth-child(2)",  //TODO: make unique locator
+            search: "//button[contains(text(),'Search') and @class='dokan-btn']", 
         },
 
         //support
         vSupport: {
             //menus
-            allTickets: ".dokan-support-topic-counts > li:nth-child(1) > a",   //TODO: make unique locator
-            openTickets: ".dokan-support-topic-counts > li:nth-child(2) > a",  //TODO: make unique locator
-            closedTickets: ".dokan-support-topic-counts > li:nth-child(3) > a",  //TODO: make unique locator
+            allTickets: "//ul[contains(@class,'dokan-support-topic-counts')]//a[contains(text(), 'All Tickets')]",  
+            openTickets: "//ul[contains(@class,'dokan-support-topic-counts')]//a[contains(text(), 'Open Tickets')]",  
+            closedTickets: "//ul[contains(@class,'dokan-support-topic-counts')]//a[contains(text(), 'Closed Tickets')]", 
 
             //filter
             selectCustomer: ".page-template-default",
             ticketDateFilter: "#support_ticket_date_filter",
             tickedIdOrKeyword: "#dokan-support-ticket-search-input",
-            filter: ".dokan-btn:nth-child(6)",  //TODO: make unique locator
+            search: "//input[@class='dokan-btn' and @value='Search']",  
 
             //manage ticket
             backToTickets: ".dokan-dashboard-content > a",
@@ -2166,7 +2166,7 @@ module.exports = {
             okEmptySubmit: ".swal2-confirm",
 
             //close ticket
-            closeTopic: "tr:nth-child(2) .dokan-btn",   //TODO: make unique locator
+            closeTopic: ".dokan-support-status-change",  
             confirmCloseTopic: ".swal2-confirm",
             cancelCloseTopic: ".swal2-cancel",
         },
@@ -2265,10 +2265,10 @@ module.exports = {
             businessDaysTab: (day) => `//ul[@class='tabs']//li[@rel='store-tab-${day}']`,
             openingTime: (day) => `#opening-time-${day}`,
             closingTime: (day) => `#closing-time-${day}`,
-            addNewRow: (day) =>`#store-tab-${day} .added-store-opening-time > .fa`,
+            addNewRow: (day) => `#store-tab-${day} .added-store-opening-time > .fa`,
             deleteOneRow: ".remove-store-closing-time > .fa",
-            storeOpenNotice: "//input[@name='dokan_store_open_notice']", 
-            storeCloseNotice: "//input[@name='dokan_store_close_notice']", 
+            storeOpenNotice: "//input[@name='dokan_store_open_notice']",
+            storeCloseNotice: "//input[@name='dokan_store_close_notice']",
             //vacation
             goToVacation: "#dokan-seller-vacation-activate",
             closingStyle: "label .form-control",
@@ -2279,8 +2279,8 @@ module.exports = {
             cancelVacationEdit: "#dokan-seller-vacation-cancel-edit",
             noVacationIsSet: "//td[contains( text(),'No vacation is set')]",
             vacationRow: "//td[@class='dokan-seller-vacation-list-action']/..",
-            editSavedVacationSchedule: ".dokan-seller-vacation-list-action .fas",  
-            deleteSavedVacationSchedule: ".dokan-seller-vacation-remove-schedule", 
+            editSavedVacationSchedule: ".dokan-seller-vacation-list-action .fas",
+            deleteSavedVacationSchedule: ".dokan-seller-vacation-remove-schedule",
             confirmDeleteSavedVacationSchedule: ".swal2-confirm",
             cancelDeleteSavedVacationSchedule: ".swal2-cancel",
             //discount
@@ -2301,7 +2301,6 @@ module.exports = {
             enableMinMaxAmount: "#enable_vendor_min_max_amount",
             minimumAmountToPlaceAnOrder: "#min_amount_to_order",
             maximumAmountToPlaceAnOrder: "#max_amount_to_order",
-            // selectProducts: ".select2-search:nth-child(1) > .select2-search__field", 
             selectProducts: "//label[contains(text(), 'Select Products')]/..//input[contains(@class,'select2-search__field')]",
             selectAll: ".dokan-min-max-product-select-all",
             clear: ".dokan-min-max-product-clear-all",
@@ -2349,13 +2348,13 @@ module.exports = {
             paypal: '.payment-field-paypal .dokan-form-control',
 
             //bank transfer
-            bankAccountName: '.dokan-form-group:nth-child(1) > .dokan-w8 > .dokan-form-control',  //TODO: make unique locator
-            bankAccountNumber: '.dokan-form-group:nth-child(2) .dokan-form-control',  //TODO: make unique locator
-            bankName: '.dokan-form-group:nth-child(3) .dokan-form-control',  //TODO: make unique locator
-            bankAddress: '.dokan-form-group:nth-child(4) .dokan-form-control',  //TODO: make unique locator
-            bankRoutingNumber: '.dokan-form-group:nth-child(5) .dokan-form-control',  //TODO: make unique locator
-            bankIban: '.dokan-form-group:nth-child(6) .dokan-form-control',  //TODO: make unique locator
-            bankSwiftCode: '.dokan-form-group:nth-child(7) .dokan-form-control',  //TODO: make unique locator
+            bankAccountName: "//input[@name='settings[bank][ac_name]']", 
+            bankAccountNumber: "//input[@name='settings[bank][ac_number]']", 
+            bankName: "//input[@name='settings[bank][bank_name]']", 
+            bankAddress: "//textarea[@name='settings[bank][bank_addr]']",  
+            bankRoutingNumber: "//input[@name='settings[bank][routing_number]']",
+            bankIban: "//input[@name='settings[bank][iban]']",
+            bankSwiftCode: "//input[@name='settings[bank][swift]']",
 
             //Stripe
             ConnectWithStripe: '.dokan-stripe-connect-link',
@@ -2453,7 +2452,7 @@ module.exports = {
         },
 
         //verification settings
-        vDashboardvVerificationSettings: {
+        vVerificationSettings: {
 
             //wp image upload
             wpUploadFiles: "#menu-item-upload",
@@ -2518,7 +2517,6 @@ module.exports = {
             timeSlot: (day) => `#delivery_time_slot-${day}`,
             // orderPerSlot:"//input[@placeholder='Order per slot']",
             orderPerSlot: (day) => `#order_per_slot-${day}`,
-            // deliveryTimeUpdateSettings :"//input[@name='dokan_update_delivery_time_settings']",
             deliveryTimeUpdateSettings: ".dokan-btn.dokan-btn-danger.dokan-btn-theme",
             deliveryTimeUpdateSettingsSuccessMessage: ".dokan-message strong",
         },
@@ -2599,10 +2597,6 @@ module.exports = {
             saveChanges: "//input[@value='Save Changes']",
             updateSettingsSuccessMessage: ".dokan-alert.dokan-alert-success span",
 
-            selectStates: "", //ToDO: find this locator may be exists when shipping is disabled or zone is not selected
-            limitZIPOrPostcodes: "", //ToDO: find this locator
-
-            //TODO: add more locators
             //previous shipping settings
             previousShippingSettings: "//a[contains( text(), 'Click Here')]",
             backToZoneWiseShippingSettings: ".dokan-page-help a",

@@ -26,9 +26,6 @@ describe('Environment setup test', () => {
         //TODO: Test product add
         //TODO:
         //TODO:
-        //TODO:
-        //TODO:
-        //TODO:
 
     }, timeout)
 

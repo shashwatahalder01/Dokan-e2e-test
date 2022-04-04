@@ -133,6 +133,7 @@ dist
 
 # custom files
 # packages & plugins
+.Ds_store
 wp-content/
 artifacts/
 jest-stare/
