@@ -3,13 +3,12 @@
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
   "plugins": [
-    "./wp-content/plugins/dokan/",
-    "./wp-content/plugins/dokan-pro/",
-    "./wp-content/plugins/woocommerce/",
-    "./wp-content/plugins/woocommerce-bookings/",
-    "./wp-content/plugins/woocommerce-product-addons/",
-    "./wp-content/plugins/woocommerce-subscriptions/",
-    "./wp-content/plugins/woocommerce-simple-auctions/"
+    "weDevsOfficial/dokan#develop",
+    "woocommerce/woocommerce#trunk",
+    "https://drive.google.com/uc?export=download&id=1Ox5rRYxoVVdB-CnwN09SuGBHU5H5q_Zz",
+    "https://drive.google.com/uc?export=download&id=1EMXavg0ITwu6ufN9HC1PPaRvAAHbmAcB",
+    "https://drive.google.com/uc?export=download&id=1EUHnNgfPWHRXQn7W2tKO8k2VMOLiOo3l",
+    "https://drive.google.com/uc?export=download&id=186k9S7jorVwVCe87F_Xj4AyomKZJ5Puk"
 
   ],
   "themes": [
