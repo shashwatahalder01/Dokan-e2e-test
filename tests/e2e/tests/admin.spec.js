@@ -12,7 +12,7 @@ describe('admin functionality test', () => {
    // beforeEach(async () => {})
    // afterEach(async () => {await browser.close()})
 
-    it.only('admin can add test settings', async () => {
+    it('admin can add test settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.setWpSettings()
         await adminPage.setWoocommerceSettings()
@@ -241,7 +241,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanProductAdvertisingSettings()
     },timeout)
 
-    it('admin can set dokan geolocation settings', async () => {
+    it.only('admin can set dokan geolocation settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanGeolocationSettings()

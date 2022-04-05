@@ -1,4 +1,4 @@
-const { loginUser } = require("@wordpress/e2e-test-utils")
+const { loginUser, createUser } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const adminPage = require("../pages/admin.js")
@@ -9,13 +9,15 @@ module.exports = {
 
     // user login
     async login(username, password) {
+
         await this.loginFrontend(username, password)
         // await this.loginBackend(username, password)
     },
 
     //login from frontend
     async loginFrontend(username, password) {
-        await base.goto("my-account")
+        // await base.goto("my-account")
+        await page.goto("http://dokan2.test/my-account")
         let emailField = await base.isVisible(page, selector.frontend.username)
         if (emailField) {
             await page.type(selector.frontend.username, username)
@@ -91,5 +93,10 @@ module.exports = {
             expect(loggedInUser).toBe(username)
         }
     },
+
+    async createUser(username, userDetails ) {
+        let password = createUser(username, userDetails)
+        return password
+    }
 
 }

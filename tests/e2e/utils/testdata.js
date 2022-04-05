@@ -115,21 +115,27 @@ module.exports = {
    shippingPolicy: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], // TODO: replace with select text values
    vendorShippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping'],
    flatRateCalculationType: ['class', 'order'],
-   flatRateCalculationType: ['item', 'line','class'], // TODO: replace with select text values, one option missing
+   flatRateCalculationType: ['item', 'line', 'class'], // TODO: replace with select text values, one option missing
    tableRateTaxIncludedInShippingCosts: ['yes', 'no'],
    distanceRateTransportationMode: ['driving', 'walking', 'Bicycling'],
-   distanceRateAvoid: ['none', 'tolls','highways','ferries'],
+   distanceRateAvoid: ['none', 'tolls', 'highways', 'ferries'],
    distanceRateDistanceUnit: ['metric', 'imperial'],
    //addon
-   addonType: ['multiple_choice', 'checkbox','custom_text', 'custom_textarea','file_upload', 'custom_price','input_multiplier', 'heading'],
+   addonType: ['multiple_choice', 'checkbox', 'custom_text', 'custom_textarea', 'file_upload', 'custom_price', 'input_multiplier', 'heading'],
    addonDisplayAs: ['select', 'radiobutton', 'images'],
    addonFormatTitle: ['label', 'heading', 'hide'],
-   addonOptionPriceType: ['flat_fee', 'quantity_based','percentage_based'],
+   addonOptionPriceType: ['flat_fee', 'quantity_based', 'percentage_based'],
    //vendor store settings
-   vacationClosingStyle: ['instantly','datewise'],
+   vacationClosingStyle: ['instantly', 'datewise'],
 
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//
+
+   wpCustomer: {
+      firstName: 'customer10005',
+      lastName: 'c10005',
+      role: 'customer',
+   },
 
    customerInfo: {
       userEmail: faker.internet.email(),
@@ -156,6 +162,8 @@ module.exports = {
       street1: 'abc street',
       street2: 'xyz street',
       country: 'United States (US)',
+      countrySelectValue: 'US',
+      stateSelectValue: 'NY',
       city: 'New York',
       zipCode: '10006',
       state: 'New York',
@@ -166,6 +174,16 @@ module.exports = {
       routingNumber: faker.random.alphaNumeric(10),
       swiftCode: faker.random.alphaNumeric(10),
       iban: faker.random.alphaNumeric(10),
+
+      //shop details
+      productsPerPage: '12',
+      mapLocation: 'New York',
+      minimumOrderAmount: '200',
+      minimumOrderAmountPercentage: '10',
+      minimumProductQuantity: '1',
+      maximumProductQuantity: '20',
+      minimumAmountToPlace: '10',
+      maximumAmountToPlace: '1000000',
    },
 
    vendorSetupWizard: {
@@ -206,7 +224,22 @@ module.exports = {
       categories: faker.random.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
       attribute: 'size',
       attributeTerms: ['s', 'l', 'm'],
-      vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1]
+      vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1],
+      booking: {
+         productName: faker.commerce.productName() + (' (Booking)'),
+         category: 'Uncategorized',
+         bookingDurationType: 'fixed',
+         bookingDuration: '2',
+         bookingDurationUnit: 'day',
+         calenderDisplayMode: 'always_visible',
+         maxBookingsPerBlock: '5',
+         minimumBookingWindowIntoTheFutureDate: '0',
+         minimumBookingWindowIntoTheFutureDateUnit: 'month',
+         maximumBookingWindowIntoTheFutureDate: '5',
+         maximumBookingWindowIntoTheFutureDateUnit: 'month',
+         baseCost: '20',
+         blockCost: '10',
+      }
    },
 
    dokanSubscription: {

@@ -256,11 +256,11 @@ module.exports = {
     },
 
     async goToCheckoutFromCart() {
-        await page.waitForTimeout(2000)
+        // await page.waitForTimeout(2000)
         // await page.waitForSelector(selector.customer.cCart.proceedToCheckout, {visible: true})
-        await page.click(selector.customer.cCart.proceedToCheckout)
+        await base.click(selector.customer.cCart.proceedToCheckout)
 
-        await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
+        // await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(page, selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
 
@@ -297,7 +297,7 @@ module.exports = {
     },
 
     async placeOrder() {
-        await page.click(selector.customer.cCheckout.placeOrder)
+        await base.click(selector.customer.cCheckout.placeOrder)
         await page.waitForTimeout(2000)
 
         await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)

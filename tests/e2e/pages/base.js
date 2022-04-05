@@ -171,7 +171,7 @@ module.exports = {
 
     // uncheck checkbox, if unchecked then skip
     async uncheck(selector) {
-        let element = await page.$(selector)
+        let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
             await element.click()
@@ -286,6 +286,22 @@ module.exports = {
         let value = await (await element.getProperty('value')).jsonValue()
         // console.log(value)
         return value
+    },
+
+    // set element property value
+    async setElementValue(selector, value) {  //TODO: not working
+        // let element = await this.getElement(selecto r)
+        // const randomDate = '2022-04-05 09:29'
+        const randomDate = value
+        // await page.$eval(selector, (e, randomDate) => { e.setAttribute("value", randomDate), randomDate })
+        await page.evaluate((element, value) => element.setAttribute("value", value))
+    },
+
+    // remove element attribute
+    async removeElementAttribute(selector, attribute) {
+        await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
+
+        
     },
 
     // get element class value
@@ -521,7 +537,7 @@ module.exports = {
     async checkPageNotExist() {
         let pageContent = await page.content()
 
-        if (pageContent.includes('Oops! That page can’t be found.')) {
+        if (pageContent.includes('Oops! That page can\'t be found.')) {
             await page.screenshot({ path: 'tests/e2e/screenshot/pageNotExists' + Date.now() + '.png', fullPage: true })
             //TODO: save permalink
         }
@@ -598,18 +614,18 @@ module.exports = {
     async getCurrentUser() {
         const cookies = await page.cookies();
         const cookie = cookies.find(c => {
-          var _c$name;
-          return !!(c !== null && c !== void 0 && (_c$name = c.name) !== null && _c$name !== void 0 && _c$name.startsWith('wordpress_logged_in_'));
+            var _c$name;
+            return !!(c !== null && c !== void 0 && (_c$name = c.name) !== null && _c$name !== void 0 && _c$name.startsWith('wordpress_logged_in_'));
         });
         if (!(cookie !== null && cookie !== void 0 && cookie.value)) {
-          return;
+            return;
         }
         return decodeURIComponent(cookie.value).split('|')[0];
-      }
+    }
 
 
 
-    
+
 
 
 

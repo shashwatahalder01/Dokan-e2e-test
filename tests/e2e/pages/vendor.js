@@ -2,7 +2,7 @@ const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
-
+const { faker } = require('@faker-js/faker')
 
 
 
@@ -20,7 +20,7 @@ module.exports = {
 
     async goToVendorDashboard() {
         await page.goto(createURL('dashboard'))
-
+        
         const url = await page.url()
         expect(url).toMatch('dashboard')
     },
@@ -30,6 +30,8 @@ module.exports = {
     //vendor registration
     async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, withSetupWizard, setupWizardData) {
         await base.goto("my-account")
+        // await page.goto("http://dokan2.test")
+        await base.click(selector.frontend.myAccount)
         await page.type(selector.vendor.vRegistration.regEmail, userEmail)
         await page.type(selector.vendor.vRegistration.regPassword, password)
         await base.clickXpath(selector.vendor.vRegistration.regVendor)
@@ -44,7 +46,7 @@ module.exports = {
         await page.type(selector.vendor.vRegistration.bankName, bankName)
         await page.type(selector.vendor.vRegistration.bankIban, bankIban)
         await page.type(selector.vendor.vRegistration.phone, phone)
-        // let subscriptionPackIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest) 
+        // let subscriptionPackIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.subscriptionPack) 
         // if(subscriptionPackIsVisible){
         // await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
         // }
@@ -52,24 +54,10 @@ module.exports = {
 
         if (withSetupWizard) {
             await this.vendorSetupWizard(
-                setupWizardData.storeProductsPerPage,
-                setupWizardData.street1,
-                setupWizardData.street2,
-                setupWizardData.city,
-                setupWizardData.zipCode,
-                setupWizardData.country,
-                setupWizardData.state,
-                setupWizardData.paypal,
-                setupWizardData.bankAccountName,
-                setupWizardData.bankAccountNumber,
-                setupWizardData.bankName,
-                setupWizardData.bankAddress,
-                setupWizardData.bankRoutingNumber,
-                setupWizardData.bankIban,
-                setupWizardData.bankSwiftCode,
-                setupWizardData.customPayment,
-                setupWizardData.skrill,
-            )
+                setupWizardData.storeProductsPerPage, setupWizardData.street1, setupWizardData.street2, setupWizardData.city, setupWizardData.zipCode,
+                setupWizardData.country, setupWizardData.state, setupWizardData.paypal, setupWizardData.bankAccountName, setupWizardData.bankAccountNumber,
+                setupWizardData.bankName, setupWizardData.bankAddress, setupWizardData.bankRoutingNumber, setupWizardData.bankIban, setupWizardData.bankSwiftCode,
+                setupWizardData.customPayment, setupWizardData.skrill)
         }
         else {
             await base.click(selector.vendor.vSetup.notRightNow)
@@ -314,22 +302,26 @@ module.exports = {
 
         //add new auction product
         await base.click(selector.vendor.vAuction.addNewActionProduct)
-        await page.type(selector.vendor.vAuction.productName, productName)
+        await page.type(selector.vendor.vAuction.productName, faker.commerce.productName() + (' (Auction)'))
         // await page.type(selector.vendor.vAuction.productShortDescription, productShortDescription)
         await page.click(selector.vendor.product.productCategory)
         await page.type(selector.vendor.product.productCategoryInput, category)
         await page.keyboard.press('Enter')
-        // await page.click(selector.vendor.vAuction.productCategory)
-        // await base.setDropdownOptionSpan(selector.vendor.vAuction.productCategoryValues, category)
 
         // await page.select(selector.vendor.vAuction.itemCondition, itemCondition)
         // await page.select(selector.vendor.vAuction.actionType, actionType)
         await page.type(selector.vendor.vAuction.startPrice, productPrice)
         await page.type(selector.vendor.vAuction.bidIncrement, '50')
-        await page.type(selector.vendor.vAuction.reservedPrice, productPrice + 400)
-        await page.type(selector.vendor.vAuction.buyItNowPrice, productPrice + 900)
+        await page.type(selector.vendor.vAuction.reservedPrice, String(Number(productPrice) + 400))
+        await page.type(selector.vendor.vAuction.buyItNowPrice, String(Number(productPrice )+ 900))
+        // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, 'readonly') 
+        // await base.type(selector.vendor.vAuction.auctionStartDate, '2022-04-05 10:15') 
+        // await page.waitForTimeout(10000)
+        // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, '2022-04-05 15:15') 
+        // await base.setElementValue(selector.vendor.vAuction.auctionEndDate, '2022-04-05 15:15') 
         await page.type(selector.vendor.vAuction.auctionStartDate, '2022-03-31 10:15') //TODO: handle date using datepicker or use core input filed 
         await page.type(selector.vendor.vAuction.auctionEndDate, '2022-04-10 10:12')
+        // await page.waitForTimeout(50000)
         // await page.keyboard.press('Enter')
         await base.click(selector.vendor.vAuction.addAuctionProduct)
 
@@ -339,27 +331,30 @@ module.exports = {
     },
 
     //vendor add booking product
-    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, enableCalendarRangePicker, maxBookingsPerBlock,
-        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit,
-        baseCost, blockCost) {
+    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, maxBookingsPerBlock,
+        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit, baseCost, blockCost) {
+        await base.click(selector.vendor.vDashboard.booking)
+        await base.click(selector.vendor.vBooking.addNewBookingProduct)
 
+        //add new booking product
         await page.type(selector.vendor.vBooking.productName, productName)
-        await page.click(selector.vendor.vBooking.category)
-        await base.setDropdownOptionSpan(selector.vendor.vBooking.categoryValues, category)
+        await page.click(selector.vendor.vBooking.productCategory)
+        await page.type(selector.vendor.vBooking.productCategoryInput, category)
+        await page.keyboard.press('Enter')
 
         // general Booking options
         await page.select(selector.vendor.vBooking.bookingDurationType, bookingDurationType)
-        await page.type(selector.vendor.vBooking.bookingDuration, bookingDuration)
+        await base.clearAndType(selector.vendor.vBooking.bookingDuration, bookingDuration)
         await page.select(selector.vendor.vBooking.bookingDurationUnit, bookingDurationUnit)
 
         await page.select(selector.vendor.vBooking.calenderDisplayMode, calenderDisplayMode)
-        await page.select(selector.vendor.vBooking.enableCalendarRangePicker, enableCalendarRangePicker)
+        await base.check(selector.vendor.vBooking.enableCalendarRangePicker)
 
         //availability
-        await page.type(selector.vendor.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
-        await page.type(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
+        await base.clearAndType(selector.vendor.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
+        await base.clearAndType(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
         await page.select(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
-        await page.type(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
+        await base.clearAndType(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
         await page.select(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDateUnit)
 
         //costs
@@ -367,6 +362,9 @@ module.exports = {
         await page.type(selector.vendor.vBooking.blockCost, blockCost)
 
         await base.click(selector.vendor.vBooking.saveProduct)
+
+        let createdProduct = await base.getElementValue(selector.vendor.vBooking.productName)
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
 
     },
 
@@ -531,7 +529,6 @@ module.exports = {
         //show more products
         await base.check(selector.vendor.vStoreSettings.moreProducts)
         //map
-        await page.click(selector.vendor.vStoreSettings.map)
         await base.clearAndType(selector.vendor.vStoreSettings.map, map)
         await page.waitForTimeout(1000)
         await page.keyboard.press('ArrowDown')

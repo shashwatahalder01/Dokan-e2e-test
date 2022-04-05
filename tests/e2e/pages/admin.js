@@ -366,7 +366,10 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.radiusSearchMinimumDistance, '0')
     await base.clearAndType(selector.admin.dokan.settings.radiusSearchMaximumDistance, '10')
     await base.clearAndType(selector.admin.dokan.settings.mapZoomLevel, '11')
-    // await base.clearAndType(selector.admin.dokan.settings.defaultLocation, 'New York, NY, USA')//TODO: add default location
+    await base.clearAndType(selector.admin.dokan.settings.defaultLocation, 'New York')
+    await page.waitForTimeout(1000)
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.press('Enter')
     await page.click(selector.admin.dokan.settings.geolocationSaveChanges)
 
     let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
@@ -931,9 +934,9 @@ module.exports = {
     await page.type(selector.admin.dokan.vendors.iban, iban)
     await page.type(selector.admin.dokan.vendors.swift, swift)
     await page.type(selector.admin.dokan.vendors.payPalEmail, payPalEmail)
-    await page.click(selector.admin.dokan.vendors.enableSelling)
-    await page.click(selector.admin.dokan.vendors.publishProductDirectly)
-    await page.click(selector.admin.dokan.vendors.makeVendorFeature)
+    await base.check(selector.admin.dokan.vendors.enableSelling)
+    await base.check(selector.admin.dokan.vendors.publishProductDirectly)
+    await base.check(selector.admin.dokan.vendors.makeVendorFeature)
     //create vendor
     await page.click(selector.admin.dokan.vendors.createVendor)
     await page.waitForTimeout(2000)

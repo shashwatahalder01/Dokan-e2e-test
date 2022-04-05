@@ -116,4 +116,14 @@ describe('customer functionality test', () => {
         await customerPage.placeOrder()
     }, timeout)
 
+
+    it.only('customer can add product to cart', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.goToShop()
+        await customerPage.addProductToCartFromShop('simple product')
+        await customerPage.goToCartFromShop()
+        await customerPage.goToCheckoutFromCart()
+        await customerPage.placeOrder()
+    },timeout)
+
 })
