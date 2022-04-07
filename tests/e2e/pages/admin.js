@@ -1,4 +1,3 @@
-const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
@@ -11,14 +10,13 @@ module.exports = {
 
   //methods
   async goToAdminDashboard() {
-    await await page.goto(createURL('wp-admin/index.php'))
+    await base.goto('wp-admin/index.php')
 
     const url = await page.url()
     expect(url).toMatch('wp-admin/index.php')
   },
 
   async goToDokanSettings() {
-    // await page.goto(createURL('wp-admin/admin.php?page=dokan#/settings'))
 
     await base.hover(selector.admin.aDashboard.dokan)
     await base.click(selector.admin.dokan.settingsMenu)
@@ -28,7 +26,6 @@ module.exports = {
   },
 
   async goToWooCommerceSettings() {
-    // await page.goto(createURL('wp-admin/admin.php?page=wc-settings'))
 
     await base.hover(selector.admin.aDashboard.wooCommerce)
     await base.click(selector.admin.wooCommerce.settingsMenu)

@@ -1,7 +1,4 @@
-
-// const puppeteer = require('puppeteer')
-const { createURL } = require("@wordpress/e2e-test-utils")
-
+require('dotenv').config()
 
 // This page contains all necessary puppeteer automation methods 
 module.exports = {
@@ -224,9 +221,16 @@ module.exports = {
         await page.waitForTimeout(3000)
     },
 
+    // create a new url
+    async createURL(subPath) {
+        const url = new URL(process.env.BASE_URL)
+        url.pathname = url.pathname + subPath
+        return url.href
+    },
+
     //goto subUrl
-    async goto(subpath) {
-        await Promise.all([page.goto(createURL(subpath)), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    async goto(subPath) {
+        await Promise.all([page.goto(this.createURL(subPath)), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
     //reload page and wait until network idle
@@ -256,6 +260,22 @@ module.exports = {
         let elements = await this.getElements(selector)
         for (let element of elements) {
             await element.click()
+        }
+    },
+
+    //click multiple elements with same selector/class/xpath
+    async checkMultiple(selector) {
+        let elements = await this.getElements(selector)
+        for (let element of elements) {
+            const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
+            if (isCheckBoxChecked) {
+                await element.click()
+                await page.waitForTimeout(10)
+                await element.click()
+            }
+            else {
+                await element.click()
+            }
         }
     },
 
@@ -301,7 +321,7 @@ module.exports = {
     async removeElementAttribute(selector, attribute) {
         await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
 
-        
+
     },
 
     // get element class value

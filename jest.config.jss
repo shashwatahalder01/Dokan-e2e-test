@@ -18,23 +18,23 @@ module.exports = {
   // setupFilesAfterEnv: ["jest-allure/dist/setup"], // setupFilesAfterEnv  will run some code immediately after the test framework has been installed in the environment but before the test code itself.
 
   // Jest stare reporter
-  // reporters: ["default", "jest-stare"],
-  // testResultsProcessor: "./node_modules/jest-stare",
-  // reporters: [
-  //   "default",
-  //   [
-  //     "jest-stare",
-  //     {
-  //       "resultDir": "results/jest-stare",
-  //       "reportTitle": "Dokan e2e test report",
-  //       "reportHeadline": "Dokan e2e tests",
-  //       "reportSummary": true,
-  //       "additionalResultsProcessors": [ "jest-junit" ],
-  //       "coverageLink": "../../coverage/lcov-report/index.html",
-  //       "jestStareConfigJson": "jest-stare.json",
-  //       "jestGlobalConfigJson": "globalStuff.json"
-  //     }
-  //   ]
-  // ]
+  reporters: ["default", "jest-stare"],
+  testResultsProcessor: "./node_modules/jest-stare",
+  reporters: [
+    "default",
+    [
+      "jest-stare",
+      {
+        "resultDir": "artifacts/customer can add product to cart 2022-04-04T17-20-54.jpgresults/jest-stare",
+        "reportTitle": "Dokan e2e test report",
+        "reportHeadline": "Dokan e2e tests",
+        "reportSummary": true,
+        "additionalResultsProcessors": [ "jest-junit" ],
+        // "coverageLink": "../../coverage/lcov-report/index.html",
+        "jestStareConfigJson": "jest-stare.json",
+        "jestGlobalConfigJson": "globalStuff.json"
+      }
+    ]
+  ]
 
 }

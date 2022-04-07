@@ -12,20 +12,23 @@ describe('vendor functionality test', () => {
    // afterEach(async () => {await browser.close())
 
 
-   it('vendor can register', async () => {
-      await vendorPage.vendorRegister('vendor1@gmail.com', process.env.VENDOR_PASSWORD, data.vendorInfo.firstName, data.vendorInfo.lastName,
-         data.vendorInfo.shopName, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, true, data.vendorSetupWizard)
-      await loginPage.vendorLogout()
-   }, timeout)
 
    it('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+      await vendorPage.goToVendorDashboard()
       // let password = await loginPage.createUser('customer100002', data.wpCustomer)
       // await loginPage.switchToAdmin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
    }, timeout)
 
    it('vendor can logout', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+      await vendorPage.goToVendorDashboard()
+      await loginPage.vendorLogout()
+   }, timeout)
+
+   it('vendor can register', async () => {
+      await vendorPage.vendorRegister(data.vendorInfo.userEmail, process.env.VENDOR_PASSWORD, data.vendorInfo.firstName, data.vendorInfo.lastName,
+         data.vendorInfo.shopName, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, true, data.vendorSetupWizard)
       await loginPage.vendorLogout()
    }, timeout)
 
@@ -59,19 +62,18 @@ describe('vendor functionality test', () => {
       await vendorPage.addExternalProduct(data.product.name.external, data.product.price, data.product.category)
    }, timeout)
 
-   it.only('vendor can add auction product', async () => {
+   it('vendor can add auction product', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      for (let i = 0; i < 20; i++) {
-         await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice, data.product.category,)
-      }
+      await vendorPage.goToVendorDashboard()
+      await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice, data.product.category,)
       // await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice, data.product.category,)
    }, timeout)
 
    it('vendor can add booking product', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
-      await vendorPage.addBookingProduct(data.product.booking.productName, data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode,  data.product.booking.maxBookingsPerBlock,
-          data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
+      await vendorPage.addBookingProduct(data.product.booking.productName, data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock,
+         data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
    }, timeout)
 
    it('vendor can add coupon', async () => {
@@ -92,7 +94,7 @@ describe('vendor functionality test', () => {
       await vendorPage.cancelRequestWithdraw()
    }, timeout)
 
-   it.skip('vendor can add auto withdraw disbursement schedule ', async () => {
+   it('vendor can add auto withdraw disbursement schedule ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.addAutoWithdrawDisbursementSchedule('dokan_custom', 'weekly', '5', '15')
@@ -113,7 +115,7 @@ describe('vendor functionality test', () => {
 
    // vendor settings
 
-   it('vendor can set store settings ', async () => {
+   it.only('vendor can set store settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)

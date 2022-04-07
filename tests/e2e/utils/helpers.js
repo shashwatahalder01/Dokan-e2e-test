@@ -20,7 +20,7 @@ module.exports = {
     openUrl: (url) => open('url'),
 
     // opens test report in the default browser 
-    openReport: () => open('./jest-stare/index.html'),
+    openReport: () => open('./artifacts/jest-stare/index.html'),
 
     //current day
     currentDate: (new Date()).toLocaleDateString('en-CA'),

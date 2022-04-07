@@ -32,7 +32,6 @@
     "test-interactive:watch": "npm run test-e2e:watch -- --puppeteer-interactive",
     "test-e2e:debug": "wp-scripts --inspect-brk test-e2e --puppeteer-devtools",
     "container_path": "wp-env install-path",
-
     "wp-env": "wp-env"
   },
   "keywords": [],
@@ -50,6 +49,8 @@
     "jest-allure": "^0.1.3",
     "jest-puppeteer": "^6.1.0",
     "jest-stare": "^2.3.0",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
     "open": "^8.4.0",
     "puppeteer-testing-library": "^0.6.0"
   }

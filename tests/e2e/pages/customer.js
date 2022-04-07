@@ -1,5 +1,4 @@
 
-const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
@@ -16,7 +15,7 @@ module.exports = {
 
 
     async goToMyAccount() {
-        await page.goto(createURL('my-account'))
+        await base.goto('my-account')
 
         // const url = await page.url()
         // expect(url).toMatch('my-account')
@@ -26,7 +25,7 @@ module.exports = {
     },
 
     async goToShop() {
-        await page.goto(createURL('shop'))
+        await base.goto('shop')
 
         // const url = await page.url()
         // expect(url).toMatch('shop')
@@ -36,7 +35,7 @@ module.exports = {
     },
 
     async goToStoreList() {
-        await page.goto(createURL('store-listing'))
+        await base.goto('store-listing')
 
         // const url = await page.url()
         // expect(url).toMatch('store-listing')
@@ -49,7 +48,7 @@ module.exports = {
 
 
     //-------------------------------------------------- customer details ---------------------------------------------------//
-   
+
 
 
     //customer register

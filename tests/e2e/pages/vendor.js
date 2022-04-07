@@ -1,4 +1,3 @@
-const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
@@ -19,7 +18,7 @@ module.exports = {
 
 
     async goToVendorDashboard() {
-        await page.goto(createURL('dashboard'))
+        await base.goto('dashboard')
         
         const url = await page.url()
         expect(url).toMatch('dashboard')
@@ -30,7 +29,6 @@ module.exports = {
     //vendor registration
     async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, withSetupWizard, setupWizardData) {
         await base.goto("my-account")
-        // await page.goto("http://dokan2.test")
         await base.click(selector.frontend.myAccount)
         await page.type(selector.vendor.vRegistration.regEmail, userEmail)
         await page.type(selector.vendor.vRegistration.regPassword, password)
@@ -83,7 +81,7 @@ module.exports = {
         await page.click(selector.vendor.vSetup.email)
         await base.click(selector.vendor.vSetup.continueStoreSetup)
 
-        await base.type(selector.vendor.vSetup.paypal, paypal)
+        await base.clearAndType1(selector.vendor.vSetup.paypal, paypal)
         await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
         await base.type(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
         await base.type(selector.vendor.vSetup.bankName, bankName)
@@ -92,9 +90,7 @@ module.exports = {
         await base.type(selector.vendor.vSetup.bankIban, bankIban)
         await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
         await base.type(selector.vendor.vSetup.customPayment, customPayment)
-        console.log(selector.vendor.vSetup.skrill)
-
-        await base.type(selector.vendor.vSetup.skrill, skrill)
+        await base.clearAndType1(selector.vendor.vSetup.skrill, skrill)
         // TODO: stripe connect
         // TODO: paypal marketplace
         await base.click(selector.vendor.vSetup.continuePaymentSetup)
@@ -506,7 +502,7 @@ module.exports = {
         await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
         await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
         await page.click(selector.vendor.vStoreSettings.profilePicture)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar.png')
+        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar2.png')
         // store basic info
         await base.clearAndType(selector.vendor.vStoreSettings.storeName, storeName)
         await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, storeProductsPerPage)

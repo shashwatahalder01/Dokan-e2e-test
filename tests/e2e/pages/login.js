@@ -16,8 +16,7 @@ module.exports = {
 
     //login from frontend
     async loginFrontend(username, password) {
-        // await base.goto("my-account")
-        await page.goto("http://dokan2.test/my-account")
+        await base.goto("my-account")
         let emailField = await base.isVisible(page, selector.frontend.username)
         if (emailField) {
             await page.type(selector.frontend.username, username)
