@@ -89,17 +89,49 @@ module.exports = {
         },
 
         //dashboard
-        dashboard: {},
+        dashboard: {
+            //menus
+            home: "//li[@id='menu-dashboard']//a[contains(text(),'Home')]",
+            updates: "//li[@id='menu-dashboard']//a[contains(text(),'Updates ')]",
+        },
         //posts
-        posts: {},
+        posts: {
+            //menus
+            allPosts: "//li[@id='menu-posts']//a[contains(text(),'All Posts')]",
+            addNew: "//li[@id='menu-posts']//a[contains(text(),'Add New')]",
+            categories: "//li[@id='menu-posts']//a[contains(text(),'Categories')]",
+            tags: "//li[@id='menu-posts']//a[contains(text(),'Tags')]",
+        },
         //media
-        media: {},
+        media: {
+            //menus
+            library: "//li[@id='menu-media']//a[contains(text(),'Library')]",
+            addNew: "//li[@id='menu-media']//a[contains(text(),'Add New')]"
+        },
         //pages
-        pages: {},
+        pages: {
+            //menus
+            allPages: "//li[@id='menu-pages']//a[contains(text(),'All Pages')]",
+            addNew: "//li[@id='menu-pages']//a[contains(text(),'Add New')]",
+        },
         //comments
-        comments: {},
+        comments: {
+            //nav tabs
+            all: "//li[@class='all']",
+            mine: "//li[@class='mine']",
+            pending: "//li[@class='moderated']",
+            approved: "//li[@class='approved']",
+            spam: "//li[@class='spam']",
+            trash: "//li[@class='trash']",
+        },
         //emailLog
-        emailLog: {},
+        emailLog: {
+            //menus
+            viewLogs: "//li[@id='toplevel_page_email-log']//a[contains(text(),'View Logs')]",
+            settings: "//li[@id='toplevel_page_email-log']//a[contains(text(),'Settings')]",
+            addOns: "//li[@id='toplevel_page_email-log']//a[contains(text(),'Add-ons')]",
+            systemInfo: "//li[@id='toplevel_page_email-log']//a[contains(text(),'System Info')]",
+        },
         //dokan
         dokan: {
             //dokan menus
@@ -122,15 +154,36 @@ module.exports = {
             licenseMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='License']",
 
             //dashboard
-            dashboard: {},
+            dashboard: {
+                //divs
+                atAGlance: ".postbox.dokan-postbox.dokan-status",
+                overview: ".postbox.dokan-postbox.overview-chart",
+                dokanNewsUpdates: "//span[contains(text(),'Dokan News Updates')]/../../..",
+
+                //at a glance
+                netSalesThisMonth: ".sale strong",
+                commissionEarned: ".commission strong div",
+                signupThisMonth: ".vendor strong",
+                awaitingApproval: ".approval strong",
+                createdThisMonth: ".product strong",
+                awaitingApproval: ".withdraw strong ",
+            },
             //withdraw
-            withdraw: {},
+            withdraw: {
+                //nav tabs
+                pending: "//ul[@class='subsubsub']//li//a[contains(text(),'Pending')]",
+                approved: "//ul[@class='subsubsub']//li//a[contains(text(),'Approved')]",
+                cancelled: "//ul[@class='subsubsub']//li//a[contains(text(),'Cancelled')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+            },
             //vendors
             vendors: {
                 // add new vendors
                 //menus
                 accountInfo: "//div[@class='tab-link']//a[contains(text(), 'Account Info')]",
-                address: "//div[@class='tab-link']//a[contains(text(), 'Address')]",  
+                address: "//div[@class='tab-link']//a[contains(text(), 'Address')]",
                 paymentOptions: "//div[@class='tab-link']//a[contains(text(), 'Payment Options')]",
                 addNewVendorCloseModal: '.modal-close',
                 next: '.button.button-primary.button-hero',
@@ -138,7 +191,7 @@ module.exports = {
                 //account info
                 addNewVendor: '.page-title-action',
                 vendorPicture: ".profile-image .dokan-upload-image",
-                banner: '.banner-image .dokan-upload-image button', 
+                banner: '.banner-image .dokan-upload-image button',
                 firstName: '#first-name',
                 lastName: '#last-name',
                 storeName: '#store-name',
@@ -170,9 +223,9 @@ module.exports = {
                 iban: '#iban',
                 swift: '#swift',
                 payPalEmail: '#paypal-email',
-                enableSelling: "//span[contains(text(), 'Enable Selling')]/..//span",  
-                publishProductDirectly: "//span[contains(text(), 'Publish Product Directly')]/..//span",  
-                makeVendorFeature: "//span[contains(text(), 'Make Vendor Featured')]/..//span",  
+                enableSelling: "//span[contains(text(), 'Enable Selling')]/..//span",
+                publishProductDirectly: "//span[contains(text(), 'Publish Product Directly')]/..//span",
+                makeVendorFeature: "//span[contains(text(), 'Make Vendor Featured')]/..//span",
                 createVendor: '.button.button-primary.button-hero',
                 //sweet alert
                 createAnother: '.swal2-confirm',  //sweet alert confirm 
@@ -182,7 +235,7 @@ module.exports = {
                 //edit vendor form
                 editVendor: {
                     editVendorIcon: ".dashicons-edit",
-                    changeStorePhoto: ".profile-icon .dokan-upload-image img", 
+                    changeStorePhoto: ".profile-icon .dokan-upload-image img",
                     changeStoreBanner: ".profile-banner .dokan-upload-image img",
                     //account info
                     firstName: '#first-name',
@@ -220,52 +273,99 @@ module.exports = {
                     iban: '#iban',
                     swift: '#swift',
                     payPalEmail: '#paypal-email',
-                    AdminCommissionType: "//label[@for='commission-type']/..//span[@class='multiselect__single']",  
+                    AdminCommissionType: "//label[@for='commission-type']/..//span[@class='multiselect__single']",
                     AdminCommissionFlat: ".wc_input_price",
                     AdminCommissionPercentage: ".wc_input_decimal",
-                    enableSelling: "//span[contains(text(), 'Enable Selling')]/..//span",  
-                    publishProductDirectly: "//span[contains(text(), 'Publish Product Directly')]/..//span",  
-                    makeVendorFeature: "//span[contains(text(), 'Make Vendor Featured')]/..//span",  
+                    enableSelling: "//span[contains(text(), 'Enable Selling')]/..//span",
+                    publishProductDirectly: "//span[contains(text(), 'Publish Product Directly')]/..//span",
+                    makeVendorFeature: "//span[contains(text(), 'Make Vendor Featured')]/..//span",
                     // vendor subscription
                     AssignSubscriptionPack: ".multiselect--active > .multiselect__tags",
                     //edit options
                     cancelEdit: "//div[contains(@class, 'action-links footer')]//button[contains(text(),'Cancel')]",
                     saveChanges: "//div[contains(@class, 'action-links footer')]//button[contains(text(),'Save Changes')]",
-                    cancelEditOnTop: "//div[contains(@class, 'profile-banner')]//button[contains(text(),'Cancel')]",  
-                    saveChangesOnTop: "//div[contains(@class, 'profile-banner')]//button[contains(text(),'Save Changes')]",  
+                    cancelEditOnTop: "//div[contains(@class, 'profile-banner')]//button[contains(text(),'Cancel')]",
+                    saveChangesOnTop: "//div[contains(@class, 'profile-banner')]//button[contains(text(),'Save Changes')]",
                     confirmSaveChanges: ".swal2-confirm",
                 },
 
             },
             //abuseReports
-            abuseReports: {},
+            abuseReports: {
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+                //filters
+                filterByAbuseReason: "(//select[@id='filter-products']/..//select)[1]",
+                filterByProduct: "#filter-products",
+                filterByVendors: "#filter-vendors",
+            },
             //storeReviews
-            storeReviews: {},
+            storeReviews: {
+                //nav tabs
+                all: "//ul[@class='subsubsub']//li//a[contains(text(),'All')]",
+                trash: "//ul[@class='subsubsub']//li//a[contains(text(),'Trash')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+                //filters
+                filterByVendors: "#filter-vendors",
+            },
             //storeSupport
-            storeSupport: {},
+            storeSupport: {
+                //nav tabs
+                open: "//ul[@class='subsubsub']//li//a[contains(text(),'Open')]",
+                closed: "//ul[@class='subsubsub']//li//a[contains(text(),'Closed')]",
+                all: "//ul[@class='subsubsub']//li//a[contains(text(),'All')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+                //filters
+                filterByVendors: "#select2-filter-vendors-container",
+                filterByCustomers: "#select2-filter-customers-container",
+            },
             //announcements
-            announcements: {},
+            announcements: {
+                //nav tabs
+                all: "//ul[@class='subsubsub']//li//a[contains(text(),'All')]",
+                published: "//ul[@class='subsubsub']//li//a[contains(text(),'Published')]",
+                pending: "//ul[@class='subsubsub']//li//a[contains(text(),'Pending')]",
+                scheduled: "//ul[@class='subsubsub']//li//a[contains(text(),'Scheduled')]",
+                draft: "//ul[@class='subsubsub']//li//a[contains(text(),'Draft')]",
+                trash: "//ul[@class='subsubsub']//li//a[contains(text(),'Trash')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+            },
             //refunds
-            refunds: {},
+            refunds: {
+                //nav tabs
+                pending: "//ul[@class='subsubsub']//li//a[contains(text(),'Pending')]",
+                approved: "//ul[@class='subsubsub']//li//a[contains(text(),'Approved')]",
+                cancelled: "//ul[@class='subsubsub']//li//a[contains(text(),'Cancelled')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+            },
 
             //reports
             reports: {
-                // menus
-                reports: "//a[contains(@class, 'nav-tab') and contains(text(),'Reports')]", 
-                allLogs: "//a[contains(@class, 'nav-tab') and contains(text(),'All Logs')]",  
+                //menus
+                reports: "//a[contains(@class, 'nav-tab') and contains(text(),'Reports')]",
+                allLogs: "//a[contains(@class, 'nav-tab') and contains(text(),'All Logs')]",
 
                 //reports
                 //by day
-                byDay: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Day')]", 
+                byDay: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Day')]",
                 byDayFrom: "//label[contains(text(),'From')]/../input",
                 byDayTo: "//label[contains(text(),'To')]/../input",
                 byDayShow: "//label[contains(text(),'To')]/../button",
                 //by year
-                byYear: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Year')]",  
+                byYear: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Year')]",
                 byYearNumber: ".dokan-input",
                 byYearShow: ".button",
                 //by vendor
-                byVendor: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Vendor')]", 
+                byVendor: "//ul[contains(@class, 'dokan-report-sub')]//a[contains(text(),'By Vendor')]",
                 storeName: ".multiselect__tags",
                 byVendorFrom: "//label[contains(text(),'From')]/../input",
                 byVendorTo: "//label[contains(text(),'To')]/../input",
@@ -274,7 +374,7 @@ module.exports = {
                 //all logs
                 //search
                 searchByOrder: "#post-search-input",
-                clearSearch: "//a[contains(text(),'Clear')]", 
+                clearSearch: "//a[contains(text(),'Clear')]",
                 exportLogs: "#export-all-logs",
                 //filter
                 filterByStore: "#select2-filter-vendors-container",
@@ -282,7 +382,6 @@ module.exports = {
                 filterByStatus: "#select2-filter-status-container",
                 filterByStatusValues: ".select2-results ul li",
                 filterByDate: ".form-control",
-
                 //order details
                 orderId: ".column.order_id > a",
                 store: ".column.vendor_id > a",
@@ -292,25 +391,73 @@ module.exports = {
                 gatewayFee: ".column.dokan_gateway_fee > div",
                 shipping: ".column.shipping_total > div",
                 taxStatus: ".column.tax_total > div",
-                orderStatus: "td.column.status ",
+                orderStatus: "td.column.status",
                 date: "td.column.date ",
             },
 
             //modules
-            modules: {},
+            modules: {
+                //nav tabs
+                active: "//li//a[contains(text(),'Active')]",
+                inActive: "//li//a[contains(text(),'Inactive')]",
+                //search box
+                searchBox: ".search-box input",
+                moduleActivationSwitch: ".switch.tips span",
+                moduleCard: ".module-card",
+                moduleCheckbox: ".module-checkbox input",
+                //all module activation
+                selectAllBulkAction: ".bulk-actions li input",
+                activeAll: ".activate",
+                deActivateAll: ".deactivate",
+            },
             //tools
-            tools: {},
+            tools: {
+                reBuild: "//a[contains(text(),'Re-build')]",
+                checkOrders: "//a[contains(text(),'Check Orders')]",
+                openSetupWizard: "//a[contains(text(),'Open Setup Wizard')]",
+
+            },
             //verifications
-            verifications: {},
+            verifications: {
+                //nav tabs
+                pending: "//ul[@class='subsubsub']//li//a[contains(text(),'Pending')]",
+                approved: "//ul[@class='subsubsub']//li//a[contains(text(),'Approved')]",
+                rejected: "//ul[@class='subsubsub']//li//a[contains(text(),'Rejected')]",
+            },
             //advertising
-            advertising: {},
+            advertising: {
+                //nav tabs
+                all: "//ul[@class='subsubsub']//li//a[contains(text(),'All')]",
+                active: "//ul[@class='subsubsub']//li//a[contains(text(),'Active')]",
+                expired: "//ul[@class='subsubsub']//li//a[contains(text(),'Expired')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+                //search
+                search: "#post-search-input",
+            },
             //wholesaleCustomer
             wholesaleCustomer: {
+                //nav tabs
+                all: "//ul[@class='subsubsub']//li//a[contains(text(),'All')]",
+                active: "//ul[@class='subsubsub']//li//a[contains(text(),'Active')]",
+                deActive: "//ul[@class='subsubsub']//li//a[contains(text(),'Deactive')]",
+                //bulk actions
+                bulkActions: "#bulk-action-selector-top",
+                selectAllCheckbox: ".check-column input",
+                //search
+                search: "#post-search-input",
                 statusSlider: (username) => `//td[contains(text(), '${username}')]/..//label[@class='switch tips']`,
                 enableStatusUpdateSuccessMessage: '.notification-content'
             },
             //help
-            help: {},
+            help: {
+                //divs
+                basics: "//span[contains(text(), 'Basics')]/../../..",
+                paymentsAndShipping: "//span[contains(text(), 'Payment and Shipping')]/../../..",
+                vendorRelatedQuestions: "//span[contains(text(), 'Vendor Related Questions')]/../../..",
+                miscellaneous: "//span[contains(text(), 'Miscellaneous')]/../../..",
+            },
 
             //dokan settings
             settings: {
@@ -474,9 +621,30 @@ module.exports = {
                 storeSupportSaveChanges: "#submit",
 
                 //seller verification
-                //TODO: add locators
+                //facebook
+                appId: "#dokan_verification\\[fb_app_id\\]",
+                appSecret: "#dokan_verification\\[fb_app_secret\\]",
+                //twitter
+                consumerKey: "#dokan_verification\\[twitter_app_id\\]",
+                consumerSecret: "#dokan_verification\\[twitter_app_secret\\]",
+                //google
+                googleClientId: "#dokan_verification\\[google_app_id\\]",
+                googleClientSecret: "#dokan_verification\\[google_app_secret\\]",
+                //linkedin
+                linkedinClientId: "#dokan_verification\\[linkedin_app_id\\]",
+                linkedinClientSecret: "#dokan_verification\\[linkedin_app_secret\\]",
+
+
                 //verification sms gateways
-                //TODO: add locators 
+                senderName: "#dokan_verification_sms_gateways\\[sender_name\\]",
+                smsText: "#dokan_verification_sms_gateways\\[sms_text\\]",
+                smsSentSuccess: "#dokan_verification_sms_gateways\\[sms_sent_msg\\]",
+                smsSentError: "#dokan_verification_sms_gateways\\[sms_sent_error\\]",
+                activeGateway: "#dokan_verification_sms_gateways\\[active_gateway\\]",
+                //nexmo
+                apiKey: "#dokan_verification_sms_gateways\\[nexmo_username\\]",
+                apiSecret: "#dokan_verification_sms_gateways\\[nexmo_pass\\]",
+
                 //email verification
                 enableEmailVerification: "#dokan_email_verification\\[enabled\\]",
                 registrationNotice: "#dokan_email_verification\\[registration_notice\\]",
@@ -484,11 +652,28 @@ module.exports = {
                 emailVerificationSaveChanges: "#submit",
 
                 //social api
-                //TODO: add locators 
+                enableSocialLogin: "#dokan_social_api\\[enabled\\]",
+
                 //shipping status
-                //TODO: add locators 
+                allowShipmentTracking: "#dokan_shipping_status_setting\\[enabled\\]",
+                //shipping providers
+                australiaPost: "#dokan_shipping_status_setting\\[shipping_status_provider\\]\\[sp-australia-post\\]",
+                canadaPost: "#dokan_shipping_status_setting\\[shipping_status_provider\\]\\[sp-canada-post\\]",
+                customShippingStatusInput: ".regular-text",
+                customShippingStatusAdd: ".dokan-repetable-add-item-btn",
+                shippingStatusSaveChanges: "#submit",
+
                 //colors
-                //TODO: add locators 
+                buttonTextColor: ".btn_text span",
+                buttonBackgroundColor: ".btn_primary span",
+                buttonBorderColor: ".btn_primary_border span",
+                buttonHoverTextColor: ".btn_hover_text span",
+                buttonHoverColor: ".btn_hover span",
+                buttonHoverBorderColor: ".btn_hover_border span",
+                dashboardNavigationText: ".dash_nav_text span",
+                dashboardNavigationActiveMenu: ".dash_active_link span",
+                dashboardNavigationBackground: ".dash_nav_bg span",
+                dashboardMenuBorder: ".dash_nav_border span",
 
                 //live chat
                 enableLiveChat: "#dokan_live_chat\\[enable\\]",
@@ -602,7 +787,7 @@ module.exports = {
                 singleProductMultiVendorSaveChanges: "#submit",
 
                 //vendor analytics
-                //TODO: add locators 
+                vendorAnalyticsSaveChanges: "#submit",
 
                 //vendor subscription
                 subscription: "#dokan_product_subscription\\[subscription_pack\\]",
@@ -622,7 +807,9 @@ module.exports = {
             },
 
             //license
-            license: {}
+            license: {
+                activateLicense: "//button[contains(text(),'Activate License')]",
+            }
         },
 
         //woocommerce
@@ -665,14 +852,14 @@ module.exports = {
 
                 //tax
                 //tax menus
-                taxOptions: "//ul[@class='subsubsub']//a[contains(text(),'Tax options')]",  
-                standardRates: "//ul[@class='subsubsub']//a[contains(text(),'Standard rates')]",  
-                reducedRateRates: "//ul[@class='subsubsub']//a[contains(text(),'Reduced rate rates')]", 
-                zeroRateRates: "//ul[@class='subsubsub']//a[contains(text(),'Zero rate rates')]", 
+                taxOptions: "//ul[@class='subsubsub']//a[contains(text(),'Tax options')]",
+                standardRates: "//ul[@class='subsubsub']//a[contains(text(),'Standard rates')]",
+                reducedRateRates: "//ul[@class='subsubsub']//a[contains(text(),'Reduced rate rates')]",
+                zeroRateRates: "//ul[@class='subsubsub']//a[contains(text(),'Zero rate rates')]",
 
                 //tax options
-                pricesEnteredWithTaxPricesInclusiveOfTax: "//label[contains(text(),'Yes, I will enter prices inclusive of tax')]//input[@name='woocommerce_prices_include_tax']",  
-                pricesEnteredWithTaxPricesExclusiveOfTax: "//label[contains(text(),'No, I will enter prices exclusive of tax')]//input[@name='woocommerce_prices_include_tax']", 
+                pricesEnteredWithTaxPricesInclusiveOfTax: "//label[contains(text(),'Yes, I will enter prices inclusive of tax')]//input[@name='woocommerce_prices_include_tax']",
+                pricesEnteredWithTaxPricesExclusiveOfTax: "//label[contains(text(),'No, I will enter prices exclusive of tax')]//input[@name='woocommerce_prices_include_tax']",
                 calculateTaxBasedOn: "#select2-woocommerce_tax_based_on-container",
                 shippingTaxClass: "#select2-woocommerce_shipping_tax_class-container",
                 rounding: "#woocommerce_tax_round_at_subtotal",
@@ -813,10 +1000,8 @@ module.exports = {
                     sandboxClientId: "#woocommerce_dokan_mangopay_sandbox_client_id",
                     sandBoxApiKey: "#woocommerce_dokan_mangopay_sandbox_api_key",
                     //payment options
-                    //chooseAvailableCreditCards: ".select2-search:nth-child(2) > .select2-search__field",
                     chooseAvailableCreditCards: '//label[contains(text(),"Choose Available Credit Cards ")]/../..//input[@class="select2-search__field"]',
                     chooseAvailableCreditCardsValues: ".select2-results ul li",
-                    //chooseAvailableDirectPaymentServices: ".form-table:nth-child(14) tr:nth-child(2) .select2-selection__rendered",
                     chooseAvailableDirectPaymentServices: '//label[contains(text(),"Choose Available Direct Payment Services")]/../..//input[@class="select2-search__field"]',
                     chooseAvailableDirectPaymentServicesValues: ".select2-results ul li",
                     savedCards: "#woocommerce_dokan_mangopay_saved_cards",
@@ -866,7 +1051,6 @@ module.exports = {
                     testWebhookSecret: "#woocommerce_dokan_stripe_express_test_webhook_key",
                     //payment and disbursement
                     choosePaymentMethods: "//select[@id='woocommerce_dokan_stripe_express_enabled_payment_methods']/..//span[@class='select2-selection select2-selection--multiple']",
-                    //choosePaymentMethods: ".select2-search__field",
                     choosePaymentMethodsValues: ".select2-results ul li",
                     takeProcessingFeesFromSellers: "#woocommerce_dokan_stripe_express_sellers_pay_processing_fee",
                     savedCards: "#woocommerce_dokan_stripe_express_saved_cards",
@@ -939,7 +1123,6 @@ module.exports = {
                 fileName: '.file_name > .input_text',
                 fileUrl: '.file_url > .input_text',
                 chooseFile: '.upload_file_button',
-                UploadFile: "",//TODO:add locator
                 downloadLimit: '#\\_download_limit',
                 downloadExpiry: "#\\_download_expiry",
                 taxStatus: "#\\_tax_status",
@@ -973,8 +1156,8 @@ module.exports = {
                 dokanSubscriptionAdminCommissionType: '#\\_subscription_product_admin_commission_type',
                 dokanSubscriptionAdminCommissionSingle: '.show_if_product_pack #admin_commission',
                 dokanSubscriptionAdminCommissionCombined: '.subscription_additional_fee > .input-text',
-                allowedProductTypes: '.form-field:nth-child(9) .select2-search__field',   //TODO: make unique locator
-                allowedCategoriesUncategorized: '.form-field:nth-child(10) .select2-search__field',
+                allowedProductTypes: '.dokan_subscription_allowed_product_types .select2-search__field',
+                allowedCategoriesUncategorized: '._vendor_allowed_categories .select2-search__field',
                 restrictGalleryImageUpload: '#\\_enable_gallery_restriction',
                 recurringPayment: '#\\_enable_recurring_payment',
                 billingCycleRange: '#\\_dokan_subscription_period_interval',
@@ -982,8 +1165,7 @@ module.exports = {
                 billingCycleStop: '#\\_dokan_subscription_length',
                 enableTrial: '#dokan_subscription_enable_trial',
                 trialPeriodRange: '.dokan-subscription-range',
-                trialPeriodPeriod: '.dokan_subscription_trial_period > select:nth-child(3)',  //TODO: make unique locator
-
+                trialPeriodPeriod: "//select[@name='dokan_subscription_trial_period_types']",
                 //auction
                 itemCondition: '#\\_auction_item_condition',
                 auctionType: '#\\_auction_type',
@@ -991,7 +1173,7 @@ module.exports = {
                 startPrice: '#\\_auction_start_price',
                 bidIncrement: '#\\_auction_bid_increment',
                 reservePriced: '#\\_auction_reserved_price',
-                buyItNowPrice: '.form-field:nth-child(7) > #\\_regular_price',  //TODO: make unique locator
+                buyItNowPrice: "//label[contains(text(),'Buy it now price')]/..//input[@id='_regular_price']",
                 auctionDatesFrom: '#\\_auction_dates_from',
                 auctionDatesTo: '#\\_auction_dates_to',
 
@@ -1035,25 +1217,23 @@ module.exports = {
                 height: '#product_height',
                 shippingClass: '#product_shipping_class',
                 //linked Products
-                // upSells: ".options_group:nth-child(2) > .form-field:nth-child(1) .select2-search__field", 
                 upSells: '//label[contains(text(),"Grouped products")]/..//input[@class="select2-search__field"]',
-                // crossSells: ".form-field:nth-child(2) .select2-search__field", 
                 crossSells: '//label[contains(text(),"Upsells")]/..//input[@class="select2-search__field"]',
                 //attributes
                 customProductAttribute: '.attribute_taxonomy',
                 addAttribute: '.add_attribute',
-                attributeName: '.woocommerce_attribute:nth-child(1) .attribute_name > .attribute_name',  //TODO: make unique locator
-                attributeValues: '.woocommerce_attribute:nth-child(1) textarea',   //TODO: make unique locator
+                attributeName: '.attribute_name .attribute_name',
+                attributeValues: '.woocommerce_attribute_data textarea',
                 selectAll: '.select_all_attributes',
                 selectNone: '.minus',
                 addNewAttribute: '.button.add_new_attribute',
-                visibleOnTheProductPage: '.woocommerce_attribute:nth-child(1) td > label > .checkbox',  //TODO: make unique locator
-                usedForVariations: '.woocommerce_attribute:nth-child(1) .enable_variation .checkbox',  //TODO: make unique locator
+                visibleOnTheProductPage: "//input[contains(@name, 'attribute_visibility')]",
+                usedForVariations: "//input[contains(@name, 'attribute_variation')]",
                 saveAttributes: '.save_attributes',
                 //variations
-                //TODO: add more locators
+                variations: '.woocommerce_variation',
                 addVariations: '#field_to_edit',
-                go: '.bulk_edit',  // invokes default js alert
+                go: '.bulk_edit',  //invokes default js alert
                 //advanced
                 purchaseNote: '#\\_purchase_note',
                 menuOrder: '#menu_order',
@@ -1074,7 +1254,6 @@ module.exports = {
                 saveDraft: '#save-post',
                 preview: '#post-preview',
                 publish: '#publish',
-                // publish: '.button.button-primary.button-large',
                 updatedSuccessMessage: ".updated.notice.notice-success",
             },
 
@@ -1111,29 +1290,68 @@ module.exports = {
 
         },
         //bookings
-        bookings: {},
-
-        //analytics
-        analytics: {},
+        bookings: {
+            //menus
+            allBooking: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'All Bookings')]",
+            resources: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'Resources')]",
+            addBooking: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'Add Booking')]",
+            calender: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'Calendar')]",
+            sendNotification: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'Send Notification')]",
+            settings: "//li[@id='menu-posts-wc_booking']//a[contains(text(),'Settings')]",
+        },
 
         //marketing
         marketing: {
+            //menus
+            coupons: "//li[@id='toplevel_page_woocommerce-marketing']//a[contains(text(),'Coupons')]",
             //coupon
+            // coupon sub menus
+            general: "ss=#general_coupon_data",
+
+            addCoupon: "//a[contains(text(),'Add coupon')]",
+            couponCode: "#title",
+            couponDescription: "#woocommerce-coupon-description",
+            //general
+            discountType: "#discount_type",
+            couponAmount: "#coupon_amount",
+            allowFreeShipping: "#free_shipping",
+            couponExpiryDate: "#expiry_date",
+            //vendor limits
+            enableForAllVendors: "#admin_coupons_enabled_for_vendor",
+            couponPriceDeduct: "#coupon_commissions_type",
+            vendors: ".dokan-admin-coupons-include-vendors .select2-search__field",
+            products: ".dokan-coupons-include-product-search-group .select2-search__field",
+            excludeProducts: "//label[contains(text(),'Exclude products')]/..//input[@class='select2-search__field']",
+            showOnStores: "#admin_coupons_show_on_stores",
+            notifyVendors: "#admin_coupons_send_notify_to_vendors",
+            //usage restriction
+            minimumSpend: "#minimum_amount",
+            maximumSpend: "#maximum_amount",
+            individualUseOnly: "#individual_use",
+            excludeSaleItems: "#exclude_sale_items",
+            productCategories: "//label[contains(text(),'Product categories')]/..//input[@class='select2-search__field']",
+            excludeCategories: "//label[contains(text(),'Exclude categories')]/..//input[@class='select2-search__field']",
+            allowedEmails: "#customer_email",
+            //usage limits
+            usageLimitPerCoupon: "//input[@id='usage_limit']",
+            usageLimitPerUser: "#usage_limit_per_user",
+
+            publish: "#publish",
         },
 
-        //elementor
-        elementor: {},
-
-        //templates
-        templates: {},
-
         //appearance
-        appearance: {},
+        appearance: {
+            //menus
+            themes: "//li[@id='menu-appearance']//a[contains(text(),'Themes')]",
+            addNew: "//div[@class='wrap']//a[contains(text(),'Add New')]",
+            searchTheme: "#wp-filter-search-input",
+        },
 
         //plugins
         plugins: {
             //plugins menus
             installedPlugins: '//a[text()="Installed Plugins"]',
+            plugin: (pluginSlug) => `//tr[@data-slug='${pluginSlug}']`,
 
             //add new plugins
             addNew: '.page-title-action',
@@ -1148,9 +1366,9 @@ module.exports = {
         //users
         users: {
             //users menu
-            allUsers: "#menu-users .wp-first-item > .wp-first-item",
-            addNew: "#menu-users li:nth-child(3) > a",  //TODO: make unique locator
-            profile: "#menu-users li:nth-child(4) > a",  //TODO: make unique locator
+            allUsers: "//li[@id='menu-users']//a[contains(text(),'All Users')]",
+            addNew: "//li[@id='menu-users']//a[contains(text(),'Add New')]",
+            profile: "//li[@id='menu-users']//a[contains(text(),'Profile')]",
 
             //all users
             allUsersAddNew: ".page-title-action",
@@ -1214,30 +1432,30 @@ module.exports = {
             shippingState: "#shipping_state",
             shippingPhone: "#shipping_phone",
             //dokan options
-            dokanBanner: "",//TODO: add locator
-            dokanStoreName: ".form-table:nth-child(21) tr:nth-child(2) .regular-text",  //TODO: make unique locator
+            dokanBanner: ".dokan-banner .button-area a",
+            dokanStoreName: "//input[@name='dokan_store_name']",
             dokanStoreUrl: "#seller-url",
-            dokanAddress1: ".form-table:nth-child(21) tr:nth-child(4) .regular-text",  //TODO: make unique locator
-            dokanAddress2: ".form-table:nth-child(21) tr:nth-child(5) .regular-text",  //TODO: make unique locator
-            dokanCity: ".form-table:nth-child(21) tr:nth-child(6) .regular-text",  //TODO: make unique locator
-            dokanPostcode: ".form-table:nth-child(21) tr:nth-child(7) .regular-text",  //TODO: make unique locator
+            dokanAddress1: "//input[@name='dokan_store_address[street_1]']",
+            dokanAddress2: "//input[@name='dokan_store_address[street_2]']",
+            dokanCity: "//input[@name='dokan_store_address[city]']",
+            dokanPostcode: "//input[@name='dokan_store_address[zip]']",
             dokanCountry: "#select2-country-container",
             dokanCountryValues: ".select2-results ul li",
             dokanState: "##select2-state-container",
             dokanStateValues: ".select2-results ul li",
-            dokanPhone: ".form-table:nth-child(21) tr:nth-child(10) .regular-text",  //TODO: make unique locator
-            dokanCompanyName: "form-table:nth-child(21) tr:nth-child(11) .regular-text",  //TODO: make unique locator
-            dokanCompanyIdOrEuidNumber: ".form-table:nth-child(21) tr:nth-child(12) .regular-text",  //TODO: make unique locator
-            dokanVatOrTaxNumber: ".form-table:nth-child(21) tr:nth-child(13) .regular-text",  //TODO: make unique locator
-            dokanBank: ".form-table:nth-child(21) tr:nth-child(14) .regular-text",  //TODO: make unique locator
-            dokanBankIban: ".form-table:nth-child(21) tr:nth-child(15) .regular-text",  //TODO: make unique locator
-            dokanFacebook: "tr:nth-child(16) .regular-text",  //TODO: make unique locator
-            dokanTwitter: "tr:nth-child(17) .regular-text",  //TODO: make unique locator
-            dokanPinterest: "tr:nth-child(18) .regular-text",  //TODO: make unique locator
-            dokanLinkedin: "tr:nth-child(19) .regular-text",  //TODO: make unique locator
-            dokanYoutube: "tr:nth-child(20) .regular-text",  //TODO: make unique locator
-            dokanInstagram: "tr:nth-child(21) .regular-text",  //TODO: make unique locator
-            dokanFlicker: "tr:nth-child(22) .regular-text", //TODO: make unique locator
+            dokanPhone: "//input[@name='dokan_store_phone']",
+            dokanCompanyName: "//input[@name='dokan_company_name']",
+            dokanCompanyIdOrEuidNumber: "//input[@name='dokan_company_id_number']",
+            dokanVatOrTaxNumber: "//input[@name='dokan_vat_number']",
+            dokanBank: "//input[@name='dokan_bank_name']",
+            dokanBankIban: "//input[@name='dokan_bank_iban']",
+            dokanFacebook: "//input[@name='dokan_social[fb]']",
+            dokanTwitter: "//input[@name='dokan_social[twitter]']",
+            dokanPinterest: "//input[@name='dokan_social[pinterest]']",
+            dokanLinkedin: "//input[@name='dokan_social[linkedin]']",
+            dokanYoutube: "//input[@name='dokan_social[youtube]']",
+            dokanInstagram: "//input[@name='dokan_social[instagram]']",
+            dokanFlicker: "//input[@name='dokan_social[flickr]']",
             dokanSelling: "#dokan_enable_selling",
             dokanPublishing: "#dokan_publish",
             dokanAdminCommissionType: "#dokan_admin_percentage_type",
@@ -1252,7 +1470,11 @@ module.exports = {
         },
 
         //tools
-        tools: {},
+        tools: {
+            //menus
+            import: "//li[@id='menu-tools']//a[text()='Import']",
+            export: "//li[@id='menu-tools']//a[text()='Export']",
+        },
 
         //settings
         settings: {
@@ -1275,26 +1497,25 @@ module.exports = {
             newUserDefaultRole: "#default_role",
             siteLanguage: "#WPLANG",
             timezone: "#timezone_string",
-            dateFormat: "",// TODO: add locator
-            timeFormat: "",// TODO: add locator
+            customDateFormat: "//input[@id='date_format_custom_radio' and @name='date_format']",
+            timeFormat: "//input[@id='time_format_custom_radio' and @name='time_format']",
             weekStartsOn: "#start_of_week",
             generalSaveChanges: "#submit",
 
             //permalinks settings
             //common settings
-            numeric: ".permalink-structure tr:nth-child(4) input",  //TODO: make unique locator
-            postName: ".permalink-structure tr:nth-child(5) input",  //TODO: make unique locator
+            numeric: "//input[@value='/archives/%post_id%']",
+            postName: "//input[@value='/%postname%/' and @type='radio']",
             //optional settings
-            shopBaseWithCategory: "tr:nth-child(3) .wctog",  //TODO: make unique locator
-            customBase: "#woocommerce_custom_selection",
+            shopBaseWithCategory: "//input[@value='/shop/%product_cat%/']",
+            customBase: "//input[@id='woocommerce_custom_selection']",
+            customBaseInput: "//input[@id='woocommerce_permalink_structure']",
             permalinkSaveChanges: "#submit",
 
             //update settings
             updatedSuccessMessage: "#setting-error-settings_updated strong",
         },
 
-        //locoTranslate
-        locoTranslate: {},
     },
 
 
@@ -1340,7 +1561,7 @@ module.exports = {
             country: '#select2-addresscountry-container',
             countryInput: '.select2-search__field',
             state: '#calc_shipping_state',
-            email: 'label:nth-child(2)',  //TODO: make unique locator
+            email: '//input[@id="show_email"]/..//label',
             continueStoreSetup: '.store-step-continue',
             skipTheStepStoreSetup: '.store-step-skip-btn',
 
@@ -1402,17 +1623,17 @@ module.exports = {
         //products
         product: {
             //menus
-            all: ".active:nth-child(1) > a",  //TODO: make unique locator
-            online: ".dokan-listing-filter > li:nth-child(2) > a",  //TODO: make unique locator
-            pendingReview: ".dokan-listing-filter > li:nth-child(3) > a",  //TODO: make unique locator
-            inStock: ".dokan-listing-filter > li:nth-child(4) > a",  //TODO: make unique locator
-            //TODO: add more menu bar locators
+            all: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'All')]",
+            online: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Online')]",
+            draft: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Draft')]",
+            pendingReview: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Pending Review')]",
+            inStock: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'In stock')]",
             //filter
             filterByDate: "#filter-by-date",
             filterByCategory: "#product_cat",
             filterByType: "#filter-by-type",
-            filterByOther: ".dokan-w8 > .dokan-form-group:nth-child(4) > .dokan-form-control",  //TODO: make unique locator
-            filter: ".dokan-btn:nth-child(6)",  //TODO: make unique locator
+            filterByOther: "//select[@name='filter_by_other']",
+            filter: "//button[@name='product_listing_filter']",
             //search product
             searchProduct: ".dokan-w5 .dokan-form-control",
             search: ".dokan-w5 > .dokan-btn",
@@ -1422,8 +1643,8 @@ module.exports = {
             applyBulkAction: "#bulk-product-action",
 
             //import export product
-            import: ".dokan-add-product-link > .dokan-btn:nth-child(2)",  //TODO: make unique locator
-            export: ".dokan-add-product-link > .dokan-btn:nth-child(3)",  //TODO: make unique locator
+            import: "//span[@class='dokan-add-product-link']//a[contains(text(),'Import')]",
+            export: "//span[@class='dokan-add-product-link']//a[contains(text(),'Export')]",
 
             // product sub options
             editProduct: ".row-actions > .edit > a",
@@ -1437,9 +1658,7 @@ module.exports = {
             addNewProduct: ".dokan-add-new-product",
             productName: "input[name='post_title']",
             productImage: ".dokan-feat-image-btn",
-            productUploadProductImage: '#\\__wp-uploader-id-1',
             productAddGalleryImage: ".fa-plus",
-            productUploadGalleryImage: "#\\__wp-uploader-id-4",
             productPrice: "#_regular_price",
             productDiscountedPrice: "#_sale_price",
             productDiscountedPriceSchedule: ".sale_schedule",
@@ -1447,7 +1666,7 @@ module.exports = {
             productScheduleTo: ".dokan-end-date",
             productScheduleCancel: ".cancel_sale_schedule.dokan-hide",
             productCategory: "#select2-product_cat-container",
-            productCategoryInput: ".select2-search--dropdown > .select2-search__field",
+            productCategoryInput: ".select2-search--dropdown .select2-search__field",
             productCategoryValues: ".select2-results ul li",
             productTags: '.select2-search__field',
             productDescription: 'textarea[placeholder="Enter some short description about this product..."]',
@@ -1455,17 +1674,19 @@ module.exports = {
             createAndNewProduct: "#dokan-create-and-add-new-product-btn",
 
             //edit product
-            viewProduct: ".dokan-right > .dokan-btn",
+            viewProduct: ".dokan-right .dokan-btn",
             title: "#post_title",
             //permalink
             permalinkEdit: ".edit-slug",
             confirmPermalinkEdit: ".cancel",
             cancelPermalinkEdit: ".save",
             //image
-            productImage: ".dokan-feat-image-btn",
-            uploadProductImage: '#\\__wp-uploader-id-1',
+            addProductImage: ".dokan-feat-image-btn",
+            uploadedProductImage: '.image-wrap img',
+            removeProductImage: '.close.dokan-remove-feat-image',
             addGalleryImage: ".fa-plus",
-            uploadGalleryImage: "#\\__wp-uploader-id-4",
+            uploadGalleryImage: "#dokan-product-images .image",
+            removeGalleryImage: ".action-delete",
             //product type
             productType: "#product_type",
             downloadable: "#\\_downloadable",
@@ -1489,21 +1710,23 @@ module.exports = {
             signUpFee: '#\\_subscription_sign_up_fee',
             subscriptionTrialLength: '#\\_subscription_trial_length',
             subscriptionTrialPeriod: '#\\_subscription_trial_period',
+            //short description
+            shortDescriptionIframe: ".dokan-product-short-description iframe",
+            shortDescriptionHtmlBody: "#tinymce",
             //description
-            shortDescription: "p", //TODO:
-            description: "p", //TODO:
+            descriptionIframe: ".dokan-product-description iframe",
+            descriptionHtmlBody: "#tinymce",
             //inventory
             sku: "#\\_sku",
             stockStatus: "#\\_stock_status",
             enableProductStockManagement: "#\\_manage_stock",
-            stockQuantity: ".show_if_stock > .content-half-part:nth-child(1) > .dokan-form-control",  //TODO: make unique locator
-            lowStockThreshold: ".show_if_stock > .content-half-part:nth-child(2) > .dokan-form-control",  //TODO: make unique locator
+            stockQuantity: "//input[@name='_stock']",
+            lowStockThreshold: "//input[@name='_low_stock_amount']",
             allowBackOrders: "#\\_backorders",
             allowOnlyOneQuantityOfThisProductToBeBoughtInASingleOrder: "#\\_sold_individually",
             //geolocation
             sameAsStore: "#\\_dokan_geolocation_use_store_settings",
             productLocation: "#\\_dokan_geolocation_product_location",
-            productLocationFirstResult: ".gm-style > div:nth-child(2) > div:nth-child(2)",  //TODO: make unique locator
             //add-ons
             addField: ".wc-pao-add-field",
             type: "#wc-pao-addon-content-type-0",
@@ -1521,7 +1744,7 @@ module.exports = {
             //add-ons option
             enterAnOption: ".wc-pao-addon-content-label > input",
             optionPriceType: ".wc-pao-addon-option-price-type",
-            optionPrice: ".wc_input_price:nth-child(1)",  //TODO: make unique locator
+            optionPrice: ".wc-pao-addon-content-price input",
             addOption: ".wc-pao-add-option",
             removeOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
             cancelRemoveOption: ".swal2-cancel",
@@ -1538,14 +1761,14 @@ module.exports = {
             taxStatus: "#\\_tax_status",
             taxClass: "#\\_tax_class",
             //linked products
-            upSells: ".content-half-part:nth-child(1) > .select2 .select2-search__field",  //TODO: make unique locator
-            crossSells: ".dokan-section-content > .content-half-part:nth-child(2) .select2-search__field",  //TODO: make unique locator
+            upSells: "//label[contains(text(),'Upsells')]/..//input[@class='select2-search__field']",
+            crossSells: "//label[contains(text(),'Cross-sells ')]/..//input[@class='select2-search__field']",
             //attribute
             customProductAttribute: "#predefined_attribute",
             addAttribute: ".add_new_attribute",
-            visibleOnTheProductPage: "checkbox-item:nth-child(6) > input",  //TODO: make unique locator
-            usedForVariations: ".show_if_variable > input",
-            selectItems: "dokan-section-content > .content-half-part:nth-child(2) .select2-search__field",  //TODO: make unique locator
+            visibleOnTheProductPage: "//input[contains(@name, 'attribute_visibility')]",
+            usedForVariations: "//input[contains(@name, 'attribute_variation')]",
+            selectTerms: ".dokan-attribute-values .select2-search__field",
             selectAll: ".plus",
             selectNone: ".minus",
             removeAttribute: ".dokan-product-remove-attribute",
@@ -1572,9 +1795,10 @@ module.exports = {
             label: "#dokan-rma-label",
             type: "#dokan-warranty-type",
             length: "#dokan-warranty-length",
-            lengthValue: "content-half-part:nth-child(4) > .dokan-form-control",  //TODO: make unique locator
+            lengthValue: "//input[@name='warranty_length_value']",
             lengthDuration: "#dokan-warranty-length-duration",
-            rmaPolicy: "p", //TODO: improve
+            rmaPolicyIframe: '#wp-warranty_policy-wrap iframe',
+            rmaPolicyHtmlBody: '#tinymce',
             //wholesale options
             enableWholeSaleForThisProduct: "#wholesale\\[enable_wholesale\\]",
             wholesalePrice: "#dokan-wholesale-price",
@@ -1632,17 +1856,17 @@ module.exports = {
             filter: ".dokan-btn",
 
             //edit subscription
-            subscription: "td > a > strong",
+            subscription: "td a strong",
             //edit subscription order status
-            editSubscriptionOrderStatus: ".dokan-edit-status > small",
+            editSubscriptionOrderStatus: ".dokan-edit-status small",
             subscriptionOrderStatus: "#order_status",
-            updateSubscriptionOrderStatus: ".dokan-btn:nth-child(5)",  //TODO: make unique locator
+            updateSubscriptionOrderStatus: "//input[@name='dokan_vps_change_status']",
             cancelSubscriptionOrderStatus: ".dokan-btn-default",
             //downloadable product permission
             chooseADownloadableProduct: ".select2-search__field",
             grantAccess: ".grant_access",
             downloadsRemaining: ".form-input",
-            accessExpires: "td > .short ",
+            accessExpires: "td .short ",
             removeAccess: ".revoke_access",
             confirmRemoveAccess: ".swal2-confirm",
             cancelRemoveAccess: ".swal2-cancel",
@@ -1655,7 +1879,7 @@ module.exports = {
             endDate: "#end",
             endDateHour: "#end_hour",
             endDateMinute: "#end_minute",
-            updateSchedule: ".dokan-btn:nth-child(4)",  //TODO: make unique locator
+            updateSchedule: '//input[@name="dokan_change_subscription_schedule"]',
             //subscription notes
             addNoteContent: "#add-note-content",
             orderNoteType: "#order_note_type",
@@ -1735,15 +1959,16 @@ module.exports = {
             commentStatus: "select",
             commentStatusSubmit: ".dokan-btn",
 
-            //comment Actions
-            viewComment: ".approved:nth-child(1) > .col-link > a",   //TODO: make unique locator
-            unApproveComment: ".approved:nth-child(1) li:nth-child(1) > .dokan-cmt-action",  //TODO: make unique locator
-            SpamComment: "approved:nth-child(1) li:nth-child(2) > .dokan-cmt-action",  //TODO: make unique locator
-            trashComment: "approved:nth-child(1) li:nth-child(3) > .dokan-cmt-action"  //TODO: make unique locator
+            //comment actions
+            viewComment: "//a[contains(text(),'View Comment')]",
+            commentActions: "//ul[@class='dokan-cmt-row-actions']",
+            unApproveComment: "//ul[@class='dokan-cmt-row-actions']//a[contains(text(),'Unapprove')]",
+            SpamComment: "//ul[@class='dokan-cmt-row-actions']//a[contains(text(),'Spam')]",
+            trashComment: "//ul[@class='dokan-cmt-row-actions']//a[contains(text(),'Trash')]"
         },
 
         //withdraw
-        vRmaSettingsWithdraw: {
+        vWithdraw: {
             // manual withdraw request
             minimumWithdrawAmount: "bdi",
             balance: "//p[contains(text(),'Your Balance:')]//a//span[@class='woocommerce-Price-amount amount']",
@@ -1765,12 +1990,12 @@ module.exports = {
             maintainAReserveBalance: "#withdraw-remaining-amount",
             changeSchedule: "#dokan-withdraw-schedule-request-submit",
 
-            // view payment
-            viewPayment: "#dokan-withdraw-display-requests-button",
-            pendingRequests: ".list-inline > li:nth-child(1) > a",  //TODO: make unique locator
-            approvedRequests: ".list-inline > li:nth-child(2) > a",  //TODO: make unique locator
-            cancelledRequests: ".list-inline > li:nth-child(3) > a", //TODO: make unique locator
-            withdrawDashboard: ".dokan-btn:nth-child(2)",  //TODO: make unique locator
+            // view payments
+            viewPayments: "#dokan-withdraw-display-requests-button",
+            pendingRequests: "//ul[contains(@class,'subsubsub')]//a[contains(text(), 'Pending Requests')]",
+            approvedRequests: "//ul[contains(@class,'subsubsub')]//a[contains(text(), 'Approved Requests')]",
+            cancelledRequests: "//ul[contains(@class,'subsubsub')]//a[contains(text(), 'Cancelled Requests')]",
+            withdrawDashboard: ".dokan-add-product-link a",
 
             //default payment methods
             customMethodMakeDefault: (methodName) => `//strong[contains( text(), '${methodName}')]/../..//button[contains(@class, 'dokan-btn')]`,
@@ -1781,16 +2006,25 @@ module.exports = {
         //return request
         vReturnRequest: {
             //menus
-            all: ".active:nth-child(1) > a",  //TODO: make unique locator
-            new: ".list-inline > li:nth-child(2) > a",  //TODO: make unique locator
-            view: ".fa-eye",
-            manage: ".request-manage",
+            all: "//ul[contains(@class,'request-statuses-filter')]//a[contains(text(),'All')]",
+            completed: "//ul[contains(@class,'request-statuses-filter')]//a[contains(text(),'Completed')]",
+            completed: "//ul[contains(@class,'request-statuses-filter')]//a[contains(text(),'Processing')]",
+
+            //refund request actions
+            view: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../../..//i[@class='far fa-eye']`,
+            manage: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../..//a[@class='request-manage']`,
+            delete: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../..//a[@class='request-delete']`,
+
             //return request
             backToList: ".left-header-content > a",
             changeOrderStatus: "#status",
-            updateOrderStatus: ".dokan-btn", //TODO: has alert to handle
-            sendRequest: ".dokan-send-refund-request",
-            //TODO: add More locator 
+            updateOrderStatus: "//input[@value='Update']", //invokes default js alert
+            sendRefund: ".dokan-send-refund-request",
+            taxRefund: "//input[contains(@name,'refund_tax')]",
+            subTotalRefund: "//input[contains(@name,'refund_amount')]",
+            sendRequest: "//input[@name='dokan_refund_submit']",
+
+            //conversations
             message: "#message",
             sendMessage: ".woocommerce-button",
         },
@@ -1818,13 +2052,16 @@ module.exports = {
 
         // booking
         vBooking: {
+            //menus
+            allBookingProduct: "//ul[@class='dokan_tabs']//a[contains(text(),'All Booking Product')]",
+            manageBookings: "//ul[@class='dokan_tabs']//a[contains(text(),'Manage Bookings')]",
+            calendar: "//ul[@class='dokan_tabs']//a[contains(text(),'Calendar')]",
+            manageResources: "//ul[@class='dokan_tabs']//a[contains(text(),'Manage Resources')]",
+
             //create booking product
             viewProduct: ".view-product",
             productName: "#post_title",
             ProductImage: ".dokan-feat-image-btn",
-            // uploadProductImage: '#\\__wp-uploader-id-1',
-            // addGalleryImage: ".fa-plus",
-            // uploadGalleryImage: "#\\__wp-uploader-id-4",
             virtual: "#\\_virtual",
             accommodationBooking: "#\\_is_dokan_accommodation",
             productCategory: "#select2-product_cat-container",
@@ -1908,13 +2145,13 @@ module.exports = {
             enablePersonTypes: "#\\_wc_booking_has_person_types",
             //add person
             addPersonType: ".add_person",
-            personTypeName: ".person_name:nth-child(2)",  //TODO: make unique locator
-            personBaseCost: ".wc-metabox-content tr:nth-child(1) > td:nth-child(2) > input",  //TODO: make unique locator
-            personBlockCost: ".wc-metabox-content tr:nth-child(1) > td:nth-child(3) > input",  //TODO: make unique locator
+            personTypeName: "//label[contains(text(),'Person Type Name:')]/..//input",
+            personBaseCost: "//label[contains(text(),'Base Cost:')]/..//input",
+            personBlockCost: "//label[contains(text(),'Block Cost:')]/..//input",
             description: ".person_description",
-            min: "tr:nth-child(2) > td:nth-child(2) > input",  //TODO: make unique locator
-            max: "tr:nth-child(2) > td:nth-child(3) > input",  //TODO: make unique locator
-            unlink: ".unlink_booking_person", //TODO: confirmation in alert
+            min: "//label[contains(text(),'Min:')]/..//input",
+            max: "//label[contains(text(),'Max:')]/..//input",
+            unlink: ".unlink_booking_person", // invokes default js alert
             //has resources
             hasResources: "#\\_wc_booking_has_resources",
             //add resource
@@ -1922,9 +2159,9 @@ module.exports = {
             resourcesAre: "#\\_wc_booking_resources_assignment",
             addResourceId: ".add_resource_id",
             addResource: ".add_resource",
-            resourceBaseCost: "td:nth-child(1) > input",
-            resourceBlockCost: ".wc-metabox-content td:nth-child(2) > input",  //TODO: make unique locator
-            removeResource: ".wc-metabox-content td:nth-child(2) > input", //TODO: confirmation in alert  //TODO: make unique locator
+            resourceBaseCost: "//label[contains(text(),'Base Cost:')]/..//input",
+            resourceBlockCost: "//label[contains(text(),'Block Cost:')]/..//input",
+            removeResource: ".remove_booking_resource.button", // invokes default js alert
             //short description
             shortDescriptionIframe: ".dokan-product-short-description iframe",
             shortDescriptionHtmlBody: "#tinymce",
@@ -1935,14 +2172,13 @@ module.exports = {
             sku: "#\\_sku",
             stockStatus: "#\\_stock_status",
             enableProductStockManagement: "#\\_manage_stock",
-            stockQuantity: ".show_if_stock > .content-half-part:nth-child(1) > .dokan-form-control",  //TODO: make unique locator
-            lowStockThreshold: ".show_if_stock > .content-half-part:nth-child(2) > .dokan-form-control",  //TODO: make unique locator
+            stockQuantity: "//input[@name='_stock']",
+            lowStockThreshold: "//input[@name='_low_stock_amount']",
             allowBackorders: "#\\_backorders",
             allowOnlyOneQuantityOfThisProductToBeBoughtInASingleOrder: "#\\_sold_individually",
             //geolocation
             sameAsStore: "#\\_dokan_geolocation_use_store_settings",
             productLocation: "#\\_dokan_geolocation_product_location",
-            productLocationFirstResult: ".gm-style > div:nth-child(2) > div:nth-child(2)",  //TODO: make unique locator
             //add-ons
             addField: ".wc-pao-add-field",
             type: "#wc-pao-addon-content-type-0",
@@ -1962,7 +2198,7 @@ module.exports = {
             //add-ons option
             enterAnOption: ".wc-pao-addon-content-label > input",
             optionPriceType: ".wc-pao-addon-option-price-type",
-            optionPrice: ".wc_input_price:nth-child(1)",   //TODO: make unique locator
+            optionPrice: ".wc-pao-addon-content-price input",
             addOption: ".wc-pao-add-option",
             removeOptionCrossIcon: ".wc-pao-addon-content-remove > .button",
             cancelRemoveOption: ".swal2-cancel",
@@ -1976,44 +2212,44 @@ module.exports = {
             saveProduct: ".dokan-btn-lg",
 
             //allBookingProduct
-            allBookingProduct: ".dokan_tabs > li:nth-child(1) > a",   //TODO: make unique locator
             addNewBookingProduct: ".dokan-btn-theme",
             addNewBooking: ".dokan-btn-theme",
             //addBooking
             customerId: "#select2-customer_id-container",
             selectABookableProduct: "#select2-bookable_product_id-container",
-            createANewCorrespondingOrderForThisNewBooking: "p:nth-child(1) .checkbox",  //TODO: make unique locator
-            assignThisBookingToAnExistingOrderWithThisId: "p:nth-child(2) .checkbox",  //TODO: make unique locator
+            createANewCorrespondingOrderForThisNewBooking: "//input[@name='booking_order' and @value='new']",
+            assignThisBookingToAnExistingOrderWithThisId: "//input[@name='booking_order' and @value='existing']",
             bookingOrderId: ".text",
-            DontCreateAnOrderForThisBooking: "p:nth-child(3) .checkbox",  //TODO: make unique locator
+            DontCreateAnOrderForThisBooking: "//label[normalize-space()='Don\'t create an order for this booking.']/..//input",
             next: ".button-primary",
-            //TODO: add new booking locators
+
             //filter
             filterByDate: "#filter-by-date",
             filterByCategory: "#product_cat",
             filterByType: "#filter-by-type",
-            filterByOther: ".dokan-w8 > .dokan-form-group:nth-child(4) > .dokan-form-control",  //TODO: make unique locator
-            filter: ".dokan-btn:nth-child(6)",  //TODO: make unique locator
+            filterByOther: "//select[@name='filter_by_other']",
+            filter: "//button[@name='product_listing_filter']",
             //search product
             searchProduct: ".dokan-w5 .dokan-form-control",
             search: ".dokan-w5 > .dokan-btn",
 
             //manage Booking
-            manageBookings: ".dokan_tabs > li:nth-child(2) > a",  //TODO: make unique locator
-            all: ".list-inline > li:nth-child(1) > a",  //TODO: make unique locator
-            unPaid: "a > .status-unpaid",
-            paidAndConfirmed: "a > .status-paid",
+            //menus
+            all: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(),'All')]",
+            unPaid: "//ul[contains(@class,'order-statuses-filter')]//span[contains(text(),'Un-paid')]/..",
+            paidAndConfirmed: "//ul[contains(@class,'order-statuses-filter')]//span[contains(text(),'Paid & Confirmed')]/..",
+            completed: "//ul[contains(@class,'order-statuses-filter')]//span[contains(text(),'Complete')]/..",
+
             view: ".dokan-btn",
-            editBookingStatus: 'small:nth-child(1)',  //TODO: make unique locator
+            editBookingStatus: '.dokan-edit-status',
             selectOrderStatus: "#booking_order_status",
             UpdateOrderStatus: ".dokan-btn-success",
             cancelUpdateOrderStatus: "dokan-btn-default",
 
             //calender
-            calendar: ".dokan_tabs > li:nth-child(3) > a",   //TODO: make unique locator
             calendarBookingsFilter: "#calendar-bookings-filter",
-            month: "div:nth-child(2) > .dokan-form-control",  //TODO: make unique locator
-            year: "div:nth-child(3) > .dokan-form-control",   //TODO: make unique locator
+            month: "//select[@name='calendar_month']",
+            year: "//select[@name='calendar_year']",
             previous: ".prev",
             next: ".next",
             calenderDay: "//input[@placeholder='yyyy-mm-dd']",
@@ -2021,20 +2257,20 @@ module.exports = {
             monthView: ".month",
 
             //manage resources
-            manageResources: ".dokan_tabs > li:nth-child(4) > a",   //TODO: make unique locator
             addNewResource: ".dokan-right",
             resourceName: ".swal2-input",
             cancelAddNewResource: ".swal2-cancel",
             confirmAddNewResource: ".swal2-confirm",
-            editResource: "",
-            removeResource: "",
+            editResource: (resourceName) => `//a[contains(text(),'${resourceName}')]/../..//a[contains(text(),'Edit')]`,
+            removeResourceButton: (resourceName) => `//a[contains(text(),'${resourceName}')]/../..//button[contains(text(),'Remove')]`,
+
             //edit resource
             resourceTitle: "#post_title",
             availableQuantity: "#\\_wc_booking_qty",
             rangeTypeResource: ".wc_booking_availability_type > select",
             rangeFromResource: ".from_date > .date-picker",
             rangeToResource: ".to_date > .date-picker ",
-            bookableResource: "td:nth-child(6) select",  //TODO: make unique locator
+            bookableResource: "//select[contains(@name,'wc_booking_availability_type')]",
             priorityResource: ".priority > input",
             addRangeResource: ".button",
             saveResource: ".dokan-btn-lg",
@@ -2131,10 +2367,6 @@ module.exports = {
             //description
             productDescriptionIframe: ".dokan-auction-post-content iframe",
             productDescriptionHtmlBody: "#tinymce",
-
-            //add auction
-            addAuctionProduct: ".dokan-btn-theme",
-            //TODO: add more locators
 
             //auction activity
             actionActivity: ".button-ml > .dokan-btn",
@@ -2265,7 +2497,6 @@ module.exports = {
             termsAndConditionsHtmlBody: '#tinymce',
             //store opening closing time
             storeOpeningClosingTime: "#dokan-store-time-enable",
-            // chooseBusinessDays: ".select2-container--below .select2-selection__rendered",
             chooseBusinessDays: "//label[contains(text(),'Choose Business Days')]/..//input[contains(@class,'select2-search__field')]",
             businessDaysTab: (day) => `//ul[@class='tabs']//li[@rel='store-tab-${day}']`,
             openingTime: (day) => `#opening-time-${day}`,
@@ -2443,7 +2674,25 @@ module.exports = {
             // verification
             documentType: "#dokan-kyc-file-type",
             chooseFiles: "#dokan-kyc-file",
-            //TODO: add UBO locators
+            //ubo
+            createAnUboDeclaration: "#ubo_create_declaration_button",
+            addUbo: "#ubo_add_button",
+            FirstName: "#dokan_mp_first_name",
+            LastName: "#dokan_mp_last_name",
+            DateOfBirth: "#dokan_mp_birthday",
+            Nationality: "#dokan_mp_nationality",
+            Address: "#dokan_mp_address_line1",
+            AddressDetails: "#dokan_mp_address_line2",
+            Country: "#dokan_mp_country",
+            State: "#dokan_mp_region",
+            City: "#dokan_mp_city",
+            Postcode: "#dokan_mp_postal_code",
+            BirthplaceCity: "#dokan_mp_birthplace_city_field",
+            BirthplaceCountry: "#dokan_mp_birthplace_country_field",
+            sendUbo: "add_button_ubo_element",
+            cancelUbo: "cancel_button_ubo_element",
+
+
             submit: "#dokan-mangopay-submit-kyc",
 
             //custom payment method
@@ -2465,7 +2714,7 @@ module.exports = {
             selectFiles: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']",
             select: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]",
 
-            //ID verification
+            //id verification
             startIdVerification: "#dokan_v_id_click",
             cancelIdVerificationRequest: "#dokan_v_id_cancel",
             passport: "//input[@value='passport']",
@@ -2488,11 +2737,8 @@ module.exports = {
             state: "#dokan_address_state",
             submitAddress: "#dokan_v_address_submit",
             cancelSubmitAddress: ".dokan-form-group > #dokan_v_address_cancel",
-            cancelAddressVerificationRequest: ".dokan-panel-body > #dokan_v_address_cancel",
+            cancelAddressVerificationRequest: ".dokan-panel-body #dokan_v_address_cancel",
             addressUpdateSuccessMessage: ".dokan-alert.dokan-alert-success",
-
-            //Social profiles
-            //TODO: add more locator
 
             //company verification
             startCompanyVerification: "#dokan_v_company_click",
@@ -2574,7 +2820,6 @@ module.exports = {
             tableRateShippingHandlingFeePerOrder: "#dokan_table_rate_handling_fee",
             tableRateShippingMinimumCostPerOrder: "#dokan_table_rate_min_cost",
             tableRateShippingMaximumCostPerOrder: "#dokan_table_rate_max_cost",
-            //TODO: add more locators
             tableRateShippingUpdateSettings: "//input[@name='dokan_update_table_rate_shipping_settings']",
             tableRateShippingUpdateSettingsSuccessMessage: ".dokan-message Strong",
             //dokan distance rate shipping
@@ -2592,7 +2837,6 @@ module.exports = {
             distanceRateShippingZipOrPostalCode: "#dokan_distance_rate_postal_code",
             distanceRateShippingStateOrProvince: "#dokan_distance_rate_state_province",
             distanceRateShippingCountry: "#dokan_distance_rate_country",
-            //TODO: add more locators
             distanceRateShippingUpdateSettings: "//input[@name='dokan_update_distance_rate_shipping_settings']",
             distanceRateShippingUpdateSettingsSuccessMessage: ".dokan-message Strong",
             // edit save shipping settings
@@ -2636,7 +2880,7 @@ module.exports = {
             instagram: "#settings\\[social\\]\\[instagram\\]",
             flicker: "#settings\\[social\\]\\[flickr\\]",
             updateSettings: ".dokan-btn.dokan-btn-danger.dokan-btn-theme",
-            updateSettingsSuccessMessage: ".dokan-alert.dokan-alert-success > p",
+            updateSettingsSuccessMessage: ".dokan-alert.dokan-alert-success p",
         },
 
         //rma settings
@@ -2703,25 +2947,25 @@ module.exports = {
 
         //customer my account
         cMyAccount: {
-            dashboard: '.woocommerce-MyAccount-navigation-link--dashboard > a',
-            orders: '.woocommerce-MyAccount-navigation-link--orders > a',
-            subscriptions: '.woocommerce-MyAccount-navigation-link--subscriptions > a',
-            downloads: '.woocommerce-MyAccount-navigation-link--downloads > a',
-            addresses: '.woocommerce-MyAccount-navigation-link--edit-address > a',
-            paymentMethods: '.woocommerce-MyAccount-navigation-link--payment-methods > a',
-            rmaRequests: '.woocommerce-MyAccount-navigation-link--rma-requests > a',
-            accountDetails: '.woocommerce-MyAccount-navigation-link--edit-account > a',
-            vendors: 'woocommerce-MyAccount-navigation-link--following > a',
-            sellerSupportTickets: '.woocommerce-MyAccount-navigation-link--support-tickets > a',
-            bookings: '.woocommerce-MyAccount-navigation-link--bookings > a',
-            auctions: '.woocommerce-MyAccount-navigation-link--auctions-endpoint > a',
-            logout: '.woocommerce-MyAccount-navigation-link--customer-logout > a',
+            dashboard: '.woocommerce-MyAccount-navigation-link--dashboard a',
+            orders: '.woocommerce-MyAccount-navigation-link--orders a',
+            subscriptions: '.woocommerce-MyAccount-navigation-link--subscriptions a',
+            downloads: '.woocommerce-MyAccount-navigation-link--downloads a',
+            addresses: '.woocommerce-MyAccount-navigation-link--edit-address a',
+            paymentMethods: '.woocommerce-MyAccount-navigation-link--payment-methods a',
+            rmaRequests: '.woocommerce-MyAccount-navigation-link--rma-requests a',
+            accountDetails: '.woocommerce-MyAccount-navigation-link--edit-account a',
+            vendors: 'woocommerce-MyAccount-navigation-link--following a',
+            sellerSupportTickets: '.woocommerce-MyAccount-navigation-link--support-tickets a',
+            bookings: '.woocommerce-MyAccount-navigation-link--bookings a',
+            auctions: '.woocommerce-MyAccount-navigation-link--auctions-endpoint a',
+            logout: '.woocommerce-MyAccount-navigation-link--customer-logout a',
         },
 
         //customer dashboard
         cDashboard: {
             // become vendor
-            becomeVendor: 'li:nth-child(1) .btn', //TODO: make unique locator
+            becomeVendor: '//a[contains(text(),"Become a Vendor")]',
             firstName: '#first-name',
             lastName: '#last-name',
             shopName: '#company-name',
@@ -2741,26 +2985,25 @@ module.exports = {
 
         //customer orders
         cOrders: {
-            view: ".order:nth-child(1) .button", //TODO: make unique locator
+            view: (orderNumber) => `//a[contains(text(),'${orderNumber}')]/../..//a[contains(@class,'woocommerce-button button view')]`,
             // request warranty
             warrantyRequest: ".request_warranty",
-            warrantyRequestItemName: "th > input:nth-child(1)", //TODO: make unique locator
-            warrantyRequestItemQuantity: "#request_item_qty\\[\\]",
+            warrantyRequestItemCheckbox: (productName) => `//a[contains(text(),'${productName}')]/../..//input[@type='checkbox' and contains(@name,'request_item')]`,
+            warrantyRequestItemQuantity: (productName) => `//a[contains(text(),'${productName}')]/../..//select[contains(@name,'request_item_qty')]`,
             warrantyRequestType: "#type",
             warrantyRequestDetails: "#warranty_request_details",
             warrantySubmitRequest: ".dokan-btn",
 
-            //payNow
-            payNow: "",//TODO:
         },
 
         //customer subscription
         cSubscription: {
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,ß
         },
 
         //customer downloads
         cDownloads: {
-
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,
         },
 
         //customer address
@@ -2785,7 +3028,7 @@ module.exports = {
             billingZipCode: "#billing_postcode",
             billingPhone: "#billing_phone",
             billingEmailAddress: "#billing_email",
-            billingSaveAddress: "p:nth-child(2) > .button", //TODO: make unique locator
+            billingSaveAddress: "//button[@name='save_address']",
 
             //shipping address
             editShippingAddress: ".u-column2.col-2 .edit",
@@ -2800,7 +3043,7 @@ module.exports = {
             shippingState: "#select2-shipping_state-container",
             shippingStateValues: ".select2-results ul li",
             shippingZipCode: "#shipping_postcode",
-            shippingSaveAddress: "p:nth-child(2) > .button", //TODO: make unique locator
+            shippingSaveAddress: "//button[@name='save_address']",
 
             //success message
             successMessage: ".woocommerce-message",
@@ -2809,7 +3052,7 @@ module.exports = {
 
         //customer rma requests
         cRma: {
-            view: ".order:nth-child(1) .woocommerce-button", //TODO: make unique locator
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,
             // Conversations
             message: "#message",
             sendMessage: ".woocommerce-button"
@@ -2822,7 +3065,7 @@ module.exports = {
             deleteMethod: ".delete",
             addPaymentMethod: ".woocommerce-MyAccount-content .button",
 
-            // stripe card
+            //stripe card
             stripeCardNumber: ".CardNumberField-input-wrapper .InputElement",
             stripeCardExpiryDate: ".CardField-expiry .InputElement",
             stripeCardCvc: ".CardField-cvc .InputElement",
@@ -2845,16 +3088,16 @@ module.exports = {
 
         // customer followed vendors
         cVendors: {
-            visitStore: ".dokan-single-seller:nth-child(1) .dashicons", //TODO: make unique locator
-            unFollowStore: ".dokan-single-seller:nth-child(1) .dokan-follow-store-button-label-unfollow" //TODO: make unique locator
+            visitStore: (storeName) => `//a[contains(text(),'${storeName}')]/../../../../..//a[@title='Visit Store']`,
+            followUnFollowStore: (storeName) => `//a[contains(text(),'${storeName}')]/../../../../..//button[contains(@class,'dokan-follow-store-button')]`,
         },
 
         // customer support tickets
         cSupportTickets: {
             //menus
-            allTickets: ".dokan-support-topic-counts > li:nth-child(1) > a", //TODO: make unique locator
-            openTickets: ".dokan-support-topic-counts > li:nth-child(2) > a", //TODO: make unique locator
-            closedTickets: ".dokan-support-topic-counts > li:nth-child(3) > a", //TODO: make unique locator
+            allTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'All Tickets')]",
+            openTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Open Tickets')]",
+            closedTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Closed Tickets')]",
 
             addReply: "#comment",
             submitReply: "#submit",
@@ -2862,10 +3105,12 @@ module.exports = {
 
         // customer bookings
         cBookings: {
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,
         },
 
         // customer auctions settings
-        cAuctionsSettings: {
+        cAuctions: {
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,
         },
 
         //customer shop page
@@ -2875,26 +3120,31 @@ module.exports = {
             //filter
             searchProduct: ".dokan-form-control",
             searchedProductName: ".woocommerce-loop-product__title",
-            location: ".location-address > input",
+            location: ".location-address input",
+            radiusSlider: ".dokan-range-slider",
             selectCategory: "#product_cat",
             radius: ".dokan-range-slider",
-            sorting: ".woocommerce-ordering:nth-child(3) > .orderby", //TODO: make unique locator
+            sorting: ".woocommerce-ordering .orderby",
             search: ".dokan-btn",
             //cart
-            addToCart: ".button.add_to_cart_button.ajax_add_to_cart", //TODO: edit
+            addToCart: ".add_to_cart_button",
             viewCart: ".added_to_cart",
+            bidNow: '.button.product_type_auction',
+
             //pagination
-            previous: ".woocommerce-pagination:nth-child(3) .prev", //TODO: make unique locator
-            next: ".woocommerce-pagination:nth-child(3) .next",  //TODO: make unique locator
-            // TODO:page navigation, map 
+            previous: ".prev",
+            next: ".next",
         },
 
         //customer store page
         cStoreList: {
-
             storeListPageHeader: ".entry-title",
+            //search vendor
+            searchVendors: ".store-search-input",
+            location: ".location-address input",
+            radiusSlider: ".dokan-range-slider",
             //filter
-            filter: ".dokan-icon-div:nth-child(1)",  //TODO: make unique locator
+            filter: ".dokan-store-list-filter-button",
             featured: "#featured",
             openNow: "#open-now",
             rating: (star) => `.star-${star}`,
@@ -2904,39 +3154,34 @@ module.exports = {
             //view style
             gridView: ".dashicons-screenoptions",
             listView: ".dashicons-menu-alt",
-            //search vendor
-            searchVendors: "dokan_seller_search",
-            location: ".location-address > input",
-            //TODO:map
-            visitStore: "dokan_stripe_express_sources_",
-            followUnFollowStore: ".dokan-single-seller:nth-child(1) .dokan-btn"  //TODO: make unique locator
+
+            visitStore: (storeName) => `//a[contains(text(),'${storeName}')]/../../../../..//a[@title='Visit Store']`,
+            followUnFollowStore: (storeName) => `//a[contains(text(),'${storeName}')]/../../../../..//button[contains(@class,'dokan-follow-store-button')]`,
         },
 
         //customer header cart
         cHeaderCart: {
             //cartContent
-            cartContent: ".cart-contents > .woocommerce-Price-amount",
+            cartContent: ".cart-contents .woocommerce-Price-amount",
             removeItem: ".remove",
-            viewCart: ".button:nth-child(1)",  //TODO: make unique locator
-            checkout: ".checkout",
+            viewCart: "//p[contains(@class,'woocommerce-mini-cart__buttons')]//a[contains(text(),'View cart')]",
+            checkout: "//p[contains(@class,'woocommerce-mini-cart__buttons')]//a[contains(text(),'Checkout')]",
         },
 
         // customer single store 
         cSingleStore: {
-
-            products: ".dokan-list-inline > li:nth-child(1) > a",  //TODO: make unique locator
-            //reviews
-            reviews: "dokan-list-inline > li:nth-child(2) > a",  //TODO: make unique locator
+            //products
+            products: "//div[@class='dokan-store-tabs']//a[contains(text(),'Products')]",
+            // reviews
+            reviews: "//div[@class='dokan-store-tabs']//a[contains(text(),'Reviews')]",
             writeAReview: ".add-review-btn",
             closeReviewPopup: ".mfp-close",
-            reviewStar: (star) => `.jq-ry-rated-group > svg:nth-child(${star}) > polygon`,  //TODO: make unique locator
+            reviewStar: (star) => `.jq-ry-rated-group > svg:nth-child(${star}) > polygon`,
             reviewTitle: "#dokan-review-title",
             reviewMessage: "#dokan-review-details",
             submitReview: "#support-submit-btn",
-
             //follow store
             follow: ".dokan-follow-store-button",
-
             //get Support
             getSupport: ".dokan-store-support-btn",
             closeGetSupportPopup: ".mfp-close",
@@ -2944,7 +3189,7 @@ module.exports = {
             getSupportOrderId: ".dokan-select",
             message: "#dokan-support-msg",
             submitGetSupport: "#support-submit-btn",
-
+            //share store
             share: ".dokan-share-btn",
             facebook: ".fa-facebook",
             twitter: ".fa-twitter",
@@ -2953,7 +3198,6 @@ module.exports = {
             mail: ".fa-at",
             //open now
             openNow: ".fa.fa-angle-down",
-
             //search product
             productName: ".product-name-search",
             search: ".search-store-products",
@@ -2978,7 +3222,8 @@ module.exports = {
 
             //report abuse
             reportAbuse: ".dokan-report-abuse-button",
-            reportReason: (reasonNumber) => `li:nth-child(${reasonNumber}) input`,  //TODO: make unique locator
+            reportReason: (reasonNumber) => `li:nth-child(${reasonNumber}) input`, //by number
+            reportReason1: (reasonName) => `//input[@value='${reasonName}']`, //by name
             reportDescription: ".dokan-form-control",
             reportSubmit: "#dokan-report-abuse-form-submit-btn",
             confirmReportSubmit: ".swal2-confirm",
@@ -2986,16 +3231,16 @@ module.exports = {
             //other available vendor
             OtherAvailableVendorViewStore: ".fa-external-link-alt",
             OtherAvailableVendorViewProduct: ".view",
-            OtherAvailableVendorAddToCart: ".dokan-btn:nth-child(3)",   //TODO: make unique locator
+            OtherAvailableVendorAddToCart: ".fa-shopping-cart",
 
             //product menus
-            description: "#tab-title-description > a",
+            description: "#tab-title-description a",
             reviews: "#tab-title-reviews",
-            vendorInfo: "#tab-title-seller > a",
-            location: "#tab-title-geolocation > a",
-            moreProducts: "#tab-title-more_seller_product > a",
-            warrantyPolicy: "#tab-title-refund_policy > a",
-            productEnquiry: "#tab-title-seller_enquiry_form > a",
+            vendorInfo: "#tab-title-seller a",
+            location: "#tab-title-geolocation a",
+            moreProducts: "#tab-title-more_seller_product a",
+            warrantyPolicy: "#tab-title-refund_policy a",
+            productEnquiry: "#tab-title-seller_enquiry_form a",
 
             // product reviews
             rating: (star) => `.star-${star}`,
@@ -3011,17 +3256,15 @@ module.exports = {
         cCart: {
             cartPageHeader: ".entry-title",
             //edit cart
-            removeItem: ".woocommerce-cart-form__cart-item:nth-child(1) .remove",   //TODO: make unique locator
-            quantity: ".quantity .qty",//TODO:handle for multiple product
+            removeItem: (productName) => `//a[contains(text(),'${productName}')]/../..//a[@class='remove']`,
+            quantity: (productName) => `//a[contains(text(),'${productName}')]/../..//input[@class='input-text qty text']`,
             couponCode: "#coupon_code",
-            applyCoupon: ".button:nth-child(3)",  //TODO: make unique locator
-            reviewStar: (star) => `.jq-ry-rated-group > svg:nth-child(${star}) > polygon`,   //TODO: make unique locator
+            applyCoupon: "//button[@name='apply_coupon']",
             removeCoupon: (couponCode) => `.cart-discount.coupon-${couponCode.toLowerCase()} .woocommerce-remove-coupon`,
-            updateCart: ".button:nth-child(2)",  //TODO: make unique locator
+            updateCart: "//button[@name='update_cart']",
             //shipping methods
-            flatRate: "#shipping_method_0_flat_rate1",
-            freeShipping: "#shipping_method_0_free_shipping2",
-            //TODO: edit locator based on vendor
+            shippingMethod: (vendorName, shippingMethod) => `//th[contains(text(),'Shipping:  ${vendorName}')]/..//label[contains(text(),'${shippingMethod}')]/..//input`, // for vendor-wise or admin shipping method
+            vendorShippingMethod: (shippingMethod) => `//label[contains(text(),'${shippingMethod}')]/..//input`, //for unique shipping method
             //proceed To Checkout
             proceedToCheckout: ".checkout-button"
 
@@ -3063,34 +3306,57 @@ module.exports = {
             shippingState: "select2-shipping_state-container",
             shippingStateValues: ".select2-results ul li",
             shippingZipCode: "#shipping_postcode",
-            shippingSaveAddress: "p:nth-child(2) > .button",  //TODO: make unique locator
 
             //order comments
             orderComments: "#order_comments",
 
             //shipping methods
-            flatRate: "#shipping_method_0_flat_rate1",
-            freeShipping: "#shipping_method_0_free_shipping2",
-            //TODO: edit locator based on vendor
+            shippingMethod: (vendorName, shippingMethod) => `//th[contains(text(),'Shipping:  ${vendorName}')]/..//label[contains(text(),'${shippingMethod}')]/..//input`, // for vendor-wise or admin shipping method
+            vendorShippingMethod: (shippingMethod) => `//label[contains(text(),'${shippingMethod}')]/..//input`, //for unique shipping method
 
             //payment methods
-            directBankTransfer: ".payment_method_bacs > label",
-            checkPayments: ".payment_method_cheque > label",
-            cashOnDelivery: ".payment_method_cod > label",
-            paypalAdaptive: ".payment_method_dokan_paypal_adaptive > label",
-            wireCardCreditCard: ".payment_method_dokan-moip-connect > label",
-            //TODO:Razorpay,mangopay,paypal marketplace,strip,stripeExpress
-
+            directBankTransfer: ".payment_method_bacs label",
+            checkPayments: ".payment_method_cheque label",
+            cashOnDelivery: ".payment_method_cod label",
+            paypalAdaptive: ".payment_method_dokan_paypal_adaptive label",
+            wireCardCreditCard: ".payment_method_dokan-moip-connect label",
             //place order
             placeOrder: "#place_order"
 
         },
 
-        cPayWithStripe: {},
-        cPayWithPaypalMarketPlace: {},
-        cPayWithRazorpay: {},
-        cPayWithMangoPay: {},
-        cPayWithStripeExpress: {},
+        cPayWithStripe: {
+            strip: "#payment_method_dokan-stripe-connect",
+            // strip1:"..payment_method_dokan-stripe-connect label",
+            userNewPaymentMethod: "#wc-dokan-stripe-connect-payment-token-new",
+            cardNumber: "//input[@name='cardnumber']",
+            expDate: "//input[@name='exp-date']",
+            cvc: "//input[@name='cvc']",
+            savePaymentInformation: "#wc-dokan-stripe-connect-new-payment-method",
+        },
+        cPayWithPaypalMarketPlace: {
+            paypalMarketPlace: ".payment_method_dokan_paypal_marketplace label"
+        },
+        cPayWithRazorpay: {
+            razorPay: ".payment_method_dokan_razorpay label"
+        },
+
+        cPayWithMangoPay: {
+            mangoPay: ".payment_method_dokan_mangopay label",
+            creditCard: "//input[@name='dokan_mangopay_payment_type']",
+            cardType: "#dokan-mangopay-card-type",
+            registeredCard: "#dokan-mangopay-payment-type-registeredcard",
+            registerCardType: "#registered_card_type",
+            cardNumber: "#dokan-mp-ccnumber",
+            cvc: "#dokan-mp-cccrypto",
+            expDateMonth: "#preauth_ccdate_month",
+            expDateYear: "#preauth_ccdate_year",
+            register: "#save_preauth_card_button",
+        },
+
+        cPayWithStripeExpress: {
+            stripExpress: ".payment_method_strip_express label",
+        },
 
         cOrderReceived: {
             orderReceivedPageHeader: ".entry-title",
@@ -3098,8 +3364,8 @@ module.exports = {
             orderNumber: ".woocommerce-order-overview__order.order strong",
             orderDate: ".woocommerce-order-overview__date.date strong",
             email: ".woocommerce-order-overview__email.email strong",
-            total: ".woocommerce-order-overview__total.total strong ",
-            paymentMethod: ".woocommerce-order-overview__payment-method.method strong ",
+            total: ".woocommerce-order-overview__total.total strong",
+            paymentMethod: ".woocommerce-order-overview__payment-method.method strong",
 
             //order details
             subtotal: "//th[normalize-space()='Subtotal:']//..//span",
@@ -3116,7 +3382,12 @@ module.exports = {
         cBookings: {
             bookNow: ".wc-bookings-booking-form-button",
         },
-        cAuctions: {},
+        cAuctions: {
+            bidValue: "//input[@name='bid_value']",
+            plus: "//input[@value='+']",
+            minus: "//input[@value='-']",
+            bid: ".bid_button",
+        },
 
     },
 

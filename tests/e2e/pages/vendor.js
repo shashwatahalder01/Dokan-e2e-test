@@ -717,7 +717,6 @@ module.exports = {
 
     //vendor send id verification request
     async sendIdVerificationRequest() {
-        // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.verification)
         await page.waitForTimeout(2000)
