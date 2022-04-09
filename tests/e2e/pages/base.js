@@ -223,14 +223,15 @@ module.exports = {
 
     // create a new url
     async createURL(subPath) {
-        const url = new URL(process.env.BASE_URL)
+        let url = new URL(process.env.BASE_URL)
         url.pathname = url.pathname + subPath
         return url.href
     },
 
     //goto subUrl
     async goto(subPath) {
-        await Promise.all([page.goto(this.createURL(subPath)), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        let url = await this.createURL(subPath)
+        await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
     //reload page and wait until network idle

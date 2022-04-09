@@ -240,8 +240,9 @@ module.exports = {
     },
 
     async goToCartFromShop() {
-        await base.click(selector.customer.cShop.viewCart)
+        await page.click(selector.customer.cShop.viewCart)
 
+        await page.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(page, selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
     },
@@ -255,11 +256,9 @@ module.exports = {
     },
 
     async goToCheckoutFromCart() {
-        // await page.waitForTimeout(2000)
-        // await page.waitForSelector(selector.customer.cCart.proceedToCheckout, {visible: true})
-        await base.click(selector.customer.cCart.proceedToCheckout)
+        await page.click(selector.customer.cCart.proceedToCheckout)
 
-        // await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
+        await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(page, selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
 
@@ -296,9 +295,8 @@ module.exports = {
     },
 
     async placeOrder() {
-        await base.click(selector.customer.cCheckout.placeOrder)
-        await page.waitForTimeout(2000)
-
+        await page.click(selector.customer.cCheckout.placeOrder)
+        await page.waitForTimeout(17000)
         await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
         let orderReceivedIsVisible = await base.isVisible(page, selector.customer.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)

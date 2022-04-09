@@ -40,7 +40,7 @@ module.exports = {
     await base.click(selector.admin.plugins.installedPlugins)
 
     const url = await page.url()
-    expect(url).toMatch('http://dokan3.test/wp-admin/plugins.php')
+    expect(url).toMatch('wp-admin/plugins.php')
   },
 
 
@@ -48,10 +48,6 @@ module.exports = {
 
   //plugin activation check
   async checkPluginActivationConfirmation(pluginSlug) {
-
-    await base.hover(selector.admin.aDashboard.plugins)
-    await base.click(selector.admin.plugins.installedPlugins)
-
     let classValue = await base.getElementClassValue(selector.admin.plugins.plugin(pluginSlug))
     console.log(classValue)
     expect(classValue).toMatch('active')

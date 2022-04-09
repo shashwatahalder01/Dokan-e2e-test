@@ -2998,7 +2998,7 @@ module.exports = {
 
         //customer subscription
         cSubscription: {
-            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,ß
+            view: (orderNumber) => `//a[contains(text(),'Order #${orderNumber}')]/../..//a[@class="woocommerce-button button view"]`,
         },
 
         //customer downloads
@@ -3266,7 +3266,7 @@ module.exports = {
             shippingMethod: (vendorName, shippingMethod) => `//th[contains(text(),'Shipping:  ${vendorName}')]/..//label[contains(text(),'${shippingMethod}')]/..//input`, // for vendor-wise or admin shipping method
             vendorShippingMethod: (shippingMethod) => `//label[contains(text(),'${shippingMethod}')]/..//input`, //for unique shipping method
             //proceed To Checkout
-            proceedToCheckout: ".checkout-button"
+            proceedToCheckout: ".checkout-button.button.wc-forward",
 
         },
 
