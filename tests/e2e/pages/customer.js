@@ -1,4 +1,7 @@
 
+require('dotenv').config()
+const loginPage = require('../pages/login.js')
+const adminPage = require('../pages/admin.js')
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
@@ -17,33 +20,50 @@ module.exports = {
     async goToMyAccount() {
         await base.goto('my-account')
 
-        // const url = await page.url()
-        // expect(url).toMatch('my-account')
+        const url = await page.url()
+        expect(url).toMatch('my-account')
 
-        let dashboardIsVisible = await base.isVisible(page, selector.customer.cMyAccount.dashboard)
-        expect(dashboardIsVisible).toBe(true)
+        // let dashboardIsVisible = await base.isVisible( selector.customer.cMyAccount.dashboard)
+        // expect(dashboardIsVisible).toBe(true)
     },
 
     async goToShop() {
         await base.goto('shop')
 
-        // const url = await page.url()
-        // expect(url).toMatch('shop')
+        const url = await page.url()
+        expect(url).toMatch('shop')
 
-        let shopIsVisible = await base.isVisible(page, selector.customer.cShop.shopPageHeader)
-        expect(shopIsVisible).toBe(true)
+        // let shopIsVisible = await base.isVisible( selector.customer.cShop.shopPageHeader)
+        // expect(shopIsVisible).toBe(true)
     },
 
     async goToStoreList() {
         await base.goto('store-listing')
 
-        // const url = await page.url()
-        // expect(url).toMatch('store-listing')
+        const url = await page.url()
+        expect(url).toMatch('store-listing')
 
-        let storeListIsVisible = await base.isVisible(page, selector.customer.cStoreList.storeListPageHeader)
-        expect(storeListIsVisible).toBe(true)
+        // let storeListIsVisible = await base.isVisible( selector.customer.cStoreList.storeListPageHeader)
+        // expect(storeListIsVisible).toBe(true)
     },
 
+
+
+
+    //-------------------------------------------------- customer logout ---------------------------------------------------//
+
+
+
+        //customer logout
+        async customerLogout() {
+            await this.goToMyAccount()
+            await base.click(selector.frontend.customerLogout)
+
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBeUndefined()
+            // let homeIsVisible = await base.isVisible( selector.frontend.home)
+            // expect(homeIsVisible).toBe(false)
+        },
 
 
 
@@ -59,19 +79,22 @@ module.exports = {
         await base.clickXpath(selector.customer.cRegistration.regCustomer)
         await base.click(selector.customer.cRegistration.register)
 
-        let customer = (userEmail.split("@")[0]).toLowerCase()
-        let regWelcomeMessage = await base.getSelectorText(selector.customer.cRegistration.regCustomerWelcomeMessage)
-        expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
+        let username = (userEmail.split("@")[0]).toLowerCase()
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBe(username)
+        // let regWelcomeMessage = await base.getSelectorText(selector.customer.cRegistration.regCustomerWelcomeMessage)
+        // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
 
 
-    async customerBecomeVendor(firstName, lastName, shopName, shopUrl, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
-        await page.click(selector.customer.cDashboard.becomeVendor)
+    async customerBecomeVendor(firstName, lastName, shopName, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
+        await base.waitForSelector(selector.customer.cDashboard.becomeVendor)
+        await base.click(selector.customer.cDashboard.becomeVendor)
         // vendor registration form
         await page.type(selector.customer.cDashboard.firstName, firstName)
         await page.type(selector.customer.cDashboard.lastName, lastName)
         await page.type(selector.customer.cDashboard.shopName, shopName)
-        await page.type(selector.customer.cDashboard.shopUrl, shopUrl)
+        await page.click(selector.customer.cDashboard.shopUrl)
         await page.type(selector.customer.cDashboard.address, address)
         await page.type(selector.customer.cDashboard.phone, phone)
         await page.type(selector.customer.cDashboard.companyName, companyName)
@@ -79,12 +102,24 @@ module.exports = {
         await page.type(selector.customer.cDashboard.vatNumber, vatNumber)
         await page.type(selector.customer.cDashboard.bankName, bankName)
         await page.type(selector.customer.cDashboard.bankIban, bankIban)
+        await base.clickIfVisible(selector.customer.cDashboard.termsAndConditions)
 
-        await base.click(selector.customer.becomeAVendor)
+        await base.click(selector.customer.cDashboard.becomeAVendor)
     },
 
-    async customerSendWholesaleRequest() {
-        await base.click(selector.customer.becomeWholesaleCustomer)
+    // customer become wholesale customer
+    async customerBecomeWholesaleCustomer() {
+        let currentUser = await base.getCurrentUser()
+        await page.click(selector.customer.cDashboard.becomeWholesaleCustomer)
+
+        let returnMessage = await base.getSelectorText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
+        if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
+            let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+            expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
+        } else {
+            await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+            await adminPage.adminApproveWholesaleRequest(currentUser)
+        }
     },
 
     async addBillingAddress(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, billingStreetAddress2, billingTownCity,
@@ -101,19 +136,23 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingNameOfBank)
         await base.clearAndType(selector.customer.cAddress.billingBankIban, billingBankIban)
         await page.click(selector.customer.cAddress.billingCountryOrRegion)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
+        await page.type(selector.customer.cAddress.billingCountryOrRegionInput, billingCountryOrRegion)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
         await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingStreetAddress)
         await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingStreetAddress2)
         await base.clearAndType(selector.customer.cAddress.billingTownCity, billingTownCity)
         await page.click(selector.customer.cAddress.billingState)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
+        await page.type(selector.customer.cAddress.billingStateInput, billingState)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
         await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
         await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
         await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
         await base.click(selector.customer.cAddress.billingSaveAddress)
 
-        let SuccessMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(SuccessMessage).toMatch('Address changed successfully.')
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        expect(successMessage).toMatch('Address changed successfully.')
     },
 
     async addShippingAddress(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
@@ -125,17 +164,21 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingLastName)
         await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingCompanyName)
         await page.click(selector.customer.cAddress.shippingCountryOrRegion)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
+        await page.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingCountryOrRegion)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
         await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingStreetAddress)
         await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingStreetAddress2)
         await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingTownCity)
         await page.click(selector.customer.cAddress.shippingState)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
+        await page.type(selector.customer.cAddress.shippingStateInput, shippingState)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
         await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
         await base.click(selector.customer.cAddress.shippingSaveAddress)
 
-        let SuccessMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(SuccessMessage).toMatch('Address changed successfully.')
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        expect(successMessage).toMatch('Address changed successfully.')
     },
 
 
@@ -191,13 +234,16 @@ module.exports = {
 
     async addCustomerDetails(firstName, lastName, displayName, email, currentPassword, newPassword) {
 
-        await page.click(selector.customer.cMyAccount.accountDetails)
+        await base.click(selector.customer.cMyAccount.accountDetails)
 
         await base.clearAndType(selector.customer.cAccountDetails.firstName, firstName)
         await base.clearAndType(selector.customer.cAccountDetails.lastName, lastName)
         await base.clearAndType(selector.customer.cAccountDetails.displayName, displayName)
         await base.clearAndType(selector.customer.cAccountDetails.email, email)
         await this.updatePassword(currentPassword, newPassword)
+
+        
+        await base.click(selector.customer.cMyAccount.accountDetails)
         await this.updatePassword(newPassword, currentPassword)
     },
 
@@ -215,9 +261,8 @@ module.exports = {
         await page.type(selector.customer.cShop.searchProduct, productName)
         await base.click(selector.customer.cShop.search)
 
-        await page.waitForSelector(selector.customer.cShop.searchedProductName)
-        let cartIsVisible = await base.getSelectorText(selector.customer.cShop.searchedProductName)
-        expect(cartIsVisible).toMatch(productName)
+        let searchedProductName = await base.getSelectorText(selector.customer.cShop.searchedProductName)
+        expect(searchedProductName).toMatch(productName)
     },
 
     async addProductToCartFromShop(productName) {
@@ -226,7 +271,7 @@ module.exports = {
         await page.click(selector.customer.cShop.addToCart)
 
         await page.waitForSelector(selector.customer.cShop.viewCart)
-        let cartIsVisible = await base.isVisible(page, selector.customer.cShop.viewCart)
+        let cartIsVisible = await base.isVisible(selector.customer.cShop.viewCart)
         expect(cartIsVisible).toBe(true)
 
     },
@@ -241,38 +286,41 @@ module.exports = {
 
     async goToCartFromShop() {
         await page.click(selector.customer.cShop.viewCart)
+        await page.waitForTimeout(2000)
 
         await page.waitForSelector(selector.customer.cCart.cartPageHeader)
-        let cartIsVisible = await base.isVisible(page, selector.customer.cCart.cartPageHeader)
+        let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
     },
 
     async goToCartFromSingleProductPage() {
-        await base.click(selector.customer.cSingleProduct.viewCart)
+        await page.click(selector.customer.cSingleProduct.viewCart)
+        await page.waitForTimeout(2000)
 
-        let cartIsVisible = await base.isVisible(page, selector.customer.cCart.cartPageHeader)
+        await page.waitForSelector(selector.customer.cCart.cartPageHeader)
+        let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
 
     },
 
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
+        await page.waitForTimeout(2000)
 
         await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
-        let checkoutIsVisible = await base.isVisible(page, selector.customer.cCheckout.checkoutPageHeader)
+        let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
 
     },
     async applyCoupon(couponCode) {
-        let couponIsApplied = await base.isVisible(page, selector.customer.cCart.removeCoupon(couponCode))
-
+        let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
         if (couponIsApplied) {
             await this.removeAppliedCoupon(couponCode)
         }
 
         await page.type(selector.customer.cCart.couponCode, couponCode)
-        await page.click(selector.customer.cCart.applyCoupon)
-        await page.waitForTimeout(3000)
+        await base.clickXpath(selector.customer.cCart.applyCoupon)
+        await page.waitForTimeout(4000)
 
         // // negative test
         // let failureMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
@@ -280,25 +328,27 @@ module.exports = {
         // expect(failureMessage).toMatch("Sorry, this coupon is not applicable to selected products.") //for other vendor coupons
         // expect(failureMessage).toMatch("Coupon code already applied!") 
 
-        await page.waitForSelector(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Coupon code applied successfully.")
     },
 
     async removeAppliedCoupon(couponCode) {
         await page.click(selector.customer.cCart.removeCoupon(couponCode))
-        await page.waitForTimeout(3000)
+        await page.waitForTimeout(6000)
 
-        await page.waitForSelector(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch('Coupon has been removed.')
+        let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
+        expect(couponIsApplied).toBe(false)
+        // let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        // expect(successMessage).toMatch('Coupon has been removed.') //not reoccurring for second login
     },
 
     async placeOrder() {
+        await page.waitForSelector(selector.customer.cCheckout.placeOrder)
         await page.click(selector.customer.cCheckout.placeOrder)
-        await page.waitForTimeout(17000)
+        await page.waitForTimeout(6000)
+
         await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
-        let orderReceivedIsVisible = await base.isVisible(page, selector.customer.cOrderReceived.orderReceivedPageHeader)
+        let orderReceivedIsVisible = await base.isVisible(selector.customer.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)
     },
 
@@ -314,12 +364,16 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingNameOfBank)
         await base.clearAndType(selector.customer.cAddress.billingBankIban, billingBankIban)
         await page.click(selector.customer.cAddress.billingCountryOrRegion)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
+        await page.type(selector.customer.cAddress.billingCountryOrRegionInput, billingCountryOrRegion)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.bil–lingCountryOrRegionValues, billingCountryOrRegion)
         await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingStreetAddress)
         await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingStreetAddress2)
         await base.clearAndType(selector.customer.cAddress.billingTownCity, billingTownCity)
         await page.click(selector.customer.cAddress.billingState)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
+        await page.type(selector.customer.cAddress.billingStateInput, billingState)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
         await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
         await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
         await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
@@ -334,12 +388,16 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingLastName)
         await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingCompanyName)
         await page.click(selector.customer.cAddress.shippingCountryOrRegion)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
+        await page.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingCountryOrRegion)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
         await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingStreetAddress)
         await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingStreetAddress2)
         await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingTownCity)
         await page.click(selector.customer.cAddress.shippingState)
-        await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
+        await page.type(selector.customer.cAddress.shippingStateInput, shippingState)
+        await page.keyboard.press('Enter')
+        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
         await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
         await page.waitForTimeout(2000)
     },

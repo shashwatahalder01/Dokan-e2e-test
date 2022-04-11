@@ -19,7 +19,7 @@ module.exports = {
     },
 
     //check whether element is visible or not
-    async isVisible(page, selector) {
+    async isVisible(selector) {
         return await page.evaluate((selector) => {
             if (selector.startsWith('//')) {
                 var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
@@ -80,12 +80,18 @@ module.exports = {
         if (selector.startsWith('//')) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
-            await element.click()
             await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
         } else {
             await page.waitForSelector(selector)
-            await page.click(selector)
             await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
+        }
+    },
+
+    //click if element is visible
+    async clickIfVisible(selector) {
+        let IsVisible = await this.isVisible(selector)
+        if (IsVisible) {
+            await this.waitAndClick(selector)
         }
     },
 
@@ -577,7 +583,7 @@ module.exports = {
         let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
         let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
         await page.waitForTimeout(1000)
-        let uploadedMediaIsVisible = await this.isVisible(page, uploadedMedia)
+        let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
             await this.clickXpath(wpUploadFiles)
             // await page.click(uploadedMedia)   
@@ -587,7 +593,7 @@ module.exports = {
         await this.uploadImage(selectFiles, filePath)
         await this.clickXpath(select)
         await page.waitForTimeout(2000)
-        let cropIsVisible = await this.isVisible(page, crop)
+        let cropIsVisible = await this.isVisible(crop)
         if (cropIsVisible) {
             await this.clickXpath(crop)
             await page.waitForTimeout(3000)
@@ -604,7 +610,7 @@ module.exports = {
         let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
         let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
 
-        let uploadedMediaIsVisible = await this.isVisible(page, uploadedMedia)
+        let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
             // await page.click(wpUploadFiles)
             await page.click(uploadedMedia)
@@ -614,7 +620,7 @@ module.exports = {
             await this.uploadImage(selectFiles, filePath)
             await this.clickXpath(select)
             await page.waitForTimeout(1000)
-            let cropIsVisible = await this.isVisible(page, crop)
+            let cropIsVisible = await this.isVisible(crop)
             if (cropIsVisible) {
                 await this.clickXpath(crop)
                 await page.waitForTimeout(1000)
@@ -624,7 +630,7 @@ module.exports = {
 
     // remove previous uploaded image if exists
     async removePreviousUploadedImage(previousUploadedImageSelector, removePreviousUploadedImageSelector) {
-        let previousUploadedImageIsVisible = await this.isVisible(page, previousUploadedImageSelector)
+        let previousUploadedImageIsVisible = await this.isVisible(previousUploadedImageSelector)
         if (previousUploadedImageIsVisible) {
             await this.hover(previousUploadedImageSelector)
             await page.click(removePreviousUploadedImageSelector)
@@ -742,7 +748,7 @@ module.exports = {
     // I have figure it out. It seems that I've been using page.hover(selector) in a wrong way. This is only an action for page to do on the dom.
     // The code should look like this
 
-    // const hoverScreenshot = async (page, dataHook, directory) => {
+    // const hoverScreenshot = async ( dataHook, directory) => {
     //   await page.hover(`[data-hook="${dataHook}`)
     //   const element = await page.$(`[data-hook="${dataHook}`);
     //   await page.waitFor(50);

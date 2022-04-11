@@ -46,18 +46,42 @@ module.exports = {
 
   //--------------------------------------------- wordpress site settings ------------------------------------------------//
 
+
+  //admin logout
+  async adminLogout() {
+    await base.hover(selector.backend.userMenu)
+    await base.click(selector.backend.logout)
+
+    let loggedInUser = await base.getCurrentUser()
+    expect(loggedInUser).toBeUndefined()
+
+    // let successMessage = await base.getSelectorText(selector.backend.logoutSuccessMessage)
+    // expect(successMessage).toMatch("You are now logged out.")
+  },
+
+
+
+  //--------------------------------------------- wordpress site settings ------------------------------------------------//
+
   //plugin activation check
-  async checkPluginActivationConfirmation(pluginSlug) {
-    let classValue = await base.getElementClassValue(selector.admin.plugins.plugin(pluginSlug))
-    console.log(classValue)
-    expect(classValue).toMatch('active')
+  async checkPluginActivationConfirmation(PluginSlugList) {
+    await this.goToPlugins()
+    for (let pluginSlug of PluginSlugList) {
+      let classValue = await base.getElementClassValue(selector.admin.plugins.plugin(pluginSlug))
+      expect(classValue).toMatch('active')
+    }
   },
 
 
   // admin set wordpress site settings
   async setWpSettings() {
-    await base.hover(selector.admin.aDashboard.settings)
+    await this.setWpGeneralSettings()
+    await this.setPermalinkSettings()
 
+  },
+
+  async setWpGeneralSettings() {
+    await base.hover(selector.admin.aDashboard.settings)
     //set general settings
     await base.click(selector.admin.settings.general)
     // enable user registration
@@ -68,17 +92,16 @@ module.exports = {
 
     let successMessage = await base.getSelectorText(selector.admin.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Settings saved.')
-
-    await this.setPermalinkSettings()
-
   },
 
   //admin set permalink settings
   async setPermalinkSettings() {
+    await base.hover(selector.admin.aDashboard.settings)
     //set permalinks settings
     await base.click(selector.admin.settings.permalinks)
-    await page.click(selector.admin.settings.postName)
-    await page.click(selector.admin.settings.customBase)
+    await base.clickXpath(selector.admin.settings.postName)
+    await base.clickXpath(selector.admin.settings.customBase)
+    await base.clearAndType1(selector.admin.settings.customBaseInput, '/product/')
     await page.click(selector.admin.settings.permalinkSaveChanges)
 
     let permalinkSuccessMessage = await base.getSelectorText(selector.admin.settings.updatedSuccessMessage)
@@ -463,7 +486,7 @@ module.exports = {
     // set tax rate
     await base.click(selector.admin.wooCommerce.settings.tax)
     await base.click(selector.admin.wooCommerce.settings.standardRates)
-    let taxIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.taxRate)
+    let taxIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.taxRate)
     if (!taxIsVisible) {
       await page.click(selector.admin.wooCommerce.settings.insertRow)
     }
@@ -525,7 +548,7 @@ module.exports = {
     await base.click(selector.admin.wooCommerce.settings.shipping)
     // await page.waitForTimeout(2000)
 
-    let zoneIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
+    let zoneIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
     if (!zoneIsVisible) {
       //add shipping zone
       await base.click(selector.admin.wooCommerce.settings.addShippingZone)
@@ -540,7 +563,7 @@ module.exports = {
       await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shippingZone))
     }
 
-    let methodIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.shippingMethodCell(helper.replaceAndCapitalize(shippingMethod)))
+    let methodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(helper.replaceAndCapitalize(shippingMethod)))
     if (!methodIsVisible) {
       // add shipping method
       await page.click(selector.admin.wooCommerce.settings.addShippingMethods)
@@ -600,7 +623,7 @@ module.exports = {
 
     await page.click(selector.admin.wooCommerce.settings.shippingMethodSaveChanges)
     await base.waitForSelector(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
-    let shippingMethodIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
+    let shippingMethodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
     expect(shippingMethodIsVisible).toBe(true)
 
   },
@@ -614,7 +637,7 @@ module.exports = {
     await base.clickXpath(selector.admin.wooCommerce.settings.deleteShippingZone(shippingZone))
     await page.waitForTimeout(1000)
 
-    let shippingZoneIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
+    let shippingZoneIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
     expect(shippingZoneIsVisible).toBe(false)
   },
 
@@ -628,7 +651,7 @@ module.exports = {
     await base.clickXpath(selector.admin.wooCommerce.settings.deleteShippingMethod(shippingMethod))
     await page.click(selector.admin.wooCommerce.settings.shippingZoneSaveChanges)
 
-    let shippingMethodIsVisible = await base.isVisible(page, selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
+    let shippingMethodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
     expect(shippingMethodIsVisible).toBe(false)
   },
 
@@ -684,10 +707,12 @@ module.exports = {
     let classValue = await base.getElementClassValue(selector)
     if (classValue.includes('woocommerce-input-toggle--disabled')) {
       await base.clickXpath(selector)
+      await page.waitForTimeout(2000)
     } else {
       await base.clickXpath(selector)
       await page.waitForTimeout(1000)
       await base.clickXpath(selector)
+      await page.waitForTimeout(2000)
     }
 
     let classValue1 = await base.getElementClassValue(selector)
@@ -970,7 +995,7 @@ module.exports = {
     await base.hover(selector.admin.aDashboard.products)
     await base.click(selector.admin.products.categoriesMenu)
 
-    let categoryIsVisible = await base.isVisible(page, selector.admin.products.category.categoryCell(categoryName))
+    let categoryIsVisible = await base.isVisible(selector.admin.products.category.categoryCell(categoryName))
     if (!categoryIsVisible) {
 
       // add new category
@@ -979,7 +1004,7 @@ module.exports = {
       await page.click(selector.admin.products.category.addNewCategory)
 
       await base.waitForSelector(selector.admin.products.category.categoryCell(categoryName))
-      let categoryIsVisible = await base.isVisible(page, selector.admin.products.category.categoryCell(categoryName))
+      let categoryIsVisible = await base.isVisible(selector.admin.products.category.categoryCell(categoryName))
       expect(categoryIsVisible).toBe(true)
     }
   },
@@ -989,7 +1014,7 @@ module.exports = {
     await base.hover(selector.admin.aDashboard.products)
     await base.click(selector.admin.products.attributesMenu)
 
-    let attributeIsVisible = await base.isVisible(page, selector.admin.products.attribute.attributeCell(attributeName))
+    let attributeIsVisible = await base.isVisible(selector.admin.products.attribute.attributeCell(attributeName))
     if (!attributeIsVisible) {
       // add new attribute
       await page.type(selector.admin.products.attribute.name, attributeName)
@@ -997,7 +1022,7 @@ module.exports = {
       await page.click(selector.admin.products.attribute.addAttribute)
 
       await base.waitForSelector(selector.admin.products.attribute.attributeCell(attributeName))
-      let attributeIsVisible = await base.isVisible(page, selector.admin.products.attribute.attributeCell(attributeName))
+      let attributeIsVisible = await base.isVisible(selector.admin.products.attribute.attributeCell(attributeName))
       expect(attributeIsVisible).toBe(true)
 
       await base.click(selector.admin.products.attribute.configureTerms(attributeName))
@@ -1009,7 +1034,7 @@ module.exports = {
         await page.click(selector.admin.products.attribute.addAttributeTerm)
 
         await base.waitForSelector(selector.admin.products.attribute.attributeTerm(attributeTerm))
-        let attributeTermIsVisible = await base.isVisible(page, selector.admin.products.attribute.attributeTermCell(attributeTerm))
+        let attributeTermIsVisible = await base.isVisible(selector.admin.products.attribute.attributeTermCell(attributeTerm))
         expect(attributeTermIsVisible).toBe(true)
       }
     }
@@ -1181,7 +1206,7 @@ module.exports = {
   },
 
   // admin add auction product
-  async addAuctionProduct(productName, productPrice, categoryName, vendor) {
+  async addAuctionProduct(productName, productPrice, startDate, endDate, categoryName, vendor ) {
     await base.hover(selector.admin.aDashboard.products)
     await base.click(selector.admin.products.addNewMenu)
 
@@ -1192,10 +1217,10 @@ module.exports = {
     await page.select(selector.admin.products.product.auctionType, 'normal')
     await page.type(selector.admin.products.product.startPrice, productPrice)
     await page.type(selector.admin.products.product.bidIncrement, '50')
-    await page.type(selector.admin.products.product.reservePriced, Number(productPrice) + 400)
-    await page.type(selector.admin.products.product.buyItNowPrice, Number(productPrice) + 900)
-    await page.type(selector.admin.products.product.auctionDatesFrom, '2022-03-27 23:12')
-    await page.type(selector.admin.products.product.auctionDatesTo, '2022-03-31 23:13')
+    await page.type(selector.admin.products.product.reservePriced, String(Number(productPrice) + 400))
+    await base.type(selector.admin.products.product.buyItNowPrice, String(Number(productPrice) + 900))
+    await page.type(selector.admin.products.product.auctionDatesFrom, startDate)
+    await page.type(selector.admin.products.product.auctionDatesTo, endDate)
 
     //category
     await base.clickXpath(selector.admin.products.product.category(categoryName))

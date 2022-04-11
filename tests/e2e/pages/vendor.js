@@ -2,6 +2,7 @@ const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
 const { faker } = require('@faker-js/faker')
+const { isVisible } = require("../pages/base.js")
 
 
 
@@ -19,15 +20,32 @@ module.exports = {
 
     async goToVendorDashboard() {
         await base.goto('dashboard')
-        
+
         const url = await page.url()
         expect(url).toMatch('dashboard')
     },
 
     //-------------------------------------------------- setup wizard ---------------------------------------------------//
 
+
+    // vendor logout
+    async vendorLogout() {
+        await this.goToVendorDashboard()
+        await base.click(selector.frontend.vendorLogout)
+
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBeUndefined()
+
+        // let homeIsVisible = await base.isVisible(selector.frontend.home)
+        // expect(homeIsVisible).toBe(true)
+    },
+
+
+
+    //-------------------------------------------------- setup wizard ---------------------------------------------------//
+
     //vendor registration
-    async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, withSetupWizard, setupWizardData) {
+    async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
         await base.goto("my-account")
         await base.click(selector.frontend.myAccount)
         await page.type(selector.vendor.vRegistration.regEmail, userEmail)
@@ -44,13 +62,18 @@ module.exports = {
         await page.type(selector.vendor.vRegistration.bankName, bankName)
         await page.type(selector.vendor.vRegistration.bankIban, bankIban)
         await page.type(selector.vendor.vRegistration.phone, phone)
-        // let subscriptionPackIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.subscriptionPack) 
+        // let subscriptionPackIsVisible = await base.isVisible( selector.vendor.vWithdraw.subscriptionPack) 
         // if(subscriptionPackIsVisible){
         // await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
         // }
         await base.click(selector.vendor.vRegistration.register)
 
-        if (withSetupWizard) {
+        await this.vendorSetupWizardChoice(setupWizardChoice, setupWizardData)
+    },
+
+    async vendorSetupWizardChoice(setupWizardChoice, setupWizardData) {
+
+        if (setupWizardChoice) {
             await this.vendorSetupWizard(
                 setupWizardData.storeProductsPerPage, setupWizardData.street1, setupWizardData.street2, setupWizardData.city, setupWizardData.zipCode,
                 setupWizardData.country, setupWizardData.state, setupWizardData.paypal, setupWizardData.bankAccountName, setupWizardData.bankAccountNumber,
@@ -60,11 +83,13 @@ module.exports = {
         else {
             await base.click(selector.vendor.vSetup.notRightNow)
 
-            let dashboardIsVisible = await base.isVisible(page, selector.vendor.vDashboard.dashboard)
+            let dashboardIsVisible = await base.isVisible(selector.vendor.vDashboard.dashboard)
             expect(dashboardIsVisible).toBe(true)
         }
+
     },
 
+    //vendor setup wizard
     async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment, skrill) {
         await page.click(selector.vendor.vSetup.letsGo)
 
@@ -78,7 +103,7 @@ module.exports = {
         await page.keyboard.press('Enter')
         await page.type(selector.vendor.vSetup.state, state)
         await page.keyboard.press('Enter')
-        await page.click(selector.vendor.vSetup.email)
+        await base.clickXpath(selector.vendor.vSetup.email)
         await base.click(selector.vendor.vSetup.continueStoreSetup)
 
         await base.clearAndType1(selector.vendor.vSetup.paypal, paypal)
@@ -91,13 +116,11 @@ module.exports = {
         await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
         await base.type(selector.vendor.vSetup.customPayment, customPayment)
         await base.clearAndType1(selector.vendor.vSetup.skrill, skrill)
-        // TODO: stripe connect
-        // TODO: paypal marketplace
         await base.click(selector.vendor.vSetup.continuePaymentSetup)
 
         await base.click(selector.vendor.vSetup.goToStoreDashboard)
 
-        let dashboardIsVisible = await base.isVisible(page, selector.vendor.vDashboard.dashboard)
+        let dashboardIsVisible = await base.isVisible(selector.vendor.vDashboard.dashboard)
         expect(dashboardIsVisible).toBe(true)
 
     },
@@ -149,7 +172,7 @@ module.exports = {
         await page.click(selector.vendor.product.addAttribute)
         await base.waitForSelector(selector.vendor.product.selectAll)
         await page.click(selector.vendor.product.selectAll)
-        await page.click(selector.vendor.product.usedForVariations)
+        await base.clickXpath(selector.vendor.product.usedForVariations)
         await base.waitForSelector(selector.vendor.product.saveAttributes)
         await page.click(selector.vendor.product.saveAttributes)
 
@@ -234,7 +257,7 @@ module.exports = {
         await page.click(selector.vendor.product.addAttribute)
         await base.waitForSelector(selector.vendor.product.selectAll)
         await page.click(selector.vendor.product.selectAll)
-        await page.click(selector.vendor.product.usedForVariations)
+        await base.clickXpath(selector.vendor.product.usedForVariations)
         await base.waitForSelector(selector.vendor.product.saveAttributes)
         await page.click(selector.vendor.product.saveAttributes)
 
@@ -309,14 +332,14 @@ module.exports = {
         await page.type(selector.vendor.vAuction.startPrice, productPrice)
         await page.type(selector.vendor.vAuction.bidIncrement, '50')
         await page.type(selector.vendor.vAuction.reservedPrice, String(Number(productPrice) + 400))
-        await page.type(selector.vendor.vAuction.buyItNowPrice, String(Number(productPrice )+ 900))
+        await page.type(selector.vendor.vAuction.buyItNowPrice, String(Number(productPrice) + 900))
         // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, 'readonly') 
         // await base.type(selector.vendor.vAuction.auctionStartDate, '2022-04-05 10:15') 
         // await page.waitForTimeout(10000)
         // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, '2022-04-05 15:15') 
         // await base.setElementValue(selector.vendor.vAuction.auctionEndDate, '2022-04-05 15:15') 
-        await page.type(selector.vendor.vAuction.auctionStartDate, '2022-03-31 10:15') //TODO: handle date using datepicker or use core input filed 
-        await page.type(selector.vendor.vAuction.auctionEndDate, '2022-04-10 10:12')
+        // await page.type(selector.vendor.vAuction.auctionStartDate, '2022-03-31 10:15') //TODO: handle date using datepicker or use core input filed 
+        // await page.type(selector.vendor.vAuction.auctionEndDate, '2022-04-10 10:12')
         // await page.waitForTimeout(50000)
         // await page.keyboard.press('Enter')
         await base.click(selector.vendor.vAuction.addAuctionProduct)
@@ -400,37 +423,41 @@ module.exports = {
 
 
     //vendor request withdraw 
-    async requestWithdraw(withdrawAmount, withdrawMethod) {
+    async requestWithdraw(withdrawMethod, withdrawAmount) {
 
         await base.click(selector.vendor.vDashboard.withdraw)
 
-        try {
-            let canRequestIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest)
-            expect(canRequestIsVisible).toBe(false)
-        } catch (err) {
-            throw new Error("Vendor already requested for withdraw")
-        }
+        // try {
+        //     let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
+        //     expect(canRequestIsVisible).toBe(false)
+        // } catch (err) {
+        //     throw new Error("Vendor already requested for withdraw")
+        // }
 
+        let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
+        if (canRequestIsVisible) {
+            await base.click(selector.vendor.vWithdraw.cancelRequest)
+            await base.click(selector.vendor.vWithdraw.withdrawDashboard)
+        }
 
         let minimumWithdrawAmount = await base.getElementText(selector.vendor.vWithdraw.minimumWithdrawAmount)
-        minimumWithdrawAmount = minimumWithdrawAmount.replace('$', '')
+        minimumWithdrawAmount = helper.price(minimumWithdrawAmount)
         // console.log(minimumWithdrawAmount)
         let balance = await base.getElementText(selector.vendor.vWithdraw.balance)
-        balance = balance.replace('$', '')
+        balance = helper.price(balance)
         // console.log(balance)
 
-        if (Number(balance) > Number(minimumWithdrawAmount)) {
+        if (balance > minimumWithdrawAmount) {
             await page.click(selector.vendor.vWithdraw.requestWithdraw)
-            await page.type(selector.vendor.vWithdraw.withdrawAmount, minimumWithdrawAmount)
-            // await base.setDropdownOption(selector.vendor.withdraw.withdrawMethod, withdrawMethod)
+            await base.clearAndType(selector.vendor.vWithdraw.withdrawAmount, String(minimumWithdrawAmount))
+            await page.waitForTimeout(2000)
+            await page.select(selector.vendor.vWithdraw.withdrawMethod, withdrawMethod)
             await base.click(selector.vendor.vWithdraw.submitRequest)
-        }
-        try {
-            let canRequestIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest)
-            expect(canRequestIsVisible).toBe(true)
 
-        } catch (err) {
-            // console.error(err)
+            let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
+            expect(canRequestIsVisible).toBe(true)
+        } else {
+
             throw new Error("Vendor balance is less than minimum withdraw amount")
         }
     },
@@ -438,9 +465,10 @@ module.exports = {
     //vendor cancel withdraw request
     async cancelRequestWithdraw() {
         await base.click(selector.vendor.vDashboard.withdraw)
-        await page.click(selector.vendor.vWithdraw.cancelRequest)
+        await base.click(selector.vendor.vWithdraw.cancelRequest)
+        await base.click(selector.vendor.vWithdraw.withdrawDashboard)
 
-        let canRequestIsVisible = await base.isVisible(page, selector.vendor.vWithdraw.cancelRequest)
+        let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
         expect(canRequestIsVisible).toBe(false)
 
     },
@@ -459,18 +487,17 @@ module.exports = {
 
     // vendor add default withdraw payment methods
     async addDefaultWithdrawPaymentMethods(preferredSchedule) {
-        // TODO : locator issue
         await base.click(selector.vendor.vDashboard.withdraw)
-        await base.click(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
-        await page.waitForTimeout(5000)
-    },
+        let defaultMethod = base.isVisible(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
+        if (defaultMethod) {
+            await base.click(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
 
-    // vendor add default withdraw payment methods
-    async setupDefaultWithdrawPaymentMethods(preferredSchedule) {
-        // TODO : locator issue
-        await base.click(selector.vendor.vDashboard.withdraw)
-        await base.click(selector.vendor.vWithdraw.customMethodSetup(preferredSchedule))
-        await page.waitForTimeout(5000)
+            let methodStatus = await base.getSelectorText(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
+            expect(methodStatus).toMatch('Default')
+        } else {
+            throw new Error("Withdraw payment method isn\'t set up")
+        }
+
     },
 
     //vendor add vendor details
@@ -497,23 +524,23 @@ module.exports = {
         await base.click(selector.vendor.vDashboard.settings)
 
         //upload banner and profile picture  
-        await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.bannerImage, selector.vendor.vStoreSettings.removeBannerImage)
-        await page.click(selector.vendor.vStoreSettings.banner)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
-        await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
-        await page.click(selector.vendor.vStoreSettings.profilePicture)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar2.png')
+        // await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.bannerImage, selector.vendor.vStoreSettings.removeBannerImage)
+        // await page.click(selector.vendor.vStoreSettings.banner)
+        // await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
+        // await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
+        // await page.click(selector.vendor.vStoreSettings.profilePicture)
+        // await base.wpUploadFile('tests/e2e/utils/sampleData/avatar2.png')
         // store basic info
         await base.clearAndType(selector.vendor.vStoreSettings.storeName, storeName)
         await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
         await base.clearAndType(selector.vendor.vStoreSettings.phoneNo, phoneNo)
         //address
-        await base.clearAndType(selector.vendor.vStoreSettings.street, street)
-        await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
-        await base.clearAndType(selector.vendor.vStoreSettings.city, city)
-        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
-        await page.select(selector.vendor.vStoreSettings.country, country)
-        await page.select(selector.vendor.vStoreSettings.state, state)
+        // await base.clearAndType(selector.vendor.vStoreSettings.street, street)
+        // await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
+        // await base.clearAndType(selector.vendor.vStoreSettings.city, city)
+        // await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
+        // await page.select(selector.vendor.vStoreSettings.country, country)
+        // await page.select(selector.vendor.vStoreSettings.state, state)
         //company info
         await base.clearAndType(selector.vendor.vStoreSettings.companyName, companyName)
         await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
@@ -550,7 +577,7 @@ module.exports = {
             await base.clearAndType(selector.vendor.vStoreSettings.closingTime(day), '11:30 PM')
         }
         //vacation
-        let noVacationIsSetIsVisible = await base.isVisible(page, selector.vendor.vStoreSettings.noVacationIsSet)
+        let noVacationIsSetIsVisible = await base.isVisible(selector.vendor.vStoreSettings.noVacationIsSet)
         if (!noVacationIsSetIsVisible) {
             await base.hover(selector.vendor.vStoreSettings.vacationRow)
             await page.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
@@ -658,16 +685,19 @@ module.exports = {
         expect(successMessage).toMatch('Add-on saved successfully')
     },
 
-
-    //vendor set payment settings
-    async setPaymentSettings() {
-
-        await base.click(selector.vendor.vDashboard.settings)
-        await base.click(selector.vendor.vSettings.payment)
-
+    //paypal payment settings
+    async setPaypal(email) {
         //paypal
-        await base.clearAndType(selector.vendor.vPaymentSettings.paypal, paypal)
+        await base.clearAndType(selector.vendor.vPaymentSettings.paypal, email)
+        //update settings
+        await base.click(selector.vendor.vPaymentSettings.updateSettings)
 
+        let successMessage = await base.getSelectorText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
+    },
+
+    //bank transfer payment settings
+    async setBankTransfer(bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode) {
         //bank transfer
         await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountName, bankAccountName)
         await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountNumber, bankAccountNumber)
@@ -676,15 +706,28 @@ module.exports = {
         await base.clearAndType(selector.vendor.vPaymentSettings.bankRoutingNumber, bankRoutingNumber)
         await base.clearAndType(selector.vendor.vPaymentSettings.bankIban, bankIban)
         await base.clearAndType(selector.vendor.vPaymentSettings.bankSwiftCode, bankSwiftCode)
+        //update settings
+        await base.click(selector.vendor.vPaymentSettings.updateSettings)
 
+        let successMessage = await base.getSelectorText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
+    },
 
-        // //Stripe
+    //stripe payment settings
+    async setStripe(email) {
+        //Stripe
         // await base.click(selector.vendor.vPaymentSettings.ConnectWithStripe)
+    },
 
-        // //paypal marketplace
+    //paypal marketplace payment settings
+    async setPaypalMarketPlace(email) {
+        //paypal marketplace
         // await base.clearAndType(selector.vendor.vPaymentSettings.paypalMarketplace, paypalMarketplace)
         // await base.click(selector.vendor.vPaymentSettings.paypalMarketplaceSigUp)
+    },
 
+    //razorpay payment settings
+    async setRazorpay(email) {
         //razorpay
         //     await base.click(selector.vendor.vPaymentSettings.rzSignup)
         //  // existing account info
@@ -701,17 +744,43 @@ module.exports = {
         //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
         //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountType, rzBankAccountType)
         //     await base.click(selector.vendor.vPaymentSettings.rzConnectAccount)
+    },
 
-        //mangopay
-
+    //custom payment settings
+    async setCustom(emailOrPhone) {
         //custom payment method
-        await base.clearAndType(selector.vendor.vPaymentSettings.customPayment, customPayment)
-
-        //skrill
-        await base.clearAndType(selector.vendor.skrill.email, skrillEmail)
-
+        await base.clearAndType(selector.vendor.vPaymentSettings.customPayment, emailOrPhone)
         //update settings
-        await page.click(selector.vendor.vPaymentSettings.updateSettings)
+        await base.click(selector.vendor.vPaymentSettings.updateSettings)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
+    },
+
+    //skrill payment settings
+    async setSkrill(email) {
+        //skrill
+        await base.clearAndType(selector.vendor.skrill.email, email)
+        //update settings
+        await base.click(selector.vendor.vPaymentSettings.updateSettings)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
+        expect(successMessage).toMatch('Your information has been saved successfully')
+    },
+
+    //vendor set payment settings
+    async setPaymentSettings() {
+
+        await base.click(selector.vendor.vDashboard.settings)
+        await base.click(selector.vendor.vSettings.payment)
+
+        await this.setPaypal()
+        await this.setBankTransfer()
+        await this.setStripe()
+        await this.setPaypalMarketPlace()
+        await this.setRazorpay()
+        await this.setCustom()
+        await this.setSkrill()
 
     },
 
@@ -722,14 +791,14 @@ module.exports = {
         await page.waitForTimeout(2000)
 
         //id verification
-        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
+        let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
         if (cancelRequestIsVisible) {
             await page.click(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
             await page.waitForTimeout(2000)
         }
         await page.click(selector.vendor.vVerificationSettings.startIdVerification)
         await page.waitForTimeout(1000)
-        let previousUploadedImageIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.previousUploadedPhoto)
+        let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedPhoto)
         if (previousUploadedImageIsVisible) {
             await base.hover(selector.vendor.vVerificationSettings.previousUploadedPhoto)
             await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedPhoto)
@@ -738,7 +807,7 @@ module.exports = {
         await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
         await page.click(selector.vendor.vVerificationSettings.uploadPhoto)
         await page.waitForTimeout(2000)
-        let uploadedMediaIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.uploadedMedia)
+        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
             await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await page.waitForTimeout(1000)
@@ -755,15 +824,14 @@ module.exports = {
 
     //vendor send address verification request
     async sendAddressVerificationRequest() {
-        // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.verification)
         await page.waitForTimeout(2000)
 
         //company verification
-        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
+        let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
         if (cancelRequestIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
+            await base.clickXpath(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
             await page.waitForTimeout(1000)
         }
         await page.click(selector.vendor.vVerificationSettings.startAddressVerification)
@@ -774,11 +842,29 @@ module.exports = {
         await base.clearAndType(selector.vendor.vVerificationSettings.postOrZipCode, '10006')
         await base.select(selector.vendor.vVerificationSettings.country, 'US')
         await base.select(selector.vendor.vVerificationSettings.state, 'NY')
+
+        // let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
+        // if (previousUploadedImageIsVisible) {
+        //     await base.hover(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
+        //     await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedResidenceProof)
+        //     await page.waitForTimeout(4000)
+        // }
+        await base.waitForSelector(selector.vendor.vVerificationSettings.uploadResidenceProof)
+        await page.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
+        await page.waitForTimeout(2000)
+        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
+        if (uploadedMediaIsVisible) {
+            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await page.waitForTimeout(1000)
+        } else {
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+        }
+
         await page.click(selector.vendor.vVerificationSettings.submitAddress)
         await page.waitForTimeout(2000)
 
-        let successMessage = await base.getSelectorText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
-        expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
+        // let successMessage = await base.getSelectorText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
+        // expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
     },
 
     //vendor send company verification request
@@ -789,7 +875,7 @@ module.exports = {
         await page.waitForTimeout(2000)
 
         //company verification
-        let cancelRequestIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
+        let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
         if (cancelRequestIsVisible) {
             await page.click(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
             await page.waitForTimeout(1000)
@@ -798,7 +884,7 @@ module.exports = {
         await page.waitForTimeout(1000)
         await page.click(selector.vendor.vVerificationSettings.uploadFiles)
         await page.waitForTimeout(2000)
-        let uploadedMediaIsVisible = await base.isVisible(page, selector.vendor.vVerificationSettings.uploadedMedia)
+        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
             await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await page.waitForTimeout(1000)
@@ -896,7 +982,7 @@ module.exports = {
         await base.clickXpath(selector.vendor.vShippingSettings.editShippingZone(shippingZone))
         await page.waitForTimeout(3000)
 
-        let methodIsVisible = await base.isVisible(page, selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
+        let methodIsVisible = await base.isVisible(selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
         if (!methodIsVisible) {
             await base.clickXpath(selector.vendor.vShippingSettings.addShippingMethod)
             await page.waitForTimeout(2000)
@@ -1017,7 +1103,7 @@ module.exports = {
         await base.type(selector.vendor.vRmaSettings.lengthValue, lengthValue)
         await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
 
-        let refundReasonIsVisible = await base.isVisible(page, selector.vendor.vRmaSettings.refundReasons)
+        let refundReasonIsVisible = await base.isVisible(selector.vendor.vRmaSettings.refundReasons)
         if (refundReasonIsVisible) {
             await base.clickMultiple(selector.vendor.vRmaSettings.refundReasons)
         }

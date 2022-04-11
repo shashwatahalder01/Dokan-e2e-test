@@ -1970,13 +1970,13 @@ module.exports = {
         //withdraw
         vWithdraw: {
             // manual withdraw request
-            minimumWithdrawAmount: "bdi",
+            minimumWithdrawAmount: "//p[contains(text(),'Your Balance:')]//strong[2]",
             balance: "//p[contains(text(),'Your Balance:')]//a//span[@class='woocommerce-Price-amount amount']",
             requestWithdraw: "#dokan-request-withdraw-button",
             withdrawAmount: "#withdraw-amount",
             withdrawMethod: "#withdraw-method",
             submitRequest: "#dokan-withdraw-request-submit",
-            cancelRequest: "td > a",
+            cancelRequest: "//strong[normalize-space()='Pending Requests']/..//a[normalize-space()='Cancel']",
 
             // auto disbursement schedule
             editSchedule: "#dokan-withdraw-display-schedule-popup",
@@ -2379,6 +2379,8 @@ module.exports = {
             //search
             searchAuctionActivity: ".dokan-form-control",
             search: "//button[contains(text(),'Search') and @class='dokan-btn']",
+            //add auction
+            addAuctionProduct: ".dokan-btn-theme",
         },
 
         //support
@@ -2703,6 +2705,7 @@ module.exports = {
 
             //update settings
             updateSettings: ".dokan-btn",
+            updateSettingsSuccessMessage: ".dokan-alert.dokan-alert-success p",
         },
 
         //verification settings
@@ -2735,9 +2738,12 @@ module.exports = {
             postOrZipCode: "#dokan_address\\[zip\\]",
             country: "#dokan_address_country",
             state: "#dokan_address_state",
+            uploadResidenceProof:"#vendor-proof-url",
+            previousUploadedResidenceProof:".vendor_img_container img",
+            removePreviousUploadedResidenceProof:".dokan-close.dokan-remove-proof-image",
             submitAddress: "#dokan_v_address_submit",
             cancelSubmitAddress: ".dokan-form-group > #dokan_v_address_cancel",
-            cancelAddressVerificationRequest: ".dokan-panel-body #dokan_v_address_cancel",
+            cancelAddressVerificationRequest: "//button[@id='dokan_v_address_cancel']",
             addressUpdateSuccessMessage: ".dokan-alert.dokan-alert-success",
 
             //company verification
@@ -2977,10 +2983,12 @@ module.exports = {
             vatNumber: '#dokan-vat-number',
             bankName: '#dokan-bank-name',
             bankIban: '#dokan-bank-iban',
+            termsAndConditions:'#tc_agree',
             becomeAVendor: '.dokan-btn',
 
             //become wholesale customer
             becomeWholesaleCustomer: '#dokan-become-wholesale-customer-btn',
+            wholesaleRequestReturnMessage:".dokan-account-migration-lists .woocommerce-info",
         },
 
         //customer orders
@@ -3019,11 +3027,13 @@ module.exports = {
             billingNameOfBank: "#billing_dokan_bank_name",
             billingBankIban: "#billing_dokan_bank_iban",
             billingCountryOrRegion: "#select2-billing_country-container",
+            billingCountryOrRegionInput:'.select2-search__field',
             billingCountryOrRegionValues: ".select2-results ul li",
             billingStreetAddress: "#billing_address_1",
             billingStreetAddress2: "#billing_address_2",
             billingTownCity: "#billing_city",
             billingState: "#select2-billing_state-container",
+            billingStateInput:'.select2-search__field',
             billingStateValues: ".select2-results ul li",
             billingZipCode: "#billing_postcode",
             billingPhone: "#billing_phone",
@@ -3036,11 +3046,13 @@ module.exports = {
             shippingLastName: "#shipping_last_name",
             shippingCompanyName: "#shipping_company",
             shippingCountryOrRegion: "#select2-shipping_country-container",
+            shippingCountryOrRegionInput:'.select2-search__field',
             shippingCountryOrRegionValues: ".select2-results ul li",
             shippingStreetAddress: "#shipping_address_1",
             shippingStreetAddress2: "#shipping_address_2",
             shippingTownCity: "#shipping_city",
             shippingState: "#select2-shipping_state-container",
+            shippingStateInput:'.select2-search__field',
             shippingStateValues: ".select2-results ul li",
             shippingZipCode: "#shipping_postcode",
             shippingSaveAddress: "//button[@name='save_address']",
