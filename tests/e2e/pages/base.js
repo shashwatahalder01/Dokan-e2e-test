@@ -21,7 +21,7 @@ module.exports = {
     //check whether element is visible or not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
-            if (selector.startsWith('//')) {
+            if (selector.startsWith('//') || selector.startsWith('(//')) {
                 var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
             } else {
                 var element = document.querySelector(selector)
@@ -37,7 +37,7 @@ module.exports = {
 
     //click element and wait until network idle
     async click(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await this.clickXpathAndWait(selector)
         } else {
             await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
@@ -65,7 +65,7 @@ module.exports = {
 
     //wait for element and then click
     async waitAndClick(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             await element.click()  // just click
@@ -77,7 +77,7 @@ module.exports = {
 
     //wait for element and then click and wait until network idle
     async waitAndClickAndWait(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
@@ -97,7 +97,7 @@ module.exports = {
 
     //wait for element
     async waitForSelector(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector)
         } else {
             await page.waitForSelector(selector)
@@ -106,7 +106,7 @@ module.exports = {
 
     //wait for element to visible and then click
     async waitVisibleAndClick(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector, { visible: true })
             let [element] = await page.$x(selector)
             await element.click()
@@ -118,7 +118,7 @@ module.exports = {
 
     //hover on element
     async hover(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             let [element] = await page.$x(selector)
             await element.hover()
         } else {
@@ -206,6 +206,10 @@ module.exports = {
     async selectByText(selector, text) {  // TODO: don't work for text ,fix this
         // let optionValue = await page.$$eval('option', options => options.find(o => o.innerText == text)?.value)
         let optionValue = await page.$$eval('option', options => options.find(o => o.innerText === 'NYshop')?.value) //TODO:working
+
+        var currentPageNo = "100"
+        await page.$eval('div.panel-footer > div > div > ul > li:nth-child(3) > a', (e, no) => e.setAttribute("data-page", no), currentPageNo)
+
         // console.log(optionValue)
         // await page.select(selector, optionValue)
 
@@ -247,7 +251,7 @@ module.exports = {
 
     //get element text
     async getSelectorText(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             let text = await (await element.getProperty('textContent')).jsonValue()
@@ -288,7 +292,7 @@ module.exports = {
 
     //get element handle for xpath or css selector 
     async getElement(selector) {
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             return element
@@ -315,17 +319,13 @@ module.exports = {
         return value
     },
 
-    // set element property value
-    async setElementValue(selector, value) {  //TODO: not working
-        // let element = await this.getElement(selecto r)
-        // const randomDate = '2022-04-05 09:29'
-        const randomDate = value
-        // await page.$eval(selector, (e, randomDate) => { e.setAttribute("value", randomDate), randomDate })
-        await page.evaluate((element, value) => element.setAttribute("value", value))
+    // set element attribute value
+    async setElementValue(selector, attribute, value) {
+        await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
     },
 
     // remove element attribute
-    async removeElementAttribute(selector, attribute) {
+    async removeElementAttribute(selector, attribute) { //TODO: need to test
         await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
 
 
@@ -435,7 +435,7 @@ module.exports = {
 
     //scroll element into view
     async scrollIntoView(selector) {  //TODO: don't work
-        if (selector.startsWith('//')) {
+        if (selector.startsWith('//') || selector.startsWith('(//')) {
             let [element] = await page.$x(selector)
             await page.evaluate((element) => { element.scrollIntoView() }, element)
         } else {
@@ -554,9 +554,7 @@ module.exports = {
 
         if ((pageContent.includes('Warning')) || (pageContent.includes('Fatal error')) || (pageContent.includes('Notice:'))) {
             await page.screenshot({ path: 'tests/e2e/screenshot/phpError' + Date.now() + '.png', fullPage: true })
-        }
-        else {
-            console.log('no php error')
+            throw new Error("PHP Error!!")
         }
     },
 

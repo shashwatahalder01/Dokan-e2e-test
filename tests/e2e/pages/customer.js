@@ -197,29 +197,31 @@ module.exports = {
     },
 
     //customer add payment method
-    async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) {
+    async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) { //TODO: Actual card number required
+        await this.goToMyAccount()
         await page.click(selector.customer.cMyAccount.paymentMethods)
         await page.waitForTimeout(2000)
-
-        await base.click(selector.customer.cPaymentMethods.addPaymentMethod)
+        await page.click(selector.customer.cPaymentMethods.addPaymentMethod)
+        await page.waitForTimeout(2000)
 
         //negative test
         // await base.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
         // let failureMessage = await base.getSelectorText(selector.customer.cWooSelector.failureMessage)
         // expect(failureMessage).toMatch("Your card number is incomplete.")
 
-        await page.type(selector.customer.cPaymentMethods.stripeCardNumber, cardNumber)
-        await page.type(selector.customer.cPaymentMethods.stripeCardExpiryDate, cardExpiryDate)
-        await page.type(selector.customer.cPaymentMethods.stripeCardCvc, cardCvc)
+        let stripeCardIframe = await base.switchToIframe(selector.customer.cPaymentMethods.stripeCardIframe)
+        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardNumber, cardNumber)
+        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardExpiryDate, cardExpiryDate)
+        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardCvc, cardCvc)
+        await page.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
+        await page.waitForTimeout(1000)
 
-        await base.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
-
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch("Payment method successfully added.")
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceError)
+        expect(successMessage).toMatch("Unable to process this payment, please try again or use alternative method.")
     },
 
     //customer delete payment method
-    async deletePaymentMethod() {
+    async deletePaymentMethod() { //TODO:need to test
         await base.click(selector.customer.cMyAccount.paymentMethods)
         await page.click(selector.customer.cPaymentMethods.deleteMethod)
 
@@ -292,16 +294,15 @@ module.exports = {
 
         let reviewMessage = faker.datatype.uuid()
         await base.click(selector.customer.cSingleStore.reviews)
-        // await page.waitForTimeout(1000)
+        await page.waitForTimeout(1000)
         let writeAReviewIsVisible = await base.isVisible(selector.customer.cSingleStore.writeAReview)
         if (writeAReviewIsVisible) {
             await page.click(selector.customer.cSingleStore.writeAReview)
-        }else {
+        } else {
             await page.click(selector.customer.cSingleStore.editReview)
         }
         await page.waitForTimeout(2000)
-        console.log(selector.customer.cSingleStore.reviewStar(rating))
-        await page.click(selector.customer.cSingleStore.reviewStar('5'))
+        await base.setElementValue(selector.customer.cSingleStore.rating, 'style', rating)
         await base.clearAndType(selector.customer.cSingleStore.reviewTitle, reviewTitle)
         await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
         await page.click(selector.customer.cSingleStore.submitReview)
@@ -588,13 +589,29 @@ module.exports = {
     },
 
     //customer ask for warranty
-    async sendWarrantyRequest(itemQuantity, requestType, RequestDetails) {
-        await base.click(selector.customer.cOrders.warrantyRequest)
-        await base.click(selector.customer.cOrders.warrantyRequestItemName)
-        // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity, itemQuantity)
-        await page.type(selector.customer.cOrders.warrantyRequestType, requestType)
-        await base.setValue(selector.customer.cOrders.warrantyRequestDetails, RequestDetails)
-        await base.click(selector.customer.cOrders.warrantySubmitRequest)
+    async sendWarrantyRequest(orderId, productName, requestType, requestReason, requestDetails) {
+        // await this.goToMyAccount()
+
+        // await base.click(selector.customer.cMyAccount.orders)
+        // await base.click(selector.customer.cOrders.ordersWarrantyRequest(orderId))
+
+        // await base.clickXpath(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
+        // // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
+        // await page.select(selector.customer.cOrders.warrantyRequestType, requestType)
+        // // await page.select(selector.customer.cOrders.warrantyRequestReason, requestReason)
+        // await page.type(selector.customer.cOrders.warrantyRequestDetails, requestDetails)
+        // await base.click(selector.customer.cOrders.warrantySubmitRequest)
+        // await page.waitForTimeout(2000)
+
+        // let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        // expect(successMessage).toMatch('Request has been successfully submitted')
+
+        //cleanup
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        // await vendorPage.deleteReturnRequest(orderId)
+        await vendorPage.approveReturnRequest(orderId, productName)
+
+
     },
 
 }

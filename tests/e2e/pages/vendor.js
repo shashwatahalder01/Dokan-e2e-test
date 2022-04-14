@@ -1,6 +1,6 @@
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
-const helper = require("../../e2e/utils/helpers.js")
+const helpers = require("../../e2e/utils/helpers.js")
 const { faker } = require('@faker-js/faker')
 
 
@@ -1156,10 +1156,44 @@ module.exports = {
 
         let reviewIsVisible = await base.isVisible(selector.vendor.vReviews.reviewRow(reviewMessage))
         expect(reviewIsVisible).toBe(false)
+    },
 
+    async approveReturnRequest(orderId, productName) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.returnRequest)
 
+        await base.click(selector.vendor.vReturnRequest.view(orderId))
+
+        //change order status to refund
+        // await page.select(selector.vendor.vReturnRequest.changeOrderStatus, 'processing')
+        // await base.alert('accept')
+        // await base.click(selector.vendor.vReturnRequest.updateOrderStatus)
+
+        //refund request
+        await page.click(selector.vendor.vReturnRequest.sendRefund)
+        await page.waitForTimeout(3000)
+        let tax =  String(helpers.price(await base.getSelectorText(selector.vendor.vReturnRequest.taxAmount(productName))))
+        let subTotal = String(helpers.price(await await base.getSelectorText(selector.vendor.vReturnRequest.subTotal(productName))))
+        await base.type(selector.vendor.vReturnRequest.taxRefund, tax)
+        await base.type(selector.vendor.vReturnRequest.subTotalRefund, subTotal)
+        await base.click(selector.vendor.vReturnRequest.sendRequest)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vReturnRequest.sendRequestSuccessMessage)
+        expect(successMessage).toMatch('Already send refund request. Wait for admin approval')
+
+        //TODO: ADD ADMIN APPROVE
 
     },
 
+    async deleteReturnRequest(orderId) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.returnRequest)
+
+        await base.hover(selector.vendor.vReturnRequest.returnRequestCell(orderId))
+        await base.click(selector.vendor.vReturnRequest.delete(orderId))
+
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        expect(successMessage).toMatch('Return Request has been deleted successfully')
+    },
 
 }

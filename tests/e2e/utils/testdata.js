@@ -1,5 +1,6 @@
 require('dotenv').config()
 const { faker } = require('@faker-js/faker')
+const { isThemeInstalled } = require('@wordpress/e2e-test-utils')
 const helper = require("../utils/helpers.js")
 
 
@@ -277,7 +278,7 @@ module.exports = {
       },
 
       //review
-      rating: faker.datatype.number({min:1, max:5}),
+      rating: faker.datatype.number({ min: 1, max: 5 }),
       reviewMessage: faker.datatype.uuid(),
       // reviewMessage: faker.lorem.word()
 
@@ -290,9 +291,34 @@ module.exports = {
    },
 
    store: {
-      rating: faker.datatype.number({min:2, max:5}),
+      rating: faker.random.arrayElement(['width: 20%', 'width: 40%', 'width: 60%', 'width: 80%', 'width: 100%']),
       storeReviewTitle: 'store review title',
       storeReviewMessage: 'store review message',
+
+   },
+
+   order:{
+      //refund
+      refundRequestType:'refund',
+      refundRequestReasons:'defective',
+      refundRequestDetails:'I would like to return this product',
+   },
+
+   card: {
+      strip: {
+         striptNon3D: '4242424242424242',
+         stript3D: '4000002500003155',
+         expiryMonth: '12',
+         expiryYear: '50',
+         expiryDate:'1250',
+         cvc: '111'
+      },
+      mangopay: {
+         creditCard: '4972485830400049',
+         expiryMonth: '12',
+         expiryYear: '50',
+         cvc: '111'
+      },
 
    },
 

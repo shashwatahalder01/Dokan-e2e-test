@@ -118,29 +118,31 @@ describe('customer functionality test', () => {
         await customerPage.followVendor(process.env.VENDOR)
     }, timeout)
 
-    it.only('customer can review store', async () => {
+    it('customer can review store', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.reviewStore(process.env.VENDOR, data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
     }, timeout)
 
-    it('customer ask for get support ', async () => {
+    it('customer can ask for get support ', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.askForGetSupport(process.env.VENDOR, data.customerInfo.getSupportSubject, data.customerInfo.getSupportMessage)
     }, timeout)
 
-    // it('customer add payment method', async () => {
-    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-    //     await customerPage.goToMyAccount()
-    //     await customerPage.addPaymentMethod(' 4242 4242 4242 4242', '12', '55', '111')
-    //     await customerPage.deletePaymentMethod()
-    // }, timeout)
+    it.skip('customer can add payment method', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.addPaymentMethod(data.card.strip.striptNon3D, data.card.strip.expiryDate, data.card.strip.cvc)
+        await customerPage.deletePaymentMethod()
+    }, timeout)
 
-    // it('customer send return request ', async () => {
-    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-    //     await customerPage.goToMyAccount()
-    //     await customerPage.sendWarrantyRequest('return', 'I would like to return this product')
-    //     await customerPage.deletePaymentMethod()
-    // }, timeout)
+    it.only('customer can send return request ', async () => {
+        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        // await customerPage.sendWarrantyRequest( orderId, 'productName', data.order.refundRequestType, data.order.refundRequestReasons, data.order.refundRequestDetails)
+        await customerPage.sendWarrantyRequest( '874','v1', data.order.refundRequestType, data.order.refundRequestReasons, data.order.refundRequestDetails)
+    }, timeout)
+
+
+
+
 
 
 

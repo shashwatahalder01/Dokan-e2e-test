@@ -2013,18 +2013,22 @@ module.exports = {
             completed: "//ul[contains(@class,'request-statuses-filter')]//a[contains(text(),'Processing')]",
 
             //refund request actions
-            view: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../../..//i[@class='far fa-eye']`,
-            manage: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../..//a[@class='request-manage']`,
-            delete: (orderNumber) => `//strong[contains(text(),'${orderNumber}')]/../..//a[@class='request-delete']`,
-
+            returnRequestCell: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../..`,
+            manage: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../..//a[@class='request-manage']`,
+            delete: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../..//a[@class='request-delete']`,
+            view: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//i[@class='far fa-eye']`,
             //return request
             backToList: ".left-header-content > a",
             changeOrderStatus: "#status",
             updateOrderStatus: "//input[@value='Update']", //invokes default js alert
             sendRefund: ".dokan-send-refund-request",
+            taxAmount: (productName) => `(//a[contains(text(),'${productName}')]/../..//bdi)[1]`,
+            subTotal: (productName) => `(//a[contains(text(),'${productName}')]/../..//bdi)[2]`,
             taxRefund: "//input[contains(@name,'refund_tax')]",
             subTotalRefund: "//input[contains(@name,'refund_amount')]",
             sendRequest: "//input[@name='dokan_refund_submit']",
+            sendRequestSuccessMessage: ".dokan-alert.dokan-alert-info",
+
 
             //conversations
             message: "#message",
@@ -2995,12 +2999,14 @@ module.exports = {
 
         //customer orders
         cOrders: {
-            view: (orderNumber) => `//a[contains(text(),'${orderNumber}')]/../..//a[contains(@class,'woocommerce-button button view')]`,
             // request warranty
-            warrantyRequest: ".request_warranty",
+            view: (orderNumber) => `//a[contains(text(),'${orderNumber}')]/../..//a[contains(@class,'woocommerce-button button view')]`,
+            recentOrdersWarrantyRequest: (orderNumber) => `//td[@class='${orderNumber}']/..//a[@class='button request_warranty']`,
+            ordersWarrantyRequest: (orderNumber) => `//a[contains(text(),'#${orderNumber}')]/../..//a[@class='woocommerce-button button request_warranty']`,
             warrantyRequestItemCheckbox: (productName) => `//a[contains(text(),'${productName}')]/../..//input[@type='checkbox' and contains(@name,'request_item')]`,
             warrantyRequestItemQuantity: (productName) => `//a[contains(text(),'${productName}')]/../..//select[contains(@name,'request_item_qty')]`,
             warrantyRequestType: "#type",
+            warrantyRequestReason: "#reasons",
             warrantyRequestDetails: "#warranty_request_details",
             warrantySubmitRequest: ".dokan-btn",
 
@@ -3080,7 +3086,10 @@ module.exports = {
             addPaymentMethod: ".woocommerce-MyAccount-content .button",
 
             //stripe card
+            stripeCardIframe: '#dokan-stripe-card-element iframe',
             stripeCardNumber: ".CardNumberField-input-wrapper .InputElement",
+            // stripeCardNumber1: "//input[@name='cardnumber']/..",
+            // stripeCardNumber: "//input[@name='cardnumber']",
             stripeCardExpiryDate: ".CardField-expiry .InputElement",
             stripeCardCvc: ".CardField-cvc .InputElement",
 
@@ -3193,10 +3202,9 @@ module.exports = {
             // reviews
             reviews: "//div[@class='dokan-store-tabs']//a[contains(text(),'Reviews')]",
             writeAReview: ".add-review-btn",
-            editReview:".edit-review-btn",
+            editReview: ".edit-review-btn",
             closeReviewPopup: ".mfp-close",
-            // reviewStar: (star) => `.jq-ry-rated-group svg:nth-child(${star}) polygon`,
-            reviewStar: '.jq-ry-rated-group.jq-ry-group',
+            rating: '.jq-ry-rated-group.jq-ry-group',
             reviewTitle: "#dokan-review-title",
             reviewMessage: "#dokan-review-details",
             submitReview: "#support-submit-btn",
