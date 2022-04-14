@@ -1,5 +1,4 @@
 //TODO: deleteIfExists() recursion is not working
-
 //TODO add press enter in map location in appearance, store  settings, product location
 //TODO: npm install puppeteer-firefox
 //TODO: Add required necessary steps
@@ -27,3 +26,7 @@
 //TODO: shift toMatch with toBe jest expect
 //TODO: handle all actions for xpath element and css element
 //TODO: remove redundant locator
+//TODO: vendor verification upload media  update function from vendor store settings
+//TODO: creat users & also add in before all
+//TODO: min max product wholesale product,vendor subscription handle
+//TODO: replace login with wp script login function

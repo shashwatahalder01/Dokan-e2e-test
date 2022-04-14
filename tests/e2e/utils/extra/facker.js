@@ -58,7 +58,8 @@ const randomBsNoun = faker.company.bsNoun()
 const randomBsBsAdjective = faker.company.bsAdjective()
 const randomBsBuzz = faker.company.bsBuzz()
 
-const randomNumber = faker.datatype.number({ min: 1000000 })
+// const randomNumber = faker.datatype.number({ min: 1000000 })
+const randomNumber = faker.datatype.number({min:1, max:5})
 const randomUuid = faker.datatype.uuid()
 const randomAlphaNumeric = faker.random.alphaNumeric(10)
 
@@ -77,6 +78,8 @@ const randomName = faker.name.findName()
 const randomAvatar = faker.image.avatar()
 
 
+
+
 const randomWord = faker.lorem.word()
 const randomWords = faker.lorem.words()
 const randomSentence = faker.lorem.sentence()
@@ -88,3 +91,5 @@ const randomText = faker.lorem.text()
 const randomLines = faker.lorem.lines()
 
 
+// console.log(randomWords)
+console.log(faker.datatype.uuid())

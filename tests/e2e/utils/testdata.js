@@ -1,11 +1,16 @@
 require('dotenv').config()
 const { faker } = require('@faker-js/faker')
+const helper = require("../utils/helpers.js")
 
 
 
 module.exports = {
 
    //--------------------------------------------------- Fixed  test data ---------------------------------------------//
+   // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
+   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
+
+
    // wooCommerce
 
    //shipping
@@ -140,8 +145,34 @@ module.exports = {
    customerInfo: {
       userEmail: faker.internet.email(),
       password: process.env.CUSTOMER_PASSWORD,
+      password1: '02dokan02',
       firstName: faker.name.firstName('male'),
       lastName: faker.name.lastName('male'),
+      userEmail: faker.internet.email(),
+      companyName: faker.company.companyName(),
+      companyId: faker.random.alphaNumeric(5),
+      vatNumber: faker.random.alphaNumeric(10),
+      bankName: faker.address.state(),
+      bankIban: faker.finance.iban(),
+      phone: faker.phone.phoneNumber('(###) ###-####'),
+      street1: 'abc street',
+      street2: 'xyz street',
+      country: 'United States (US)',
+      countrySelectValue: 'US',
+      stateSelectValue: 'NY',
+      city: 'New York',
+      zipCode: '10006',
+      state: 'New York',
+      accountName: 'accountName',
+      accountNumber: faker.random.alphaNumeric(10),
+      bankName: 'bankName',
+      bankAddress: 'bankAddress',
+      routingNumber: faker.random.alphaNumeric(10),
+      swiftCode: faker.random.alphaNumeric(10),
+      iban: faker.random.alphaNumeric(10),
+
+      getSupportSubject: 'get Support Subject',
+      getSupportMessage: 'get Support Message',
    },
 
 
@@ -239,12 +270,30 @@ module.exports = {
          maximumBookingWindowIntoTheFutureDateUnit: 'month',
          baseCost: '20',
          blockCost: '10',
-      }
+      },
+      auction: {
+         startDate: helper.currentDateTime.replace(/,/g, ''),
+         endDate: helper.addDays(helper.currentDateTime, 60).replace(/,/g, ''),
+      },
+
+      //review
+      rating: faker.datatype.number({min:1, max:5}),
+      reviewMessage: faker.datatype.uuid(),
+      // reviewMessage: faker.lorem.word()
+
+      //report
+      reportReason: faker.random.arrayElement(['This content is spam', 'This content should marked as adult', 'This content is abusive', 'This content is violent', 'This content suggests the author might be risk of hurting themselves', 'This content infringes upon my copyright', 'This content contains my private information', 'Other', 'This product is fake']),
+      reportReasonDescription: 'report reason description',
+
+      //enquiry
+      enquiryDetails: 'enquiry details',
    },
 
-   dokanSubscription: {
+   store: {
+      rating: faker.datatype.number({min:2, max:5}),
+      storeReviewTitle: 'store review title',
+      storeReviewMessage: 'store review message',
 
-      price: faker.commerce.price(),
    },
 
    coupon: {
@@ -261,6 +310,9 @@ module.exports = {
       instagram: 'https://www.instagram.com/',
       flickr: 'https://www.flickr.com/',
    },
+
+
+
 
    // some sample data
    productsName: ["Plain Cotton Tshirt", "The moon Tshirt", "Summer Tshirt"],

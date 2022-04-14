@@ -1,7 +1,11 @@
 require('dotenv').config()
 const loginPage = require('../pages/login.js')
+const adminPage = require('../pages/admin.js')
+const vendorPage = require('../pages/vendor.js')
 const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
+const { faker } = require('@faker-js/faker')
+const helpers = require('../utils/helpers.js')
 const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
@@ -14,116 +18,156 @@ describe('customer functionality test', () => {
     // afterEach(async () => {await browser.close()})
 
 
-    //////////////////////////// need to review ///////////////////////////////
-
-
     it('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
-        await loginPage.customerLogout()
+        await customerPage.customerLogout()
     }, timeout)
-
 
     it('customer login', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        // await loginPage.switchToAdmin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     }, timeout)
-
 
     it('customer logout', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await loginPage.customerLogout()
+        await customerPage.customerLogout()
     }, timeout)
 
-
-    it.skip('customer become a vendor', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.customerBecomeVendor('vendor101', 'v101', 'v101', 'v101', 'abc street', '123456789', 'abcCompany', '123456789', '123456789', 'abcBank', '1234567890')
-        await vendorPage.vendorSetupWizard(20, 'abc street', 'street2', 'New York', '10001', "United States (US)", "New York", "vendor@paypal.com", 'vendorBankAccount', 1234567890, 'abcBank', 'abc bank address', 1234567890, 1234567890, 123456789, 'custom@payment.com')
+    it('customer become a vendor', async () => {
+        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.customerBecomeVendor(data.vendorInfo.firstName, data.vendorInfo.lastName, data.vendorInfo.shopName, data.vendorInfo.street1, data.vendorInfo.phone, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban)
+        await vendorPage.vendorSetupWizardChoice(true, data.vendorSetupWizard)
     }, timeout)
 
-
-    it.skip('customer become a wholesale customer', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.customerSendWholesaleRequest()
-        await loginPage.switchToAdmin(process.env.ADMIN_EMAIL, process.env.ADMIN_PASSWORD)
-        await adminPage.adminApproveWholesaleRequest(process.env.CUSTOMER)
+    it('customer become a wholesale customer', async () => {
+        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.customerBecomeWholesaleCustomer()
     }, timeout)
 
-    it.skip('customer send return request ', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.sendWarrantyRequest('return', 'I would like to return this product')
-        await customerPage.deletePaymentMethod()
+    it('customer add customer details', async () => {
+        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.addCustomerDetails(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.firstName, data.customerInfo.userEmail, data.customerInfo.password, data.customerInfo.password1)
     }, timeout)
-
-    it.skip('customer ask for get support ', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.sendWarrantyRequest('return', 'I would like to return this product')
-        await customerPage.deletePaymentMethod()
-    }, timeout)
-
-    it.skip('customer add customer details', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.addCustomerDetails('customer1', 'c1', 'customer1', 'customer1@gamil.com', process.env.CUSTOMER_PASSWORD, '02dokan02')
-    }, timeout)
-
-    it.skip('customer add payment method', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.addPaymentMethod(' 4242 4242 4242 4242', '12', '55', '111')
-        await customerPage.deletePaymentMethod()
-    }, timeout)
-
-    /////////////////////////////////////////////////////////////// reviewed ///////////////////////////////
 
     it('customer add billing details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.addBillingAddress('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
+        await customerPage.addBillingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
     }, timeout)
 
     it('customer add shipping details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToMyAccount()
-        await customerPage.addShippingAddress('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
+        await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
+    }, timeout)
+
+    it('customer can buy product', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.goToShop()
+        await customerPage.addProductToCartFromShop('product1')
+        await customerPage.goToCartFromShop()
+        await customerPage.applyCoupon('VC_RJHHN')
+        await customerPage.goToCheckoutFromCart()
+        await customerPage.placeOrder()
+    }, timeout)
+
+    it('customer can review product', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.reviewProduct('product1', data.product.rating)
+    }, timeout)
+
+    it('customer can report product', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.reportProduct('product1', data.product.reportReason, data.product.reportReasonDescription)
+    }, timeout)
+
+    it('customer can enquire product', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.enquireProduct('product1', data.product.enquiryDetails)
     }, timeout)
 
     it('customer can search product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToShop()
-        await customerPage.searchProduct('Handmade Plastic Table (Simple)')
+        await customerPage.searchProduct('product1')
     }, timeout)
 
-    it.skip('customer can apply coupon', async () => {
+    it('customer can apply coupon', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('Handmade Plastic Table (Simple)')
+        await customerPage.addProductToCartFromShop('product1')
         await customerPage.goToCartFromShop()
-        await customerPage.applyCoupon('VC_HHYZ')
+        await customerPage.applyCoupon('VC_RJHHN')
     }, timeout)
 
-    it.skip('customer can buy product', async () => {
+    it('customer can add product to cart', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('Handmade Plastic Table (Simple)')
-        await customerPage.goToCartFromShop()
-        // await customerPage.applyCoupon('VC_ORUGM')
-        await customerPage.goToCheckoutFromCart()
-        // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
-        // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
-        await customerPage.placeOrder()
-    }, timeout)
-
-
-    it.only('customer can add product to cart', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('simple product')
+        await customerPage.addProductToCartFromShop('product1')
         await customerPage.goToCartFromShop()
         await customerPage.goToCheckoutFromCart()
         await customerPage.placeOrder()
-    },timeout)
+    }, timeout)
+
+    it('customer can search vendor', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.searchVendor(process.env.VENDOR)
+    }, timeout)
+
+    it('customer can follow vendor', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.followVendor(process.env.VENDOR)
+    }, timeout)
+
+    it.only('customer can review store', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.reviewStore(process.env.VENDOR, data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
+    }, timeout)
+
+    it('customer ask for get support ', async () => {
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.askForGetSupport(process.env.VENDOR, data.customerInfo.getSupportSubject, data.customerInfo.getSupportMessage)
+    }, timeout)
+
+    // it('customer add payment method', async () => {
+    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.goToMyAccount()
+    //     await customerPage.addPaymentMethod(' 4242 4242 4242 4242', '12', '55', '111')
+    //     await customerPage.deletePaymentMethod()
+    // }, timeout)
+
+    // it('customer send return request ', async () => {
+    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.goToMyAccount()
+    //     await customerPage.sendWarrantyRequest('return', 'I would like to return this product')
+    //     await customerPage.deletePaymentMethod()
+    // }, timeout)
+
+
+
+    // it.only('customer can add product to cart', async () => {
+    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.goToShop()
+    //     await customerPage.addProductToCartFromShop('product1')
+    //     await customerPage.goToCartFromShop()
+    //     await customerPage.goToCheckoutFromCart()
+
+    //     // let [orderId, subtotal, shipping, tax, paymentMethod, orderTotal] = await customerPage.placeOrder(true)
+    //     console.log(orderId, subtotal, shipping, tax, paymentMethod, orderTotal)
+    //     await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     // let [orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date]= await adminPage.getOrderDetails(orderId)
+
+    //     let orderTotal = 105
+    //     let subtotal = 100
+    //     let tax = 5
+    //     let shipping = 20
+    //     let percent = this.percentage(subtotal, 5)
+    //     let calculatedTax = this.tax(subtotal)
+    //     let calculatedAdminCommission = this.adminCommission(subtotal, tax, shipping)
+    //     let calculatedVendorEarning = this.vendorEarning(orderTotal, calculatedAdminCommission, tax, shipping)
+    //     console.log(calculatedTax, calculatedAdminCommission, calculatedVendorEarning)
+    // }, timeout)
 
 })
+
+
+

@@ -1,3 +1,4 @@
+require('dotenv').config()
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
@@ -195,7 +196,7 @@ module.exports = {
     await base.check(selector.admin.dokan.settings.withdrawMethodsDokanCustom)
     await base.check(selector.admin.dokan.settings.withdrawMethodsSkrill)
     await base.clearAndType(selector.admin.dokan.settings.customMethodName, 'Bksh')
-    await base.clearAndType(selector.admin.dokan.settings.customMethodType, 'Email')
+    await base.clearAndType(selector.admin.dokan.settings.customMethodType, 'Phone')
     await base.clearAndType(selector.admin.dokan.settings.minimumWithdrawAmount, '5')
     await base.check(selector.admin.dokan.settings.orderStatusForWithdrawCompleted)
     await base.check(selector.admin.dokan.settings.orderStatusForWithdrawProcessing)
@@ -236,7 +237,7 @@ module.exports = {
     //appearance settings
     await page.click(selector.admin.dokan.settings.showMapOnStorePage)
     await base.check(selector.admin.dokan.settings.mapApiSourceGoogleMaps)
-    await base.clearAndType(selector.admin.dokan.settings.googleMapApiKey, 'apiKey')
+    await base.clearAndType(selector.admin.dokan.settings.googleMapApiKey, process.env.GOOGLE_MAP_API_KEY)
     await page.click(selector.admin.dokan.settings.storeHeaderTemplate2)
     await page.click(selector.admin.dokan.settings.storeHeaderTemplate1)
     await base.clearAndType(selector.admin.dokan.settings.storeBannerWidth, '625')
@@ -246,7 +247,7 @@ module.exports = {
     await base.click(selector.admin.dokan.settings.appearanceSaveChanges)
 
     let apiKey = await base.getElementValue(selector.admin.dokan.settings.googleMapApiKey) //TODO: update assertion
-    expect(apiKey).toMatch('apiKey')
+    expect(apiKey).toMatch(process.env.GOOGLE_MAP_API_KEY)
   },
 
   //admin set dokan privacy policy settings
@@ -519,8 +520,8 @@ module.exports = {
     await this.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
     await this.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
     await this.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
-    await this.deleteShippingMethod('US', 'Flat rate')
-    await this.deleteShippingZone('US')
+    // await this.deleteShippingMethod('US', 'Flat rate')
+    // await this.deleteShippingZone('US')
 
   },
 
@@ -754,7 +755,6 @@ module.exports = {
     await base.check(selector.admin.wooCommerce.settings.stripe.stripeCheckout)
     await page.click(selector.admin.wooCommerce.settings.stripe.stripeCheckoutLocale)
     await page.type(selector.admin.wooCommerce.settings.stripe.stripeCheckoutLocale, 'English')
-    // await page.type('.select2-search__field', 'English')
     await page.keyboard.press('Enter')
     await base.check(selector.admin.wooCommerce.settings.stripe.savedCards)
     //test credentials
@@ -1206,7 +1206,7 @@ module.exports = {
   },
 
   // admin add auction product
-  async addAuctionProduct(productName, productPrice, startDate, endDate, categoryName, vendor ) {
+  async addAuctionProduct(productName, productPrice, startDate, endDate, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
     await base.click(selector.admin.products.addNewMenu)
 
@@ -1286,6 +1286,34 @@ module.exports = {
     let enableStatusSuccessMessage = await base.getSelectorText(selector.admin.dokan.wholesaleCustomer.enableStatusUpdateSuccessMessage)
     expect(enableStatusSuccessMessage).toMatch('Wholesale capability activate')
   },
+
+  async getOrderDetails(orderNumber) {
+    await base.hover(selector.admin.aDashboard.dokan)
+    await base.click(selector.admin.dokan.reportsMenu)
+    await base.clickXpath(selector.admin.dokan.reports.allLogs)
+    await page.waitForTimeout(3000)
+    await page.type(selector.admin.dokan.reports.searchByOrder, orderNumber)
+    await page.waitForTimeout(2000)
+
+    let orderId = await base.getSelectorText(selector.admin.dokan.reports.orderId)
+    let store = await base.getSelectorText(selector.admin.dokan.reports.store)
+    let orderTotal = await base.getSelectorText(selector.admin.dokan.reports.orderTotal)
+    let vendorEarning = await base.getSelectorText(selector.admin.dokan.reports.vendorEarning)
+    let commission = await base.getSelectorText(selector.admin.dokan.reports.commission)
+    let gatewayFee = await base.getSelectorText(selector.admin.dokan.reports.gatewayFee)
+    let shipping = await base.getSelectorText(selector.admin.dokan.reports.shipping)
+    let tax = await base.getSelectorText(selector.admin.dokan.reports.tax)
+    let orderStatus = await base.getSelectorText(selector.admin.dokan.reports.orderStatus)
+    let date = await base.getSelectorText(selector.admin.dokan.reports.date)
+
+    // console.log(orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date)
+    return [orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date]
+
+
+
+
+
+  }
 
 
 }

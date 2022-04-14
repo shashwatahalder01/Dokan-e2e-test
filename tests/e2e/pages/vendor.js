@@ -2,7 +2,6 @@ const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helper = require("../../e2e/utils/helpers.js")
 const { faker } = require('@faker-js/faker')
-const { isVisible } = require("../pages/base.js")
 
 
 
@@ -62,10 +61,10 @@ module.exports = {
         await page.type(selector.vendor.vRegistration.bankName, bankName)
         await page.type(selector.vendor.vRegistration.bankIban, bankIban)
         await page.type(selector.vendor.vRegistration.phone, phone)
-        // let subscriptionPackIsVisible = await base.isVisible( selector.vendor.vWithdraw.subscriptionPack) 
-        // if(subscriptionPackIsVisible){
-        // await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
-        // }
+        let subscriptionPackIsVisible = await base.isVisible(selector.vendor.vWithdraw.subscriptionPack)
+        if (subscriptionPackIsVisible) {
+            await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
+        }
         await base.click(selector.vendor.vRegistration.register)
 
         await this.vendorSetupWizardChoice(setupWizardChoice, setupWizardData)
@@ -133,6 +132,8 @@ module.exports = {
 
     //vendor add simple product
     async addSimpleProduct(productName, productPrice, category) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.products)
 
         //add new simple product
@@ -150,6 +151,8 @@ module.exports = {
 
     //vendor add variable product
     async addVariableProduct(productName, productPrice, category, attribute, attributeTerms) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.products)
 
         //add new variable product
@@ -203,6 +206,8 @@ module.exports = {
 
     //vendor add simple subscription product
     async addSimpleSubscription(productName, productPrice, category) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.products)
 
         //add new simple subscription product
@@ -234,6 +239,8 @@ module.exports = {
 
     //vendor add variable subscription product
     async addVariableSubscription(productName, productPrice, category, attribute, attributeTerms) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.products)
 
         //add new variable subscription product
@@ -253,6 +260,7 @@ module.exports = {
         await page.waitForTimeout(1000)
 
         //add variation
+        //TODO: create attribute if not exists
         await page.select(selector.vendor.product.customProductAttribute, `pa_${attribute}`)
         await page.click(selector.vendor.product.addAttribute)
         await base.waitForSelector(selector.vendor.product.selectAll)
@@ -288,6 +296,8 @@ module.exports = {
 
     //vendor add external product
     async addExternalProduct(productName, productPrice, category) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.products)
 
         //add new external product
@@ -315,7 +325,8 @@ module.exports = {
     },
 
     //vendor add auction product
-    async addAuctionProduct(productName, productPrice, category) {
+    async addAuctionProduct(productName, productPrice, startDate, endDate, category) {
+        await this.goToVendorDashboard()
 
         await base.click(selector.vendor.vDashboard.auction)
 
@@ -338,10 +349,11 @@ module.exports = {
         // await page.waitForTimeout(10000)
         // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, '2022-04-05 15:15') 
         // await base.setElementValue(selector.vendor.vAuction.auctionEndDate, '2022-04-05 15:15') 
-        // await page.type(selector.vendor.vAuction.auctionStartDate, '2022-03-31 10:15') //TODO: handle date using datepicker or use core input filed 
-        // await page.type(selector.vendor.vAuction.auctionEndDate, '2022-04-10 10:12')
-        // await page.waitForTimeout(50000)
-        // await page.keyboard.press('Enter')
+        await page.click(selector.vendor.vAuction.auctionStartDate, startDate) //TODO: handle date using datepicker or use core input filed 
+        await page.type(selector.vendor.vAuction.auctionStartDate, startDate) //TODO: handle date using datepicker or use core input filed 
+        await page.click(selector.vendor.vAuction.auctionEndDate, endDate)
+        await page.type(selector.vendor.vAuction.auctionEndDate, endDate)
+
         await base.click(selector.vendor.vAuction.addAuctionProduct)
 
         let productCreateSuccessMessage = await base.getSelectorText(selector.vendor.product.updatedSuccessMessage)
@@ -352,6 +364,8 @@ module.exports = {
     //vendor add booking product
     async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, maxBookingsPerBlock,
         minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit, baseCost, blockCost) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.booking)
         await base.click(selector.vendor.vBooking.addNewBookingProduct)
 
@@ -403,6 +417,8 @@ module.exports = {
 
     //vendor add coupon
     async addCoupon(couponTitle, couponAmount) {
+        await this.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.coupons)
         await base.click(selector.vendor.vCoupon.addNewCoupon)
         await page.type(selector.vendor.vCoupon.couponTitle, couponTitle)
@@ -424,6 +440,7 @@ module.exports = {
 
     //vendor request withdraw 
     async requestWithdraw(withdrawMethod, withdrawAmount) {
+        await vendorPage.goToVendorDashboard()
 
         await base.click(selector.vendor.vDashboard.withdraw)
 
@@ -475,6 +492,9 @@ module.exports = {
 
     //vendor add auto withdraw disbursement schedule
     async addAutoWithdrawDisbursementSchedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
+
+        await vendorPage.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.withdraw)
         await page.click(selector.vendor.vWithdraw.editSchedule)
         await page.select(selector.vendor.vWithdraw.preferredPaymentMethod, preferredPaymentMethod)
@@ -487,6 +507,8 @@ module.exports = {
 
     // vendor add default withdraw payment methods
     async addDefaultWithdrawPaymentMethods(preferredSchedule) {
+        await vendorPage.goToVendorDashboard()
+
         await base.click(selector.vendor.vDashboard.withdraw)
         let defaultMethod = base.isVisible(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
         if (defaultMethod) {
@@ -869,7 +891,6 @@ module.exports = {
 
     //vendor send company verification request
     async sendCompanyVerificationRequest() {
-        // await base.goto('dashboard/settings/verification/')
         await base.click(selector.vendor.vDashboard.settings)
         await base.click(selector.vendor.vSettings.verification)
         await page.waitForTimeout(2000)
@@ -1113,6 +1134,30 @@ module.exports = {
 
         let successMessage = await base.getSelectorText(selector.vendor.vRmaSettings.updateSettingsSuccessMessage)
         expect(successMessage).toMatch('Settings saved successfully')
+
+    },
+
+
+    //----------------------------------------------------Vendor functions---------------------------------------//
+
+    async approveProductReview(reviewMessage) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.reviews)
+
+        // let approvedReviewIsVisible = await base.isVisible(selector.vendor.vReviews.reviewRow(reviewMessage))
+        // if (approvedReviewIsVisible) {
+        //     expect(approvedReviewIsVisible).toBe(true)
+        // }
+
+        await base.click(selector.vendor.vReviews.pending)
+        await base.hover(selector.vendor.vReviews.reviewRow(reviewMessage))
+        await base.clickXpath(selector.vendor.vReviews.approveReview(reviewMessage))
+        await page.waitForTimeout(2000)
+
+        let reviewIsVisible = await base.isVisible(selector.vendor.vReviews.reviewRow(reviewMessage))
+        expect(reviewIsVisible).toBe(false)
+
+
 
     },
 

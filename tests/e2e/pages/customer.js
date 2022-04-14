@@ -2,9 +2,11 @@
 require('dotenv').config()
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js')
+const vendorPage = require('../pages/vendor.js')
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
-const helper = require("../../e2e/utils/helpers.js")
+const helpers = require("../../e2e/utils/helpers.js")
+const { faker } = require('@faker-js/faker')
 
 module.exports = {
 
@@ -22,9 +24,6 @@ module.exports = {
 
         const url = await page.url()
         expect(url).toMatch('my-account')
-
-        // let dashboardIsVisible = await base.isVisible( selector.customer.cMyAccount.dashboard)
-        // expect(dashboardIsVisible).toBe(true)
     },
 
     async goToShop() {
@@ -32,9 +31,6 @@ module.exports = {
 
         const url = await page.url()
         expect(url).toMatch('shop')
-
-        // let shopIsVisible = await base.isVisible( selector.customer.cShop.shopPageHeader)
-        // expect(shopIsVisible).toBe(true)
     },
 
     async goToStoreList() {
@@ -42,9 +38,6 @@ module.exports = {
 
         const url = await page.url()
         expect(url).toMatch('store-listing')
-
-        // let storeListIsVisible = await base.isVisible( selector.customer.cStoreList.storeListPageHeader)
-        // expect(storeListIsVisible).toBe(true)
     },
 
 
@@ -54,16 +47,16 @@ module.exports = {
 
 
 
-        //customer logout
-        async customerLogout() {
-            await this.goToMyAccount()
-            await base.click(selector.frontend.customerLogout)
+    //customer logout
+    async customerLogout() {
+        await this.goToMyAccount()
+        await base.click(selector.frontend.customerLogout)
 
-            let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBeUndefined()
-            // let homeIsVisible = await base.isVisible( selector.frontend.home)
-            // expect(homeIsVisible).toBe(false)
-        },
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBeUndefined()
+        // let homeIsVisible = await base.isVisible( selector.frontend.home)
+        // expect(homeIsVisible).toBe(false)
+    },
 
 
 
@@ -74,6 +67,10 @@ module.exports = {
     //customer register
     async customerRegister(userEmail, password) {
         await base.goto("my-account")
+        let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
+        if (!loginIsVisible) {
+            await this.customerLogout()
+        }
         await page.type(selector.customer.cRegistration.regEmail, userEmail)
         await page.type(selector.customer.cRegistration.regPassword, password)
         await base.clickXpath(selector.customer.cRegistration.regCustomer)
@@ -86,7 +83,7 @@ module.exports = {
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
 
-
+    //customer become vendor
     async customerBecomeVendor(firstName, lastName, shopName, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
         await base.waitForSelector(selector.customer.cDashboard.becomeVendor)
         await base.click(selector.customer.cDashboard.becomeVendor)
@@ -111,8 +108,10 @@ module.exports = {
     async customerBecomeWholesaleCustomer() {
         let currentUser = await base.getCurrentUser()
         await page.click(selector.customer.cDashboard.becomeWholesaleCustomer)
+        await page.waitForTimeout(2000)
 
         let returnMessage = await base.getSelectorText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
+        console.log(returnMessage)
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
             let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
@@ -122,8 +121,10 @@ module.exports = {
         }
     },
 
+    //customer add billing address
     async addBillingAddress(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, billingStreetAddress2, billingTownCity,
         billingState, billingZipCode, billingPhone, billingEmailAddress) {
+        await this.goToMyAccount()
 
         await base.click(selector.customer.cMyAccount.addresses)
         //billing address
@@ -155,7 +156,9 @@ module.exports = {
         expect(successMessage).toMatch('Address changed successfully.')
     },
 
+    //customer add shipping address
     async addShippingAddress(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
+        await this.goToMyAccount()
 
         await base.click(selector.customer.cMyAccount.addresses)
         //shipping address
@@ -182,6 +185,7 @@ module.exports = {
     },
 
 
+    // customer send rma request
     async sendRmaMessage(message) {
         await base.click(selector.customer.cMyAccount.rmaRequests)
 
@@ -192,6 +196,7 @@ module.exports = {
         expect(successMessage).toMatch("Message send successfully")
     },
 
+    //customer add payment method
     async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) {
         await page.click(selector.customer.cMyAccount.paymentMethods)
         await page.waitForTimeout(2000)
@@ -213,6 +218,7 @@ module.exports = {
         expect(successMessage).toMatch("Payment method successfully added.")
     },
 
+    //customer delete payment method
     async deletePaymentMethod() {
         await base.click(selector.customer.cMyAccount.paymentMethods)
         await page.click(selector.customer.cPaymentMethods.deleteMethod)
@@ -221,6 +227,7 @@ module.exports = {
         expect(successMessage).toMatch("Payment method deleted.")
     },
 
+    //customer update password
     async updatePassword(currentPassword, newPassword) {
         await base.clearAndType(selector.customer.cAccountDetails.currentPassword, currentPassword)
         await base.clearAndType(selector.customer.cAccountDetails.NewPassword, newPassword)
@@ -229,24 +236,101 @@ module.exports = {
 
         let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Account details changed successfully.")
-
     },
 
+    //customer add customer details
     async addCustomerDetails(firstName, lastName, displayName, email, currentPassword, newPassword) {
+        await this.goToMyAccount()
 
         await base.click(selector.customer.cMyAccount.accountDetails)
 
         await base.clearAndType(selector.customer.cAccountDetails.firstName, firstName)
         await base.clearAndType(selector.customer.cAccountDetails.lastName, lastName)
         await base.clearAndType(selector.customer.cAccountDetails.displayName, displayName)
-        await base.clearAndType(selector.customer.cAccountDetails.email, email)
+        // await base.clearAndType(selector.customer.cAccountDetails.email, email) 
         await this.updatePassword(currentPassword, newPassword)
 
-        
+        //cleanup
         await base.click(selector.customer.cMyAccount.accountDetails)
         await this.updatePassword(newPassword, currentPassword)
     },
 
+    //customer search vendor
+    async searchVendor(vendorName) {
+        await this.goToStoreList()
+
+        await page.click(selector.customer.cStoreList.filter)
+        await page.type(selector.customer.cStoreList.searchVendors, vendorName)
+        await page.click(selector.customer.cStoreList.apply)
+
+        await base.waitForSelector(selector.customer.cStoreList.visitStore(vendorName))
+        let cartIsVisible = await base.isVisible(selector.customer.cStoreList.visitStore(vendorName))
+        expect(cartIsVisible).toBe(true)
+        await page.waitForTimeout(500)
+    },
+
+    //customer follow vendor
+    async followVendor(vendorName) {
+        await this.searchVendor(vendorName)
+
+        let currentStoreFollowStatus = await base.getSelectorText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
+        if (currentStoreFollowStatus == "Following") {
+            await base.clickXpath(selector.customer.cStoreList.followUnFollowStore(vendorName))
+            await page.waitForTimeout(1000)
+        }
+        await base.clickXpath(selector.customer.cStoreList.followUnFollowStore(vendorName))
+        await page.waitForTimeout(1000)
+        let storeFollowStatus = await base.getSelectorText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
+        expect(storeFollowStatus).toMatch('Following')
+    },
+
+    //customer review store
+    async reviewStore(vendorName, rating, reviewTitle) {
+        await this.searchVendor(vendorName)
+
+        await base.click(selector.customer.cStoreList.visitStore(vendorName))
+
+        let reviewMessage = faker.datatype.uuid()
+        await base.click(selector.customer.cSingleStore.reviews)
+        // await page.waitForTimeout(1000)
+        let writeAReviewIsVisible = await base.isVisible(selector.customer.cSingleStore.writeAReview)
+        if (writeAReviewIsVisible) {
+            await page.click(selector.customer.cSingleStore.writeAReview)
+        }else {
+            await page.click(selector.customer.cSingleStore.editReview)
+        }
+        await page.waitForTimeout(2000)
+        console.log(selector.customer.cSingleStore.reviewStar(rating))
+        await page.click(selector.customer.cSingleStore.reviewStar('5'))
+        await base.clearAndType(selector.customer.cSingleStore.reviewTitle, reviewTitle)
+        await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
+        await page.click(selector.customer.cSingleStore.submitReview)
+        await page.waitForTimeout(2000)
+
+        let submittedReviewMessage = await base.getSelectorText(selector.customer.cSingleStore.submittedReview(reviewMessage))
+        expect(submittedReviewMessage).toMatch(reviewMessage)
+    },
+
+    //customer ask for get support
+    async askForGetSupport(vendorName, getSupportSubject, getSupportMessage) {
+        await this.searchVendor(vendorName)
+
+        await base.click(selector.customer.cStoreList.visitStore(vendorName))
+
+        await page.click(selector.customer.cSingleStore.getSupport)
+        await page.waitForTimeout(2000)
+        await page.type(selector.customer.cSingleStore.subject, getSupportSubject)
+        await page.type(selector.customer.cSingleStore.message, getSupportMessage)
+        await page.click(selector.customer.cSingleStore.submitGetSupport)
+        await page.waitForTimeout(2000)
+
+        let successMessage = await base.getSelectorText(selector.customer.cDokanSelector.dokanAlertSuccessMessage)
+        expect(successMessage).toMatch('Thank you. Your ticket has been submitted!')
+        //close popup
+        await page.click(selector.customer.cDokanSelector.dokanAlertClose)
+    },
+
+    //customer add customer support ticket
     async addCustomerSupportTicket(message) {
         await page.click(selector.customer.cMyAccount.supportTickets)
         await page.click(selector.customer.cSupportTickets.openTickets)
@@ -257,7 +341,10 @@ module.exports = {
         //TODO: add assertion
     },
 
+    //customer search product
     async searchProduct(productName) {
+        await this.goToShop()
+
         await page.type(selector.customer.cShop.searchProduct, productName)
         await base.click(selector.customer.cShop.search)
 
@@ -265,6 +352,77 @@ module.exports = {
         expect(searchedProductName).toMatch(productName)
     },
 
+    //customer go to product(single) details
+    async goToProductDetails(productName) {
+        await this.searchProduct(productName)
+
+        await base.click(selector.customer.cShop.productDetailsViewLink)
+
+        let productTitle = await base.getSelectorText(selector.customer.cSingleProduct.productTitle)
+        expect(productTitle).toMatch(productName)
+    },
+
+    //customer rate & review product
+    async reviewProduct(productName, rating) {
+        await this.goToProductDetails(productName)
+
+        let reviewMessage = faker.datatype.uuid()
+        await page.click(selector.customer.cSingleProduct.reviews)
+        await page.waitForTimeout(2000)
+        await page.click(selector.customer.cSingleProduct.rating(rating))
+        await base.clearAndType(selector.customer.cSingleProduct.reviewMessage, reviewMessage)
+        await base.click(selector.customer.cSingleProduct.submitReview)
+
+        let duplicateCommentAlertIsVisible = await base.isVisible(selector.customer.cSingleProduct.duplicateCommentAlert)
+        if (duplicateCommentAlertIsVisible) {
+            await base.click(selector.customer.cSingleProduct.backFromDuplicateCommentAlert)
+            await this.rateProduct(rating)
+        }
+
+        let submittedReviewMessage = await base.getSelectorText(selector.customer.cSingleProduct.submittedReview(reviewMessage))
+        expect(submittedReviewMessage).toMatch(reviewMessage)
+
+        let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
+        if (awaitingApprovalReviewIsVisible) {
+            await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+            await vendorPage.approveProductReview(reviewMessage)
+        }
+
+    },
+
+    // customer report product
+    async reportProduct(productName, reportReason, reportReasonDescription) {
+        await this.goToProductDetails(productName)
+
+        await page.click(selector.customer.cSingleProduct.reportAbuse)
+        await page.waitForTimeout(2000)
+        await base.clickXpath(selector.customer.cSingleProduct.reportReasonByName(reportReason))
+        await page.type(selector.customer.cSingleProduct.reportDescription, reportReasonDescription)
+        await page.click(selector.customer.cSingleProduct.reportSubmit)
+        await page.waitForTimeout(2500)
+
+        let successMessage = await base.getSelectorText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
+        expect(successMessage).toMatch('Your report has been submitted. Thank you for your response.')
+
+        await page.click(selector.customer.cSingleProduct.confirmReportSubmit)
+
+    },
+
+    // customer enquire product
+    async enquireProduct(productName, enquiryDetails) {
+        await this.goToProductDetails(productName)
+
+        await page.click(selector.customer.cSingleProduct.productEnquiry)
+        await page.waitForTimeout(1000)
+        await page.type(selector.customer.cSingleProduct.enquiryMessage, enquiryDetails)
+        await page.click(selector.customer.cSingleProduct.submitEnquiry)
+        await page.waitForTimeout(2500)
+
+        let successMessage = await base.getSelectorText(selector.customer.cSingleProduct.submitEnquirySuccessMessage)
+        expect(successMessage).toMatch('Email sent successfully!')
+    },
+
+    //customer add product to cart from shop page
     async addProductToCartFromShop(productName) {
         await page.type(selector.customer.cShop.searchProduct, productName)
         await base.click(selector.customer.cShop.search)
@@ -276,14 +434,15 @@ module.exports = {
 
     },
 
+    //customer add product to cart from product details page
     async addProductToCartFromSingleProductPage(productName) {
         await base.click(selector.customer.cSingleProduct.addToCart)
 
         let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch(`“${productName}” has been added to your cart.`)
-
     },
 
+    //go to cart from shop page
     async goToCartFromShop() {
         await page.click(selector.customer.cShop.viewCart)
         await page.waitForTimeout(2000)
@@ -293,6 +452,7 @@ module.exports = {
         expect(cartIsVisible).toBe(true)
     },
 
+    //go to cart from product details page
     async goToCartFromSingleProductPage() {
         await page.click(selector.customer.cSingleProduct.viewCart)
         await page.waitForTimeout(2000)
@@ -303,6 +463,7 @@ module.exports = {
 
     },
 
+    //got to checkout from cart
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
         await page.waitForTimeout(2000)
@@ -312,6 +473,8 @@ module.exports = {
         expect(checkoutIsVisible).toBe(true)
 
     },
+
+    //customer apply coupon
     async applyCoupon(couponCode) {
         let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
         if (couponIsApplied) {
@@ -332,26 +495,48 @@ module.exports = {
         expect(successMessage).toMatch("Coupon code applied successfully.")
     },
 
+    //customer remove applied coupon
     async removeAppliedCoupon(couponCode) {
         await page.click(selector.customer.cCart.removeCoupon(couponCode))
         await page.waitForTimeout(6000)
 
-        let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
-        expect(couponIsApplied).toBe(false)
-        // let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        // expect(successMessage).toMatch('Coupon has been removed.') //not reoccurring for second login
+        // let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
+        // // expect(couponIsApplied).toBe(false)
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        expect(successMessage).toMatch('Coupon has been removed.')
     },
 
-    async placeOrder() {
-        await page.waitForSelector(selector.customer.cCheckout.placeOrder)
+    //customer place order
+    async placeOrder(getOrderDetails) {
+        //TODO:handle billing address warning or shipping address warning
+        // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
+        // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
+
+        await page.waitForTimeout(3000)
+        // await page.waitForSelector(selector.customer.cCheckout.placeOrder)
         await page.click(selector.customer.cCheckout.placeOrder)
         await page.waitForTimeout(6000)
 
         await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
         let orderReceivedIsVisible = await base.isVisible(selector.customer.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)
+
+        if (getOrderDetails) {
+            // await this.getOrderDetails()
+
+            let orderId = await base.getSelectorText(selector.customer.cOrderReceived.orderNumber)
+            let subtotal = await base.getSelectorText(selector.customer.cOrderReceived.subtotal)
+            let shipping = await base.getSelectorText(selector.customer.cOrderReceived.shipping)
+            let tax = await base.getSelectorText(selector.customer.cOrderReceived.tax)
+            let paymentMethod = await base.getSelectorText(selector.customer.cOrderReceived.orderPaymentMethod)
+            let orderTotal = await base.getSelectorText(selector.customer.cOrderReceived.orderTotal)
+            // console.log(orderId, subtotal, shipping, tax, paymentMethod, orderTotal)
+            return [orderId, subtotal, shipping, tax, paymentMethod, orderTotal]
+
+        }
     },
 
+    //customer add billing address in checkout
     async addBillingAddressInCheckout(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, billingStreetAddress2, billingTownCity,
         billingState, billingZipCode, billingPhone, billingEmailAddress) {
 
@@ -377,9 +562,9 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
         await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
         await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
-
     },
 
+    //customer add shipping address in checkout
     async addShippingAddressInCheckout(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
 
         await page.click(selector.customer.cCheckout.shipToADifferentAddress)
@@ -402,6 +587,7 @@ module.exports = {
         await page.waitForTimeout(2000)
     },
 
+    //customer ask for warranty
     async sendWarrantyRequest(itemQuantity, requestType, RequestDetails) {
         await base.click(selector.customer.cOrders.warrantyRequest)
         await base.click(selector.customer.cOrders.warrantyRequestItemName)
@@ -412,3 +598,4 @@ module.exports = {
     },
 
 }
+
