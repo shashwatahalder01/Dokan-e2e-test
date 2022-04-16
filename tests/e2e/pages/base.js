@@ -36,54 +36,28 @@ module.exports = {
     },
 
     //click element and wait until network idle
+    async clickAndWait(selector) {
+        let element = await this.getElement(selector)
+        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait for network idle
+        // await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle0' })]) //wait for network idle
+        // await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' })]) //wait util dom content loaded
+        // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait on both simultaneously and handle whichever occurs first
+    },
+
+    //wait for element and then click
     async click(selector) {
-        if (/^(\/\/|\(\/\/)/.test(selector)) {
-            await this.clickXpathAndWait(selector)
-        } else {
-            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-            // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-            // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-        }
-    },
-
-    //click xpath element and wait until network idle
-    async clickXpathAndWait(selector) {
-        await page.waitForXPath(selector)
-        let [element] = await page.$x(selector)
-        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-        // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle0' })])
-        // await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'domcontentloaded' })])
-        // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-    },
-
-    //click xpath element
-    async clickXpath(selector) {
-        let [element] = await page.$x(selector)
+        let element = await this.getElement(selector)
         await element.click()
     },
 
     //wait for element and then click
-    async waitAndClick(selector) {
+    async clickOnly(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
-            await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
-            await element.click()  // just click
+            await element.click() // just click 
         } else {
-            await page.waitForSelector(selector)
-            await page.click(selector)  // just click
-        }
-    },
-
-    //wait for element and then click and wait until network idle
-    async waitAndClickAndWait(selector) {
-        if (/^(\/\/|\(\/\/)/.test(selector)) {
-            await page.waitForXPath(selector)
-            let [element] = await page.$x(selector)
-            await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
-        } else {
-            await page.waitForSelector(selector)
-            await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
+            let element = await page.$(selector)
+            await element.click() // just click 
         }
     },
 
@@ -91,7 +65,7 @@ module.exports = {
     async clickIfVisible(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
-            await this.waitAndClick(selector)
+            await this.click(selector)
         }
     },
 
@@ -112,71 +86,42 @@ module.exports = {
             await element.click()
         } else {
             await page.waitForSelector(selector, { visible: true })
-            await page.click(selector)
+            let element = await page.$(selector)
+            await element.click() 
         }
     },
 
     //hover on element
     async hover(selector) {
-        if (/^(\/\/|\(\/\/)/.test(selector)) {
-            let [element] = await page.$x(selector)
-            await element.hover()
-        } else {
-            let element = await page.$(selector)
-            await element.hover()
-            // await page.hover(selector)
-        }
-        await page.waitForTimeout(1000)
+        let element = await this.getElement(selector)
+        await element.hover()
+        await base.wait(1)
     },
 
-    // //check checkbox, if checked uncheck then check
-    // async check(selector) {
-    //     let element = await page.$(selector)
-    //     // const hasChecked = await page.$eval(selector, (element) => element.hasAttribute('checked'))
-    //     const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
-    //     if (isCheckBoxChecked) {
-    //         await page.click(selector)
-    //         await page.waitForTimeout(10)
-    //         await page.click(selector)
-    //     }
-    //     else {
-    //         await page.click(selector)
-    //     }
-    // },
-
-    // //or
-
-    //check checkbox, if checked uncheck then check
+    //check checkbox, if checked then skip
     async check(selector) {
         let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
-        if (isCheckBoxChecked) {
+        if (!isCheckBoxChecked) {
+            await element.click()
+        }
+        else { // if checked uncheck then check
             await element.click()
             await page.waitForTimeout(10)
             await element.click()
         }
-        else {
-            await element.click()
-        }
     },
-
-
-    // // uncheck checkbox, if unchecked then skip
-    // async uncheck(selector) {
-    //     let element = await page.$(selector)
-    //     const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
-    //     if (isCheckBoxChecked) {
-    //         await page.click(selector)
-    //     }
-    // },
-
-    // //or
 
     // uncheck checkbox, if unchecked then skip
     async uncheck(selector) {
         let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (isCheckBoxChecked) {
+            await element.click()
+        }
+        else { // if unchecked check then uncheck
+            await element.click()
+            await page.waitForTimeout(10)
             await element.click()
         }
     },
@@ -223,74 +168,16 @@ module.exports = {
         // await page.evaluate(() => { $(`${selector} option:contains('${text}')`)[0].selected = true })
     },
 
-    //upload image via file chooser
-    async uploadImage(selector, image) {
-        let element = await this.getElement(selector)
-        const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
-        await fileChooser.accept([image])
-        await page.waitForTimeout(3000)
-    },
-
-    // is current url
-    async isCurrentURL(subpath) {
-        const currentURL = new URL(await page.url())
-        console.log(currentURL.href)
-        console.log(await this.createURL(subpath))
-        return currentURL.href === await this.createURL(subpath)
-    },
-
-    // create a new url
-    async createURL(subPath) {
-        let url = new URL(process.env.BASE_URL)
-        url.pathname = url.pathname + subPath + '/'
-        return url.href
-    },
-
-    //goto subUrl
-    async goIfNotThere(subPath) {
-        if (!await this.isCurrentURL(subPath)) {
-        let url = await this.createURL(subPath)
-        await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-        }
-    },
-
-    //goto subUrl
-    async goto(subPath) {
-        let url = await this.createURL(subPath)
-        await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
-    },
-
-    //reload page and wait until network idle
-    async reload() {
-        await page.reload({ waitUntil: 'networkidle2' })
-    },
-
-    //get element text
-    async getSelectorText(selector) {
-        if (/^(\/\/|\(\/\/)/.test(selector)) {
-            await page.waitForXPath(selector)
-            let [element] = await page.$x(selector)
-            let text = await (await element.getProperty('textContent')).jsonValue()
-            // console.log(text)
-            return text
-        } else {
-            await page.waitForSelector(selector)
-            let text = await page.$eval(selector, (element) => element.textContent)
-            // let text =  await page.$eval(selector, element => element.innerText)
-            // console.log(text)
-            return text
-        }
-    },
-
     //click multiple elements with same selector/class/xpath
     async clickMultiple(selector) {
         let elements = await this.getElements(selector)
         for (let element of elements) {
+            await base.wait(1)
             await element.click()
         }
     },
 
-    //click multiple elements with same selector/class/xpath
+    //check multiple elements with same selector/class/xpath
     async checkMultiple(selector) {
         let elements = await this.getElements(selector)
         for (let element of elements) {
@@ -306,6 +193,59 @@ module.exports = {
         }
     },
 
+    // media
+
+    //upload image via file chooser
+    async uploadImage(selector, image) {
+        let element = await this.getElement(selector)
+        const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
+        await fileChooser.accept([image])
+        await base.wait(3)
+    },
+
+    // Navigation
+
+    //get base url
+    async getBaseUrl() {
+        let url = await page.url()
+        //   return url.match(/^https?:\/\/[^#?\/]+/)[0] //using regex
+        return new URL(url).origin //using Web API's built-in URL
+    },
+
+    // check current url is equal to expected url, return boolean
+    async isCurrentURL(subpath) {
+        const currentURL = new URL(await page.url())
+        return currentURL.href === await this.createURL(subpath)
+    },
+
+    // create a new url
+    async createURL(subPath) {
+        let url = new URL(process.env.BASE_URL)
+        url.pathname = url.pathname + subPath + '/'
+        return url.href
+    },
+
+    //goto subUrl if current url is not equal to expected url
+    async goIfNotThere(subPath) {
+        if (!await this.isCurrentURL(subPath)) {
+            let url = await this.createURL(subPath)
+            await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        }
+    },
+
+    //goto subUrl
+    async goto(subPath) {
+        let url = await this.createURL(subPath)
+        await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+    },
+
+    //reload page and wait until network idle
+    async reload() {
+        await page.reload({ waitUntil: 'networkidle2' })
+    },
+
+    // element & element attribute
+
     //get element handle for xpath or css selector 
     async getElement(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
@@ -317,6 +257,12 @@ module.exports = {
             let element = await page.$(selector)
             return element
         }
+    },
+
+    // get multiple elements
+    async getElements(selector) {
+        let elements = await page.$$(selector)
+        return elements
     },
 
     // get element text
@@ -335,18 +281,6 @@ module.exports = {
         return value
     },
 
-    // set element attribute value
-    async setElementValue(selector, attribute, value) {
-        await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
-    },
-
-    // remove element attribute
-    async removeElementAttribute(selector, attribute) { //TODO: need to test
-        await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
-
-
-    },
-
     // get element class value
     async getElementClassValue(selector) {
         let element = await this.getElement(selector)
@@ -355,10 +289,22 @@ module.exports = {
         return classValue
     },
 
-    // get multiple elements
-    async getElements(selector) {
-        let elements = await page.$$(selector)
-        return elements
+    // get element attribute value
+    async getElementAttributeValue(selector, attribute) {
+        let element = await this.getElement(selector)
+        let value = await (await element.getProperty(attribute)).jsonValue()
+        // console.log(value)
+        return value
+    },
+
+    // get element attribute value
+    async setElementValue(selector, attribute, value) {
+        await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
+    },
+
+    // remove element attribute
+    async removeElementAttribute(selector, attribute) { //TODO: need to test
+        await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
     },
 
     // get element count
@@ -370,7 +316,7 @@ module.exports = {
     },
     // or
     async getCount(selector) {
-        let count = await page.$$eval(selector, ele => ele.length)
+        let count = await page.$$eval(selector, element => element.length)
         // console.log(count)
         return count
     },
@@ -386,9 +332,7 @@ module.exports = {
         }
         return options
     },
-
     // or
-
     async getMultipleElementTexts(selector) {
         let texts = await page.$$eval(selector, elements => elements.map(item => item.textContent))
         // console.log(texts)
@@ -408,12 +352,13 @@ module.exports = {
         }
     },
 
-    // get value
+    // get element value
     async getValue(selector) {
         let value = await page.$eval(selector, (element) => element.value)
         // console.log(value)
         return value
     },
+
     // clear input field
     async clearInputField(selector) {
         await page.$eval(selector, el => el.value = '')
@@ -422,14 +367,11 @@ module.exports = {
     async clearInputField1(selector) {
         await page.click(selector, { clickCount: 3 })
         await page.keyboard.press('Backspace')
-
     },
 
     async type(selector, value) {
         let element = await this.getElement(selector)
         await element.type(value)
-        // let [element] = await page.$x(selector)
-        // await element.type(value)
     },
 
     // clear input field and type 
@@ -451,21 +393,13 @@ module.exports = {
 
     //scroll element into view
     async scrollIntoView(selector) {  //TODO: don't work
-        if (/^(\/\/|\(\/\/)/.test(selector)) {
-            let [element] = await page.$x(selector)
-            await page.evaluate((element) => { element.scrollIntoView() }, element)
-        } else {
-            // console.log('css selector')
-            let element = await page.$(selector)
-            await page.evaluate((element) => { element.scrollIntoView() }, element)
-        }
+        let element = await this.getElement(selector)
+        await page.evaluate((element) => { element.scrollIntoView() }, element)
     },
 
     // close single tab
     async closeSingleTab() {
         await page.close()
-        // close browser or close all tab
-        await browser.close()
     },
 
     // close all tab i.e. close browser
@@ -473,11 +407,11 @@ module.exports = {
         await browser.close()
     },
 
-    //switch to another 
+    //switch to another tab
     async switchTab() { },//TODO: add this
 
     //open link in new tab
-    async openNewTab() {
+    async openInNewTab() { //TODO: correct this
         const browser = await puppeteer.launch()
         const page = await browser.newPage()
         // await browser.newPage() 
@@ -488,8 +422,7 @@ module.exports = {
 
     //iframe
     async switchToIframe(selector) {
-        await page.waitForSelector(selector)
-        const frameHandle = await page.$(selector)
+        const frameHandle = await this.getElement(selector)
         const iframe = await frameHandle.contentFrame()
         return iframe
     },
@@ -499,13 +432,6 @@ module.exports = {
         await iframe.$eval(selector, el => el.textContent = '')
         // await iframe.$eval(selector, el => el.value = '')
         await iframe.type(selector, value)
-    },
-
-    //get base url
-    async getBaseUrl() {
-        let url = await page.url()
-        //   return url.match(/^https?:\/\/[^#?\/]+/)[0] //using regex
-        return new URL(url).origin //using Web API's built-in URL
     },
 
     //handle alert
@@ -528,8 +454,23 @@ module.exports = {
         page.evaluate(() => alert('500'))
     },
 
-    //TODO: add function for grab console error
 
+    // get page content
+    async getPageContent() {
+        return await page.content()
+    },
+
+    // get page title
+    async getPageTitle() {
+        return await page.title()
+    },
+
+    //timeout
+    async wait(seconds) {
+        await page.waitForTimeout(seconds * 1000)
+    },
+
+    //TODO: add function for grab console error
 
 
 
@@ -537,12 +478,10 @@ module.exports = {
 
 
     //delete element if exist (only first will delete) dokan specific :rma,report abuse
-    async deleteIfExists(selector) {
+    async deleteIfExists(selector) { //TODO: there may be alternative solution, this method might not needed
         if (await page.$x(selector) !== null) {
             let [element] = await page.$x(selector)
             await element.click()
-        } else {
-            return
         }
     },
 
@@ -596,21 +535,21 @@ module.exports = {
         let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
         let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
         let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
-        await page.waitForTimeout(1000)
+        await base.wait(1)
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
             await this.clickXpath(wpUploadFiles)
             // await page.click(uploadedMedia)   
-            await page.waitForTimeout(1000)
+            await base.wait(1)
         }
         // else {
         await this.uploadImage(selectFiles, filePath)
         await this.clickXpath(select)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
         let cropIsVisible = await this.isVisible(crop)
         if (cropIsVisible) {
             await this.clickXpath(crop)
-            await page.waitForTimeout(3000)
+            await base.wait(3)
         }
         // }
     },
@@ -628,16 +567,16 @@ module.exports = {
         if (uploadedMediaIsVisible) {
             // await page.click(wpUploadFiles)
             await page.click(uploadedMedia)
-            await page.waitForTimeout(1000)
+            await base.wait(1)
         }
         else {
             await this.uploadImage(selectFiles, filePath)
             await this.clickXpath(select)
-            await page.waitForTimeout(1000)
+            await base.wait(1)
             let cropIsVisible = await this.isVisible(crop)
             if (cropIsVisible) {
                 await this.clickXpath(crop)
-                await page.waitForTimeout(1000)
+                await base.wait(1)
             }
         }
     },
@@ -648,10 +587,11 @@ module.exports = {
         if (previousUploadedImageIsVisible) {
             await this.hover(previousUploadedImageSelector)
             await page.click(removePreviousUploadedImageSelector)
-            await page.waitForTimeout(2000)
+            await base.wait(2)
         }
     },
 
+    //get wordpress current user
     async getCurrentUser() {
         const cookies = await page.cookies();
         const cookie = cookies.find(c => {
@@ -666,112 +606,28 @@ module.exports = {
 
 
 
-
-
-
-
-
-
     //--------------------------------------------------- extra -----------------------------------------------//
 
-    // //hover on element
-    // async hover(selector) {
-    //     if (selector.startsWith('//')) {
-    //         let [element] = await page.$x(selector)
-    //         await element.hover()
-    //     } else {
-    //         await page.hover(selector)
-    //     }
-    //     await page.waitForTimeout(1000)
-    // },
-
-    // //  or  make all methods like below
-
-    // //get element handle for xpath or css selector 
-    // async getElement(selector) {
-    //     if (selector.startsWith('//')) {
-    //         await page.waitForXPath(selector)
-    //         let [element] = await page.$x(selector)
-    //         return element
-    //     } else {
-    //         await page.waitForSelector(selector)
-    //         let element = await page.$(selector)
-    //         return element
-    //     }
-    // },
-
-    // //hover on element
-    // async hover(selector) {
-    //     let element = this.getElement()
-    //     await element.hover()
-    //     await page.waitForTimeout(1000)
-    // },
-
-
-
-
-
-
-
-
-
-    // let [element] = await page.$(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
-    // await page.evaluate(element => element.scrollIntoView(), element)
-
-    // await page.$eval(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings, element => element.scrollIntoView());
-
-
-
-
-    // // get Title of a page
-    // await page.title()
-    // // Get url of current tab in puppeteer
-    // await page.url()
-    // // Content of page / Page Source
-    // await page.content()
 
 
     // Network handle methods
 
     //option 1
     // You can wait on both simultaneously and handle whichever occurs first:
+    // await Promise.race([page.waitForNavigation({ waitUntil: "networkidle0" }),page.waitForSelector(".Error")])
 
-    // await Promise.race([
-    //   page.waitForNavigation({ waitUntil: "networkidle0" }),
-    //   page.waitForSelector(".Error")
-    // ])
+    //option 2
+    // age.waitForResponse( response => response.status() === 200 )   
 
-    // age.waitForResponse( response => response.status() === 200 )   //option 2
+    //option 3
+    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   
 
-    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   //option 3
+    //option 4
+    // Since v1.6.0 there's page.waitForResponse.  
 
-    // Since v1.6.0 there's page.waitForResponse.  ///option 4
-
-    //option 1 5
-    // Create promise object before event trigger
-    // If you want to satisfy any one of the condition to wait use
-
-    // const watchDog2 = [
-    //                 page.waitForSelector('.form .error'),
-    //                 page.waitForNavigation({ waitUntil: 'networkidle2' })
-    // ]
+    //option 5
+    // Create promise object before event trigger, If you want to satisfy any one of the condition to wait use
+    // const watchDog2 = [page.waitForSelector('.form .error'),page.waitForNavigation({ waitUntil: 'networkidle2' })]
     // await continueButton.evaluate(continueButton => continueButton.click())
     // await await Promise.race(watchDog2)
-
-
-
-
-    // I have figure it out. It seems that I've been using page.hover(selector) in a wrong way. This is only an action for page to do on the dom.
-    // The code should look like this
-
-    // const hoverScreenshot = async ( dataHook, directory) => {
-    //   await page.hover(`[data-hook="${dataHook}`)
-    //   const element = await page.$(`[data-hook="${dataHook}`);
-    //   await page.waitFor(50);
-    //   await element.screenshot({
-    //     omitBackground: true,
-    //     path: `e2e/screenshots/${directory}/${dataHook}-hover.png`
-    //   });
-    // })
-
 }

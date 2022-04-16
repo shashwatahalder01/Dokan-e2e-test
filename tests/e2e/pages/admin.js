@@ -20,7 +20,7 @@ module.exports = {
   async goToDokanSettings() {
 
     await base.hover(selector.admin.aDashboard.dokan)
-    await base.click(selector.admin.dokan.settingsMenu)
+    await base.clickAndWait(selector.admin.dokan.settingsMenu)
 
     const url = await page.url()
     expect(url).toMatch('wp-admin/admin.php?page=dokan#/settings')
@@ -29,7 +29,7 @@ module.exports = {
   async goToWooCommerceSettings() {
 
     await base.hover(selector.admin.aDashboard.wooCommerce)
-    await base.click(selector.admin.wooCommerce.settingsMenu)
+    await base.clickAndWait(selector.admin.wooCommerce.settingsMenu)
 
     const url = await page.url()
     expect(url).toMatch('wp-admin/admin.php?page=wc-settings')
@@ -38,7 +38,7 @@ module.exports = {
   async goToPlugins() {
 
     await base.hover(selector.admin.aDashboard.plugins)
-    await base.click(selector.admin.plugins.installedPlugins)
+    await base.clickAndWait(selector.admin.plugins.installedPlugins)
 
     const url = await page.url()
     expect(url).toMatch('wp-admin/plugins.php')
@@ -51,12 +51,12 @@ module.exports = {
   //admin logout
   async adminLogout() {
     await base.hover(selector.backend.userMenu)
-    await base.click(selector.backend.logout)
+    await base.clickAndWait(selector.backend.logout)
 
     let loggedInUser = await base.getCurrentUser()
     expect(loggedInUser).toBeUndefined()
 
-    // let successMessage = await base.getSelectorText(selector.backend.logoutSuccessMessage)
+    // let successMessage = await base.getElementText(selector.backend.logoutSuccessMessage)
     // expect(successMessage).toMatch("You are now logged out.")
   },
 
@@ -84,14 +84,14 @@ module.exports = {
   async setWpGeneralSettings() {
     await base.hover(selector.admin.aDashboard.settings)
     //set general settings
-    await base.click(selector.admin.settings.general)
+    await base.clickAndWait(selector.admin.settings.general)
     // enable user registration
     await base.check(selector.admin.settings.membership)
     //timezone
     await page.select(selector.admin.settings.timezone, 'UTC+6')
-    await base.click(selector.admin.settings.generalSaveChanges)
+    await base.clickAndWait(selector.admin.settings.generalSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Settings saved.')
   },
 
@@ -99,13 +99,13 @@ module.exports = {
   async setPermalinkSettings() {
     await base.hover(selector.admin.aDashboard.settings)
     //set permalinks settings
-    await base.click(selector.admin.settings.permalinks)
-    await base.clickXpath(selector.admin.settings.postName)
-    await base.clickXpath(selector.admin.settings.customBase)
+    await base.clickAndWait(selector.admin.settings.permalinks)
+    await base.click(selector.admin.settings.postName)
+    await base.click(selector.admin.settings.customBase)
     await base.clearAndType1(selector.admin.settings.customBaseInput, '/product/')
     await page.click(selector.admin.settings.permalinkSaveChanges)
 
-    let permalinkSuccessMessage = await base.getSelectorText(selector.admin.settings.updatedSuccessMessage)
+    let permalinkSuccessMessage = await base.getElementText(selector.admin.settings.updatedSuccessMessage)
     expect(permalinkSuccessMessage).toMatch('Permalink structure updated.')
 
   },
@@ -152,13 +152,13 @@ module.exports = {
     await page.select(selector.admin.dokan.settings.storCategory, 'none')
     await page.click(selector.admin.dokan.settings.generalSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan selling settings
   async setDokanSellingSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.sellingOptions)
+    await base.click(selector.admin.dokan.settings.sellingOptions)
 
     //commission settings
     await page.select(selector.admin.dokan.settings.commissionType, 'percentage')
@@ -180,7 +180,7 @@ module.exports = {
     await base.check(selector.admin.dokan.settings.guestProductEnquiry)
     await base.check(selector.admin.dokan.settings.enableMinMaxQuantities)
     await base.check(selector.admin.dokan.settings.enableMinMaxAmount)
-    await base.click(selector.admin.dokan.settings.sellingOptionsSaveChanges)
+    await base.clickAndWait(selector.admin.dokan.settings.sellingOptionsSaveChanges)
 
     let commission = await base.getElementValue(selector.admin.dokan.settings.adminCommission)//TODO: update assertion
     expect(commission).toMatch('10')
@@ -188,7 +188,7 @@ module.exports = {
 
   //admin set dokan withdraw settings
   async setDokanWithdrawSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.withdrawOptions)
+    await base.click(selector.admin.dokan.settings.withdrawOptions)
 
     //withdraw options
     await base.check(selector.admin.dokan.settings.withdrawMethodsPaypal)
@@ -226,13 +226,13 @@ module.exports = {
     await page.select(selector.admin.dokan.settings.weeklyScheduleDay, 'monday')
     await page.click(selector.admin.dokan.settings.withdrawSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan appearance settings
   async setDokanAppearanceSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.appearance)
+    await base.click(selector.admin.dokan.settings.appearance)
 
     //appearance settings
     await page.click(selector.admin.dokan.settings.showMapOnStorePage)
@@ -244,7 +244,7 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.storeBannerHeight, '300')
     await base.check(selector.admin.dokan.settings.storeOpeningClosingTimeWidget)
     await base.check(selector.admin.dokan.settings.showVendorInfo)
-    await base.click(selector.admin.dokan.settings.appearanceSaveChanges)
+    await base.clickAndWait(selector.admin.dokan.settings.appearanceSaveChanges)
 
     let apiKey = await base.getElementValue(selector.admin.dokan.settings.googleMapApiKey) //TODO: update assertion
     expect(apiKey).toMatch(process.env.GOOGLE_MAP_API_KEY)
@@ -252,7 +252,7 @@ module.exports = {
 
   //admin set dokan privacy policy settings
   async setDokanPrivacyPolicySettings() {
-    await base.clickXpath(selector.admin.dokan.settings.privacyPolicy)
+    await base.click(selector.admin.dokan.settings.privacyPolicy)
 
     //privacy policy settings
     await base.check(selector.admin.dokan.settings.enablePrivacyPolicy)
@@ -260,13 +260,13 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.privacyPolicyMessage, 'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our [dokan_privacy_policy]')
     await page.click(selector.admin.dokan.settings.privacyPolicySaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan store support settings
   async setDokanStoreSupportSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.storeSupport)
+    await base.click(selector.admin.dokan.settings.storeSupport)
 
     //store support settings
     await base.check(selector.admin.dokan.settings.displayOnOrderDetails)
@@ -274,40 +274,37 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.supportButtonLabel, 'Get Support')
     await page.click(selector.admin.dokan.settings.storeSupportSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan rma settings
   async setDokanRmaSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.rma)
+    await base.click(selector.admin.dokan.settings.rma)
 
     //rma settings
     await page.select(selector.admin.dokan.settings.orderStatus, 'processing')
     await page.select(selector.admin.dokan.settings.enableRefundRequests, 'yes')
     await page.select(selector.admin.dokan.settings.enableCouponRequests, 'yes')
-    await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle('Defective'))
-    await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, 'Defective')
+    let rmaReasons = ['Defective','Wrong Product','Other']
+    for (let rmaReason of rmaReasons) {
+    await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle(rmaReason))
+    await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, rmaReason)
     await page.click(selector.admin.dokan.settings.reasonsForRmaAdd)
-    await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle('Wrong Product'))
-    await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, 'Wrong Product')
-    await page.click(selector.admin.dokan.settings.reasonsForRmaAdd)
-    await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle('Other'))
-    await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, 'Other')
-    await page.click(selector.admin.dokan.settings.reasonsForRmaAdd)
+    }
 
     let iframe = await base.switchToIframe(selector.admin.dokan.settings.refundPolicyIframe)
     await base.iframeClearAndType(iframe, selector.admin.dokan.settings.refundPolicyHtmlBody, 'Refund Policy')
 
     await page.click(selector.admin.dokan.settings.rmaSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   // admin set dokan wholesale settings
   async setDokanWholesaleSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.wholesale)
+    await base.click(selector.admin.dokan.settings.wholesale)
 
     //wholesale settings
     await base.check(selector.admin.dokan.settings.whoCanSeeWholesalePriceAllUsers)
@@ -315,13 +312,13 @@ module.exports = {
     await page.select(selector.admin.dokan.settings.needApprovalForCustomer, 'no')
     await page.click(selector.admin.dokan.settings.wholesaleSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan eu compliance settings
   async setDokanEuComplianceSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.euComplianceFields)
+    await base.click(selector.admin.dokan.settings.euComplianceFields)
 
     //eu compliance settings
     await base.check(selector.admin.dokan.settings.vendorExtraFieldsCompanyName)
@@ -338,13 +335,13 @@ module.exports = {
     await base.check(selector.admin.dokan.settings.vendorsWillBeAbleToOverrideInvoiceNumber)
     await page.click(selector.admin.dokan.settings.euComplianceFieldsSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan delivery time settings
   async setDokanDeliveryTimeSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.deliveryTime)
+    await base.click(selector.admin.dokan.settings.deliveryTime)
 
     //delivery time settings
     await base.check(selector.admin.dokan.settings.allowVendorSettings)
@@ -365,13 +362,13 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.orderPerSlot, '0')
     await page.click(selector.admin.dokan.settings.deliveryTimeSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan product advertising settings
   async setDokanProductAdvertisingSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.productAdvertising)
+    await base.click(selector.admin.dokan.settings.productAdvertising)
 
     //product advertising settings
     await base.clearAndType(selector.admin.dokan.settings.noOfAvailableSlot, '100')
@@ -384,13 +381,13 @@ module.exports = {
     await base.check(selector.admin.dokan.settings.outOfStockVisibility)
     await page.click(selector.admin.dokan.settings.productAdvertisingSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan geolocation settings
   async setDokanGeolocationSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.geolocation)
+    await base.click(selector.admin.dokan.settings.geolocation)
 
     //geolocation settings
     await page.select(selector.admin.dokan.settings.locationMapPosition, 'top')
@@ -402,18 +399,18 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.radiusSearchMaximumDistance, '10')
     await base.clearAndType(selector.admin.dokan.settings.mapZoomLevel, '11')
     await base.clearAndType(selector.admin.dokan.settings.defaultLocation, 'New York')
-    await page.waitForTimeout(1000)
+    await base.wait(1)
     await page.keyboard.press('ArrowDown')
     await page.keyboard.press('Enter')
     await page.click(selector.admin.dokan.settings.geolocationSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan product report abuse settings
   async setDokanProductReportAbuseSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.productReportAbuse)
+    await base.click(selector.admin.dokan.settings.productReportAbuse)
 
     //product report abuse settings
     await base.deleteIfExists(selector.admin.dokan.settings.reasonsForAbuseReportSingle('This product is fake'))
@@ -421,13 +418,13 @@ module.exports = {
     await page.click(selector.admin.dokan.settings.reasonsForAbuseReportAdd)
     await page.click(selector.admin.dokan.settings.productReportAbuseSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan spmv settings
   async setDokanSpmvSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.singleProductMultiVendor)
+    await base.click(selector.admin.dokan.settings.singleProductMultiVendor)
 
 
     await base.check(selector.admin.dokan.settings.enableSingleProductMultipleVendor)
@@ -437,13 +434,13 @@ module.exports = {
     await page.select(selector.admin.dokan.settings.showSpmvProducts, 'show_all')
     await page.click(selector.admin.dokan.settings.singleProductMultiVendorSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
   //admin set dokan vendor subscription settings
   async setDokanVendorSubscriptionSettings() {
-    await base.clickXpath(selector.admin.dokan.settings.vendorSubscription)
+    await base.click(selector.admin.dokan.settings.vendorSubscription)
 
     //vendor subscription settings
     await page.select(selector.admin.dokan.settings.subscription, '2')
@@ -458,7 +455,7 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.alertEmailBody, 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely')
     await page.click(selector.admin.dokan.settings.vendorSubscriptionSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
@@ -471,9 +468,9 @@ module.exports = {
   async enableTax() {
     // enable tax
     await base.check(selector.admin.wooCommerce.settings.enableTaxes)
-    await base.click(selector.admin.wooCommerce.settings.generalSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -485,17 +482,17 @@ module.exports = {
     await this.enableTax()
 
     // set tax rate
-    await base.click(selector.admin.wooCommerce.settings.tax)
-    await base.click(selector.admin.wooCommerce.settings.standardRates)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.tax)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.standardRates)
     let taxIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.taxRate)
     if (!taxIsVisible) {
       await page.click(selector.admin.wooCommerce.settings.insertRow)
     }
     await base.clearAndType(selector.admin.wooCommerce.settings.taxRate, '5')
     await page.click(selector.admin.wooCommerce.settings.taxTable) //TODO: recheck if it required
-    await page.waitForTimeout(1000)
+    await base.wait(1)
     await page.click(selector.admin.wooCommerce.settings.taxRateSaveChanges)
-    await page.waitForTimeout(1000)
+    await base.wait(1)
 
     let newTaxRate = await base.getElementValue(selector.admin.wooCommerce.settings.taxRate)
     expect(newTaxRate).toBe('5.0000')
@@ -529,11 +526,11 @@ module.exports = {
   //enable password field
   async enablePasswordInputField() {
     await this.goToWooCommerceSettings()
-    await base.click(selector.admin.wooCommerce.settings.accounts)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.accounts)
     await base.uncheck(selector.admin.wooCommerce.settings.automaticPasswordGeneration)
-    await base.click(selector.admin.wooCommerce.settings.accountSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.accountSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
 
   },
@@ -546,13 +543,13 @@ module.exports = {
   // admin add shipping method
   async addShippingMethod(shippingZone, shippingCountry, selectShippingMethod, shippingMethod) {
 
-    await base.click(selector.admin.wooCommerce.settings.shipping)
-    // await page.waitForTimeout(2000)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
+    // await base.wait(2)
 
     let zoneIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
     if (!zoneIsVisible) {
       //add shipping zone
-      await base.click(selector.admin.wooCommerce.settings.addShippingZone)
+      await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingZone)
       await base.clearAndType(selector.admin.wooCommerce.settings.zoneName, shippingZone)
       // await page.select(selector.admin.wooCommerce.settings.zoneRegions, shippingCountry)
       await page.click(selector.admin.wooCommerce.settings.zoneRegions)
@@ -561,7 +558,7 @@ module.exports = {
     } else {
       // edit shipping zone
       await base.hover(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
-      await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shippingZone))
+      await base.clickAndWait(selector.admin.wooCommerce.settings.editShippingMethod(shippingZone))
     }
 
     let methodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(helper.replaceAndCapitalize(shippingMethod)))
@@ -569,15 +566,15 @@ module.exports = {
       // add shipping method
       await page.click(selector.admin.wooCommerce.settings.addShippingMethods)
       await page.select(selector.admin.wooCommerce.settings.shippingMethod, selectShippingMethod)
-      await base.click(selector.admin.wooCommerce.settings.addShippingMethod)
-      await page.waitForTimeout(1000)
+      await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingMethod)
+      await base.wait(1)
       //set shipping method options
       await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
-      await base.clickXpath(selector.admin.wooCommerce.settings.editShippingMethod(shippingMethod))
+      await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shippingMethod))
     } else {
       //edit shipping method
       await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
-      await base.clickXpath(selector.admin.wooCommerce.settings.editShippingMethod(shippingMethod))
+      await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shippingMethod))
     }
 
     switch (selectShippingMethod) {
@@ -631,12 +628,12 @@ module.exports = {
 
   //admin delete shipping zone
   async deleteShippingZone(shippingZone) {
-    await base.click(selector.admin.wooCommerce.settings.shipping)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
 
     await base.hover(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
     await base.alert('accept')
-    await base.clickXpath(selector.admin.wooCommerce.settings.deleteShippingZone(shippingZone))
-    await page.waitForTimeout(1000)
+    await base.click(selector.admin.wooCommerce.settings.deleteShippingZone(shippingZone))
+    await base.wait(1)
 
     let shippingZoneIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
     expect(shippingZoneIsVisible).toBe(false)
@@ -644,12 +641,12 @@ module.exports = {
 
   //admin delete shipping method
   async deleteShippingMethod(shippingZone, shippingMethod) {
-    await base.click(selector.admin.wooCommerce.settings.shipping)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
 
     await base.hover(selector.admin.wooCommerce.settings.shippingZoneCell(shippingZone))
-    await base.click(selector.admin.wooCommerce.settings.editShippingZone(shippingZone))
+    await base.clickAndWait(selector.admin.wooCommerce.settings.editShippingZone(shippingZone))
     await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
-    await base.clickXpath(selector.admin.wooCommerce.settings.deleteShippingMethod(shippingMethod))
+    await base.click(selector.admin.wooCommerce.settings.deleteShippingMethod(shippingMethod))
     await page.click(selector.admin.wooCommerce.settings.shippingZoneSaveChanges)
 
     let shippingMethodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
@@ -681,9 +678,9 @@ module.exports = {
     await base.clearAndType(selector.admin.wooCommerce.settings.thousandSeparator, ',')
     await base.clearAndType(selector.admin.wooCommerce.settings.decimalSeparator, ',')
     await base.clearAndType(selector.admin.wooCommerce.settings.numberOfDecimals, '2')
-    await base.click(selector.admin.wooCommerce.settings.generalSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
 
   },
@@ -691,14 +688,14 @@ module.exports = {
   //admin set currency
   async setCurrency(currency) {
     await this.goToWooCommerceSettings()
-    let currentCurrency = await base.getSelectorText(selector.admin.wooCommerce.settings.currency)
+    let currentCurrency = await base.getElementText(selector.admin.wooCommerce.settings.currency)
     if (currentCurrency !== currency) {
       await page.click(selector.admin.wooCommerce.settings.currency)
       await page.type(selector.admin.wooCommerce.settings.currency, currency)
       await page.keyboard.press('Enter')
-      await base.click(selector.admin.wooCommerce.settings.generalSaveChanges)
+      await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
-      let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+      let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
       expect(successMessage).toMatch('Your settings have been saved.')
     }
   },
@@ -707,13 +704,13 @@ module.exports = {
   async enablePaymentMethod(selector) {
     let classValue = await base.getElementClassValue(selector)
     if (classValue.includes('woocommerce-input-toggle--disabled')) {
-      await base.clickXpath(selector)
-      await page.waitForTimeout(2000)
+      await base.click(selector)
+      await base.wait(2)
     } else {
-      await base.clickXpath(selector)
-      await page.waitForTimeout(1000)
-      await base.clickXpath(selector)
-      await page.waitForTimeout(2000)
+      await base.click(selector)
+      await base.wait(1)
+      await base.click(selector)
+      await base.wait(2)
     }
 
     let classValue1 = await base.getElementClassValue(selector)
@@ -722,7 +719,7 @@ module.exports = {
 
   //admin setup basic payment methods
   async setupBasicPaymentMethods() {
-    await base.click(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     //bank transfer
     await this.enablePaymentMethod(selector.admin.wooCommerce.settings.enableDirectBankTransfer)
     //check payments
@@ -730,9 +727,9 @@ module.exports = {
     //cash on delivery
     await this.enablePaymentMethod(selector.admin.wooCommerce.settings.enableCashOnDelivery)
 
-    await base.click(selector.admin.wooCommerce.settings.paymentMethodsSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.paymentMethodsSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -740,8 +737,8 @@ module.exports = {
   async setupStripeConnect() {
     await this.setCurrency('United States (US) dollar ($)')
 
-    await base.click(selector.admin.wooCommerce.settings.payments)
-    await base.click(selector.admin.wooCommerce.settings.setupDokanStripeConnect)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanStripeConnect)
     //setup strip connect
     await base.check(selector.admin.wooCommerce.settings.stripe.enableDisableStripe)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.title, 'Dokan Credit card (Stripe)')
@@ -761,9 +758,9 @@ module.exports = {
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testPublishableKey, 'pk_test_')
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testSecretKey, 'sk_test_')
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testClientId, 'ca_')
-    await base.click(selector.admin.wooCommerce.settings.stripe.stripeSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.stripe.stripeSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -771,8 +768,8 @@ module.exports = {
   async setupPaypalMarketPlace() {
     await this.setCurrency('United States (US) dollar ($)')
 
-    await base.click(selector.admin.wooCommerce.settings.payments)
-    await base.click(selector.admin.wooCommerce.settings.setupDokanPayPalMarketplace)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanPayPalMarketplace)
     // setup paypal marketplace
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.enableDisablePayPalMarketplace)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.title, 'PayPal Marketplace')
@@ -791,9 +788,9 @@ module.exports = {
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.displayNoticeToConnectSeller)
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.sendAnnouncementToConnectSeller)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.sendAnnouncementInterval, '7')
-    await base.click(selector.admin.wooCommerce.settings.paypalMarketPlace.paypalMarketPlaceSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.paypalMarketPlace.paypalMarketPlaceSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -801,8 +798,8 @@ module.exports = {
   async setupDokanMangoPay() {
     await this.setCurrency('Euro (€)')
 
-    await base.click(selector.admin.wooCommerce.settings.payments)
-    await base.click(selector.admin.wooCommerce.settings.setupDokanMangoPay)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanMangoPay)
     // setup dokan mangopay
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.enableDisableMangoPayPayment)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.title, 'MangoPay')
@@ -812,11 +809,11 @@ module.exports = {
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.sandboxClientId, 'client_')
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.sandBoxApiKey, 'secret_')
     // payment options
-    await base.clickXpath(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards)
+    await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards)
     // await base.type(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards, 'CB/Visa/Mastercard')
     // await page.keyboard.press('Enter')
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCardsValues, 'CB/Visa/Mastercard')
-    await base.clickXpath(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServices)
+    await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServices)
     // await base.type(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServices, 'Sofort*')
     // await page.keyboard.press('Enter')
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServicesValues, 'Sofort*')
@@ -834,9 +831,9 @@ module.exports = {
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.displayNoticeToNonConnectedSellers)
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonConnectedSellers)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.announcementInterval, '7')
-    await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.dokanMangopaySaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.dokanMangoPay.dokanMangopaySaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -844,8 +841,8 @@ module.exports = {
   async setupDokanRazorpay() {
     await this.setCurrency('Indian rupee (₹)')
 
-    await base.click(selector.admin.wooCommerce.settings.payments)
-    await base.click(selector.admin.wooCommerce.settings.setupDokanRazorpay)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanRazorpay)
     //setup dokan razorpay
     await base.check(selector.admin.wooCommerce.settings.dokanRazorpay.enableDisableDokanRazorpay)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.title, 'Razorpay')
@@ -860,9 +857,9 @@ module.exports = {
     await base.check(selector.admin.wooCommerce.settings.dokanRazorpay.displayNoticeToConnectSeller)
     await base.check(selector.admin.wooCommerce.settings.dokanRazorpay.sendAnnouncementToConnectSeller)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.sendAnnouncementInterval, '7')
-    await base.click(selector.admin.wooCommerce.settings.dokanRazorpay.dokanRazorpaySaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.dokanRazorpay.dokanRazorpaySaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
   },
 
@@ -870,8 +867,8 @@ module.exports = {
   async setupStripeExpress() {
     await this.setCurrency('United States (US) dollar ($)')
 
-    await base.click(selector.admin.wooCommerce.settings.payments)
-    await base.click(selector.admin.wooCommerce.settings.setupDokanStripeExpress)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanStripeExpress)
 
     // stripe express
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.enableOrDisableStripeExpress)
@@ -883,9 +880,9 @@ module.exports = {
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.testSecretKey, 'sk_test_')
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.testWebhookSecret, 'webHook_test_')
     // payment and disbursement
-    await base.clickXpath(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
+    await base.click(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, 'Credit/Debit Card')
-    await base.clickXpath(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
+    await base.click(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, 'iDEAL')
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.takeProcessingFeesFromSellers)
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.savedCards)
@@ -897,17 +894,17 @@ module.exports = {
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.paymentRequestButtons)
     await page.select(selector.admin.wooCommerce.settings.stripeExpress.buttonType, 'default')
     await page.select(selector.admin.wooCommerce.settings.stripeExpress.buttonTheme, 'dark')
-    await base.clickXpath(selector.admin.wooCommerce.settings.stripeExpress.buttonLocations)
+    await base.click(selector.admin.wooCommerce.settings.stripeExpress.buttonLocations)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.buttonLocationsValues, 'Product')
-    await base.clickXpath(selector.admin.wooCommerce.settings.stripeExpress.buttonLocations)
+    await base.click(selector.admin.wooCommerce.settings.stripeExpress.buttonLocations)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.buttonLocationsValues, 'Checkout')
     // advanced settings
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.displayNoticeToNonConnectedSellers)
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.sendAnnouncementToNonConnectedSellers)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.announcementInterval, '7')
-    await base.click(selector.admin.wooCommerce.settings.stripeExpress.stripeExpressSaveChanges)
+    await base.clickAndWait(selector.admin.wooCommerce.settings.stripeExpress.stripeExpressSaveChanges)
 
-    let successMessage = await base.getSelectorText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
     expect(successMessage).toMatch('Your settings have been saved.')
 
   },
@@ -924,7 +921,7 @@ module.exports = {
 
     let email = faker.internet.email()
     await base.hover(selector.admin.aDashboard.dokan)
-    await base.click(selector.admin.dokan.vendorsMenu)
+    await base.clickAndWait(selector.admin.dokan.vendorsMenu)
 
     //add new vendor
     await page.click(selector.admin.dokan.vendors.addNewVendor)
@@ -935,7 +932,7 @@ module.exports = {
     await page.type(selector.admin.dokan.vendors.phoneNumber, phoneNumber)
     await page.type(selector.admin.dokan.vendors.email, email)
     await page.click(selector.admin.dokan.vendors.generatePassword)
-    // await page.waitForTimeout(1000)
+    // await base.wait(1)
     await page.waitForSelector(selector.admin.dokan.vendors.password)
     await base.clearAndType(selector.admin.dokan.vendors.password, password)
     await page.type(selector.admin.dokan.vendors.username, faker.name.firstName('male'))
@@ -975,8 +972,8 @@ module.exports = {
     await base.check(selector.admin.dokan.vendors.makeVendorFeature)
     //create vendor
     await page.click(selector.admin.dokan.vendors.createVendor)
-    await page.waitForTimeout(2000)
-    await base.click(selector.admin.dokan.vendors.editVendorInfo)
+    await base.wait(2)
+    await base.clickAndWait(selector.admin.dokan.vendors.editVendorInfo)
 
     // await page.waitForSelector(selector.admin.dokan.vendors.editVendor.email)
     let vendorEmail = await base.getElementValue(selector.admin.dokan.vendors.editVendor.email)
@@ -993,7 +990,7 @@ module.exports = {
   //admin add categories
   async addCategory(categoryName) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.categoriesMenu)
+    await base.clickAndWait(selector.admin.products.categoriesMenu)
 
     let categoryIsVisible = await base.isVisible(selector.admin.products.category.categoryCell(categoryName))
     if (!categoryIsVisible) {
@@ -1012,7 +1009,7 @@ module.exports = {
   //admin add attributes
   async addAttributes(attributeName, attributeTerms) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.attributesMenu)
+    await base.clickAndWait(selector.admin.products.attributesMenu)
 
     let attributeIsVisible = await base.isVisible(selector.admin.products.attribute.attributeCell(attributeName))
     if (!attributeIsVisible) {
@@ -1025,7 +1022,7 @@ module.exports = {
       let attributeIsVisible = await base.isVisible(selector.admin.products.attribute.attributeCell(attributeName))
       expect(attributeIsVisible).toBe(true)
 
-      await base.click(selector.admin.products.attribute.configureTerms(attributeName))
+      await base.clickAndWait(selector.admin.products.attribute.configureTerms(attributeName))
 
       // add new term
       for (let attributeTerm of attributeTerms) {
@@ -1044,84 +1041,84 @@ module.exports = {
   async addSimpleProduct(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
     // await page.click(selector.admin.aDashboard.products)
-    // await page.waitForTimeout(2000)
-    await base.click(selector.admin.products.addNewMenu)
+    // await base.wait(2)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new simple product
     await page.select(selector.admin.products.product.productType, 'simple')
     await page.type(selector.admin.products.product.regularPrice, productPrice)
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
   //admin add variable product
   // async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
   //   await base.hover(selector.admin.aDashboard.products)
-  //   await base.click(selector.admin.products.addNewMenu)
+  //   await base.clickAndWait(selector.admin.products.addNewMenu)
 
   //   // add new variable product
   //   await page.select(selector.admin.products.product.productType, 'variable')
 
   //   await page.click(selector.admin.products.product.attributes)
-  //   // await page.waitForTimeout(1000)
+  //   // await base.wait(1)
 
   //   // add attributes
   //   await page.select(selector.admin.products.product.customProductAttribute, `pa_${attribute}`)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.click(selector.admin.products.product.addAttribute)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.click(selector.admin.products.product.selectAll)
   //   await page.click(selector.admin.products.product.usedForVariations)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.click(selector.admin.products.product.saveAttributes)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
 
   //   //TODO: need to update js alert 
   //   // add variations
   //   await page.click(selector.admin.products.product.variations)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.click(selector.admin.products.product.variations)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.select(selector.admin.products.product.addVariations, 'link_all_variations')
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await base.alert('accept')
   //   await page.click(selector.admin.products.product.go)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
 
   //   await page.select(selector.admin.products.product.addVariations, 'variable_regular_price')
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
   //   await page.click(selector.admin.products.product.go)
   //   await base.alertWithValue(120)
-  //   await page.waitForTimeout(2000)
+  //   await base.wait(2)
 
   //   //category
-  //   await base.clickXpath(selector.admin.products.product.category(categoryName))
+  //   await base.click(selector.admin.products.product.category(categoryName))
   //   //vendor
   //   // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
   //   await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
   //   // name
   //   await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
   //   //publish
-  //   await base.click(selector.admin.products.product.publish)
+  //   await base.clickAndWait(selector.admin.products.product.publish)
 
-  //   let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+  //   let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
   //   expect(productCreateSuccessMessage).toMatch('Product published. ')
   // },
 
   //admin add simple subscription product
   async addSimpleSubscription(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.addNewMenu)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new simple subscription
     await page.select(selector.admin.products.product.productType, 'subscription')
@@ -1132,16 +1129,16 @@ module.exports = {
     await page.type(selector.admin.products.product.subscriptionTrialLength, '0')
     await page.select(selector.admin.products.product.subscriptionTrialPeriod, 'day')
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
@@ -1156,7 +1153,7 @@ module.exports = {
   //admin add external product
   async addExternalProduct(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.addNewMenu)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new external product
     await page.select(selector.admin.products.product.productType, 'external')
@@ -1164,29 +1161,29 @@ module.exports = {
     await page.type(selector.admin.products.product.buttonText, 'Buy product')
     await page.type(selector.admin.products.product.regularPrice, productPrice)
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
   //admin add dokan subscription product
   async addDokanSubscription(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.addNewMenu)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new simple product
     await page.select(selector.admin.products.product.productType, 'product_pack')
     await page.type(selector.admin.products.product.regularPrice, productPrice)
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     // subscription details
     await page.type(selector.admin.products.product.numberOfProducts, '-1')
     await page.type(selector.admin.products.product.packValidity, '0')
@@ -1199,16 +1196,16 @@ module.exports = {
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
   // admin add auction product
   async addAuctionProduct(productName, productPrice, startDate, endDate, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.addNewMenu)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new auction product
     await page.select(selector.admin.products.product.productType, 'auction')
@@ -1223,51 +1220,51 @@ module.exports = {
     await page.type(selector.admin.products.product.auctionDatesTo, endDate)
 
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
   //admin add booking product
   async addBookingProduct(productName, productPrice, categoryName, vendor) {
     await base.hover(selector.admin.aDashboard.products)
-    await base.click(selector.admin.products.addNewMenu)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // add new booking product
     await page.select(selector.admin.products.product.productType, 'booking')
     await page.select(selector.admin.products.product.bookingDurationType, 'customer')
-    // await page.waitForTimeout(2000)
+    // await base.wait(2)
     await base.clearAndType(selector.admin.products.product.bookingDurationMax, '7')
     await page.select(selector.admin.products.product.calendarDisplayMode, 'always_visible')
 
     //availability
-    // await base.click(selector.admin.products.product.availability)
+    // await base.clickAndWait(selector.admin.products.product.availability)
 
     //costs
     await page.click(selector.admin.products.product.bookingCosts)
-    await page.waitForTimeout(1000)
+    await base.wait(1)
     await base.clearAndType(selector.admin.products.product.baseCost, productPrice)
     await base.clearAndType(selector.admin.products.product.blockCost, '20')
 
     //category
-    await base.clickXpath(selector.admin.products.product.category(categoryName))
+    await base.click(selector.admin.products.product.category(categoryName))
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with gi
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await page.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
     //publish
-    await base.click(selector.admin.products.product.publish)
+    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getSelectorText(selector.admin.products.product.updatedSuccessMessage)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
@@ -1280,31 +1277,31 @@ module.exports = {
   //admin approve wholesale request
   async adminApproveWholesaleRequest(customer) {
     await base.hover(selector.admin.aDashboard.dokan)
-    await base.click(selector.admin.dokan.wholesaleCustomerMenu)
-    await base.clickXpath(selector.admin.dokan.wholesaleCustomer.statusSlider(customer))
+    await base.clickAndWait(selector.admin.dokan.wholesaleCustomerMenu)
+    await base.click(selector.admin.dokan.wholesaleCustomer.statusSlider(customer))
 
-    let enableStatusSuccessMessage = await base.getSelectorText(selector.admin.dokan.wholesaleCustomer.enableStatusUpdateSuccessMessage)
+    let enableStatusSuccessMessage = await base.getElementText(selector.admin.dokan.wholesaleCustomer.enableStatusUpdateSuccessMessage)
     expect(enableStatusSuccessMessage).toMatch('Wholesale capability activate')
   },
 
   async getOrderDetails(orderNumber) {
     await base.hover(selector.admin.aDashboard.dokan)
-    await base.click(selector.admin.dokan.reportsMenu)
-    await base.clickXpath(selector.admin.dokan.reports.allLogs)
-    await page.waitForTimeout(3000)
+    await base.clickAndWait(selector.admin.dokan.reportsMenu)
+    await base.click(selector.admin.dokan.reports.allLogs)
+    await base.wait(3)
     await page.type(selector.admin.dokan.reports.searchByOrder, orderNumber)
-    await page.waitForTimeout(2000)
+    await base.wait(2)
 
-    let orderId = await base.getSelectorText(selector.admin.dokan.reports.orderId)
-    let store = await base.getSelectorText(selector.admin.dokan.reports.store)
-    let orderTotal = await base.getSelectorText(selector.admin.dokan.reports.orderTotal)
-    let vendorEarning = await base.getSelectorText(selector.admin.dokan.reports.vendorEarning)
-    let commission = await base.getSelectorText(selector.admin.dokan.reports.commission)
-    let gatewayFee = await base.getSelectorText(selector.admin.dokan.reports.gatewayFee)
-    let shipping = await base.getSelectorText(selector.admin.dokan.reports.shipping)
-    let tax = await base.getSelectorText(selector.admin.dokan.reports.tax)
-    let orderStatus = await base.getSelectorText(selector.admin.dokan.reports.orderStatus)
-    let date = await base.getSelectorText(selector.admin.dokan.reports.date)
+    let orderId = await base.getElementText(selector.admin.dokan.reports.orderId)
+    let store = await base.getElementText(selector.admin.dokan.reports.store)
+    let orderTotal = await base.getElementText(selector.admin.dokan.reports.orderTotal)
+    let vendorEarning = await base.getElementText(selector.admin.dokan.reports.vendorEarning)
+    let commission = await base.getElementText(selector.admin.dokan.reports.commission)
+    let gatewayFee = await base.getElementText(selector.admin.dokan.reports.gatewayFee)
+    let shipping = await base.getElementText(selector.admin.dokan.reports.shipping)
+    let tax = await base.getElementText(selector.admin.dokan.reports.tax)
+    let orderStatus = await base.getElementText(selector.admin.dokan.reports.orderStatus)
+    let date = await base.getElementText(selector.admin.dokan.reports.date)
 
     // console.log(orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date)
     return [orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date]
@@ -1315,9 +1312,9 @@ module.exports = {
     await this.searchRefundRequest(orderNumber)
 
     await base.hover(selector.admin.dokan.refunds.refundCell(orderNumber))
-    await base.clickXpath(selector.admin.dokan.refunds.approveRefund(orderNumber))
-    // await base.clickXpath(selector.admin.dokan.refunds.cancelRefund(orderNumber))
-    await page.waitForTimeout(4000)
+    await base.click(selector.admin.dokan.refunds.approveRefund(orderNumber))
+    // await base.click(selector.admin.dokan.refunds.cancelRefund(orderNumber))
+    await base.wait(4)
 
     let refundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(refundRequestIsVisible).toBe(false)
@@ -1325,11 +1322,11 @@ module.exports = {
 
   async searchRefundRequest(orderNumber) {
     await base.hover(selector.admin.aDashboard.dokan)
-    await base.click(selector.admin.dokan.refundsMenu)
+    await base.clickAndWait(selector.admin.dokan.refundsMenu)
 
     //search refund request
     await base.type(selector.admin.dokan.refunds.searchRefund, orderNumber)
-    await page.waitForTimeout(2000)
+    await base.wait(2)
 
     let searchedRefundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(searchedRefundRequestIsVisible).toBe(true)

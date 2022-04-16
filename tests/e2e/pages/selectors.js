@@ -706,6 +706,7 @@ module.exports = {
                 enableRefundRequests: "#dokan_rma\\[rma_enable_refund_request\\]",
                 enableCouponRequests: "#dokan_rma\\[rma_enable_coupon_request\\]",
                 reasonsForRmaSingle: (reason) => `//li[contains(text(),'${reason}')]//span[@class="dashicons dashicons-no-alt remove-item"]`,
+                reasonsForRma:".remove-item",
                 reasonsForRmaInput: ".regular-text",
                 reasonsForRmaAdd: ".dokan-repetable-add-item-btn",
                 refundPolicyIframe: 'iframe',

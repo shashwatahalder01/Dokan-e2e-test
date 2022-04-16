@@ -50,7 +50,7 @@ module.exports = {
     //customer logout
     async customerLogout() {
         await this.goToMyAccount()
-        await base.click(selector.frontend.customerLogout)
+        await base.clickAndWait(selector.frontend.customerLogout)
 
         let loggedInUser = await base.getCurrentUser()
         expect(loggedInUser).toBeUndefined()
@@ -73,20 +73,20 @@ module.exports = {
         }
         await page.type(selector.customer.cRegistration.regEmail, userEmail)
         await page.type(selector.customer.cRegistration.regPassword, password)
-        await base.clickXpath(selector.customer.cRegistration.regCustomer)
-        await base.click(selector.customer.cRegistration.register)
+        await base.click(selector.customer.cRegistration.regCustomer)
+        await base.clickAndWait(selector.customer.cRegistration.register)
 
         let username = (userEmail.split("@")[0]).toLowerCase()
         let loggedInUser = await base.getCurrentUser()
         expect(loggedInUser).toBe(username)
-        // let regWelcomeMessage = await base.getSelectorText(selector.customer.cRegistration.regCustomerWelcomeMessage)
+        // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
 
     //customer become vendor
     async customerBecomeVendor(firstName, lastName, shopName, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
         await base.waitForSelector(selector.customer.cDashboard.becomeVendor)
-        await base.click(selector.customer.cDashboard.becomeVendor)
+        await base.clickAndWait(selector.customer.cDashboard.becomeVendor)
         // vendor registration form
         await page.type(selector.customer.cDashboard.firstName, firstName)
         await page.type(selector.customer.cDashboard.lastName, lastName)
@@ -99,21 +99,21 @@ module.exports = {
         await page.type(selector.customer.cDashboard.vatNumber, vatNumber)
         await page.type(selector.customer.cDashboard.bankName, bankName)
         await page.type(selector.customer.cDashboard.bankIban, bankIban)
-        await base.clickIfVisible(selector.customer.cDashboard.termsAndConditions)
+        await base.clickAndWaitIfVisible(selector.customer.cDashboard.termsAndConditions)
 
-        await base.click(selector.customer.cDashboard.becomeAVendor)
+        await base.clickAndWait(selector.customer.cDashboard.becomeAVendor)
     },
 
     // customer become wholesale customer
     async customerBecomeWholesaleCustomer() {
         let currentUser = await base.getCurrentUser()
         await page.click(selector.customer.cDashboard.becomeWholesaleCustomer)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
-        let returnMessage = await base.getSelectorText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
+        let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
         console.log(returnMessage)
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
-            let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+            let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
         } else {
             await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
@@ -126,9 +126,9 @@ module.exports = {
         billingState, billingZipCode, billingPhone, billingEmailAddress) {
         await this.goToMyAccount()
 
-        await base.click(selector.customer.cMyAccount.addresses)
+        await base.clickAndWait(selector.customer.cMyAccount.addresses)
         //billing address
-        await page.$(selector.customer.cMyAccount.addresses) !== null ? await base.click(selector.customer.cAddress.editBillingAddress) : await base.click(selector.customer.cAddress.editBillingAddress1)
+        await page.$(selector.customer.cMyAccount.addresses) !== null ? await base.clickAndWait(selector.customer.cAddress.editBillingAddress) : await base.clickAndWait(selector.customer.cAddress.editBillingAddress1)
         await base.clearAndType(selector.customer.cAddress.billingFirstName, billingFirstName)
         await base.clearAndType(selector.customer.cAddress.billingLastName, billingLastName)
         await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingCompanyName)
@@ -150,9 +150,9 @@ module.exports = {
         await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
         await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
         await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
-        await base.click(selector.customer.cAddress.billingSaveAddress)
+        await base.clickAndWait(selector.customer.cAddress.billingSaveAddress)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Address changed successfully.')
     },
 
@@ -160,9 +160,9 @@ module.exports = {
     async addShippingAddress(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
         await this.goToMyAccount()
 
-        await base.click(selector.customer.cMyAccount.addresses)
+        await base.clickAndWait(selector.customer.cMyAccount.addresses)
         //shipping address
-        await base.click(selector.customer.cAddress.editShippingAddress)
+        await base.clickAndWait(selector.customer.cAddress.editShippingAddress)
         await base.clearAndType(selector.customer.cAddress.shippingFirstName, shippingFirstName)
         await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingLastName)
         await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingCompanyName)
@@ -178,21 +178,21 @@ module.exports = {
         await page.keyboard.press('Enter')
         // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
         await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
-        await base.click(selector.customer.cAddress.shippingSaveAddress)
+        await base.clickAndWait(selector.customer.cAddress.shippingSaveAddress)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Address changed successfully.')
     },
 
 
     // customer send rma request
     async sendRmaMessage(message) {
-        await base.click(selector.customer.cMyAccount.rmaRequests)
+        await base.clickAndWait(selector.customer.cMyAccount.rmaRequests)
 
         await page.type(selector.customer.cRma.message, message)
         await page.click(selector.customer.cRma.sendMessage)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Message send successfully")
     },
 
@@ -200,13 +200,13 @@ module.exports = {
     async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) { //TODO: Actual card number required
         await this.goToMyAccount()
         await page.click(selector.customer.cMyAccount.paymentMethods)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
         await page.click(selector.customer.cPaymentMethods.addPaymentMethod)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
         //negative test
-        // await base.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
-        // let failureMessage = await base.getSelectorText(selector.customer.cWooSelector.failureMessage)
+        // await base.clickAndWait(selector.customer.cPaymentMethods.addPaymentMethodCard)
+        // let failureMessage = await base.getElementText(selector.customer.cWooSelector.failureMessage)
         // expect(failureMessage).toMatch("Your card number is incomplete.")
 
         let stripeCardIframe = await base.switchToIframe(selector.customer.cPaymentMethods.stripeCardIframe)
@@ -214,18 +214,18 @@ module.exports = {
         await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardExpiryDate, cardExpiryDate)
         await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardCvc, cardCvc)
         await page.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
-        await page.waitForTimeout(1000)
+        await base.wait(1)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceError)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
         expect(successMessage).toMatch("Unable to process this payment, please try again or use alternative method.")
     },
 
     //customer delete payment method
     async deletePaymentMethod() { //TODO:need to test
-        await base.click(selector.customer.cMyAccount.paymentMethods)
+        await base.clickAndWait(selector.customer.cMyAccount.paymentMethods)
         await page.click(selector.customer.cPaymentMethods.deleteMethod)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Payment method deleted.")
     },
 
@@ -236,7 +236,7 @@ module.exports = {
         await base.clearAndType(selector.customer.cAccountDetails.confirmNewPassword, newPassword)
         await page.click(selector.customer.cAccountDetails.saveChanges)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Account details changed successfully.")
     },
 
@@ -244,7 +244,7 @@ module.exports = {
     async addCustomerDetails(firstName, lastName, displayName, email, currentPassword, newPassword) {
         await this.goToMyAccount()
 
-        await base.click(selector.customer.cMyAccount.accountDetails)
+        await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
 
         await base.clearAndType(selector.customer.cAccountDetails.firstName, firstName)
         await base.clearAndType(selector.customer.cAccountDetails.lastName, lastName)
@@ -253,7 +253,7 @@ module.exports = {
         await this.updatePassword(currentPassword, newPassword)
 
         //cleanup
-        await base.click(selector.customer.cMyAccount.accountDetails)
+        await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
         await this.updatePassword(newPassword, currentPassword)
     },
 
@@ -268,21 +268,21 @@ module.exports = {
         await base.waitForSelector(selector.customer.cStoreList.visitStore(vendorName))
         let cartIsVisible = await base.isVisible(selector.customer.cStoreList.visitStore(vendorName))
         expect(cartIsVisible).toBe(true)
-        await page.waitForTimeout(500)
+        await base.wait(0.5)
     },
 
     //customer follow vendor
     async followVendor(vendorName) {
         await this.searchVendor(vendorName)
 
-        let currentStoreFollowStatus = await base.getSelectorText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
+        let currentStoreFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         if (currentStoreFollowStatus == "Following") {
-            await base.clickXpath(selector.customer.cStoreList.followUnFollowStore(vendorName))
-            await page.waitForTimeout(1000)
+            await base.click(selector.customer.cStoreList.followUnFollowStore(vendorName))
+            await base.wait(1)
         }
-        await base.clickXpath(selector.customer.cStoreList.followUnFollowStore(vendorName))
-        await page.waitForTimeout(1000)
-        let storeFollowStatus = await base.getSelectorText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
+        await base.click(selector.customer.cStoreList.followUnFollowStore(vendorName))
+        await base.wait(1)
+        let storeFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         expect(storeFollowStatus).toMatch('Following')
     },
 
@@ -290,25 +290,25 @@ module.exports = {
     async reviewStore(vendorName, rating, reviewTitle) {
         await this.searchVendor(vendorName)
 
-        await base.click(selector.customer.cStoreList.visitStore(vendorName))
+        await base.clickAndWait(selector.customer.cStoreList.visitStore(vendorName))
 
         let reviewMessage = faker.datatype.uuid()
-        await base.click(selector.customer.cSingleStore.reviews)
-        await page.waitForTimeout(1000)
+        await base.clickAndWait(selector.customer.cSingleStore.reviews)
+        await base.wait(1)
         let writeAReviewIsVisible = await base.isVisible(selector.customer.cSingleStore.writeAReview)
         if (writeAReviewIsVisible) {
             await page.click(selector.customer.cSingleStore.writeAReview)
         } else {
             await page.click(selector.customer.cSingleStore.editReview)
         }
-        await page.waitForTimeout(2000)
+        await base.wait(2)
         await base.setElementValue(selector.customer.cSingleStore.rating, 'style', rating)
         await base.clearAndType(selector.customer.cSingleStore.reviewTitle, reviewTitle)
         await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
         await page.click(selector.customer.cSingleStore.submitReview)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
-        let submittedReviewMessage = await base.getSelectorText(selector.customer.cSingleStore.submittedReview(reviewMessage))
+        let submittedReviewMessage = await base.getElementText(selector.customer.cSingleStore.submittedReview(reviewMessage))
         expect(submittedReviewMessage).toMatch(reviewMessage)
     },
 
@@ -316,16 +316,16 @@ module.exports = {
     async askForGetSupport(vendorName, getSupportSubject, getSupportMessage) {
         await this.searchVendor(vendorName)
 
-        await base.click(selector.customer.cStoreList.visitStore(vendorName))
+        await base.clickAndWait(selector.customer.cStoreList.visitStore(vendorName))
 
         await page.click(selector.customer.cSingleStore.getSupport)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
         await page.type(selector.customer.cSingleStore.subject, getSupportSubject)
         await page.type(selector.customer.cSingleStore.message, getSupportMessage)
         await page.click(selector.customer.cSingleStore.submitGetSupport)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
-        let successMessage = await base.getSelectorText(selector.customer.cDokanSelector.dokanAlertSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cDokanSelector.dokanAlertSuccessMessage)
         expect(successMessage).toMatch('Thank you. Your ticket has been submitted!')
         //close popup
         await page.click(selector.customer.cDokanSelector.dokanAlertClose)
@@ -347,9 +347,9 @@ module.exports = {
         await this.goToShop()
 
         await page.type(selector.customer.cShop.searchProduct, productName)
-        await base.click(selector.customer.cShop.search)
+        await base.clickAndWait(selector.customer.cShop.search)
 
-        let searchedProductName = await base.getSelectorText(selector.customer.cShop.searchedProductName)
+        let searchedProductName = await base.getElementText(selector.customer.cShop.searchedProductName)
         expect(searchedProductName).toMatch(productName)
     },
 
@@ -357,9 +357,9 @@ module.exports = {
     async goToProductDetails(productName) {
         await this.searchProduct(productName)
 
-        await base.click(selector.customer.cShop.productDetailsViewLink)
+        await base.clickAndWait(selector.customer.cShop.productDetailsViewLink)
 
-        let productTitle = await base.getSelectorText(selector.customer.cSingleProduct.productTitle)
+        let productTitle = await base.getElementText(selector.customer.cSingleProduct.productTitle)
         expect(productTitle).toMatch(productName)
     },
 
@@ -369,18 +369,18 @@ module.exports = {
 
         let reviewMessage = faker.datatype.uuid()
         await page.click(selector.customer.cSingleProduct.reviews)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
         await page.click(selector.customer.cSingleProduct.rating(rating))
         await base.clearAndType(selector.customer.cSingleProduct.reviewMessage, reviewMessage)
-        await base.click(selector.customer.cSingleProduct.submitReview)
+        await base.clickAndWait(selector.customer.cSingleProduct.submitReview)
 
         let duplicateCommentAlertIsVisible = await base.isVisible(selector.customer.cSingleProduct.duplicateCommentAlert)
         if (duplicateCommentAlertIsVisible) {
-            await base.click(selector.customer.cSingleProduct.backFromDuplicateCommentAlert)
+            await base.clickAndWait(selector.customer.cSingleProduct.backFromDuplicateCommentAlert)
             await this.rateProduct(rating)
         }
 
-        let submittedReviewMessage = await base.getSelectorText(selector.customer.cSingleProduct.submittedReview(reviewMessage))
+        let submittedReviewMessage = await base.getElementText(selector.customer.cSingleProduct.submittedReview(reviewMessage))
         expect(submittedReviewMessage).toMatch(reviewMessage)
 
         let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
@@ -396,13 +396,13 @@ module.exports = {
         await this.goToProductDetails(productName)
 
         await page.click(selector.customer.cSingleProduct.reportAbuse)
-        await page.waitForTimeout(2000)
-        await base.clickXpath(selector.customer.cSingleProduct.reportReasonByName(reportReason))
+        await base.wait(2)
+        await base.click(selector.customer.cSingleProduct.reportReasonByName(reportReason))
         await page.type(selector.customer.cSingleProduct.reportDescription, reportReasonDescription)
         await page.click(selector.customer.cSingleProduct.reportSubmit)
-        await page.waitForTimeout(2500)
+        await base.wait(2.5)
 
-        let successMessage = await base.getSelectorText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
         expect(successMessage).toMatch('Your report has been submitted. Thank you for your response.')
 
         await page.click(selector.customer.cSingleProduct.confirmReportSubmit)
@@ -414,12 +414,12 @@ module.exports = {
         await this.goToProductDetails(productName)
 
         await page.click(selector.customer.cSingleProduct.productEnquiry)
-        await page.waitForTimeout(1000)
+        await base.wait(1)
         await page.type(selector.customer.cSingleProduct.enquiryMessage, enquiryDetails)
         await page.click(selector.customer.cSingleProduct.submitEnquiry)
-        await page.waitForTimeout(2500)
+        await base.wait(2.5)
 
-        let successMessage = await base.getSelectorText(selector.customer.cSingleProduct.submitEnquirySuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cSingleProduct.submitEnquirySuccessMessage)
         expect(successMessage).toMatch('Email sent successfully!')
     },
 
@@ -438,7 +438,7 @@ module.exports = {
     //customer add product to cart from shop page
     async addProductToCartFromShop(productName) {
         await page.type(selector.customer.cShop.searchProduct, productName)
-        await base.click(selector.customer.cShop.search)
+        await base.clickAndWait(selector.customer.cShop.search)
         await page.click(selector.customer.cShop.addToCart)
 
         await page.waitForSelector(selector.customer.cShop.viewCart)
@@ -449,16 +449,16 @@ module.exports = {
 
     //customer add product to cart from product details page
     async addProductToCartFromSingleProductPage(productName) {
-        await base.click(selector.customer.cSingleProduct.addToCart)
+        await base.clickAndWait(selector.customer.cSingleProduct.addToCart)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch(`“${productName}” has been added to your cart.`)
     },
 
     //go to cart from shop page
     async goToCartFromShop() {
         await page.click(selector.customer.cShop.viewCart)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
         await page.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
@@ -468,7 +468,7 @@ module.exports = {
     //go to cart from product details page
     async goToCartFromSingleProductPage() {
         await page.click(selector.customer.cSingleProduct.viewCart)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
         await page.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
@@ -479,7 +479,7 @@ module.exports = {
     //got to checkout from cart
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
 
         await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
@@ -495,25 +495,25 @@ module.exports = {
         }
 
         await page.type(selector.customer.cCart.couponCode, couponCode)
-        await base.clickXpath(selector.customer.cCart.applyCoupon)
-        await page.waitForTimeout(4000)
+        await base.click(selector.customer.cCart.applyCoupon)
+        await base.wait(4)
 
         // // negative test
-        // let failureMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        // let failureMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         // expect(failureMessage).toMatch(`Coupon "${couponCode}" does not exist!`)
         // expect(failureMessage).toMatch("Sorry, this coupon is not applicable to selected products.") //for other vendor coupons
         // expect(failureMessage).toMatch("Coupon code already applied!") 
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Coupon code applied successfully.")
     },
 
     //customer remove applied coupon
     async removeAppliedCoupon(couponCode) {
         await page.click(selector.customer.cCart.removeCoupon(couponCode))
-        await page.waitForTimeout(6000)
+        await base.wait(5)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Coupon has been removed.')
     },
 
@@ -523,10 +523,10 @@ module.exports = {
         // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
 
-        await page.waitForTimeout(4000)
+        await base.wait(4)
         // await page.waitForSelector(selector.customer.cCheckout.placeOrder)
         await page.click(selector.customer.cCheckout.placeOrder)
-        await page.waitForTimeout(6000)
+        await base.wait(5)
 
         await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
         let orderReceivedIsVisible = await base.isVisible(selector.customer.cOrderReceived.orderReceivedPageHeader)
@@ -535,12 +535,12 @@ module.exports = {
         if (getOrderDetails) {
             // await this.getOrderDetails()
 
-            let orderId = await base.getSelectorText(selector.customer.cOrderReceived.orderNumber)
-            let subtotal = await base.getSelectorText(selector.customer.cOrderReceived.subtotal)
-            let shipping = await base.getSelectorText(selector.customer.cOrderReceived.shipping)
-            let tax = await base.getSelectorText(selector.customer.cOrderReceived.tax)
-            let paymentMethod = await base.getSelectorText(selector.customer.cOrderReceived.orderPaymentMethod)
-            let orderTotal = await base.getSelectorText(selector.customer.cOrderReceived.orderTotal)
+            let orderId = await base.getElementText(selector.customer.cOrderReceived.orderNumber)
+            let subtotal = await base.getElementText(selector.customer.cOrderReceived.subtotal)
+            let shipping = await base.getElementText(selector.customer.cOrderReceived.shipping)
+            let tax = await base.getElementText(selector.customer.cOrderReceived.tax)
+            let paymentMethod = await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod)
+            let orderTotal = await base.getElementText(selector.customer.cOrderReceived.orderTotal)
             // console.log(orderId, subtotal, shipping, tax, paymentMethod, orderTotal)
             return [orderId, subtotal, shipping, tax, paymentMethod, orderTotal]
 
@@ -595,25 +595,25 @@ module.exports = {
         await page.keyboard.press('Enter')
         // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
         await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
-        await page.waitForTimeout(2000)
+        await base.wait(2)
     },
 
     //customer ask for warranty
     async sendWarrantyRequest(orderId, productName, requestType, requestReason, requestDetails) {
         await this.goToMyAccount()
 
-        await base.click(selector.customer.cMyAccount.orders)
-        await base.click(selector.customer.cOrders.ordersWarrantyRequest(orderId))
+        await base.clickAndWait(selector.customer.cMyAccount.orders)
+        await base.clickAndWait(selector.customer.cOrders.ordersWarrantyRequest(orderId))
 
-        await base.clickXpath(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
+        await base.click(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
         // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
         await page.select(selector.customer.cOrders.warrantyRequestType, requestType)
         // await page.select(selector.customer.cOrders.warrantyRequestReason, requestReason)
         await page.type(selector.customer.cOrders.warrantyRequestDetails, requestDetails)
-        await base.click(selector.customer.cOrders.warrantySubmitRequest)
-        await page.waitForTimeout(2000)
+        await base.clickAndWait(selector.customer.cOrders.warrantySubmitRequest)
+        await base.wait(2)
 
-        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Request has been successfully submitted')
 
         //cleanup

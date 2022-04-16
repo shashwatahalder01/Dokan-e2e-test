@@ -17,7 +17,7 @@ module.exports = {
         if (emailField) {
             await page.type(selector.frontend.username, username)
             await page.type(selector.frontend.userPassword, password)
-            await base.click(selector.frontend.logIn)
+            await base.clickAndWait(selector.frontend.logIn)
 
             let loggedInUser = await base.getCurrentUser()
             expect(loggedInUser).toBe(username)
@@ -31,7 +31,7 @@ module.exports = {
         if (emailField) {
             await base.clearAndType(selector.backend.email, username)
             await base.clearAndType(selector.backend.password, password)
-            await base.click(selector.backend.login)
+            await base.clickAndWait(selector.backend.login)
 
             let loggedInUser = await base.getCurrentUser()
             expect(loggedInUser).toBe(username)
