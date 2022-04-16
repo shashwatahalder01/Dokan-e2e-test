@@ -1,4 +1,4 @@
-const { loginUser, createUser,} = require("@wordpress/e2e-test-utils")
+const { loginUser, createUser, } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 
@@ -12,7 +12,7 @@ module.exports = {
 
     //login from frontend
     async loginFrontend(username, password) {
-        await base.goto("my-account")
+        await base.goIfNotThere("my-account")
         let emailField = await base.isVisible(selector.frontend.username)
         if (emailField) {
             await page.type(selector.frontend.username, username)
@@ -26,11 +26,11 @@ module.exports = {
 
     //login user form WP login dashboard
     async loginBackend(username, password) {
-        await base.goto("wp-admin")
+        await base.goIfNotThere("wp-login.php")
         let emailField = await base.isVisible(selector.backend.email)
         if (emailField) {
-            await page.type(selector.backend.email, username)
-            await page.type(selector.backend.password, password)
+            await base.clearAndType(selector.backend.email, username)
+            await base.clearAndType(selector.backend.password, password)
             await base.click(selector.backend.login)
 
             let loggedInUser = await base.getCurrentUser()
@@ -40,26 +40,14 @@ module.exports = {
 
     //admin login
     async adminLogin(username, password) {
-        await base.goto("wp-admin")
-        let emailField = await base.isVisible(selector.backend.email)
-        if (emailField) {
-            await page.type(selector.backend.email, username)
-            await page.type(selector.backend.password, password)
-            await base.click(selector.backend.login)
-
-            let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBe(username)
-        }
+        await this.loginBackend(username, password)
     },
 
     //switcher user
     async switchUser(username, password) {
         let currentUser = await base.getCurrentUser()
         if (currentUser !== username) {
-            await loginUser(username, password)
-            await page.waitForTimeout(1000)
-            let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBe(username)
+            await this.loginBackend(username, password)
         }
     },
 

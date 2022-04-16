@@ -142,7 +142,7 @@ module.exports = {
             storeReviewsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Store Reviews']",
             storeSupportMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Store Support']",
             announcementsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Announcements']",
-            refundsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Refunds']",
+            refundsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[contains(text(),'Refunds')]",
             reportsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Reports']",
             modulesMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Modules']",
             toolsMenu: "//li[contains(@class,'toplevel_page_dokan')]//a[text()='Tools']",
@@ -346,6 +346,13 @@ module.exports = {
                 //bulk actions
                 bulkActions: "#bulk-action-selector-top",
                 selectAllCheckbox: ".check-column input",
+                //search refund
+                searchRefund: "#post-search-input",
+                refundCell: (orderNumber) => `//strong[contains(text(),'#${orderNumber}')]/../..`,
+                approveRefund: (orderNumber) => `//strong[contains(text(),'#${orderNumber}')]/../..//span[@class='completed']`,
+                approveRefund: (orderNumber) => `//strong[contains(text(),'#${orderNumber}')]/../..//span[@class='completed']`,
+                cancelRefund: (orderNumber) => `//strong[contains(text(),'#${orderNumber}')]/../..//span[@class='cancelled']`,
+
             },
 
             //reports
@@ -1647,6 +1654,7 @@ module.exports = {
             export: "//span[@class='dokan-add-product-link']//a[contains(text(),'Export')]",
 
             // product sub options
+            productLink: (productName) => `//a[contains(text(),'${productName}')]`,
             editProduct: ".row-actions > .edit > a",
             deletePermanently: ".row-actions > .delete > a",
             view: ".row-actions > .view > a",
@@ -1792,11 +1800,12 @@ module.exports = {
             discountInPercentage: "#\\_lot_discount_amount",
             //rma options
             overrideYourDefaultRmaSettingsForThisProduct: "#dokan_rma_product_override",
-            label: "#dokan-rma-label",
-            type: "#dokan-warranty-type",
-            length: "#dokan-warranty-length",
-            lengthValue: "//input[@name='warranty_length_value']",
-            lengthDuration: "#dokan-warranty-length-duration",
+            rmaLabel: "#dokan-rma-label",
+            rmaType: "#dokan-warranty-type",
+            rmaLength: "#dokan-warranty-length",
+            rmaLengthValue: "//input[@name='warranty_length_value']",
+            rmaLengthDuration: "#dokan-warranty-length-duration",
+            refundReasons: ".checkbox input",
             rmaPolicyIframe: '#wp-warranty_policy-wrap iframe',
             rmaPolicyHtmlBody: '#tinymce',
             //wholesale options
@@ -1837,6 +1846,7 @@ module.exports = {
             cancelled: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Cancelled')]",
             refunded: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Refunded')]",
             failed: "//ul[contains(@class,'order-statuses-filter')]//a[contains(text(), 'Failed')]",
+            //export order
             exportAll: "//input[@name='dokan_order_export_all']",
             exportFiltered: "//input[@name='dokan_order_export_filtered']",
             //filter
@@ -1847,6 +1857,40 @@ module.exports = {
             selectAll: "#cb-select-all",
             selectBulkOrderAction: "#bulk-order-action-selector",
             applyBulkOrder: "#bulk-order-action",
+            //order sub-actions
+            orderLink: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/..`,
+            processing: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//a[@data-original-title='Processing']`,
+            complete: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//a[@data-original-title='Complete']`,
+            view: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//a[@data-original-title='View']`,
+
+            //edit order status
+            currentOrderStatus: ".dokan-label.dokan-label-info",
+            selectedOrderStatus: "//select[@id='order_status']//option[@selected='selected']",
+            edit: ".dokan-edit-status",
+            orderStatus: "#order_status",
+            updateOrderStatus: "//input[@name='dokan_change_status']",
+
+            //refund order
+            requestRefund: ".dokan-btn.refund-items",
+            productQuantity: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='quantity']//div`,
+            productCost: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='line_cost']//div`,
+            productTax: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='line_tax']//div`,
+            refundProductQuantity: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='quantity']//div[@class='refund']//input`,
+            // refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_total wc_input_price']`,
+            refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='line_total wc_input_price tips']`,
+            refundProductTaxAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_tax wc_input_price']`,
+
+            shippingCost: (shippingName) => ``, //TODO:add locator
+            refundShippingAmount: (shippingName) => `//div[@class='view' and contains(text(),'${shippingName}')]/../../..//input[@class='refund_line_total wc_input_price']`,
+            refundShippingTaxAmount: (shippingName) => `//div[@class='view' and contains(text(),'${shippingName}')]/../../..//input[@class='refund_line_tax wc_input_price']`,
+
+            refundReason: "#refund_reason",
+            refundManually: ".dokan-btn.do-manual-refund",
+            confirmRefund:".swal2-confirm.swal2-styled.swal2-default-outline",
+            refundRequestSuccessMessage:"#swal2-html-container",
+            refundRequestSuccessMessageOk:".swal2-confirm.swal2-styled.swal2-default-outline",
+            cancelRefund: ".dokan-btn.cancel-action",
+
         },
 
         //user subscriptions

@@ -1309,9 +1309,30 @@ module.exports = {
     // console.log(orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date)
     return [orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date]
 
+  },
 
+  async approveRefundRequest(orderNumber) {
+    await this.searchRefundRequest(orderNumber)
 
+    await base.hover(selector.admin.dokan.refunds.refundCell(orderNumber))
+    await base.clickXpath(selector.admin.dokan.refunds.approveRefund(orderNumber))
+    // await base.clickXpath(selector.admin.dokan.refunds.cancelRefund(orderNumber))
+    await page.waitForTimeout(4000)
 
+    let refundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
+    expect(refundRequestIsVisible).toBe(false)
+  },
+
+  async searchRefundRequest(orderNumber) {
+    await base.hover(selector.admin.aDashboard.dokan)
+    await base.click(selector.admin.dokan.refundsMenu)
+
+    //search refund request
+    await base.type(selector.admin.dokan.refunds.searchRefund, orderNumber)
+    await page.waitForTimeout(2000)
+
+    let searchedRefundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
+    expect(searchedRefundRequestIsVisible).toBe(true)
 
   }
 

@@ -423,6 +423,18 @@ module.exports = {
         expect(successMessage).toMatch('Email sent successfully!')
     },
 
+    async buyProduct(productName, couponCode, getOrderDetails) {
+        await this.goToShop()
+        await this.addProductToCartFromShop(productName)
+        await this.goToCartFromShop()
+        if (couponCode) {
+            await this.applyCoupon(couponCode)
+        }
+        await this.goToCheckoutFromCart()
+        let [orderId] = await this.placeOrder(getOrderDetails)
+        return orderId
+    },
+
     //customer add product to cart from shop page
     async addProductToCartFromShop(productName) {
         await page.type(selector.customer.cShop.searchProduct, productName)
@@ -501,8 +513,6 @@ module.exports = {
         await page.click(selector.customer.cCart.removeCoupon(couponCode))
         await page.waitForTimeout(6000)
 
-        // let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
-        // // expect(couponIsApplied).toBe(false)
         let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Coupon has been removed.')
     },
@@ -513,7 +523,7 @@ module.exports = {
         // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
 
-        await page.waitForTimeout(3000)
+        await page.waitForTimeout(4000)
         // await page.waitForSelector(selector.customer.cCheckout.placeOrder)
         await page.click(selector.customer.cCheckout.placeOrder)
         await page.waitForTimeout(6000)
@@ -590,21 +600,21 @@ module.exports = {
 
     //customer ask for warranty
     async sendWarrantyRequest(orderId, productName, requestType, requestReason, requestDetails) {
-        // await this.goToMyAccount()
+        await this.goToMyAccount()
 
-        // await base.click(selector.customer.cMyAccount.orders)
-        // await base.click(selector.customer.cOrders.ordersWarrantyRequest(orderId))
+        await base.click(selector.customer.cMyAccount.orders)
+        await base.click(selector.customer.cOrders.ordersWarrantyRequest(orderId))
 
-        // await base.clickXpath(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
-        // // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
-        // await page.select(selector.customer.cOrders.warrantyRequestType, requestType)
-        // // await page.select(selector.customer.cOrders.warrantyRequestReason, requestReason)
-        // await page.type(selector.customer.cOrders.warrantyRequestDetails, requestDetails)
-        // await base.click(selector.customer.cOrders.warrantySubmitRequest)
-        // await page.waitForTimeout(2000)
+        await base.clickXpath(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
+        // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
+        await page.select(selector.customer.cOrders.warrantyRequestType, requestType)
+        // await page.select(selector.customer.cOrders.warrantyRequestReason, requestReason)
+        await page.type(selector.customer.cOrders.warrantyRequestDetails, requestDetails)
+        await base.click(selector.customer.cOrders.warrantySubmitRequest)
+        await page.waitForTimeout(2000)
 
-        // let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        // expect(successMessage).toMatch('Request has been successfully submitted')
+        let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        expect(successMessage).toMatch('Request has been successfully submitted')
 
         //cleanup
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)

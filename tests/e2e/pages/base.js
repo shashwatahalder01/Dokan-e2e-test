@@ -21,7 +21,7 @@ module.exports = {
     //check whether element is visible or not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
-            if (selector.startsWith('//') || selector.startsWith('(//')) {
+            if (/^(\/\/|\(\/\/)/.test(selector)) {
                 var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
             } else {
                 var element = document.querySelector(selector)
@@ -37,7 +37,7 @@ module.exports = {
 
     //click element and wait until network idle
     async click(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await this.clickXpathAndWait(selector)
         } else {
             await Promise.all([page.click(selector), page.waitForNavigation({ waitUntil: 'networkidle2' })])
@@ -65,7 +65,7 @@ module.exports = {
 
     //wait for element and then click
     async waitAndClick(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             await element.click()  // just click
@@ -77,7 +77,7 @@ module.exports = {
 
     //wait for element and then click and wait until network idle
     async waitAndClickAndWait(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // click then wait
@@ -97,7 +97,7 @@ module.exports = {
 
     //wait for element
     async waitForSelector(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
         } else {
             await page.waitForSelector(selector)
@@ -106,7 +106,7 @@ module.exports = {
 
     //wait for element to visible and then click
     async waitVisibleAndClick(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector, { visible: true })
             let [element] = await page.$x(selector)
             await element.click()
@@ -118,7 +118,7 @@ module.exports = {
 
     //hover on element
     async hover(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             let [element] = await page.$x(selector)
             await element.hover()
         } else {
@@ -231,11 +231,27 @@ module.exports = {
         await page.waitForTimeout(3000)
     },
 
+    // is current url
+    async isCurrentURL(subpath) {
+        const currentURL = new URL(await page.url())
+        console.log(currentURL.href)
+        console.log(await this.createURL(subpath))
+        return currentURL.href === await this.createURL(subpath)
+    },
+
     // create a new url
     async createURL(subPath) {
         let url = new URL(process.env.BASE_URL)
-        url.pathname = url.pathname + subPath
+        url.pathname = url.pathname + subPath + '/'
         return url.href
+    },
+
+    //goto subUrl
+    async goIfNotThere(subPath) {
+        if (!await this.isCurrentURL(subPath)) {
+        let url = await this.createURL(subPath)
+        await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+        }
     },
 
     //goto subUrl
@@ -251,7 +267,7 @@ module.exports = {
 
     //get element text
     async getSelectorText(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             let text = await (await element.getProperty('textContent')).jsonValue()
@@ -292,7 +308,7 @@ module.exports = {
 
     //get element handle for xpath or css selector 
     async getElement(selector) {
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             return element
@@ -435,7 +451,7 @@ module.exports = {
 
     //scroll element into view
     async scrollIntoView(selector) {  //TODO: don't work
-        if (selector.startsWith('//') || selector.startsWith('(//')) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
             let [element] = await page.$x(selector)
             await page.evaluate((element) => { element.scrollIntoView() }, element)
         } else {
@@ -646,7 +662,9 @@ module.exports = {
             return;
         }
         return decodeURIComponent(cookie.value).split('|')[0];
-    }
+    },
+
+
 
 
 

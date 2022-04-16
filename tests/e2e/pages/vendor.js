@@ -1,4 +1,6 @@
 const base = require("../pages/base.js")
+const adminPage = require('../pages/admin.js')
+const loginPage = require('../pages/login.js')
 const selector = require("../pages/selectors.js")
 const helpers = require("../../e2e/utils/helpers.js")
 const { faker } = require('@faker-js/faker')
@@ -18,7 +20,7 @@ module.exports = {
 
 
     async goToVendorDashboard() {
-        await base.goto('dashboard')
+        await base.goIfNotThere('dashboard')
 
         const url = await page.url()
         expect(url).toMatch('dashboard')
@@ -1121,7 +1123,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.vRmaSettings.label, label)
         await page.select(selector.vendor.vRmaSettings.type, type)
         await page.select(selector.vendor.vRmaSettings.length, length)
-        await base.type(selector.vendor.vRmaSettings.lengthValue, lengthValue)
+        await base.clearAndType1(selector.vendor.vRmaSettings.lengthValue, lengthValue)
         await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(selector.vendor.vRmaSettings.refundReasons)
@@ -1164,15 +1166,15 @@ module.exports = {
 
         await base.click(selector.vendor.vReturnRequest.view(orderId))
 
-        //change order status to refund
-        // await page.select(selector.vendor.vReturnRequest.changeOrderStatus, 'processing')
-        // await base.alert('accept')
-        // await base.click(selector.vendor.vReturnRequest.updateOrderStatus)
+        // change order status to refund
+        await page.select(selector.vendor.vReturnRequest.changeOrderStatus, 'processing')
+        await base.alert('accept')
+        await base.click(selector.vendor.vReturnRequest.updateOrderStatus)
 
         //refund request
         await page.click(selector.vendor.vReturnRequest.sendRefund)
         await page.waitForTimeout(3000)
-        let tax =  String(helpers.price(await base.getSelectorText(selector.vendor.vReturnRequest.taxAmount(productName))))
+        let tax = String(helpers.price(await base.getSelectorText(selector.vendor.vReturnRequest.taxAmount(productName))))
         let subTotal = String(helpers.price(await await base.getSelectorText(selector.vendor.vReturnRequest.subTotal(productName))))
         await base.type(selector.vendor.vReturnRequest.taxRefund, tax)
         await base.type(selector.vendor.vReturnRequest.subTotalRefund, subTotal)
@@ -1181,8 +1183,8 @@ module.exports = {
         let successMessage = await base.getSelectorText(selector.vendor.vReturnRequest.sendRequestSuccessMessage)
         expect(successMessage).toMatch('Already send refund request. Wait for admin approval')
 
-        //TODO: ADD ADMIN APPROVE
-
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.approveRefundRequest(orderId)
     },
 
     async deleteReturnRequest(orderId) {
@@ -1195,5 +1197,90 @@ module.exports = {
         let successMessage = await base.getSelectorText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Return Request has been deleted successfully')
     },
+
+    async overrideRmaSettings(productName, label, type, length, lengthValue, lengthDuration) {
+
+        await this.searchProduct(productName)
+        await base.click(selector.vendor.product.productLink(productName))
+        //override rma settings
+        await page.click(selector.vendor.product.overrideYourDefaultRmaSettingsForThisProduct)
+        await page.waitForTimeout(1000)
+
+        await base.clearAndType(selector.vendor.product.rmaLabel, label)
+        await page.select(selector.vendor.product.rmaType, type)
+        await page.select(selector.vendor.product.rmaLength, length)
+        await base.clearAndType1(selector.vendor.product.rmaLengthValue, lengthValue)
+        await page.select(selector.vendor.product.rmaLengthDuration, lengthDuration)
+
+        let refundReasonIsVisible = await base.isVisible(selector.vendor.product.refundReasons)
+        if (refundReasonIsVisible) {
+            await base.clickMultiple(selector.vendor.product.refundReasons)
+        }
+
+        await base.click(selector.vendor.product.saveProduct)
+
+        let productCreateSuccessMessage = await base.getSelectorText(selector.vendor.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+    },
+
+    async searchProduct(productName) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.products)
+        //search product
+        await base.type(selector.vendor.product.searchProduct, productName)
+        await base.click(selector.vendor.product.search)
+
+        let searchedProductIsVisible = await base.isVisible(selector.vendor.product.productLink(productName))
+        expect(searchedProductIsVisible).toBe(true)
+    },
+
+    async changeOrderStatus(orderNumber, orderStatus) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.orders)
+
+        await base.click(selector.vendor.vOrders.orderLink(orderNumber))
+        await page.click(selector.vendor.vOrders.edit)
+        await page.select(selector.vendor.vOrders.orderStatus, orderStatus)
+        await base.clickXpath(selector.vendor.vOrders.updateOrderStatus)
+        await page.waitForTimeout(2000)
+
+        let currentOrderStatus = await base.getSelectorText(selector.vendor.vOrders.currentOrderStatus)
+        expect(currentOrderStatus.toLowerCase()).toMatch((orderStatus.replace(/(^wc)|(\W)/g, '')).toLowerCase())
+    },
+
+    async refundOrder(orderNumber, productName, partialRefund) {
+        await this.goToVendorDashboard()
+        await base.click(selector.vendor.vDashboard.orders)
+
+        await base.click(selector.vendor.vOrders.orderLink(orderNumber))
+
+        //request refund
+        await page.click(selector.vendor.vOrders.requestRefund)
+        await page.waitForTimeout(3000)
+        let productQuantity = await base.getSelectorText(selector.vendor.vOrders.productQuantity(productName))
+        let productCost = String(helpers.price(await base.getSelectorText(selector.vendor.vOrders.productCost(productName))))
+        let productTax = String(helpers.price(await base.getSelectorText(selector.vendor.vOrders.productTax(productName))))
+        await base.type(selector.vendor.vOrders.refundProductQuantity(productName), productQuantity.trim())
+        if (partialRefund) {
+            await base.type(selector.vendor.vOrders.refundProductCostAmount(productName), String(Number(productCost.trim()) / 2))
+            await base.type(selector.vendor.vOrders.refundProductTaxAmount(productName), String(Number(productTax.trim()) / 2))
+        }
+        await base.type(selector.vendor.vOrders.refundReason, 'Defective product')
+
+        await page.click(selector.vendor.vOrders.refundManually)
+        await page.waitForTimeout(1500)
+        await page.click(selector.vendor.vOrders.confirmRefund)
+        await page.waitForTimeout(1500)
+
+        let successMessage = await base.getSelectorText(selector.vendor.vOrders.refundRequestSuccessMessage)
+        expect(successMessage).toMatch('Refund request submitted.')
+        await page.click(selector.vendor.vOrders.refundRequestSuccessMessageOk)
+
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.approveRefundRequest(orderNumber)
+
+
+    }
+
 
 }
