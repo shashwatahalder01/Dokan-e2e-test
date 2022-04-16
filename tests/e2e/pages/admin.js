@@ -102,7 +102,7 @@ module.exports = {
     await base.clickAndWait(selector.admin.settings.permalinks)
     await base.click(selector.admin.settings.postName)
     await base.click(selector.admin.settings.customBase)
-    await base.clearAndType1(selector.admin.settings.customBaseInput, '/product/')
+    await base.clearAndType(selector.admin.settings.customBaseInput, '/product/')
     await page.click(selector.admin.settings.permalinkSaveChanges)
 
     let permalinkSuccessMessage = await base.getElementText(selector.admin.settings.updatedSuccessMessage)
@@ -620,6 +620,7 @@ module.exports = {
     }
 
     await page.click(selector.admin.wooCommerce.settings.shippingMethodSaveChanges)
+
     await base.waitForSelector(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
     let shippingMethodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(shippingMethod))
     expect(shippingMethodIsVisible).toBe(true)
@@ -933,7 +934,7 @@ module.exports = {
     await page.type(selector.admin.dokan.vendors.email, email)
     await page.click(selector.admin.dokan.vendors.generatePassword)
     // await base.wait(1)
-    await page.waitForSelector(selector.admin.dokan.vendors.password)
+    await base.waitForSelector(selector.admin.dokan.vendors.password)
     await base.clearAndType(selector.admin.dokan.vendors.password, password)
     await page.type(selector.admin.dokan.vendors.username, faker.name.firstName('male'))
     await page.type(selector.admin.dokan.vendors.companyName, companyName)
@@ -941,10 +942,10 @@ module.exports = {
     await page.type(selector.admin.dokan.vendors.vatOrTaxNumber, vatOrTaxNumber)
     await page.type(selector.admin.dokan.vendors.nameOfBank, nameOfBank)
     await page.type(selector.admin.dokan.vendors.bankIban, bankIban)
-    await page.waitForSelector(selector.admin.dokan.vendors.next)
+    await base.waitForSelector(selector.admin.dokan.vendors.next)
     await page.click(selector.admin.dokan.vendors.next)
 
-    await page.waitForSelector(selector.admin.dokan.vendors.street1)
+    await base.waitForSelector(selector.admin.dokan.vendors.street1)
     // address  
     await page.type(selector.admin.dokan.vendors.street1, street1)
     await page.type(selector.admin.dokan.vendors.street2, street2)
@@ -957,7 +958,7 @@ module.exports = {
     await page.type(selector.admin.dokan.vendors.state, state)
     await page.click(selector.admin.dokan.vendors.next)
 
-    await page.waitForSelector(selector.admin.dokan.vendors.accountName)
+    await base.waitForSelector(selector.admin.dokan.vendors.accountName)
     // payment options  
     await page.type(selector.admin.dokan.vendors.accountName, accountName)
     await page.type(selector.admin.dokan.vendors.accountNumber, accountNumber)
@@ -975,7 +976,6 @@ module.exports = {
     await base.wait(2)
     await base.clickAndWait(selector.admin.dokan.vendors.editVendorInfo)
 
-    // await page.waitForSelector(selector.admin.dokan.vendors.editVendor.email)
     let vendorEmail = await base.getElementValue(selector.admin.dokan.vendors.editVendor.email)
     expect(vendorEmail).toBe(email)
 
@@ -1314,7 +1314,7 @@ module.exports = {
     await base.hover(selector.admin.dokan.refunds.refundCell(orderNumber))
     await base.click(selector.admin.dokan.refunds.approveRefund(orderNumber))
     // await base.click(selector.admin.dokan.refunds.cancelRefund(orderNumber))
-    await base.wait(4)
+    await base.wait(3)
 
     let refundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(refundRequestIsVisible).toBe(false)
@@ -1326,7 +1326,7 @@ module.exports = {
 
     //search refund request
     await base.type(selector.admin.dokan.refunds.searchRefund, orderNumber)
-    await base.wait(2)
+    await base.wait(3)
 
     let searchedRefundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(searchedRefundRequestIsVisible).toBe(true)

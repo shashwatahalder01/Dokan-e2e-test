@@ -107,7 +107,7 @@ module.exports = {
         await base.click(selector.vendor.vSetup.email)
         await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
 
-        await base.clearAndType1(selector.vendor.vSetup.paypal, paypal)
+        await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
         await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
         await base.type(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
         await base.type(selector.vendor.vSetup.bankName, bankName)
@@ -116,7 +116,7 @@ module.exports = {
         await base.type(selector.vendor.vSetup.bankIban, bankIban)
         await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
         await base.type(selector.vendor.vSetup.customPayment, customPayment)
-        await base.clearAndType1(selector.vendor.vSetup.skrill, skrill)
+        await base.clearAndType(selector.vendor.vSetup.skrill, skrill)
         await base.clickAndWait(selector.vendor.vSetup.continuePaymentSetup)
 
         await base.clickAndWait(selector.vendor.vSetup.goToStoreDashboard)
@@ -346,11 +346,11 @@ module.exports = {
         await page.type(selector.vendor.vAuction.bidIncrement, '50')
         await page.type(selector.vendor.vAuction.reservedPrice, String(Number(productPrice) + 400))
         await page.type(selector.vendor.vAuction.buyItNowPrice, String(Number(productPrice) + 900))
-        // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, 'readonly') 
+        // await base.setElementAttributeValue(selector.vendor.vAuction.auctionStartDate, 'readonly') 
         // await base.type(selector.vendor.vAuction.auctionStartDate, '2022-04-05 10:15') 
         // await base.wait(10)
-        // await base.setElementValue(selector.vendor.vAuction.auctionStartDate, '2022-04-05 15:15') 
-        // await base.setElementValue(selector.vendor.vAuction.auctionEndDate, '2022-04-05 15:15') 
+        // await base.setElementAttributeValue(selector.vendor.vAuction.auctionStartDate, '2022-04-05 15:15') 
+        // await base.setElementAttributeValue(selector.vendor.vAuction.auctionEndDate, '2022-04-05 15:15') 
         await page.click(selector.vendor.vAuction.auctionStartDate, startDate) //TODO: handle date using datepicker or use core input filed 
         await page.type(selector.vendor.vAuction.auctionStartDate, startDate) //TODO: handle date using datepicker or use core input filed 
         await page.click(selector.vendor.vAuction.auctionEndDate, endDate)
@@ -661,15 +661,14 @@ module.exports = {
 
         //Add-on fields
         await page.click(selector.vendor.vAddonSettings.addField)
-        await base.waitForSelector(selector.vendor.vAddonSettings.type)
-        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
+        await base.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
         await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
         await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
         await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
         await page.click(selector.vendor.vAddonSettings.enableDescription)
         await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
         await page.click(selector.vendor.vAddonSettings.requiredField)
-        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
+        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
         await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
         await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
         await base.clickAndWait(selector.vendor.vAddonSettings.publish)
@@ -692,15 +691,14 @@ module.exports = {
 
         //Add-on fields
         await page.click(selector.vendor.vAddonSettings.addField)
-        await base.waitForSelector(selector.vendor.vAddonSettings.type)
-        await page.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
+        await base.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
         await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
         await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
         await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
         await page.click(selector.vendor.vAddonSettings.enableDescription)
         await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
         await page.click(selector.vendor.vAddonSettings.requiredField)
-        await base.clearAndType1(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
+        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
         await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
         await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
         await base.clickAndWait(selector.vendor.vAddonSettings.update)
@@ -953,10 +951,10 @@ module.exports = {
             await base.select(selector.vendor.vDeliveryTimeSettings.openingTime(day), '06:00 AM')
             await base.select(selector.vendor.vDeliveryTimeSettings.closingTime(day), '12:00 PM')
 
-            await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.timeSlot(day), '300')
-            await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), '100')
-            // await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.timeSlot, '30')
-            // await base.clearAndType1(selector.vendor.vDeliveryTimeSettings.orderPerSlot, '10')
+            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot(day), '300')
+            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), '100')
+            // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot, '30')
+            // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot, '10')
         }
         await base.clickAndWait(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
 
@@ -1123,7 +1121,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.vRmaSettings.label, label)
         await page.select(selector.vendor.vRmaSettings.type, type)
         await page.select(selector.vendor.vRmaSettings.length, length)
-        await base.clearAndType1(selector.vendor.vRmaSettings.lengthValue, lengthValue)
+        await base.clearAndType(selector.vendor.vRmaSettings.lengthValue, lengthValue)
         await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(selector.vendor.vRmaSettings.refundReasons)
@@ -1209,7 +1207,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.product.rmaLabel, label)
         await page.select(selector.vendor.product.rmaType, type)
         await page.select(selector.vendor.product.rmaLength, length)
-        await base.clearAndType1(selector.vendor.product.rmaLengthValue, lengthValue)
+        await base.clearAndType(selector.vendor.product.rmaLengthValue, lengthValue)
         await page.select(selector.vendor.product.rmaLengthDuration, lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(selector.vendor.product.refundReasons)
@@ -1256,17 +1254,17 @@ module.exports = {
 
         //request refund
         await page.click(selector.vendor.vOrders.requestRefund)
-        await base.wait(3)
+        // await base.wait(3)
         let productQuantity = await base.getElementText(selector.vendor.vOrders.productQuantity(productName))
-        let productCost = String(helpers.price(await base.getElementText(selector.vendor.vOrders.productCost(productName))))
-        let productTax = String(helpers.price(await base.getElementText(selector.vendor.vOrders.productTax(productName))))
-        await base.type(selector.vendor.vOrders.refundProductQuantity(productName), productQuantity.trim())
+        let productCost = helpers.price(await base.getElementText(selector.vendor.vOrders.productCost(productName)))
+        let productTax = helpers.price(await base.getElementText(selector.vendor.vOrders.productTax(productName)))
+        await base.type(selector.vendor.vOrders.refundProductQuantity(productName), productQuantity)
         if (partialRefund) {
-            await base.type(selector.vendor.vOrders.refundProductCostAmount(productName), String(Number(productCost.trim()) / 2))
-            await base.type(selector.vendor.vOrders.refundProductTaxAmount(productName), String(Number(productTax.trim()) / 2))
+            await base.click(selector.vendor.vOrders.refundDiv)
+            await base.clearAndType(selector.vendor.vOrders.refundProductCostAmount(productName), String(productCost / 2))
+            await base.clearAndType(selector.vendor.vOrders.refundProductTaxAmount(productName), String(productTax / 2))
         }
         await base.type(selector.vendor.vOrders.refundReason, 'Defective product')
-
         await page.click(selector.vendor.vOrders.refundManually)
         await base.wait(1.5)
         await page.click(selector.vendor.vOrders.confirmRefund)

@@ -83,9 +83,9 @@ module.exports = {
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
 
+
     //customer become vendor
     async customerBecomeVendor(firstName, lastName, shopName, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
-        await base.waitForSelector(selector.customer.cDashboard.becomeVendor)
         await base.clickAndWait(selector.customer.cDashboard.becomeVendor)
         // vendor registration form
         await page.type(selector.customer.cDashboard.firstName, firstName)
@@ -111,7 +111,6 @@ module.exports = {
         await base.wait(2)
 
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
-        console.log(returnMessage)
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
@@ -302,7 +301,7 @@ module.exports = {
             await page.click(selector.customer.cSingleStore.editReview)
         }
         await base.wait(2)
-        await base.setElementValue(selector.customer.cSingleStore.rating, 'style', rating)
+        await base.setElementAttributeValue(selector.customer.cSingleStore.rating, 'style', rating)
         await base.clearAndType(selector.customer.cSingleStore.reviewTitle, reviewTitle)
         await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
         await page.click(selector.customer.cSingleStore.submitReview)
@@ -441,7 +440,7 @@ module.exports = {
         await base.clickAndWait(selector.customer.cShop.search)
         await page.click(selector.customer.cShop.addToCart)
 
-        await page.waitForSelector(selector.customer.cShop.viewCart)
+        await base.waitForSelector(selector.customer.cShop.viewCart)
         let cartIsVisible = await base.isVisible(selector.customer.cShop.viewCart)
         expect(cartIsVisible).toBe(true)
 
@@ -460,7 +459,7 @@ module.exports = {
         await page.click(selector.customer.cShop.viewCart)
         await base.wait(2)
 
-        await page.waitForSelector(selector.customer.cCart.cartPageHeader)
+        await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
     },
@@ -470,7 +469,7 @@ module.exports = {
         await page.click(selector.customer.cSingleProduct.viewCart)
         await base.wait(2)
 
-        await page.waitForSelector(selector.customer.cCart.cartPageHeader)
+        await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
 
@@ -481,7 +480,7 @@ module.exports = {
         await page.click(selector.customer.cCart.proceedToCheckout)
         await base.wait(2)
 
-        await page.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
+        await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
 
@@ -524,11 +523,11 @@ module.exports = {
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
 
         await base.wait(4)
-        // await page.waitForSelector(selector.customer.cCheckout.placeOrder)
+        // await base.waitForSelector(selector.customer.cCheckout.placeOrder)
         await page.click(selector.customer.cCheckout.placeOrder)
         await base.wait(5)
 
-        await page.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
+        await base.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
         let orderReceivedIsVisible = await base.isVisible(selector.customer.cOrderReceived.orderReceivedPageHeader)
         expect(orderReceivedIsVisible).toBe(true)
 

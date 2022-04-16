@@ -1,6 +1,7 @@
 require('dotenv').config()
-
 // This page contains all necessary puppeteer automation methods 
+
+let regexXpath = /^(\/\/|\(\/\/)/
 module.exports = {
 
     //check whether element is ready or not
@@ -87,7 +88,7 @@ module.exports = {
         } else {
             await page.waitForSelector(selector, { visible: true })
             let element = await page.$(selector)
-            await element.click() 
+            await element.click()
         }
     },
 
@@ -95,7 +96,7 @@ module.exports = {
     async hover(selector) {
         let element = await this.getElement(selector)
         await element.hover()
-        await base.wait(1)
+        await this.wait(1)
     },
 
     //check checkbox, if checked then skip
@@ -153,7 +154,7 @@ module.exports = {
         let optionValue = await page.$$eval('option', options => options.find(o => o.innerText === 'NYshop')?.value) //TODO:working
 
         var currentPageNo = "100"
-        await page.$eval('div.panel-footer > div > div > ul > li:nth-child(3) > a', (e, no) => e.setAttribute("data-page", no), currentPageNo)
+        await page.$eval('div.panel-footer', (e, no) => e.setAttribute("data-page", no), currentPageNo)
 
         // console.log(optionValue)
         // await page.select(selector, optionValue)
@@ -172,8 +173,8 @@ module.exports = {
     async clickMultiple(selector) {
         let elements = await this.getElements(selector)
         for (let element of elements) {
-            await base.wait(1)
             await element.click()
+            await this.wait(0.5)
         }
     },
 
@@ -200,7 +201,7 @@ module.exports = {
         let element = await this.getElement(selector)
         const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
         await fileChooser.accept([image])
-        await base.wait(3)
+        await this.wait(3)
     },
 
     // Navigation
@@ -269,8 +270,8 @@ module.exports = {
     async getElementText(selector) {
         let element = await this.getElement(selector)
         let text = await (await element.getProperty('textContent')).jsonValue()
-        // console.log(text)
-        return text
+        // console.log(text.trim())
+        return text.trim()
     },
 
     // get element property value
@@ -298,8 +299,16 @@ module.exports = {
     },
 
     // get element attribute value
-    async setElementValue(selector, attribute, value) {
-        await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
+    async setElementAttributeValue(selector, attribute, value) {
+        // await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
+        let element = await this.getElement(selector)
+        await page.evaluate((element, attribute, value) => element.setAttribute(attribute, value), element, attribute, value)
+    },
+
+    // set element value
+    async setElementValue(selector, value) {
+        let element = await this.getElement(selector)
+        page.evaluate((element, value) => element.value = value, element, value)
     },
 
     // remove element attribute
@@ -352,47 +361,45 @@ module.exports = {
         }
     },
 
-    // get element value
-    async getValue(selector) {
-        let value = await page.$eval(selector, (element) => element.value)
-        // console.log(value)
-        return value
-    },
-
     // clear input field
     async clearInputField(selector) {
-        await page.$eval(selector, el => el.value = '')
+        let element = await this.getElement(selector)
+        await page.evaluate(element => element.value = '', element)
     },
     // or
     async clearInputField1(selector) {
-        await page.click(selector, { clickCount: 3 })
+        let element = await this.getElement(selector)
+        await element.click({ clickCount: 3 })
         await page.keyboard.press('Backspace')
     },
 
+    //type
     async type(selector, value) {
         let element = await this.getElement(selector)
         await element.type(value)
     },
 
     // clear input field and type 
+    async clearAndType(selector, value) {
+        let element = await this.getElement(selector)
+        await page.evaluate(element => element.value = '', element)
+        await element.type(value)
+    },
+    //or
     async clearAndType1(selector, value) {
         let element = await this.getElement(selector)
-        // await element.focus()
         await element.click({ clickCount: 3 })
         await page.keyboard.press('Backspace')
         await element.type(value)
     },
-
-    // or
-
-    // clear input field and type
-    async clearAndType(selector, value) {
-        await page.$eval(selector, el => el.value = '')
+    //or
+    async clearAndType2(selector, value) {
+        await page.$eval(selector, element => element.value = '')
         await page.type(selector, value)
     },
 
     //scroll element into view
-    async scrollIntoView(selector) {  //TODO: don't work
+    async scrollIntoView(selector) {  //TODO: doesn't work
         let element = await this.getElement(selector)
         await page.evaluate((element) => { element.scrollIntoView() }, element)
     },
@@ -429,8 +436,8 @@ module.exports = {
 
     //iframe: clear and type iframe input element 
     async iframeClearAndType(iframe, selector, value) {
-        await iframe.$eval(selector, el => el.textContent = '')
-        // await iframe.$eval(selector, el => el.value = '')
+        await iframe.$eval(selector, element => element.textContent = '')
+        // await iframe.$eval(selector, element => element.value = '')
         await iframe.type(selector, value)
     },
 
@@ -535,21 +542,21 @@ module.exports = {
         let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
         let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
         let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
-        await base.wait(1)
+        await this.wait(1)
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
-            await this.clickXpath(wpUploadFiles)
+            await this.click(wpUploadFiles)
             // await page.click(uploadedMedia)   
-            await base.wait(1)
+            await this.wait(1)
         }
         // else {
         await this.uploadImage(selectFiles, filePath)
-        await this.clickXpath(select)
-        await base.wait(2)
+        await this.click(select)
+        await this.wait(2)
         let cropIsVisible = await this.isVisible(crop)
         if (cropIsVisible) {
-            await this.clickXpath(crop)
-            await base.wait(3)
+            await this.click(crop)
+            await this.wait(3)
         }
         // }
     },
@@ -567,16 +574,16 @@ module.exports = {
         if (uploadedMediaIsVisible) {
             // await page.click(wpUploadFiles)
             await page.click(uploadedMedia)
-            await base.wait(1)
+            await this.wait(1)
         }
         else {
             await this.uploadImage(selectFiles, filePath)
-            await this.clickXpath(select)
-            await base.wait(1)
+            await this.click(select)
+            await this.wait(1)
             let cropIsVisible = await this.isVisible(crop)
             if (cropIsVisible) {
-                await this.clickXpath(crop)
-                await base.wait(1)
+                await this.click(crop)
+                await this.wait(1)
             }
         }
     },
@@ -587,7 +594,7 @@ module.exports = {
         if (previousUploadedImageIsVisible) {
             await this.hover(previousUploadedImageSelector)
             await page.click(removePreviousUploadedImageSelector)
-            await base.wait(2)
+            await this.wait(2)
         }
     },
 
@@ -630,4 +637,8 @@ module.exports = {
     // const watchDog2 = [page.waitForSelector('.form .error'),page.waitForNavigation({ waitUntil: 'networkidle2' })]
     // await continueButton.evaluate(continueButton => continueButton.click())
     // await await Promise.race(watchDog2)
+
+
 }
+
+

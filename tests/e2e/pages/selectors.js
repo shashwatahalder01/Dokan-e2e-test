@@ -1872,13 +1872,13 @@ module.exports = {
             updateOrderStatus: "//input[@name='dokan_change_status']",
 
             //refund order
+            refundDiv:"#woocommerce-order-items",
             requestRefund: ".dokan-btn.refund-items",
             productQuantity: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='quantity']//div`,
             productCost: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='line_cost']//div`,
             productTax: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='line_tax']//div`,
             refundProductQuantity: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='quantity']//div[@class='refund']//input`,
-            // refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_total wc_input_price']`,
-            refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='line_total wc_input_price tips']`,
+            refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_total wc_input_price']`,
             refundProductTaxAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_tax wc_input_price']`,
 
             shippingCost: (shippingName) => ``, //TODO:add locator

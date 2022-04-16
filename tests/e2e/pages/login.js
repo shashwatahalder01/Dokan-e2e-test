@@ -15,8 +15,8 @@ module.exports = {
         await base.goIfNotThere("my-account")
         let emailField = await base.isVisible(selector.frontend.username)
         if (emailField) {
-            await page.type(selector.frontend.username, username)
-            await page.type(selector.frontend.userPassword, password)
+            await base.type(selector.frontend.username, username)
+            await base.type(selector.frontend.userPassword, password)
             await base.clickAndWait(selector.frontend.logIn)
 
             let loggedInUser = await base.getCurrentUser()
