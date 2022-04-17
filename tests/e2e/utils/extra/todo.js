@@ -36,4 +36,5 @@
 //TODO: selector.customer.cWooSelector (using in vendor) shift woocommerce out of the customer object , 
 //TODO: update order status if needed : refund request
 //TODO: use set value instead of typing to see if theres any speed difference
-// TODO: Function empty cart if not, create product if not exits(for buying product), for customer/vendor/admin (check that user is logged in or not)  via api call
+//TODO: Function empty cart if not, create product if not exits(for buying product), for customer/vendor/admin (check that user is logged in or not)  via api call
+//TODO: get all flags from database: tax rate, commission rate, commission type, shipping rate,  
