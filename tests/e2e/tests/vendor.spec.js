@@ -20,7 +20,7 @@ describe('vendor functionality test', () => {
 
    it('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
+      await vendorPage.goToVendorDashboard() //TODO: check if this is needed
    }, timeout)
 
    it('vendor can logout', async () => {

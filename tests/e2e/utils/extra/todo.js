@@ -27,7 +27,13 @@
 //TODO: handle all actions for xpath element and css element
 //TODO: remove redundant locator
 //TODO: vendor verification upload media  update function from vendor store settings
-//TODO: creat users & also add in before all
+//TODO: create users & also add in before all
 //TODO: min max product wholesale product,vendor subscription handle
 //TODO: replace login with wp script login function
 //TODO: rename orderId to orderNumber
+//TODO: add is current url to every go to function
+//TODO: clear cart before any purchase
+//TODO: selector.customer.cWooSelector (using in vendor) shift woocommerce out of the customer object , 
+//TODO: update order status if needed : refund request
+//TODO: use set value instead of typing to see if theres any speed difference
+// TODO: Function empty cart if not, create product if not exits(for buying product), for customer/vendor/admin (check that user is logged in or not)  via api call

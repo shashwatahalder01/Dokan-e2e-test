@@ -107,6 +107,8 @@ module.exports = {
    withdrawPaymentMethods: ['paypal', 'bank', 'dokan_custom', 'skrill'],
    reserveBalance: ['0', '5', '10', '15', '50', '100', '200', '300', '500', '1000', '2000', '3000', '5000', '10000'],
 
+   orderStatus: ['wc-pending', 'wc-processing', 'wc-on-hold', 'wc-completed', 'wc-cancelled', 'wc-refunded', 'wc-failed'],
+
    //rma settings
    rmaType: ['no_warranty', 'included_warranty', 'addon_warranty'],
    rmaLength: ['limited', 'lifetime'],

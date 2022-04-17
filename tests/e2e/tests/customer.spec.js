@@ -6,6 +6,7 @@ const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
 const { faker } = require('@faker-js/faker')
 const helpers = require('../utils/helpers.js')
+const base = require('../pages/base.js')
 const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 

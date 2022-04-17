@@ -69,7 +69,7 @@ describe('admin functionality test', () => {
         await adminPage.addDokanSubscription(data.product.name.dokanSubscription, data.product.price, data.product.category, data.product.vendor[0])
     }, timeout)
 
-    it.only('admin can add auction product', async () => {
+    it('admin can add auction product', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addAuctionProduct(data.product.name.auction, data.product.price, data.product.auction.startDate, data.product.auction.endDate, data.product.category, data.product.vendor[1])
     }, timeout)
