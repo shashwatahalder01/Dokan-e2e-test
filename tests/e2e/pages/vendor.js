@@ -1269,7 +1269,32 @@ module.exports = {
         let successMessage = await base.getElementText(selector.vendor.vOrders.refundRequestSuccessMessage)
         expect(successMessage).toMatch('Refund request submitted.')
         await page.click(selector.vendor.vOrders.refundRequestSuccessMessageOk)
-    }
+    },
+
+
+    async getOrderDetails(orderNumber) {
+        await this.goToVendorDashboard()
+        await base.clickAndWait(selector.vendor.vDashboard.orders)
+        let vOrderDetails = {}
+        vOrderDetails.vendorEarning = helpers.price(await base.getElementText(selector.vendor.vOrders.vendorEarningTable(orderNumber)))
+
+        await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
+        vOrderDetails.orderNumber = (await base.getElementText(selector.vendor.vOrders.orderNumber)).split('#')[1]
+        let refundedOrderTotalIsVisible = await base.isVisible(selector.vendor.vOrders.orderTotalAfterRefund)
+        if (refundedOrderTotalIsVisible) {
+            vOrderDetails.orderTotalBeforeRefund = helpers.price(await base.getElementText(selector.vendor.vOrders.orderTotalBeforeRefund))
+            vOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.vendor.vOrders.orderTotalAfterRefund))
+        } else {
+            vOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.vendor.vOrders.orderTotal))
+        }
+        vOrderDetails.orderStatus = await base.getElementText(selector.vendor.vOrders.currentOrderStatus)
+        vOrderDetails.discount = helpers.price(await base.getElementText(selector.vendor.vOrders.discount))
+        vOrderDetails.shipping = helpers.price(await base.getElementText(selector.vendor.vOrders.shipping))
+        vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
+        vOrderDetails.refunded = helpers.price(await base.getElementText(selector.vendor.vOrders.refunded))
+
+        return vOrderDetails
+},
 
 
 }

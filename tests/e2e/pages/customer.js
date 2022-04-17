@@ -541,11 +541,11 @@ module.exports = {
     async getOrderDetails() {
         let cOrderDetails = {
             orderNumber: await base.getElementText(selector.customer.cOrderReceived.orderNumber),
-            subtotal: await base.getElementText(selector.customer.cOrderReceived.subtotal),
+            subtotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.subtotal)),
             shipping: await base.getElementText(selector.customer.cOrderReceived.shipping),
-            tax: await base.getElementText(selector.customer.cOrderReceived.tax),
+            tax: helpers.price(await base.getElementText(selector.customer.cOrderReceived.tax)),
             paymentMethod: await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod),
-            orderTotal: await base.getElementText(selector.customer.cOrderReceived.orderTotal),
+            orderTotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.orderTotal)),
         }
         return cOrderDetails
     },

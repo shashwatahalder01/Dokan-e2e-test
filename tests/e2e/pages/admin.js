@@ -1,7 +1,7 @@
 require('dotenv').config()
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
-const helper = require("../../e2e/utils/helpers.js")
+const helpers = require("../../e2e/utils/helpers.js")
 const { faker } = require('@faker-js/faker')
 
 module.exports = {
@@ -1293,14 +1293,14 @@ module.exports = {
     await base.wait(2)
 
     let aOrderDetails = {
-      orderId: await base.getElementText(selector.admin.dokan.reports.orderId),
+      orderNumber: (await base.getElementText(selector.admin.dokan.reports.orderId)).split('#')[1],
       store: await base.getElementText(selector.admin.dokan.reports.store),
-      orderTotal: await base.getElementText(selector.admin.dokan.reports.orderTotal),
-      vendorEarning: await base.getElementText(selector.admin.dokan.reports.vendorEarning),
-      commission: await base.getElementText(selector.admin.dokan.reports.commission),
-      gatewayFee: await base.getElementText(selector.admin.dokan.reports.gatewayFee),
-      shipping: await base.getElementText(selector.admin.dokan.reports.shipping),
-      tax: await base.getElementText(selector.admin.dokan.reports.tax),
+      orderTotal: helpers.price(await base.getElementText(selector.admin.dokan.reports.orderTotal)),
+      vendorEarning: helpers.price(await base.getElementText(selector.admin.dokan.reports.vendorEarning)),
+      commission: helpers.price(await base.getElementText(selector.admin.dokan.reports.commission)),
+      gatewayFee: helpers.price(await base.getElementText(selector.admin.dokan.reports.gatewayFee)),
+      shipping: helpers.price(await base.getElementText(selector.admin.dokan.reports.shipping)),
+      tax: helpers.price(await base.getElementText(selector.admin.dokan.reports.tax)),
       orderStatus: await base.getElementText(selector.admin.dokan.reports.orderStatus),
       date: await base.getElementText(selector.admin.dokan.reports.date),
     }

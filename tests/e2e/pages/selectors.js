@@ -1858,6 +1858,13 @@ module.exports = {
             selectAll: "#cb-select-all",
             selectBulkOrderAction: "#bulk-order-action-selector",
             applyBulkOrder: "#bulk-order-action",
+            //order details from table
+            orderTotalTable: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//td[@class='dokan-order-total']//bdi`,
+            orderTotalAfterRefundTable: (orderNumber) => `///strong[contains(text(),'Order ${orderNumber}')]/../../..//td[@class='dokan-order-total']//ins//bdi`,
+            vendorEarningTable: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//td[@class='dokan-order-earning']//span`,
+            orderStatusTable: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//td[@class='dokan-order-status']//span`,
+
+
             //order sub-actions
             orderLink: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/..`,
             processing: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//a[@data-original-title='Processing']`,
@@ -1865,11 +1872,21 @@ module.exports = {
             view: (orderNumber) => `//strong[contains(text(),'Order ${orderNumber}')]/../../..//a[@data-original-title='View']`,
 
             //edit order status
-            currentOrderStatus: ".dokan-label.dokan-label-info",
+            currentOrderStatus: ".order-status .dokan-label",
             selectedOrderStatus: "//select[@id='order_status']//option[@selected='selected']",
             edit: ".dokan-edit-status",
             orderStatus: "#order_status",
             updateOrderStatus: "//input[@name='dokan_change_status']",
+
+            //order details
+            orderNumber: ".dokan-panel-heading strong",
+            orderTotal: "//td[contains(text(),'Order Total:')]/..//bdi",
+            orderTotalBeforeRefund:"//td[contains(text(),'Order Total:')]/..//del",
+            orderTotalAfterRefund:"//td[contains(text(),'Order Total:')]/..//ins//bdi",
+            discount: "//td[contains(text(),'Discount')]/..//bdi",
+            shipping: "//td[contains(text(),'Shipping')]/..//bdi",
+            tax: "//td[contains(text(),'Tax')]/..//bdi",
+            refunded: ".total.refunded-total bdi",
 
             //refund order
             refundDiv:"#woocommerce-order-items",

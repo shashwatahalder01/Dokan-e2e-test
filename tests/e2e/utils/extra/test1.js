@@ -29,4 +29,4 @@
 
 
 
-console.log(.01 * 1000)
+console.log('order#103'.split('#')[1])

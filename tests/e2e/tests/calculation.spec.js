@@ -17,7 +17,7 @@ describe('refund functionality test', () => {
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
 
-    it.only('refund through rma test', async () => {
+    it('refund through rma test', async () => {
         // let productName = data.product.name.simple
         let productName = 'product1'
 
@@ -70,5 +70,32 @@ describe('refund functionality test', () => {
         // approve refund request
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.approveRefundRequest(cOrderDetails.orderNumber, true)
+    }, timeout)
+
+    it.only('calculation test', async () => {
+        // let productName = data.product.name.simple
+        let productName = 'product1'
+
+        //create product
+        // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        // await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+
+        //buy product
+        // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        let cOrderDetails = await customerPage.buyProduct(productName, false, true)
+
+        //vendor order details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
+
+        //admin order details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
+        // let vOrderDetails = await vendorPage.getOrderDetails('988')
+
+        console.log(cOrderDetails, aOrderDetails, vOrderDetails)
+        // console.log( vOrderDetails)
+
     }, timeout)
 })
