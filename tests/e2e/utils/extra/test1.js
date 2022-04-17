@@ -28,5 +28,11 @@
 
 
 
+// console.log(94.77 - 4.74 + 5)
+// console.log(94.77 - 9.48 + 4.74)
+// for (let i = 0; i < 100; i++) {
+// console.log(Math.floor((Math.random() * 2) +1)) }
 
-console.log('order#103'.split('#')[1])
+for (let i = 0; i < 100; i++) {
+console.log(Math.floor(Math.random() * 3))
+}

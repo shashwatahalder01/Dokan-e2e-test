@@ -29,65 +29,75 @@ module.exports = {
     currentDate: new Date().toLocaleDateString('en-CA'),
 
     currentDateTime: new Date().toLocaleString('en-CA', {
-        year: 'numeric', month: 'numeric', day: 'numeric', hour12: false, hour: "numeric",
-        minute: "numeric"
+        year: 'numeric', month: 'numeric', day: 'numeric', hour12: false, hour: "numeric", minute: "numeric"
     }),
 
     // add two input days
-    addDays: (date, days) => {
+    addDays(date, days) {
         var result = new Date(date)
         result.setDate(result.getDate() + days)
         return result.toLocaleDateString('en-CA', { year: 'numeric', month: 'numeric', day: 'numeric', hour12: false, hour: "numeric", minute: "numeric" })
     },
 
     // add two days
-    addDays1: (date, days) => {
+    addDays1(date, days) {
         var result = new Date(date)
         result.setDate(result.getDate() + days)
         return result.toLocaleDateString('en-CA')
     },
     //round to two decimal places
-    roundToTwo: (num) => +(Math.round(num + "e+2") + "e-2"),
+    roundToTwo(num) { return +(Math.round(num + "e+2") + "e-2") },
     //calculate percentage
-    percentage: (number, percentage) => this.roundToTwo(number * (percentage / 100)),
+    percentage(number, percentage) { return this.roundToTwo(number * (percentage / 100)) },
     //calculate percentage
-    percentage1: (number, percentage) => ((number * (percentage / 100)).toFixed(2)),
+    percentage1(number, percentage) { return ((number * (percentage / 100)).toFixed(2)) },
 
     //tax
-    tax: (taxRate, subtotal, shipping = 0) => {
-        return tax = this.percentage(subtotal, taxRate) + this.percentage(shipping, taxRate)
+    tax(taxRate, subtotal, shipping = 0) {
+        let tax = this.percentage(subtotal, taxRate) + this.percentage(shipping, taxRate)
+        return this.roundToTwo(tax)
     },
 
+    //order total
+    orderTotal(subtotal, tax, shipping = 0) {
+        let orderTotal = subtotal + tax + shipping
+        return this.roundToTwo(orderTotal)
+    },
 
     //calculate admin commission
-    adminCommission: (subTotal, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') => {
+    adminCommission(subTotal, commissionRate, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') {
         //TODO: handle gateway fee deduct from
         //TODO: handle different commission
+        let adminCommission
         if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
-            return adminCommission = this.percentage(subTotal) - gatewayFee
+            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee
         } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
-            return vendorEarning = this.percentage(subTotal) - gatewayFee + shipping
+            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + shipping
         } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
-            return vendorEarning = this.percentage(subTotal) - gatewayFee + tax
+            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax
         } else {
-            return vendorEarning = this.percentage(subTotal) - gatewayFee + tax + shipping
+            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax + shipping
         }
+        return this.roundToTwo(adminCommission)
     },
-
 
     //calculate vendor earning
-    vendorEarning: (orderTotal, commission, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') => {
+    vendorEarning(subTotal, commission, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') {
+        // console.log(subTotal, commission, tax, shipping)
         //TODO: handle gateway fee deduct from
+        let vendorEarning
         if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
-            return vendorEarning = orderTotal - commission - gatewayFee + tax + shipping
+            vendorEarning = subTotal - commission - gatewayFee + tax + shipping
         } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
-            return vendorEarning = orderTotal - commission - gatewayFee + tax
+            vendorEarning = subTotal - commission - gatewayFee + tax
         } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
-            return vendorEarning = orderTotal - commission - gatewayFee + shipping
+            vendorEarning = subTotal - commission - gatewayFee + shipping
         } else {
-            return vendorEarning = orderTotal - commission - gatewayFee
+            vendorEarning = subTotal - commission - gatewayFee
         }
+        return this.roundToTwo(vendorEarning)
     },
+
 }
 
 

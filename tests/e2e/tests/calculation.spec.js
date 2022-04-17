@@ -73,16 +73,17 @@ describe('refund functionality test', () => {
     }, timeout)
 
     it.only('calculation test', async () => {
-        // let productName = data.product.name.simple
-        let productName = 'product1'
+        let productName = data.product.name.simple  
+        // let productName = 'product1'
+        // let productName = 'Small Wooden Table (Simple)'
 
-        //create product
-        // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+        // create product
+        await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
 
-        //buy product
-        // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        // buy product
+        await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         let cOrderDetails = await customerPage.buyProduct(productName, false, true)
 
         //vendor order details
@@ -92,10 +93,39 @@ describe('refund functionality test', () => {
         //admin order details
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
-        // let vOrderDetails = await vendorPage.getOrderDetails('988')
 
         console.log(cOrderDetails, aOrderDetails, vOrderDetails)
-        // console.log( vOrderDetails)
+
+        let subtotal = cOrderDetails.subtotal
+        // let subtotal = 94.77
+        let taxRate = Number(process.env.TAX_RATE)
+        let commissionRate = Number(process.env.COMMISSION_RATE)
+        let shipping = 0
+        let calculatedTax = helpers.tax(taxRate, subtotal, shipping)
+        let calculatedOrderTotal = helpers.orderTotal(subtotal ,calculatedTax ,shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subtotal, commissionRate, calculatedTax, shipping)
+        let calculatedVendorEarning = helpers.vendorEarning(subtotal, calculatedAdminCommission, calculatedTax, shipping)
+        console.log(calculatedTax, calculatedOrderTotal, calculatedAdminCommission, calculatedVendorEarning)
+
+
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        // console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        // console.log(`shipping :  c:${cOrderDetails.shipping}, a:${aOrderDetails.shipping}, v:${vOrderDetails.shipping}`)
+        console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, a:${aOrderDetails.orderTotal},`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+
+
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        // expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        // expect(cOrderDetails.shipping ===  aOrderDetails.shipping && cOrderDetails.shipping === vOrderDetails.shipping ).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+
 
     }, timeout)
 })

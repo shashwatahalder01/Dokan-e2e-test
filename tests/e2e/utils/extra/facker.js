@@ -59,7 +59,11 @@ const randomBsBsAdjective = faker.company.bsAdjective()
 const randomBsBuzz = faker.company.bsBuzz()
 
 // const randomNumber = faker.datatype.number({ min: 1000000 })
-const randomNumber = faker.datatype.number({min:1, max:5})
+const randomNumber1 = faker.datatype.number({min:1, max:5})
+const randomNumber2 = faker.finance.amount(1, 200, 2)
+const randomNumber3 = faker.datatype.number({min:1, max:200, precision: 0.01})
+
+
 const randomUuid = faker.datatype.uuid()
 const randomAlphaNumeric = faker.random.alphaNumeric(10)
 
@@ -92,4 +96,11 @@ const randomLines = faker.lorem.lines()
 
 
 // console.log(randomWords)
-console.log(faker.datatype.uuid())
+// console.log(faker.datatype.uuid())
+
+
+
+
+for (let i = 0; i < 100; i++) {
+console.log(faker.finance.amount(100, 200, faker.random.arrayElement([0,2])))
+}
