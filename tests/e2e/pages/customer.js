@@ -422,16 +422,16 @@ module.exports = {
         expect(successMessage).toMatch('Email sent successfully!')
     },
 
-    async buyProduct(productName, couponCode, getOrderDetails) {
+    async buyProduct(productName, couponCode = false, getOrderDetails = false) {
         await this.goToShop()
-        await this.addProductToCartFromShop(productName)
+        await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
         await this.goToCartFromShop()
         if (couponCode) {
             await this.applyCoupon(couponCode)
         }
         await this.goToCheckoutFromCart()
-        let [orderId] = await this.placeOrder(getOrderDetails)
-        return orderId
+        let cOrderDetails = await this.placeOrder(getOrderDetails)
+        return cOrderDetails
     },
 
     //customer add product to cart from shop page
@@ -517,7 +517,7 @@ module.exports = {
     },
 
     //customer place order
-    async placeOrder(getOrderDetails) {
+    async placeOrder(getOrderDetails = false) {
         //TODO:handle billing address warning or shipping address warning
         // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
@@ -532,18 +532,22 @@ module.exports = {
         expect(orderReceivedIsVisible).toBe(true)
 
         if (getOrderDetails) {
-            // await this.getOrderDetails()
-
-            let orderId = await base.getElementText(selector.customer.cOrderReceived.orderNumber)
-            let subtotal = await base.getElementText(selector.customer.cOrderReceived.subtotal)
-            let shipping = await base.getElementText(selector.customer.cOrderReceived.shipping)
-            let tax = await base.getElementText(selector.customer.cOrderReceived.tax)
-            let paymentMethod = await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod)
-            let orderTotal = await base.getElementText(selector.customer.cOrderReceived.orderTotal)
-            // console.log(orderId, subtotal, shipping, tax, paymentMethod, orderTotal)
-            return [orderId, subtotal, shipping, tax, paymentMethod, orderTotal]
-
+            // let cOrderDetails = await this.getOrderDetails()
+            // return cOrderDetails
+            return await this.getOrderDetails()
         }
+    },
+
+    async getOrderDetails() {
+        let cOrderDetails = {
+            orderNumber: await base.getElementText(selector.customer.cOrderReceived.orderNumber),
+            subtotal: await base.getElementText(selector.customer.cOrderReceived.subtotal),
+            shipping: await base.getElementText(selector.customer.cOrderReceived.shipping),
+            tax: await base.getElementText(selector.customer.cOrderReceived.tax),
+            paymentMethod: await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod),
+            orderTotal: await base.getElementText(selector.customer.cOrderReceived.orderTotal),
+        }
+        return cOrderDetails
     },
 
     //customer add billing address in checkout
@@ -598,11 +602,11 @@ module.exports = {
     },
 
     //customer ask for warranty
-    async sendWarrantyRequest(orderId, productName, requestType, requestReason, requestDetails) {
+    async sendWarrantyRequest(orderNumber, productName, requestType, requestReason, requestDetails) {
         await this.goToMyAccount()
 
         await base.clickAndWait(selector.customer.cMyAccount.orders)
-        await base.clickAndWait(selector.customer.cOrders.ordersWarrantyRequest(orderId))
+        await base.clickAndWait(selector.customer.cOrders.ordersWarrantyRequest(orderNumber))
 
         await base.click(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
         // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
@@ -614,13 +618,6 @@ module.exports = {
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Request has been successfully submitted')
-
-        //cleanup
-        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // await vendorPage.deleteReturnRequest(orderId)
-        await vendorPage.approveReturnRequest(orderId, productName)
-
-
     },
 
 }

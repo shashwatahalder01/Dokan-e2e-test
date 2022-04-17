@@ -286,11 +286,11 @@ module.exports = {
     await page.select(selector.admin.dokan.settings.orderStatus, 'processing')
     await page.select(selector.admin.dokan.settings.enableRefundRequests, 'yes')
     await page.select(selector.admin.dokan.settings.enableCouponRequests, 'yes')
-    let rmaReasons = ['Defective','Wrong Product','Other']
+    let rmaReasons = ['Defective', 'Wrong Product', 'Other']
     for (let rmaReason of rmaReasons) {
-    await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle(rmaReason))
-    await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, rmaReason)
-    await page.click(selector.admin.dokan.settings.reasonsForRmaAdd)
+      await base.deleteIfExists(selector.admin.dokan.settings.reasonsForRmaSingle(rmaReason))
+      await base.clearAndType(selector.admin.dokan.settings.reasonsForRmaInput, rmaReason)
+      await page.click(selector.admin.dokan.settings.reasonsForRmaAdd)
     }
 
     let iframe = await base.switchToIframe(selector.admin.dokan.settings.refundPolicyIframe)
@@ -1292,28 +1292,30 @@ module.exports = {
     await page.type(selector.admin.dokan.reports.searchByOrder, orderNumber)
     await base.wait(2)
 
-    let orderId = await base.getElementText(selector.admin.dokan.reports.orderId)
-    let store = await base.getElementText(selector.admin.dokan.reports.store)
-    let orderTotal = await base.getElementText(selector.admin.dokan.reports.orderTotal)
-    let vendorEarning = await base.getElementText(selector.admin.dokan.reports.vendorEarning)
-    let commission = await base.getElementText(selector.admin.dokan.reports.commission)
-    let gatewayFee = await base.getElementText(selector.admin.dokan.reports.gatewayFee)
-    let shipping = await base.getElementText(selector.admin.dokan.reports.shipping)
-    let tax = await base.getElementText(selector.admin.dokan.reports.tax)
-    let orderStatus = await base.getElementText(selector.admin.dokan.reports.orderStatus)
-    let date = await base.getElementText(selector.admin.dokan.reports.date)
-
-    // console.log(orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date)
-    return [orderId, store, orderTotal, vendorEarning, commission, gatewayFee, shipping, tax, orderStatus, date]
-
+    let aOrderDetails = {
+      orderId: await base.getElementText(selector.admin.dokan.reports.orderId),
+      store: await base.getElementText(selector.admin.dokan.reports.store),
+      orderTotal: await base.getElementText(selector.admin.dokan.reports.orderTotal),
+      vendorEarning: await base.getElementText(selector.admin.dokan.reports.vendorEarning),
+      commission: await base.getElementText(selector.admin.dokan.reports.commission),
+      gatewayFee: await base.getElementText(selector.admin.dokan.reports.gatewayFee),
+      shipping: await base.getElementText(selector.admin.dokan.reports.shipping),
+      tax: await base.getElementText(selector.admin.dokan.reports.tax),
+      orderStatus: await base.getElementText(selector.admin.dokan.reports.orderStatus),
+      date: await base.getElementText(selector.admin.dokan.reports.date),
+    }
+    return aOrderDetails
   },
 
-  async approveRefundRequest(orderNumber) {
+  async approveRefundRequest(orderNumber, approve = false) {
     await this.searchRefundRequest(orderNumber)
 
     await base.hover(selector.admin.dokan.refunds.refundCell(orderNumber))
-    await base.click(selector.admin.dokan.refunds.approveRefund(orderNumber))
-    // await base.click(selector.admin.dokan.refunds.cancelRefund(orderNumber))
+    if (approve) {
+      await base.click(selector.admin.dokan.refunds.approveRefund(orderNumber))
+    } else {
+      await base.click(selector.admin.dokan.refunds.cancelRefund(orderNumber))
+    }
     await base.wait(3)
 
     let refundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
@@ -1326,11 +1328,12 @@ module.exports = {
 
     //search refund request
     await base.type(selector.admin.dokan.refunds.searchRefund, orderNumber)
+    // await page.keyboard.press('Enter')
     await base.wait(3)
 
+    await base.waitForSelector(selector.admin.dokan.refunds.refundCell(orderNumber))
     let searchedRefundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(searchedRefundRequestIsVisible).toBe(true)
-
   }
 
 

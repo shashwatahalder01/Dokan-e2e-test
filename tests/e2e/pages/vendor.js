@@ -1181,8 +1181,6 @@ module.exports = {
         let successMessage = await base.getElementText(selector.vendor.vReturnRequest.sendRequestSuccessMessage)
         expect(successMessage).toMatch('Already send refund request. Wait for admin approval')
 
-        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.approveRefundRequest(orderId)
     },
 
     async deleteReturnRequest(orderId) {
@@ -1249,12 +1247,10 @@ module.exports = {
     async refundOrder(orderNumber, productName, partialRefund) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.orders)
-
         await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
 
         //request refund
         await page.click(selector.vendor.vOrders.requestRefund)
-        // await base.wait(3)
         let productQuantity = await base.getElementText(selector.vendor.vOrders.productQuantity(productName))
         let productCost = helpers.price(await base.getElementText(selector.vendor.vOrders.productCost(productName)))
         let productTax = helpers.price(await base.getElementText(selector.vendor.vOrders.productTax(productName)))
@@ -1273,11 +1269,6 @@ module.exports = {
         let successMessage = await base.getElementText(selector.vendor.vOrders.refundRequestSuccessMessage)
         expect(successMessage).toMatch('Refund request submitted.')
         await page.click(selector.vendor.vOrders.refundRequestSuccessMessageOk)
-
-        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.approveRefundRequest(orderNumber)
-
-
     }
 
 
