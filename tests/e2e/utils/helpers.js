@@ -59,7 +59,7 @@ module.exports = {
     },
 
     //order total
-    orderTotal(subtotal, tax, shipping = 0) {
+    orderTotal(subtotal, tax = 0, shipping = 0) {
         let orderTotal = subtotal + tax + shipping
         return this.roundToTwo(orderTotal)
     },
@@ -68,16 +68,21 @@ module.exports = {
     adminCommission(subTotal, commissionRate, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') {
         //TODO: handle gateway fee deduct from
         //TODO: handle different commission
-        let adminCommission
-        if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
-            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee
-        } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
-            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + shipping
-        } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
-            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax
-        } else {
-            adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax + shipping
-        }
+        // let adminCommission
+        // if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
+        //     adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee
+        // } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
+        //     adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + shipping
+        // } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
+        //     adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax
+        // } else {
+        //     adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax + shipping
+        // }
+        if (taxReceiver == 'vendor') tax = 0
+        if (taxReceiver == 'vendor') shipping = 0
+        if (gatewayFeeGiver == 'vendor') gatewayFee = 0
+
+        let adminCommission = this.percentage(subTotal, commissionRate) - gatewayFee + tax + shipping
         return this.roundToTwo(adminCommission)
     },
 
@@ -85,16 +90,22 @@ module.exports = {
     vendorEarning(subTotal, commission, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') {
         // console.log(subTotal, commission, tax, shipping)
         //TODO: handle gateway fee deduct from
-        let vendorEarning
-        if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
-            vendorEarning = subTotal - commission - gatewayFee + tax + shipping
-        } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
-            vendorEarning = subTotal - commission - gatewayFee + tax
-        } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
-            vendorEarning = subTotal - commission - gatewayFee + shipping
-        } else {
-            vendorEarning = subTotal - commission - gatewayFee
-        }
+        // let vendorEarning
+        // if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {
+        //     vendorEarning = subTotal - commission - gatewayFee + tax + shipping
+        // } else if ((taxReceiver == 'vendor') && (shippingReceiver == 'admin')) {
+        //     vendorEarning = subTotal - commission - gatewayFee + tax
+        // } else if ((taxReceiver == 'admin') && (shippingReceiver == 'vendor')) {
+        //     vendorEarning = subTotal - commission - gatewayFee + shipping
+        // } else {
+        //     vendorEarning = subTotal - commission - gatewayFee
+        // }
+
+        if (taxReceiver !== 'vendor') tax = 0
+        if (taxReceiver !== 'vendor') shipping = 0
+        if (gatewayFeeGiver !== 'vendor') gatewayFee = 0
+
+        let vendorEarning = subTotal - commission - gatewayFee + tax + shipping
         return this.roundToTwo(vendorEarning)
     },
 

@@ -1287,12 +1287,13 @@ module.exports = {
         } else {
             vOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.vendor.vOrders.orderTotal))
         }
-        vOrderDetails.orderStatus = await base.getElementText(selector.vendor.vOrders.currentOrderStatus)
+        vOrderDetails.orderStatus = (await base.getElementText(selector.vendor.vOrders.currentOrderStatus)).replace('-', ' ')
+        let orderDate = (await base.getElementText(selector.vendor.vOrders.orderDate)).split(':')[1].trim()
+        vOrderDetails.orderDate  = orderDate.substring(0, orderDate.indexOf(',', orderDate.indexOf(',')+1))
         vOrderDetails.discount = helpers.price(await base.getElementText(selector.vendor.vOrders.discount))
-        vOrderDetails.shipping = helpers.price(await base.getElementText(selector.vendor.vOrders.shipping))
+        vOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.vendor.vOrders.shippingCost))
         vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
         vOrderDetails.refunded = helpers.price(await base.getElementText(selector.vendor.vOrders.refunded))
-
         return vOrderDetails
 },
 

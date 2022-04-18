@@ -499,12 +499,12 @@ module.exports = {
     //         const text = await page.evaluate(element => element.textContent, element)
     //         var children = await page.$x(element)
     //         console.log(children)
-    //         // console.log(text)
-    //         // if (value.toLowerCase() == (text.trim()).toLowerCase()) {
-    //         //     // console.log(text)
-    //         //     // await element.click()
-    //         //     console.log(element.childNodes.length)
-    //         // }
+            // console.log(text)
+            // if (value.toLowerCase() == (text.trim()).toLowerCase()) {
+                // console.log(text)
+                // await element.click()
+            //     console.log(element.childNodes.length)
+            // }
     //     }
     // },
 

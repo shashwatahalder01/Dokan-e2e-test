@@ -40,6 +40,13 @@ module.exports = {
         expect(url).toMatch('store-listing')
     },
 
+    async goToCart() {
+        await base.goto('cart')
+
+        const url = await page.url()
+        expect(url).toMatch('cart')
+    },
+
 
 
 
@@ -423,6 +430,7 @@ module.exports = {
     },
 
     async buyProduct(productName, couponCode = false, getOrderDetails = false) {
+        await this.clearCart()
         await this.goToShop()
         await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
         await this.goToCartFromShop()
@@ -534,19 +542,41 @@ module.exports = {
         if (getOrderDetails) {
             // let cOrderDetails = await this.getOrderDetails()
             // return cOrderDetails
-            return await this.getOrderDetails()
+            return await this.getOrderDetailsAfterPlaceOrder()
         }
     },
 
-    async getOrderDetails() {
+    async getOrderDetailsAfterPlaceOrder() {
         let cOrderDetails = {
             orderNumber: await base.getElementText(selector.customer.cOrderReceived.orderNumber),
-            subtotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.subtotal)),
-            shipping: await base.getElementText(selector.customer.cOrderReceived.shipping),
+            subtotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.subTotal)),
+            shippingMethod: await base.getElementText(selector.customer.cOrderReceived.shipping),//TODO:add shipping method & cost separately
             tax: helpers.price(await base.getElementText(selector.customer.cOrderReceived.tax)),
             paymentMethod: await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod),
             orderTotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.orderTotal)),
         }
+        return cOrderDetails
+    },
+
+    async getOrderDetails(orderNumber) {
+        await this.goToMyAccount()
+
+        await base.clickAndWait(selector.customer.cMyAccount.orders)
+        await base.clickAndWait(selector.customer.cOrders.OrderDetailsLInk(orderNumber))
+
+        let cOrderDetails = {
+            orderNumber: await base.getElementText(selector.customer.cOrders.orderNumber),
+            orderDate: await base.getElementText(selector.customer.cOrders.orderDate),
+            orderStatus: await base.getElementText(selector.customer.cOrders.orderStatus),
+            subtotal: helpers.price(await base.getElementText(selector.customer.cOrders.subTotal)),
+            shippingMethod: await base.getElementText(selector.customer.cOrders.shippingMethod),
+            // shippingCost: helpers.price(await base.getElementText(selector.customer.cOrders.shippingMethod)), //TODO:add shipping method & cost seperately
+            // shippingMethod: await base.getElementText(selector.customer.cOrders.shippingMethod),
+            tax: helpers.price(await base.getElementText(selector.customer.cOrders.tax)),
+            paymentMethod: await base.getElementText(selector.customer.cOrders.paymentMethod),
+            orderTotal: helpers.price(await base.getElementText(selector.customer.cOrders.orderTotal)),
+        }
+        // console.log(cOrderDetails)
         return cOrderDetails
     },
 
@@ -618,6 +648,20 @@ module.exports = {
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Request has been successfully submitted')
+    },
+
+    async clearCart() {
+        await this.goToCart()
+        let cartProductIsVisible = await base.isVisible(selector.customer.cCart.productCrossIcon)
+        if (cartProductIsVisible) {
+            await base.click(selector.customer.cCart.productCrossIcon)
+            let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+            expect(successMessage).toContain('removed. Undo?')
+            await this.clearCart()
+        } else {
+            let successMessage = await base.getElementText(selector.customer.cCart.cartEmptyMessage)
+            expect(successMessage).toMatch('Your cart is currently empty.')
+        }
     },
 
 }

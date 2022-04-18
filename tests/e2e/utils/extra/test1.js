@@ -33,6 +33,24 @@
 // for (let i = 0; i < 100; i++) {
 // console.log(Math.floor((Math.random() * 2) +1)) }
 
-for (let i = 0; i < 100; i++) {
-console.log(Math.floor(Math.random() * 3))
+// for (let i = 0; i < 100; i++) {
+// console.log(Math.floor(Math.random() * 3))
+// }
+
+function reverse(s){
+    return s.split("").reverse().join("");
 }
+
+// let s = 'Order Date: April 18, 2022, 11:01 pm'
+// //  console.log(s.split(':')[1])
+// //  console.log(s.split(':')[1])
+//  var str =  s.split(':')[1]
+//  var res = str.substring(0, str.indexOf(',', str.indexOf(',')+1))
+// console.log(res)
+
+
+console.log(1===1===1)
+    
+    let a = 1
+
+    a == true ? console.log(-a) : console.log(a)

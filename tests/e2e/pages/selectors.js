@@ -396,10 +396,10 @@ module.exports = {
                 vendorEarning: ".column.vendor_earning > div",
                 commission: ".column.commission > div",
                 gatewayFee: ".column.dokan_gateway_fee > div",
-                shipping: ".column.shipping_total > div",
+                shippingCost: ".column.shipping_total > div",
                 tax: ".column.tax_total > div",
                 orderStatus: "td.column.status",
-                date: "td.column.date ",
+                orderDate: "td.column.date ",
             },
 
             //modules
@@ -706,7 +706,7 @@ module.exports = {
                 enableRefundRequests: "#dokan_rma\\[rma_enable_refund_request\\]",
                 enableCouponRequests: "#dokan_rma\\[rma_enable_coupon_request\\]",
                 reasonsForRmaSingle: (reason) => `//li[contains(text(),'${reason}')]//span[@class="dashicons dashicons-no-alt remove-item"]`,
-                reasonsForRma:".remove-item",
+                reasonsForRma: ".remove-item",
                 reasonsForRmaInput: ".regular-text",
                 reasonsForRmaAdd: ".dokan-repetable-add-item-btn",
                 refundPolicyIframe: 'iframe',
@@ -1880,16 +1880,17 @@ module.exports = {
 
             //order details
             orderNumber: ".dokan-panel-heading strong",
+            orderDate:"//span[contains(text(),'Order Date:')]/..",
             orderTotal: "//td[contains(text(),'Order Total:')]/..//bdi",
-            orderTotalBeforeRefund:"//td[contains(text(),'Order Total:')]/..//del",
-            orderTotalAfterRefund:"//td[contains(text(),'Order Total:')]/..//ins//bdi",
+            orderTotalBeforeRefund: "//td[contains(text(),'Order Total:')]/..//del",
+            orderTotalAfterRefund: "//td[contains(text(),'Order Total:')]/..//ins//bdi",
             discount: "//td[contains(text(),'Discount')]/..//bdi",
-            shipping: "//td[contains(text(),'Shipping')]/..//bdi",
+            shippingCost: "//td[contains(text(),'Shipping')]/..//bdi", //TODO: add shipping method & cost
             tax: "//td[contains(text(),'Tax')]/..//bdi",
             refunded: ".total.refunded-total bdi",
 
             //refund order
-            refundDiv:"#woocommerce-order-items",
+            refundDiv: "#woocommerce-order-items",
             requestRefund: ".dokan-btn.refund-items",
             productQuantity: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='quantity']//div`,
             productCost: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//td[@class='line_cost']//div`,
@@ -1898,15 +1899,15 @@ module.exports = {
             refundProductCostAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_total wc_input_price']`,
             refundProductTaxAmount: (productName) => `//td[@class='name' and @data-sort-value='${productName}']/..//input[@class='refund_line_tax wc_input_price']`,
 
-            shippingCost: (shippingName) => ``, //TODO:add locator
+            // shippingCost: (shippingName) => ``, //TODO:add locator
             refundShippingAmount: (shippingName) => `//div[@class='view' and contains(text(),'${shippingName}')]/../../..//input[@class='refund_line_total wc_input_price']`,
             refundShippingTaxAmount: (shippingName) => `//div[@class='view' and contains(text(),'${shippingName}')]/../../..//input[@class='refund_line_tax wc_input_price']`,
 
             refundReason: "#refund_reason",
             refundManually: ".dokan-btn.do-manual-refund",
-            confirmRefund:".swal2-confirm.swal2-styled.swal2-default-outline",
-            refundRequestSuccessMessage:"#swal2-html-container",
-            refundRequestSuccessMessageOk:".swal2-confirm.swal2-styled.swal2-default-outline",
+            confirmRefund: ".swal2-confirm.swal2-styled.swal2-default-outline",
+            refundRequestSuccessMessage: "#swal2-html-container",
+            refundRequestSuccessMessageOk: ".swal2-confirm.swal2-styled.swal2-default-outline",
             cancelRefund: ".dokan-btn.cancel-action",
 
         },
@@ -3072,6 +3073,18 @@ module.exports = {
             warrantyRequestDetails: "#warranty_request_details",
             warrantySubmitRequest: ".dokan-btn",
 
+            //order details
+            OrderDetailsLInk: (orderNumber) => `//a[contains(text(), '#${orderNumber}')]/../..//a[contains(text(), 'View')]`,
+            orderNumber: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-number']",
+            orderDate: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-date']",
+            orderStatus: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-status']",
+            subTotal: "//th[contains(text(),'Subtotal:')]/..//span",
+            shippingMethod: "//th[contains(text(),'Shipping:')]/..//td", //TODO:delete this when shipping method is fixed
+            shippingCost: "//th[contains(text(),'Shipping:')]/..//span",
+            shippingMethod1: "//th[contains(text(),'Shipping:')]/..//small",
+            tax: "//th[contains(text(),'Tax:')]/..//span",
+            paymentMethod: "//th[contains(text(),'Payment method:')]/..//td",
+            orderTotal: "//th[contains(text(),'Total:')]/..//span",
         },
 
         //customer subscription
@@ -3365,6 +3378,10 @@ module.exports = {
             //proceed To Checkout
             proceedToCheckout: ".checkout-button.button.wc-forward",
 
+            //remove all item
+            productCrossIcon: ".product-remove a",
+            cartEmptyMessage: '.cart-empty.woocommerce-info',
+
         },
 
         //customer checkout
@@ -3465,8 +3482,8 @@ module.exports = {
             paymentMethod: ".woocommerce-order-overview__payment-method.method strong",
 
             //order details
-            subtotal: "//th[normalize-space()='Subtotal:']//..//span",
-            shipping: "//th[normalize-space()='Shipping:']//..//td",
+            subTotal: "//th[normalize-space()='Subtotal:']//..//span",
+            shipping: "//th[normalize-space()='Shipping:']//..//td", //TODO: add shipping cost and shipping method
             tax: "//th[normalize-space()='Tax:']//..//span",
             orderPaymentMethod: "//th[normalize-space()='Payment method:']//..//td",
             orderTotal: "//th[normalize-space()='Total:']//..//span",

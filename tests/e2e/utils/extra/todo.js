@@ -37,4 +37,7 @@
 //TODO: update order status if needed : refund request
 //TODO: use set value instead of typing to see if theres any speed difference
 //TODO: Function empty cart if not, create product if not exits(for buying product), for customer/vendor/admin (check that user is logged in or not)  via api call
-//TODO: get all flags from database: tax rate, commission rate, commission type, shipping rate,  
+//TODO: get all flags from database: tax rate, commission rate, commission type, shipping rate, 
+//TODO: buy product from single product page, not from shop page (NOT ALL PRODUCT HAVE ADD TO CART OPTION ON SHOP PAGE)
+//TODO: get customer order details from order page
+//TODO: two recursion functions  are used clearCart() and deleteIfExists() find second one and replace it with nonRecursion function

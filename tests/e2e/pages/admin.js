@@ -1284,7 +1284,7 @@ module.exports = {
     expect(enableStatusSuccessMessage).toMatch('Wholesale capability activate')
   },
 
-  async getOrderDetails(orderNumber) {
+  async getOrderDetails(orderNumber) { //TODO: separate function to get order details form inside order details page
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.reportsMenu)
     await base.click(selector.admin.dokan.reports.allLogs)
@@ -1299,10 +1299,10 @@ module.exports = {
       vendorEarning: helpers.price(await base.getElementText(selector.admin.dokan.reports.vendorEarning)),
       commission: helpers.price(await base.getElementText(selector.admin.dokan.reports.commission)),
       gatewayFee: helpers.price(await base.getElementText(selector.admin.dokan.reports.gatewayFee)),
-      shipping: helpers.price(await base.getElementText(selector.admin.dokan.reports.shipping)),
+      shippingCost: helpers.price(await base.getElementText(selector.admin.dokan.reports.shippingCost)),
       tax: helpers.price(await base.getElementText(selector.admin.dokan.reports.tax)),
       orderStatus: await base.getElementText(selector.admin.dokan.reports.orderStatus),
-      date: await base.getElementText(selector.admin.dokan.reports.date),
+      orderDate: await base.getElementText(selector.admin.dokan.reports.orderDate),
     }
     return aOrderDetails
   },
