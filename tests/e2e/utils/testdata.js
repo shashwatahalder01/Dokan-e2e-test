@@ -136,6 +136,9 @@ module.exports = {
    //vendor store settings
    vacationClosingStyle: ['instantly', 'datewise'],
 
+   //Stripe express
+   iDealBanks: ['abn_amro', 'asn_bank', 'bunq', 'handelsbanken', 'ing', 'knab', 'rabobank', 'regiobank', 'revolut', 'sns_bank', 'triodos_bank', 'van_lanschot'],
+
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//
 
@@ -255,7 +258,7 @@ module.exports = {
       // price: faker.commerce.price(100, 200, 2),
       // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
       // price: faker.finance.amount(1, 200, 2), 
-      price: faker.finance.amount(100, 200, faker.random.arrayElement([0,2])),
+      price: faker.finance.amount(100, 200, faker.random.arrayElement([0, 2])),
       auctionPrice: faker.commerce.price(10, 100, 0),
       category: 'Uncategorized',
       categories: faker.random.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
@@ -302,11 +305,11 @@ module.exports = {
 
    },
 
-   order:{
+   order: {
       //refund
-      refundRequestType:'refund',
-      refundRequestReasons:'defective',
-      refundRequestDetails:'I would like to return this product',
+      refundRequestType: 'refund',
+      refundRequestReasons: 'defective',
+      refundRequestDetails: 'I would like to return this product',
    },
 
    card: {
@@ -315,7 +318,7 @@ module.exports = {
          stript3D: '4000002500003155',
          expiryMonth: '12',
          expiryYear: '50',
-         expiryDate:'1250',
+         expiryDate: '1250',
          cvc: '111'
       },
       mangopay: {
@@ -325,6 +328,19 @@ module.exports = {
          cvc: '111'
       },
 
+   },
+
+   paymentDetails: {
+      stripExpress: {
+         paymentMethod: 'card',
+         cardInfo: {
+            cardNumber: '4242424242424242',
+            expiryMonth: '12',
+            expiryYear: '50',
+            expiryDate: '1250', //MMYY
+            cvc: '111'
+         },
+      },
    },
 
    coupon: {

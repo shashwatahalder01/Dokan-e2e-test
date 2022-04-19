@@ -1880,12 +1880,13 @@ module.exports = {
 
             //order details
             orderNumber: ".dokan-panel-heading strong",
-            orderDate:"//span[contains(text(),'Order Date:')]/..",
+            orderDate: "//span[contains(text(),'Order Date:')]/..",
             orderTotal: "//td[contains(text(),'Order Total:')]/..//bdi",
             orderTotalBeforeRefund: "//td[contains(text(),'Order Total:')]/..//del",
             orderTotalAfterRefund: "//td[contains(text(),'Order Total:')]/..//ins//bdi",
             discount: "//td[contains(text(),'Discount')]/..//bdi",
-            shippingCost: "//td[contains(text(),'Shipping')]/..//bdi", //TODO: add shipping method & cost
+            shippingMethod: "//tr[contains(@class,'shipping')]//div[@class='view']", 
+            shippingCost: "//td[contains(text(),'Shipping')]/..//bdi", 
             tax: "//td[contains(text(),'Tax')]/..//bdi",
             refunded: ".total.refunded-total bdi",
 
@@ -3079,9 +3080,9 @@ module.exports = {
             orderDate: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-date']",
             orderStatus: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-status']",
             subTotal: "//th[contains(text(),'Subtotal:')]/..//span",
-            shippingMethod: "//th[contains(text(),'Shipping:')]/..//td", //TODO:delete this when shipping method is fixed
+            shipping: "//th[contains(text(),'Shipping:')]/..//td", //TODO:delete this when shipping method is fixed
             shippingCost: "//th[contains(text(),'Shipping:')]/..//span",
-            shippingMethod1: "//th[contains(text(),'Shipping:')]/..//small",
+            shippingMethod: "//th[contains(text(),'Shipping:')]/..//small",
             tax: "//th[contains(text(),'Tax:')]/..//span",
             paymentMethod: "//th[contains(text(),'Payment method:')]/..//td",
             orderTotal: "//th[contains(text(),'Total:')]/..//span",
@@ -3434,6 +3435,8 @@ module.exports = {
             cashOnDelivery: ".payment_method_cod label",
             paypalAdaptive: ".payment_method_dokan_paypal_adaptive label",
             wireCardCreditCard: ".payment_method_dokan-moip-connect label",
+            paypalMarketPlace: "#payment_method_dokan_paypal_marketplace",
+            stripeExpress: "#payment_method_dokan_stripe_express",
             //place order
             placeOrder: "#place_order"
 
@@ -3448,9 +3451,11 @@ module.exports = {
             cvc: "//input[@name='cvc']",
             savePaymentInformation: "#wc-dokan-stripe-connect-new-payment-method",
         },
+
         cPayWithPaypalMarketPlace: {
             paypalMarketPlace: ".payment_method_dokan_paypal_marketplace label"
         },
+
         cPayWithRazorpay: {
             razorPay: ".payment_method_dokan_razorpay label"
         },
@@ -3469,7 +3474,17 @@ module.exports = {
         },
 
         cPayWithStripeExpress: {
-            stripExpress: ".payment_method_strip_express label",
+            savedTestCard4242: "//label[contains(text(),'Visa ending in 4242')]/..//input",
+            userNewPaymentMethod: "#wc-dokan_stripe_express-payment-token-new",
+            savePaymentInformation: "#wc-dokan_stripe_express-new-payment-method",
+            stripeExpressIframe: "#dokan-stripe-express-element iframe",
+            creditCard: "#card-tab",
+            gPay: "#google_pay-tab",
+            iDeal: "#ideal-tab",
+            iDealBanks: "#Field-bankInput",
+            cardNumber: "#Field-numberInput",
+            expDate: "#Field-expiryInput",
+            cvc: "#Field-cvcInput",
         },
 
         cOrderReceived: {
@@ -3483,7 +3498,9 @@ module.exports = {
 
             //order details
             subTotal: "//th[normalize-space()='Subtotal:']//..//span",
-            shipping: "//th[normalize-space()='Shipping:']//..//td", //TODO: add shipping cost and shipping method
+            shipping: "//th[normalize-space()='Shipping:']//..//td", //TODO: delete this line when localhost gets fixed
+            shippingCost: "//th[normalize-space()='Shipping:']/..//span", 
+            shippingMethod: "//th[normalize-space()='Shipping:']/..//small", 
             tax: "//th[normalize-space()='Tax:']//..//span",
             orderPaymentMethod: "//th[normalize-space()='Payment method:']//..//td",
             orderTotal: "//th[normalize-space()='Total:']//..//span",

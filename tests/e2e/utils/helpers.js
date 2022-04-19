@@ -66,7 +66,6 @@ module.exports = {
 
     //calculate admin commission
     adminCommission(subTotal, commissionRate, tax = 0, shipping = 0, gatewayFee = 0, taxReceiver = 'vendor', shippingReceiver = 'vendor', gatewayFeeGiver = 'vendor') {
-        //TODO: handle gateway fee deduct from
         //TODO: handle different commission
         // let adminCommission
         // if ((taxReceiver == 'vendor') && (shippingReceiver == 'vendor')) {

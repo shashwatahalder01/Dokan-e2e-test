@@ -25,6 +25,7 @@
     "test-interactive:vendor": "wp-scripts test-e2e vendor.spec.js -- --puppeteer-interactive ",
     "test-interactive:vendor:report": "wp-scripts test-e2e vendor.spec.js -- --puppeteer-interactive && npm run openReport",
     "test:customer": "wp-scripts test-e2e customer.spec.js",
+    "test:se": "wp-scripts test-e2e stripeExpress.spec.js",
     "test:calculation": "wp-scripts test-e2e calculation.spec.js",
     "test-interactive:customer": "wp-scripts test-e2e customer.spec.js -- --puppeteer-interactive",
     "test-interactive:customer:report": "wp-scripts test-e2e customer.spec.js -- --puppeteer-interactive && npm run openReport",

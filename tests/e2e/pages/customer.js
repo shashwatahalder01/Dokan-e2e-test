@@ -429,8 +429,10 @@ module.exports = {
         expect(successMessage).toMatch('Email sent successfully!')
     },
 
-    async buyProduct(productName, couponCode = false, getOrderDetails = false) {
-        await this.clearCart()
+    async buyProduct(productName, couponCode = false, getOrderDetails = false, payMentMethod = 'bank', paymentDetails) {
+        //clear cart before buying
+        // await this.clearCart()
+        //buy product
         await this.goToShop()
         await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
         await this.goToCartFromShop()
@@ -438,7 +440,7 @@ module.exports = {
             await this.applyCoupon(couponCode)
         }
         await this.goToCheckoutFromCart()
-        let cOrderDetails = await this.placeOrder(getOrderDetails)
+        let cOrderDetails = await this.placeOrder(payMentMethod, getOrderDetails, paymentDetails)
         return cOrderDetails
     },
 
@@ -525,15 +527,49 @@ module.exports = {
     },
 
     //customer place order
-    async placeOrder(getOrderDetails = false) {
+    async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails) {
         //TODO:handle billing address warning or shipping address warning
         // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
-
-        await base.wait(4)
-        // await base.waitForSelector(selector.customer.cCheckout.placeOrder)
-        await page.click(selector.customer.cCheckout.placeOrder)
         await base.wait(5)
+
+        switch (paymentMethod) {
+            case 'bank':
+                await page.click(selector.customer.cCheckout.directBankTransfer)
+
+                await page.click(selector.customer.cCheckout.placeOrder)
+                await base.wait(5)
+                break
+            case 'check':
+                await page.click(selector.customer.cCheckout.checkPayments)
+
+                await page.click(selector.customer.cCheckout.placeOrder)
+                await base.wait(5)
+                break
+            case 'cod':
+                await page.click(selector.customer.cCheckout.cashOnDelivery)
+
+                await page.click(selector.customer.cCheckout.placeOrder)
+                await base.wait(5)
+                break
+            case 'stripe':
+                await this.payWithStripe()
+                break
+            case 'paypalMarketPlace':
+                await this.payWithPaypalMarketPlace()
+                break
+            case 'razorPay':
+                await this.payWithRazorPay()
+                break
+            case 'mangoPay':
+                await this.payWithMangoPay()
+                break
+            case 'stripeExpress':
+                await this.payWithStripeExpress(paymentDetails)
+                break
+            default:
+                break
+        }
 
         await base.waitForSelector(selector.customer.cOrderReceived.orderReceivedPageHeader)
         let orderReceivedIsVisible = await base.isVisible(selector.customer.cOrderReceived.orderReceivedPageHeader)
@@ -546,15 +582,67 @@ module.exports = {
         }
     },
 
-    async getOrderDetailsAfterPlaceOrder() {
-        let cOrderDetails = {
-            orderNumber: await base.getElementText(selector.customer.cOrderReceived.orderNumber),
-            subtotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.subTotal)),
-            shippingMethod: await base.getElementText(selector.customer.cOrderReceived.shipping),//TODO:add shipping method & cost separately
-            tax: helpers.price(await base.getElementText(selector.customer.cOrderReceived.tax)),
-            paymentMethod: await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod),
-            orderTotal: helpers.price(await base.getElementText(selector.customer.cOrderReceived.orderTotal)),
+
+    async payWithStripe() { },
+    async payWithPaypalMarketPlace() { },
+    async payWithRazorPay() { },
+    async payWithMangoPay() { },
+    async payWithStripeExpress(paymentDetails) {
+        let paymentMethod = paymentDetails.paymentMethod
+        let cardInfo = paymentDetails.cardInfo
+
+        await base.click(selector.customer.cCheckout.stripeExpress)
+        await base.wait(2)
+
+        let savedTestCard4242IsVisible = await base.isVisible(selector.customer.cPayWithStripeExpress.savedTestCard4242)
+        if (!savedTestCard4242IsVisible) {
+            let stripeExpressCardIframe = await base.switchToIframe(selector.customer.cPayWithStripeExpress.stripeExpressIframe)
+            switch (paymentMethod) {
+                case 'card':
+                    await base.iframeClick(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.creditCard)
+                    await base.iframeClearAndType(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.cardNumber, cardInfo.cardNumber)
+                    await base.iframeClearAndType(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.expDate, cardInfo.cardExpiryDate)
+                    await base.iframeClearAndType(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.cvc, cardInfo.cardCvc)
+                    await page.click(selector.customer.cPayWithStripeExpress.savePaymentInformation)
+                    break
+                case 'gPay':
+                    await base.iframeClick(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.gPay)
+                    return
+                case 'applePay':
+                    await base.iframeClick(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.gPay)
+                    return
+                case 'iDeal':
+                    await base.iframeClick(stripeExpressCardIframe, selector.customer.cPayWithStripeExpress.iDeal)
+                    break
+                default:
+                    break
+            }
+        } else {
+            await base.click(selector.customer.cPayWithStripeExpress.savedTestCard4242)
         }
+        await page.click(selector.customer.cCheckout.placeOrder)
+        await base.wait(5)
+    },
+
+    async getOrderDetailsAfterPlaceOrder() {
+        let cOrderDetails = {}
+        cOrderDetails.orderNumber = await base.getElementText(selector.customer.cOrderReceived.orderNumber)
+        cOrderDetails.subtotal = helpers.price(await base.getElementText(selector.customer.cOrderReceived.subTotal))
+
+        // let onlyShippingIsVisible = await base.isVisible(selector.customer.cOrderReceived.shipping)//TODO:delete this line when shipping is fixed
+        // if (onlyShippingIsVisible) cOrderDetails.shippingMethod = await base.getElementText(selector.customer.cOrderReceived.shipping)//TODO:delete this line when shipping is fixed
+
+        let shippingIsVisible = await base.isVisible(selector.customer.cOrderReceived.shippingCost)
+        if (shippingIsVisible) {
+            cOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.customer.cOrderReceived.shippingCost))
+            cOrderDetails.shippingMethod = helpers.price(await base.getElementText(selector.customer.cOrderReceived.shippingMethod))
+        }
+        let taxIsVisible = await base.isVisible(selector.customer.cOrderReceived.shipping)
+        if (taxIsVisible) cOrderDetails.tax = helpers.price(await base.getElementText(selector.customer.cOrderReceived.tax))
+        
+        cOrderDetails.paymentMethod = await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod)
+        cOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.customer.cOrderReceived.orderTotal))
+
         return cOrderDetails
     },
 
@@ -564,18 +652,26 @@ module.exports = {
         await base.clickAndWait(selector.customer.cMyAccount.orders)
         await base.clickAndWait(selector.customer.cOrders.OrderDetailsLInk(orderNumber))
 
-        let cOrderDetails = {
-            orderNumber: await base.getElementText(selector.customer.cOrders.orderNumber),
-            orderDate: await base.getElementText(selector.customer.cOrders.orderDate),
-            orderStatus: await base.getElementText(selector.customer.cOrders.orderStatus),
-            subtotal: helpers.price(await base.getElementText(selector.customer.cOrders.subTotal)),
-            shippingMethod: await base.getElementText(selector.customer.cOrders.shippingMethod),
-            // shippingCost: helpers.price(await base.getElementText(selector.customer.cOrders.shippingMethod)), //TODO:add shipping method & cost seperately
-            // shippingMethod: await base.getElementText(selector.customer.cOrders.shippingMethod),
-            tax: helpers.price(await base.getElementText(selector.customer.cOrders.tax)),
-            paymentMethod: await base.getElementText(selector.customer.cOrders.paymentMethod),
-            orderTotal: helpers.price(await base.getElementText(selector.customer.cOrders.orderTotal)),
+        let cOrderDetails = {}
+        cOrderDetails.orderNumber = await base.getElementText(selector.customer.cOrders.orderNumber)
+        cOrderDetails.orderDate = await base.getElementText(selector.customer.cOrders.orderDate)
+        cOrderDetails.orderStatus = await base.getElementText(selector.customer.cOrders.orderStatus)
+        cOrderDetails.subtotal = helpers.price(await base.getElementText(selector.customer.cOrders.subTotal))
+
+        // let onlyShippingIsVisible = await base.isVisible(selector.customer.cOrders.shipping)//TODO:delete this line when shipping is fixed
+        // if (onlyShippingIsVisible) cOrderDetails.shippingMethod = await base.getElementText(selector.customer.cOrders.shippingMethod)//TODO:delete this line when shipping is fixed
+
+        let shippingIsVisible = await base.isVisible(selector.customer.cOrders.shippingCost)
+        if (shippingIsVisible) {
+            cOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.customer.cOrders.shippingMethod))
+            cOrderDetails.shippingMethod = await base.getElementText(selector.customer.cOrders.shippingMethod)
         }
+
+        let taxIsVisible = await base.isVisible(selector.customer.cOrders.shipping)
+        if (taxIsVisible) cOrderDetails.tax = helpers.price(await base.getElementText(selector.customer.cOrders.tax))
+        cOrderDetails.paymentMethod = await base.getElementText(selector.customer.cOrders.paymentMethod)
+        cOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.customer.cOrders.orderTotal))
+
         // console.log(cOrderDetails)
         return cOrderDetails
     },

@@ -49,8 +49,14 @@ function reverse(s){
 // console.log(res)
 
 
-console.log(1===1===1)
+// console.log(1===1===1)
     
-    let a = 1
+//     let a = 1
 
-    a == true ? console.log(-a) : console.log(a)
+//     a == true ? console.log(-a) : console.log(a)
+
+const hero = {
+    name: 'Batman'
+  };
+  
+  console.log(hero.hasOwnProperty('namme'))

@@ -237,6 +237,7 @@ module.exports = {
     //goto subUrl
     async goto(subPath) {
         let url = await this.createURL(subPath)
+        console.log(url)
         await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
@@ -434,6 +435,26 @@ module.exports = {
         return iframe
     },
 
+    //get element handle for xpath or css selector 
+    async getIframeElement(iframe, selector) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
+            await iframe.waitForXPath(selector)
+            let [element] = await iframe.$x(selector)
+            return element
+        } else {
+            await iframe.waitForSelector(selector)
+            let element = await iframe.$(selector)
+            return element
+        }
+    },
+
+    //iframe click element
+    async iframeClick(iframe, selector) {
+        let element = await this.getIframeElement(iframe,selector)
+        await element.click()
+
+    },
+
     //iframe: clear and type iframe input element 
     async iframeClearAndType(iframe, selector, value) {
         await iframe.$eval(selector, element => element.textContent = '')
@@ -499,12 +520,12 @@ module.exports = {
     //         const text = await page.evaluate(element => element.textContent, element)
     //         var children = await page.$x(element)
     //         console.log(children)
-            // console.log(text)
-            // if (value.toLowerCase() == (text.trim()).toLowerCase()) {
-                // console.log(text)
-                // await element.click()
-            //     console.log(element.childNodes.length)
-            // }
+    // console.log(text)
+    // if (value.toLowerCase() == (text.trim()).toLowerCase()) {
+    // console.log(text)
+    // await element.click()
+    //     console.log(element.childNodes.length)
+    // }
     //     }
     // },
 

@@ -41,3 +41,7 @@
 //TODO: buy product from single product page, not from shop page (NOT ALL PRODUCT HAVE ADD TO CART OPTION ON SHOP PAGE)
 //TODO: get customer order details from order page
 //TODO: two recursion functions  are used clearCart() and deleteIfExists() find second one and replace it with nonRecursion function
+//TODO: add increase product quantity function
+//TODO: add compare order note function vendor vs admin
+//TODO: add function to check vendor statement check for both order & refund
+//TODO: create global object payment method test data
