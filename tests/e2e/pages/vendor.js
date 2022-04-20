@@ -1294,8 +1294,10 @@ module.exports = {
         let shippingMethodIsVisible = await base.isVisible(selector.vendor.vOrders.shippingMethod)
         if(shippingMethodIsVisible) vOrderDetails.shippingMethod = helpers.price(await base.getElementText(selector.vendor.vOrders.shippingMethod))
         vOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.vendor.vOrders.shippingCost))
-        vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
+        let taxIsVisible = await base.isVisible(selector.vendor.vOrders.tax)
+        if(taxIsVisible) vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
         vOrderDetails.refunded = helpers.price(await base.getElementText(selector.vendor.vOrders.refunded))
+        
         return vOrderDetails
 },
 

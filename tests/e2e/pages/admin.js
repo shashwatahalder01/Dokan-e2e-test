@@ -464,10 +464,12 @@ module.exports = {
   //-------------------------------------------------- tax ----------------------------------------------------//
 
 
-  //admin enable tax
-  async enableTax() {
+  //admin enable-disable tax
+  async enableTax(enableTax = true) {
+    await this.goToWooCommerceSettings()
+
     // enable tax
-    await base.check(selector.admin.wooCommerce.settings.enableTaxes)
+    enableTax ? await base.check(selector.admin.wooCommerce.settings.enableTaxes) : await base.uncheck(selector.admin.wooCommerce.settings.enableTaxes)
     await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
     let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
@@ -479,7 +481,7 @@ module.exports = {
     await this.goToWooCommerceSettings()
 
     //enable tax
-    await this.enableTax()
+    await this.enableTax(true)
 
     // set tax rate
     await base.clickAndWait(selector.admin.wooCommerce.settings.tax)
@@ -538,6 +540,23 @@ module.exports = {
 
   //----------------------------------------------- shipping methods ------------------------------------------------//
 
+  //enable enable-disable shipping 
+
+  async enableShipping(enableShipping = true) {
+
+    await this.goToWooCommerceSettings()
+    await page.click(selector.admin.wooCommerce.settings.enableShipping)
+    if (enableShipping) {
+      await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.enableShippingValues, 'Ship to all countries you sell to')
+    } else {
+      await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.enableShippingValues, 'Disable shipping & shipping calculations')
+    }
+    await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
+
+    let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
+    expect(successMessage).toMatch('Your settings have been saved.')
+
+  },
 
 
   // admin add shipping method

@@ -95,7 +95,7 @@ describe('refund functionality test', () => {
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
 
-        console.log(cOrderDetails, aOrderDetails, vOrderDetails)
+        console.log('cOrderDetails: ', cOrderDetails, 'aOrderDetails: ', aOrderDetails, 'vOrderDetails: ', vOrderDetails)
 
         let subtotal = cOrderDetails.subtotal
         // let subtotal = 201.92
@@ -113,27 +113,27 @@ describe('refund functionality test', () => {
         console.log(calculatedTax, calculatedOrderTotal, calculatedAdminCommission, calculatedVendorEarning)
 
 
-        // console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
-        // console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
-        // console.log(`orderStatus :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
-        // console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
-        // // console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
-        // // console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
-        // console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
-        // console.log(`orderTotal : cal:${calculatedOrderTotal}, a:${aOrderDetails.orderTotal},`)
-        // console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
-        // console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        // console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
+        // console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
+        console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, a:${aOrderDetails.orderTotal},`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
 
 
-        // expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
-        // expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
-        // // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
-        // expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
-        // // expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod ).toBeTruthy()
-        // // expect(cOrderDetails.shippingCost ===  aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost ).toBeTruthy()
-        // expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
-        // expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
-        // expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
+        expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        // expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod ).toBeTruthy()
+        // expect(cOrderDetails.shippingCost ===  aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost ).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
 
 
     }, timeout)

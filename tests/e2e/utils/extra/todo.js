@@ -45,3 +45,5 @@
 //TODO: add compare order note function vendor vs admin
 //TODO: add function to check vendor statement check for both order & refund
 //TODO: create global object payment method test data
+//TODO: wait for ajax request to complete
+//TODO: duplicate line vs function call

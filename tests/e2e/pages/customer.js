@@ -531,7 +531,7 @@ module.exports = {
         //TODO:handle billing address warning or shipping address warning
         // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
-        await base.wait(5)
+        await base.wait(6)
 
         switch (paymentMethod) {
             case 'bank':

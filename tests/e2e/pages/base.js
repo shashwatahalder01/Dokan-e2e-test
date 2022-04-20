@@ -237,7 +237,6 @@ module.exports = {
     //goto subUrl
     async goto(subPath) {
         let url = await this.createURL(subPath)
-        console.log(url)
         await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 

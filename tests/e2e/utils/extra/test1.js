@@ -55,8 +55,6 @@ function reverse(s){
 
 //     a == true ? console.log(-a) : console.log(a)
 
-const hero = {
-    name: 'Batman'
-  };
+
   
-  console.log(hero.hasOwnProperty('namme'))
+  console.log('namme' + '\n' + 'adfasd')

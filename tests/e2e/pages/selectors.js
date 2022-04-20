@@ -847,6 +847,8 @@ module.exports = {
                 shippingLocation: "#select2-woocommerce_ship_to_countries-container",
                 defaultCustomerLocation: "#select2-woocommerce_default_customer_address-container",
                 enableTaxes: "#woocommerce_calc_taxes",
+                enableShipping: '#select2-woocommerce_ship_to_countries-container',
+                enableShippingValues: '.select2-results ul li',
                 enableCoupon: "#woocommerce_enable_coupons",
                 calculateCouponDiscountsSequentially: "#woocommerce_calc_discounts_sequentially",
                 //currency options
@@ -3435,8 +3437,8 @@ module.exports = {
             cashOnDelivery: ".payment_method_cod label",
             paypalAdaptive: ".payment_method_dokan_paypal_adaptive label",
             wireCardCreditCard: ".payment_method_dokan-moip-connect label",
-            paypalMarketPlace: "#payment_method_dokan_paypal_marketplace",
-            stripeExpress: "#payment_method_dokan_stripe_express",
+            paypalMarketPlace: ".wc_payment_method.payment_method_dokan_paypal_marketplace label",
+            stripeExpress: ".wc_payment_method.payment_method_dokan_stripe_express label",
             //place order
             placeOrder: "#place_order"
 
