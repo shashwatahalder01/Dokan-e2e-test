@@ -83,14 +83,31 @@ describe('refund functionality test', () => {
         // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         // await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
 
+        //getTotalAdminCommission
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let totalAdminCommission = await adminPage.getTotalAdminCommission()
+        //getTotalVendorEarning
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let totalVendorEarning = await vendorPage.getTotalVendorEarning()
+        console.log('totalAdminCommission:', totalAdminCommission, 'totalVendorEarning:', totalVendorEarning)
+
+
         // buy product
         // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
+        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        // let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
         // let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
         // console.log('cOrderDetails: ', cOrderDetails)
 
-        // //vendor order details
+        // //getTotalAdminCommission
+        // await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // let afterProductBoughtTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        // //getTotalVendorEarning
+        // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        // let afterProductBoughtTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        // console.log('afterProductBoughtTotalAdminCommission:', totalAdminCommission, 'afterProductBoughtTotalVendorEarning:', totalVendorEarning)
+
+        // // //vendor order details
         // await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
 
@@ -148,9 +165,14 @@ describe('refund functionality test', () => {
         // await adminPage.enableTax(true)
         // await adminPage.enableShipping(true)
 
-        await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        let vOrderDetails = await vendorPage.getOrderDetails('154')
-        console.log('vOrderDetails: ', vOrderDetails)
+        // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        // let vOrderDetails = await vendorPage.getOrderDetails('154')
+        // console.log('vOrderDetails: ', vOrderDetails)
+
+
+
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+
 
     }, timeout)
 })

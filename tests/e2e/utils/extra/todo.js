@@ -47,3 +47,4 @@
 //TODO: create global object payment method test data
 //TODO: wait for ajax request to complete
 //TODO: duplicate line vs function call
+//TODO: add commission increase & vendor earning increase in calculation function

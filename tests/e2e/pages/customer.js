@@ -482,18 +482,17 @@ module.exports = {
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
         expect(cartIsVisible).toBe(true)
-
     },
 
     //got to checkout from cart
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
         await base.wait(2)
-
+        console.log('#######################')
         await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
+        console.log('@@@@@@@@@@@@@@@@@@@@@@')
         expect(checkoutIsVisible).toBe(true)
-
     },
 
     //customer apply coupon

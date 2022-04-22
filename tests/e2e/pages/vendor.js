@@ -1301,5 +1301,13 @@ module.exports = {
         return vOrderDetails
 },
 
+//get total vendor earnings
+    async getTotalVendorEarning() {
+        await this.goToVendorDashboard()
+
+        let totalVendorEarning = helpers.price(await base.getElementText(selector.vendor.vDashboard.earning))
+        return totalVendorEarning
+    },
+
 
 }

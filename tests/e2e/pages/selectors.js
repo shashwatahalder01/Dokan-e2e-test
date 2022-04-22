@@ -1628,6 +1628,12 @@ module.exports = {
             settings: '.settings > a',
             visitStore: '.fa-external-link-alt',
             editAccount: '.fa-user',
+
+            //overview
+            sales: "//div[@class='title' and contains(text(), 'Sales')]/..//div[@class='count']",
+            earning: "//div[@class='title' and contains(text(), 'Earning')]/..//div[@class='count']",
+            pageView: "//div[@class='title' and contains(text(), 'Pageview')]/..//div[@class='count']",
+            order: "//div[@class='title' and contains(text(), 'Order')]/..//div[@class='count']",
         },
 
         //products
@@ -1887,8 +1893,8 @@ module.exports = {
             orderTotalBeforeRefund: "//td[contains(text(),'Order Total:')]/..//del",
             orderTotalAfterRefund: "//td[contains(text(),'Order Total:')]/..//ins//bdi",
             discount: "//td[contains(text(),'Discount')]/..//bdi",
-            shippingMethod: "//tr[contains(@class,'shipping')]//div[@class='view']", 
-            shippingCost: "//td[contains(text(),'Shipping')]/..//bdi", 
+            shippingMethod: "//tr[contains(@class,'shipping')]//div[@class='view']",
+            shippingCost: "//td[contains(text(),'Shipping')]/..//bdi",
             tax: "//td[contains(text(),'Tax')]/..//bdi",
             refunded: ".total.refunded-total bdi",
 
@@ -3501,8 +3507,8 @@ module.exports = {
             //order details
             subTotal: "//th[normalize-space()='Subtotal:']//..//span",
             shipping: "//th[normalize-space()='Shipping:']//..//td", //TODO: delete this line when localhost gets fixed
-            shippingCost: "//th[normalize-space()='Shipping:']/..//span", 
-            shippingMethod: "//th[normalize-space()='Shipping:']/..//small", 
+            shippingCost: "//th[normalize-space()='Shipping:']/..//span",
+            shippingMethod: "//th[normalize-space()='Shipping:']/..//small",
             tax: "//th[normalize-space()='Tax:']//..//span",
             orderPaymentMethod: "//th[normalize-space()='Payment method:']//..//td",
             orderTotal: "//th[normalize-space()='Total:']//..//span",

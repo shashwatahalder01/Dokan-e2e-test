@@ -1326,6 +1326,15 @@ module.exports = {
     return aOrderDetails
   },
 
+  //get total admin commission from admin dashboard
+  async getTotalAdminCommission() {
+    await base.hover(selector.admin.aDashboard.dokan)
+    await base.clickAndWait(selector.admin.dokan.dashboardMenu)
+   
+    let totalAdminCommission = helpers.price(await base.getElementText(selector.admin.dokan.dashboard.commissionEarned))
+    return totalAdminCommission
+  },
+
   async approveRefundRequest(orderNumber, approve = false) {
     await this.searchRefundRequest(orderNumber)
 
