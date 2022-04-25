@@ -348,27 +348,6 @@ module.exports = {
         //TODO: add assertion
     },
 
-    //customer search product
-    async searchProduct(productName) {
-        await this.goToShop()
-
-        await page.type(selector.customer.cShop.searchProduct, productName)
-        await base.clickAndWait(selector.customer.cShop.search)
-
-        let searchedProductName = await base.getElementText(selector.customer.cShop.searchedProductName)
-        expect(searchedProductName).toMatch(productName)
-    },
-
-    //customer go to product(single) details
-    async goToProductDetails(productName) {
-        await this.searchProduct(productName)
-
-        await base.clickAndWait(selector.customer.cShop.productDetailsViewLink)
-
-        let productTitle = await base.getElementText(selector.customer.cSingleProduct.productTitle)
-        expect(productTitle).toMatch(productName)
-    },
-
     //customer rate & review product
     async reviewProduct(productName, rating) {
         await this.goToProductDetails(productName)
@@ -433,7 +412,7 @@ module.exports = {
         //clear cart before buying
         // await this.clearCart()
         //buy product
-        await this.goToShop()
+        await this.searchProduct(productName)
         await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
         await this.goToCartFromShop()
         if (couponCode) {
@@ -444,10 +423,30 @@ module.exports = {
         return cOrderDetails
     },
 
-    //customer add product to cart from shop page
-    async addProductToCartFromShop(productName) {
+    //customer search product
+    async searchProduct(productName) {
+        await this.goToShop()
+
         await page.type(selector.customer.cShop.searchProduct, productName)
         await base.clickAndWait(selector.customer.cShop.search)
+
+        let searchedProductName = await base.getElementText(selector.customer.cShop.searchedProductName)
+        expect(searchedProductName).toMatch(productName)
+    },
+
+    //customer go to product(single) details
+    async goToProductDetails(productName) {
+        await this.searchProduct(productName)
+
+        await base.clickAndWait(selector.customer.cShop.productDetailsViewLink)
+
+        let productTitle = await base.getElementText(selector.customer.cSingleProduct.productTitle)
+        expect(productTitle).toMatch(productName)
+    },
+
+
+    //customer add product to cart from shop page
+    async addProductToCartFromShop(productName) {
         await page.click(selector.customer.cShop.addToCart)
 
         await base.waitForSelector(selector.customer.cShop.viewCart)
@@ -474,6 +473,7 @@ module.exports = {
         expect(cartIsVisible).toBe(true)
     },
 
+
     //go to cart from product details page
     async goToCartFromSingleProductPage() {
         await page.click(selector.customer.cSingleProduct.viewCart)
@@ -491,6 +491,33 @@ module.exports = {
         await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
+    },
+
+    //clear cart
+    async clearCart() {
+        await this.goToCart()
+        let cartProductIsVisible = await base.isVisible(selector.customer.cCart.productCrossIcon)
+        if (cartProductIsVisible) {
+            await base.click(selector.customer.cCart.productCrossIcon)
+            let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+            expect(successMessage).toContain('removed. Undo?')
+            await this.clearCart()
+        } else {
+            let successMessage = await base.getElementText(selector.customer.cCart.cartEmptyMessage)
+            expect(successMessage).toMatch('Your cart is currently empty.')
+        }
+    },
+
+    //update product quantity from cart
+    async updateProductQuantityOnCart(productName, quantity) {
+        await base.clearAndType(selector.customer.cCart.quantity(productName), quantity)
+        await base.click(selector.customer.cCart.updateCart)
+        await base.wait(6)
+
+        // let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
+        // expect(successMessage).toMatch("Cart updated.")
+        let updateProductQuantity = await base.getElementValue(selector.customer.cCart.quantity(productName))
+        expect(updateProductQuantity).toMatch(quantity)
     },
 
     //customer apply coupon
@@ -661,7 +688,7 @@ module.exports = {
         let shippingIsVisible = await base.isVisible(selector.customer.cOrders.shippingCost)
         if (shippingIsVisible) {
             cOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.customer.cOrders.shippingCost))
-            cOrderDetails.shippingMethod = (await base.getElementText(selector.customer.cOrders.shippingMethod)).replace('via ','')
+            cOrderDetails.shippingMethod = (await base.getElementText(selector.customer.cOrders.shippingMethod)).replace('via ', '')
         }
 
         let taxIsVisible = await base.isVisible(selector.customer.cOrders.tax)
@@ -753,19 +780,7 @@ module.exports = {
         expect(successMessage).toMatch('Request has been successfully submitted')
     },
 
-    async clearCart() {
-        await this.goToCart()
-        let cartProductIsVisible = await base.isVisible(selector.customer.cCart.productCrossIcon)
-        if (cartProductIsVisible) {
-            await base.click(selector.customer.cCart.productCrossIcon)
-            let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-            expect(successMessage).toContain('removed. Undo?')
-            await this.clearCart()
-        } else {
-            let successMessage = await base.getElementText(selector.customer.cCart.cartEmptyMessage)
-            expect(successMessage).toMatch('Your cart is currently empty.')
-        }
-    },
+
 
 }
 

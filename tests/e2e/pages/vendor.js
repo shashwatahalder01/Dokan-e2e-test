@@ -1199,7 +1199,7 @@ module.exports = {
         await this.searchProduct(productName)
         await base.clickAndWait(selector.vendor.product.productLink(productName))
         //override rma settings
-        await page.click(selector.vendor.product.overrideYourDefaultRmaSettingsForThisProduct)
+        await base.check(selector.vendor.product.overrideYourDefaultRmaSettingsForThisProduct)
         await base.wait(1)
 
         await base.clearAndType(selector.vendor.product.rmaLabel, label)
@@ -1212,6 +1212,23 @@ module.exports = {
         if (refundReasonIsVisible) {
             await base.clickAndWaitMultiple(selector.vendor.product.refundReasons)
         }
+
+        await base.clickAndWait(selector.vendor.product.saveProduct)
+
+        let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+    },
+
+    //add quantity discount
+    async addQuantityDiscount(productName, minimumQuantity, discountPercentage) {
+        await this.searchProduct(productName)
+        await base.clickAndWait(selector.vendor.product.productLink(productName))
+
+        //add quantity discount
+        await base.check(selector.vendor.product.enableBulkDiscount)
+        await base.wait(1)
+        await base.clearAndType(selector.vendor.product.lotMinimumQuantity, minimumQuantity)
+        await base.clearAndType(selector.vendor.product.lotDiscountInPercentage, discountPercentage)
 
         await base.clickAndWait(selector.vendor.product.saveProduct)
 
@@ -1244,7 +1261,7 @@ module.exports = {
         expect(currentOrderStatus.toLowerCase()).toMatch((orderStatus.replace(/(^wc)|(\W)/g, '')).toLowerCase())
     },
 
-    async refundOrder(orderNumber, productName, partialRefund) {
+    async refundOrder(orderNumber, productName, partialRefund=false) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.orders)
         await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
@@ -1257,8 +1274,8 @@ module.exports = {
         await base.type(selector.vendor.vOrders.refundProductQuantity(productName), productQuantity)
         if (partialRefund) {
             await base.click(selector.vendor.vOrders.refundDiv)
-            await base.clearAndType(selector.vendor.vOrders.refundProductCostAmount(productName), String(productCost / 2))
-            await base.clearAndType(selector.vendor.vOrders.refundProductTaxAmount(productName), String(productTax / 2))
+            await base.clearAndType(selector.vendor.vOrders.refundProductCostAmount(productName), String(helpers.roundToTwo(productCost / 2)))
+            await base.clearAndType(selector.vendor.vOrders.refundProductTaxAmount(productName), String(helpers.roundToTwo(productTax / 2)))
         }
         await base.type(selector.vendor.vOrders.refundReason, 'Defective product')
         await page.click(selector.vendor.vOrders.refundManually)

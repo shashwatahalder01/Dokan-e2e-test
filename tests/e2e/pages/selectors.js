@@ -1806,8 +1806,8 @@ module.exports = {
             defaultAttribute: ".dokan-variation-default-select > .dokan-form-control",
             //discount options
             enableBulkDiscount: "#\\_is_lot_discount",
-            MinimumQuantity: "#\\_lot_discount_quantity",
-            discountInPercentage: "#\\_lot_discount_amount",
+            lotMinimumQuantity: "#\\_lot_discount_quantity",
+            lotDiscountInPercentage: "#\\_lot_discount_amount",
             //rma options
             overrideYourDefaultRmaSettingsForThisProduct: "#dokan_rma_product_override",
             rmaLabel: "#dokan-rma-label",

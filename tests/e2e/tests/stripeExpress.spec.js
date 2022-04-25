@@ -435,7 +435,7 @@ describe('dokan calculation functionality test', () => {
 
     }, timeout)
 
-    it.only('calculation test with tax-shipping-coupon', async () => {
+    it('calculation test with tax-shipping-coupon', async () => {
 
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.enableTax(true)
@@ -544,6 +544,22 @@ describe('dokan calculation functionality test', () => {
         expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
         expect(commissionAdded === commissionGatewayFee).toBeTruthy()
         expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
+
+    }, timeout)
+
+    it.only('should update order status to completed', async () => {
+
+        // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        // let productName ='p2_v4'
+        // await customerPage.searchProduct(productName)
+        // await customerPage.addProductToCartFromShop(productName)
+        // await customerPage.goToCartFromShop()
+        // await customerPage.updateProductQuantityOnCart(productName, '5')
+
+
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await vendorPage.addQuantityDiscount('p1_v3', '5', '10')
+
 
     }, timeout)
 
