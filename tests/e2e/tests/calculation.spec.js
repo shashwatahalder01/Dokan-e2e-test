@@ -89,11 +89,11 @@ describe('refund functionality test', () => {
 
         //vendor order details
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)  //todo: function has swapped
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber) 
 
         //admin order details
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber) //todo: function has swapped
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber) 
 
         console.log('cOrderDetails: ', cOrderDetails, 'aOrderDetails: ', aOrderDetails, 'vOrderDetails: ', vOrderDetails)
 

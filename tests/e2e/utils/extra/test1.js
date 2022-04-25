@@ -56,5 +56,5 @@ function reverse(s){
 //     a == true ? console.log(-a) : console.log(a)
 
 
-  
-  console.log('namme' + '\n' + 'adfasd')
+  let a= 'via Flat rate'
+  console.log(a.replace('via ',''))

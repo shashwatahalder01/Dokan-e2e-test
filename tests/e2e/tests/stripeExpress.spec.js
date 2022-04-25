@@ -62,6 +62,13 @@ describe('dokan calculation functionality test', () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         let cOrderDetails = await customerPage.buyProduct(productName, false, true)
 
+        //getTotalAdminCommission
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let previousTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //getTotalVendorEarning
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let previousTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+
         //refund order
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await vendorPage.changeOrderStatus(cOrderDetails.orderNumber, data.orderStatus[1])
@@ -70,17 +77,41 @@ describe('dokan calculation functionality test', () => {
         // approve refund request
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.approveRefundRequest(cOrderDetails.orderNumber, true)
+
+        //vendor details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //getTotalVendorEarning
+        let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        //vendor Earning added
+        let vendorEarningRefunded = helpers.roundToTwo(previousTotalVendorEarning - newTotalVendorEarning)
+
+        //admin details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        //getTotalAdminCommission
+        let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //commission added
+        let commissionRefunded = helpers.roundToTwo(previousTotalAdminCommission - newTotalAdminCommission)
+
+        console.log(previousTotalAdminCommission, previousTotalVendorEarning)
+        console.log(newTotalAdminCommission, newTotalVendorEarning)
+        console.log(commissionRefunded, vendorEarningRefunded)
+
+
     }, timeout)
 
 
+    it('calculation test without tax-shipping ', async () => {
 
-    it.only('calculation test', async () => {
-        let productName = data.product.name.simple  
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.enableTax(false)
+        await adminPage.enableShipping(false)
+
+        let productName = data.product.name.simple
         // let productName = 'p1_v3'
-        // let productName = 'Small Wooden Table (Simple)'
+        // let productName = 'p2_v3'
 
         // create product
-        await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
 
         //getTotalAdminCommission
@@ -96,17 +127,6 @@ describe('dokan calculation functionality test', () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
         let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
-
-        // //getTotalAdminCommission
-        // await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
-        // //getTotalVendorEarning
-        // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
-        // console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
-        // let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
-        // let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
-        // console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
 
         //vendor details
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
@@ -140,32 +160,41 @@ describe('dokan calculation functionality test', () => {
         let subtotal = cOrderDetails.subtotal
         let taxRate = Number(process.env.TAX_RATE)
         let commissionRate = Number(process.env.COMMISSION_RATE)
-        let calculatedTax, shipping, gatewayFee;
+        let calculatedTax, shipping, gatewayFee, orderDiscount, quantityDiscount, discount, totalDiscount, subTotalWithoutDiscount
 
-        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subtotal, shipping) : calculatedTax = 0
+        
         cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
+        cOrderDetails.hasOwnProperty('orderDiscount') ? orderDiscount = cOrderDetails.orderDiscount : orderDiscount = 0
+        cOrderDetails.hasOwnProperty('quantityDiscount') ? quantityDiscount = cOrderDetails.quantityDiscount : quantityDiscount = 0
+        cOrderDetails.hasOwnProperty('discount') ? discount = cOrderDetails.discount : discount = 0
         aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
+        totalDiscount = helpers.roundToTwo(orderDiscount + quantityDiscount + discount)
+        subTotalWithoutDiscount = helpers.roundToTwo(subtotal - totalDiscount)
+        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subTotalWithoutDiscount, shipping) : calculatedTax = 0
 
 
-        let calculatedOrderTotal = helpers.orderTotal(subtotal, calculatedTax, shipping)
-        let calculatedAdminCommission = helpers.adminCommission(subtotal, commissionRate, calculatedTax, shipping, gatewayFee)
-        let calculatedVendorEarning = helpers.vendorEarning(subtotal, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
-        console.log('Calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+        let calculatedOrderTotal = helpers.orderTotal(subTotalWithoutDiscount, calculatedTax, shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subTotalWithoutDiscount, commissionRate, calculatedTax, shipping, gatewayFee)
+        let calculatedVendorEarning = helpers.vendorEarning(subTotalWithoutDiscount, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
+        console.log('calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
 
-
+        let commissionGatewayFee = helpers.roundToTwo(aOrderDetails.commission + gatewayFee)
+        let calculatedCommissionGatewayFee = helpers.roundToTwo(calculatedAdminCommission + gatewayFee)
 
         //all assertions
         console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
         console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
-        console.log(`orderStatus :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`orderDate :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
         console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        console.log(`totalDiscount :  ${totalDiscount}, orderDiscount:${orderDiscount}, quantityDiscount:${quantityDiscount}, discount:${discount}`)
+        console.log(`subTotalWithoutDiscount : ${subTotalWithoutDiscount}`)
         if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
         if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
         if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
         console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
         console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
         console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
-        console.log(`commissionAdded : FromTotalAdminCommission:${commissionAdded}, addedCommission:${aOrderDetails.commission + gatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
+        console.log(`commissionAdded : fromTotalAdminCommission:${commissionAdded}, fromCalculation:${calculatedCommissionGatewayFee} addedCommission:${commissionGatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
         console.log(`vendorEarningAdded : fromTotalVendorEarning:${vendorEarningAdded}, addedVendorEarning:${vOrderDetails.vendorEarning}`)
 
 
@@ -178,25 +207,344 @@ describe('dokan calculation functionality test', () => {
         expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
         expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
         expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
-        expect(commissionAdded === aOrderDetails.commission + gatewayFee).toBeTruthy()
+        expect(commissionAdded === commissionGatewayFee).toBeTruthy()
+        expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
+    }, timeout)
+
+    it('calculation test with tax', async () => {
+
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.enableTax(true)
+        await adminPage.enableShipping(false)
+
+        let productName = data.product.name.simple
+        // let productName = 'p1_v3'
+        // let productName = 'Small Wooden Table (Simple)'
+
+        // create product
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+
+        //getTotalAdminCommission
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let previousTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //getTotalVendorEarning
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let previousTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+
+
+        // buy product
+        await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
+        let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
+
+        //vendor details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //getTotalVendorEarning
+        let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        //vendor Earning added
+        let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
+        //vendor order details
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
+
+        //admin details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        //getTotalAdminCommission
+        let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //commission added
+        let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
+        //admin order details
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
+
+        //all order details
+        console.log('cOrderDetails: ', cOrderDetails)
+        console.log('aOrderDetails: ', aOrderDetails)
+        console.log('vOrderDetails: ', vOrderDetails)
+
+        // commission & vendor earning added
+        console.log('previousTotalAdminCommission:', previousTotalAdminCommission, 'previousTotalVendorEarning:', previousTotalVendorEarning)
+        console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
+        console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
+
+        let subtotal = cOrderDetails.subtotal
+        let taxRate = Number(process.env.TAX_RATE)
+        let commissionRate = Number(process.env.COMMISSION_RATE)
+        let calculatedTax, shipping, gatewayFee, orderDiscount, quantityDiscount, discount, totalDiscount, subTotalWithoutDiscount
+
+
+        cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
+        cOrderDetails.hasOwnProperty('orderDiscount') ? orderDiscount = cOrderDetails.orderDiscount : orderDiscount = 0
+        cOrderDetails.hasOwnProperty('quantityDiscount') ? quantityDiscount = cOrderDetails.quantityDiscount : quantityDiscount = 0
+        cOrderDetails.hasOwnProperty('discount') ? discount = cOrderDetails.discount : discount = 0
+        aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
+        totalDiscount = helpers.roundToTwo(orderDiscount + quantityDiscount + discount)
+        subTotalWithoutDiscount = helpers.roundToTwo(subtotal - totalDiscount)
+        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subTotalWithoutDiscount, shipping) : calculatedTax = 0
+
+
+        let calculatedOrderTotal = helpers.orderTotal(subTotalWithoutDiscount, calculatedTax, shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subTotalWithoutDiscount, commissionRate, calculatedTax, shipping, gatewayFee)
+        let calculatedVendorEarning = helpers.vendorEarning(subTotalWithoutDiscount, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
+        console.log('calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+
+        let commissionGatewayFee = helpers.roundToTwo(aOrderDetails.commission + gatewayFee)
+        let calculatedCommissionGatewayFee = helpers.roundToTwo(calculatedAdminCommission + gatewayFee)
+
+        //all assertions
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`orderDate :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        console.log(`totalDiscount :  ${totalDiscount}, orderDiscount:${orderDiscount}, quantityDiscount:${quantityDiscount}, discount:${discount}`)
+        console.log(`subTotalWithoutDiscount : ${subTotalWithoutDiscount}`)
+        if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
+        if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
+        if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        console.log(`commissionAdded : fromTotalAdminCommission:${commissionAdded}, fromCalculation:${calculatedCommissionGatewayFee} addedCommission:${commissionGatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
+        console.log(`vendorEarningAdded : fromTotalVendorEarning:${vendorEarningAdded}, addedVendorEarning:${vOrderDetails.vendorEarning}`)
+
+
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
+        if (cOrderDetails.tax) expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        if (cOrderDetails.shippingMethod) expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod).toBeTruthy()
+        if (cOrderDetails.shippingCost) expect(cOrderDetails.shippingCost === aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        expect(commissionAdded === commissionGatewayFee).toBeTruthy()
         expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
 
     }, timeout)
 
-    it('calculation test', async () => {
 
-        // await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // await adminPage.enableTax(true)
-        // await adminPage.enableShipping(true)
+    it('calculation test with tax-shipping', async () => {
 
-        // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // let vOrderDetails = await vendorPage.getOrderDetails('154')
-        // console.log('vOrderDetails: ', vOrderDetails)
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.enableTax(true)
+        await adminPage.enableShipping(true)
+
+        let productName = data.product.name.simple
+        // let productName = 'p1_v3'
+        // let productName = 'Small Wooden Table (Simple)'
+
+        // create product
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+
+        //getTotalAdminCommission
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let previousTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //getTotalVendorEarning
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let previousTotalVendorEarning = await vendorPage.getTotalVendorEarning()
 
 
-
+        // buy product
+        await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
+        let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
 
+        //vendor details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //getTotalVendorEarning
+        let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        //vendor Earning added
+        let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
+        //vendor order details
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
+
+        //admin details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        //getTotalAdminCommission
+        let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //commission added
+        let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
+        //admin order details
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
+
+
+        //all order details
+        console.log('cOrderDetails: ', cOrderDetails)
+        console.log('aOrderDetails: ', aOrderDetails)
+        console.log('vOrderDetails: ', vOrderDetails)
+
+        // commission & vendor earning added
+        console.log('previousTotalAdminCommission:', previousTotalAdminCommission, 'previousTotalVendorEarning:', previousTotalVendorEarning)
+        console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
+        console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
+
+        let subtotal = cOrderDetails.subtotal
+        let taxRate = Number(process.env.TAX_RATE)
+        let commissionRate = Number(process.env.COMMISSION_RATE)
+        let calculatedTax, shipping, gatewayFee, orderDiscount, quantityDiscount, discount, totalDiscount, subTotalWithoutDiscount
+
+  
+        cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
+        cOrderDetails.hasOwnProperty('orderDiscount') ? orderDiscount = cOrderDetails.orderDiscount : orderDiscount = 0
+        cOrderDetails.hasOwnProperty('quantityDiscount') ? quantityDiscount = cOrderDetails.quantityDiscount : quantityDiscount = 0
+        cOrderDetails.hasOwnProperty('discount') ? discount = cOrderDetails.discount : discount = 0
+        aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
+        totalDiscount = helpers.roundToTwo(orderDiscount + quantityDiscount + discount)
+        subTotalWithoutDiscount = helpers.roundToTwo(subtotal - totalDiscount)
+        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subTotalWithoutDiscount, shipping) : calculatedTax = 0
+
+
+        let calculatedOrderTotal = helpers.orderTotal(subTotalWithoutDiscount, calculatedTax, shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subTotalWithoutDiscount, commissionRate, calculatedTax, shipping, gatewayFee)
+        let calculatedVendorEarning = helpers.vendorEarning(subTotalWithoutDiscount, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
+        console.log('calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+
+        let commissionGatewayFee = helpers.roundToTwo(aOrderDetails.commission + gatewayFee)
+        let calculatedCommissionGatewayFee = helpers.roundToTwo(calculatedAdminCommission + gatewayFee)
+
+        //all assertions
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`orderDate :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        console.log(`totalDiscount :  ${totalDiscount}, orderDiscount:${orderDiscount}, quantityDiscount:${quantityDiscount}, discount:${discount}`)
+        console.log(`subTotalWithoutDiscount : ${subTotalWithoutDiscount}`)
+        if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
+        if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
+        if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        console.log(`commissionAdded : fromTotalAdminCommission:${commissionAdded}, fromCalculation:${calculatedCommissionGatewayFee} addedCommission:${commissionGatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
+        console.log(`vendorEarningAdded : fromTotalVendorEarning:${vendorEarningAdded}, addedVendorEarning:${vOrderDetails.vendorEarning}`)
+
+
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
+        if (cOrderDetails.tax) expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        if (cOrderDetails.shippingMethod) expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod).toBeTruthy()
+        if (cOrderDetails.shippingCost) expect(cOrderDetails.shippingCost === aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        expect(commissionAdded === commissionGatewayFee).toBeTruthy()
+        expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
 
     }, timeout)
+
+    it.only('calculation test with tax-shipping-coupon', async () => {
+
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.enableTax(true)
+        await adminPage.enableShipping(true)
+        let couponCode = 'c_v3'
+
+        // let productName = data.product.name.simple
+        let productName = 'p1_v3'
+        // let productName = 'Small Wooden Table (Simple)'
+
+        // create product
+        // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        // await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+
+        //getTotalAdminCommission
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        let previousTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //getTotalVendorEarning
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        let previousTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+
+
+        // buy product
+        await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        let cOrderDetails0 = await customerPage.buyProduct(productName, couponCode, true, 'stripeExpress', data.paymentDetails.stripExpress)
+        let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
+
+        //vendor details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //getTotalVendorEarning
+        let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        //vendor Earning added
+        let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
+        //vendor order details
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
+
+        //admin details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        //getTotalAdminCommission
+        let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //commission added
+        let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
+        //admin order details
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
+
+
+        //all order details
+        console.log('cOrderDetails: ', cOrderDetails)
+        console.log('aOrderDetails: ', aOrderDetails)
+        console.log('vOrderDetails: ', vOrderDetails)
+
+        // commission & vendor earning added
+        console.log('previousTotalAdminCommission:', previousTotalAdminCommission, 'previousTotalVendorEarning:', previousTotalVendorEarning)
+        console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
+        console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
+
+        let subtotal = cOrderDetails.subtotal
+        let taxRate = Number(process.env.TAX_RATE)
+        let commissionRate = Number(process.env.COMMISSION_RATE)
+        let calculatedTax, shipping, gatewayFee, orderDiscount, quantityDiscount, discount, totalDiscount, subTotalWithoutDiscount
+
+        cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
+        cOrderDetails.hasOwnProperty('orderDiscount') ? orderDiscount = cOrderDetails.orderDiscount : orderDiscount = 0
+        cOrderDetails.hasOwnProperty('quantityDiscount') ? quantityDiscount = cOrderDetails.quantityDiscount : quantityDiscount = 0
+        cOrderDetails.hasOwnProperty('discount') ? discount = cOrderDetails.discount : discount = 0
+        aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
+        totalDiscount = helpers.roundToTwo(orderDiscount + quantityDiscount + discount)
+        subTotalWithoutDiscount = helpers.roundToTwo(subtotal - totalDiscount)
+        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subTotalWithoutDiscount, shipping) : calculatedTax = 0
+
+
+        let calculatedOrderTotal = helpers.orderTotal(subTotalWithoutDiscount, calculatedTax, shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subTotalWithoutDiscount, commissionRate, calculatedTax, shipping, gatewayFee)
+        let calculatedVendorEarning = helpers.vendorEarning(subTotalWithoutDiscount, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
+        console.log('calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+
+        let commissionGatewayFee = helpers.roundToTwo(aOrderDetails.commission + gatewayFee)
+        let calculatedCommissionGatewayFee = helpers.roundToTwo(calculatedAdminCommission + gatewayFee)
+
+        //all assertions
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`orderDate :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        console.log(`totalDiscount :  ${totalDiscount}, orderDiscount:${orderDiscount}, quantityDiscount:${quantityDiscount}, discount:${discount}`)
+        console.log(`subTotalWithoutDiscount : ${subTotalWithoutDiscount}`)
+        if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
+        if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
+        if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        console.log(`commissionAdded : fromTotalAdminCommission:${commissionAdded}, fromCalculation:${calculatedCommissionGatewayFee} addedCommission:${commissionGatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
+        console.log(`vendorEarningAdded : fromTotalVendorEarning:${vendorEarningAdded}, addedVendorEarning:${vOrderDetails.vendorEarning}`)
+
+
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
+        if (cOrderDetails.tax) expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        if (cOrderDetails.shippingMethod) expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod).toBeTruthy()
+        if (cOrderDetails.shippingCost) expect(cOrderDetails.shippingCost === aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        expect(commissionAdded === commissionGatewayFee).toBeTruthy()
+        expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
+
+    }, timeout)
+
 })

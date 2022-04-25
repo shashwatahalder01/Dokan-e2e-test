@@ -502,7 +502,7 @@ module.exports = {
 
         await page.type(selector.customer.cCart.couponCode, couponCode)
         await base.click(selector.customer.cCart.applyCoupon)
-        await base.wait(4)
+        await base.wait(6)
 
         // // negative test
         // let failureMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
@@ -636,7 +636,7 @@ module.exports = {
         }
         let taxIsVisible = await base.isVisible(selector.customer.cOrderReceived.shipping)
         if (taxIsVisible) cOrderDetails.tax = helpers.price(await base.getElementText(selector.customer.cOrderReceived.tax))
-        
+
         cOrderDetails.paymentMethod = await base.getElementText(selector.customer.cOrderReceived.orderPaymentMethod)
         cOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.customer.cOrderReceived.orderTotal))
 
@@ -660,12 +660,22 @@ module.exports = {
 
         let shippingIsVisible = await base.isVisible(selector.customer.cOrders.shippingCost)
         if (shippingIsVisible) {
-            cOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.customer.cOrders.shippingMethod))
-            cOrderDetails.shippingMethod = await base.getElementText(selector.customer.cOrders.shippingMethod)
+            cOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.customer.cOrders.shippingCost))
+            cOrderDetails.shippingMethod = (await base.getElementText(selector.customer.cOrders.shippingMethod)).replace('via ','')
         }
 
-        let taxIsVisible = await base.isVisible(selector.customer.cOrders.shipping)
+        let taxIsVisible = await base.isVisible(selector.customer.cOrders.tax)
         if (taxIsVisible) cOrderDetails.tax = helpers.price(await base.getElementText(selector.customer.cOrders.tax))
+
+        let orderDiscount = await base.isVisible(selector.customer.cOrders.orderDiscount)
+        if (orderDiscount) cOrderDetails.orderDiscount = helpers.price(await base.getElementText(selector.customer.cOrders.orderDiscount))
+
+        let quantityDiscount = await base.isVisible(selector.customer.cOrders.quantityDiscount)
+        if (quantityDiscount) cOrderDetails.quantityDiscount = helpers.price(await base.getElementText(selector.customer.cOrders.quantityDiscount))
+
+        let discount = await base.isVisible(selector.customer.cOrders.discount)
+        if (discount) cOrderDetails.discount = helpers.price(await base.getElementText(selector.customer.cOrders.discount))
+
         cOrderDetails.paymentMethod = await base.getElementText(selector.customer.cOrders.paymentMethod)
         cOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.customer.cOrders.orderTotal))
 

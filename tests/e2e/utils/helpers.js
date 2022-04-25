@@ -60,7 +60,7 @@ module.exports = {
 
     //order total
     orderTotal(subtotal, tax = 0, shipping = 0) {
-        let orderTotal = subtotal + tax + shipping
+        let orderTotal = subtotal + tax + shipping 
         return this.roundToTwo(orderTotal)
     },
 

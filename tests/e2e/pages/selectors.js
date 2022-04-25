@@ -3089,6 +3089,9 @@ module.exports = {
             orderDate: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-date']",
             orderStatus: "//div[@class='woocommerce-MyAccount-content']//p//mark[@class='order-status']",
             subTotal: "//th[contains(text(),'Subtotal:')]/..//span",
+            orderDiscount: "//th[contains(text(),'Order Discount:')]/..//span",
+            quantityDiscount: "//th[contains(text(),'Quantity Discount:')]/..//span",
+            discount:"//th[text()='Discount:']/..//span",
             shipping: "//th[contains(text(),'Shipping:')]/..//td", //TODO:delete this when shipping method is fixed
             shippingCost: "//th[contains(text(),'Shipping:')]/..//span",
             shippingMethod: "//th[contains(text(),'Shipping:')]/..//small",
