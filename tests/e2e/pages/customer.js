@@ -488,10 +488,8 @@ module.exports = {
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
         await base.wait(2)
-        console.log('#######################')
         await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
-        console.log('@@@@@@@@@@@@@@@@@@@@@@')
         expect(checkoutIsVisible).toBe(true)
     },
 

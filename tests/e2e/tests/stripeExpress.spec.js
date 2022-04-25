@@ -11,13 +11,13 @@ const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 
-describe('refund functionality test', () => {
+describe('dokan calculation functionality test', () => {
     // beforeAll(async () => {})
     // afterAll(async () => {await browser.close()})
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
 
-    it('refund through rma test', async () => {
+    it('refund through rma test', async () => { //TODO: add commission and vendor earning impact on refund
         // let productName = data.product.name.simple
         let productName = 'product1'
 
@@ -49,7 +49,7 @@ describe('refund functionality test', () => {
     }, timeout)
 
 
-    it('vendor refund test', async () => {
+    it('vendor refund test', async () => { //TODO: add commission and vendor earning impact on refund
         // let productName = data.product.name.simple
         let productName = 'product1'
 
@@ -75,87 +75,111 @@ describe('refund functionality test', () => {
 
 
     it.only('calculation test', async () => {
-        // let productName = data.product.name.simple  
-        let productName = 'p1_v3'
+        let productName = data.product.name.simple  
+        // let productName = 'p1_v3'
         // let productName = 'Small Wooden Table (Simple)'
 
         // create product
-        // await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
+        await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        await vendorPage.addSimpleProduct(productName, data.product.price, data.product.category)
 
         //getTotalAdminCommission
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        let totalAdminCommission = await adminPage.getTotalAdminCommission()
+        let previousTotalAdminCommission = await adminPage.getTotalAdminCommission()
         //getTotalVendorEarning
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        let totalVendorEarning = await vendorPage.getTotalVendorEarning()
-        console.log('totalAdminCommission:', totalAdminCommission, 'totalVendorEarning:', totalVendorEarning)
+        let previousTotalVendorEarning = await vendorPage.getTotalVendorEarning()
 
 
         // buy product
-        // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        // let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
-        // let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
-        // console.log('cOrderDetails: ', cOrderDetails)
+        await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        let cOrderDetails0 = await customerPage.buyProduct(productName, false, true, 'stripeExpress', data.paymentDetails.stripExpress)
+        let cOrderDetails = await customerPage.getOrderDetails(cOrderDetails0.orderNumber)
 
         // //getTotalAdminCommission
         // await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // let afterProductBoughtTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        // let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
         // //getTotalVendorEarning
         // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // let afterProductBoughtTotalVendorEarning = await vendorPage.getTotalVendorEarning()
-        // console.log('afterProductBoughtTotalAdminCommission:', totalAdminCommission, 'afterProductBoughtTotalVendorEarning:', totalVendorEarning)
+        // let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        // console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
+        // let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
+        // let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
+        // console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
 
-        // // //vendor order details
-        // await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
+        //vendor details
+        await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //getTotalVendorEarning
+        let newTotalVendorEarning = await vendorPage.getTotalVendorEarning()
+        //vendor Earning added
+        let vendorEarningAdded = helpers.roundToTwo(newTotalVendorEarning - previousTotalVendorEarning)
+        //vendor order details
+        let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
 
-        // //admin order details
-        // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-        // let vOrderDetails = await vendorPage.getOrderDetails(cOrderDetails.orderNumber)
-
-        // console.log('cOrderDetails: ', cOrderDetails)
-        // console.log('aOrderDetails: ', aOrderDetails)
-        // console.log('vOrderDetails: ', vOrderDetails)
-
-        // let subtotal = cOrderDetails.subtotal
-        // let taxRate = Number(process.env.TAX_RATE)
-        // let commissionRate = Number(process.env.COMMISSION_RATE)
-        // let calculatedTax, shipping, gatewayFee;
-
-        // cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subtotal, shipping) : calculatedTax = 0
-        // cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
-        // aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
-
-
-        // let calculatedOrderTotal = helpers.orderTotal(subtotal, calculatedTax, shipping)
-        // let calculatedAdminCommission = helpers.adminCommission(subtotal, commissionRate, calculatedTax, shipping, gatewayFee)
-        // let calculatedVendorEarning = helpers.vendorEarning(subtotal, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
-        // console.log('Calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+        //admin details
+        await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        //getTotalAdminCommission
+        let newTotalAdminCommission = await adminPage.getTotalAdminCommission()
+        //commission added
+        let commissionAdded = helpers.roundToTwo(newTotalAdminCommission - previousTotalAdminCommission)
+        //admin order details
+        let aOrderDetails = await adminPage.getOrderDetails(cOrderDetails.orderNumber)
 
 
-        // console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
-        // console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
-        // console.log(`orderStatus :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
-        // console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
-        // if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
-        // if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
-        // if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
-        // console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
-        // console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
-        // console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        //all order details
+        console.log('cOrderDetails: ', cOrderDetails)
+        console.log('aOrderDetails: ', aOrderDetails)
+        console.log('vOrderDetails: ', vOrderDetails)
+
+        // commission & vendor earning added
+        console.log('previousTotalAdminCommission:', previousTotalAdminCommission, 'previousTotalVendorEarning:', previousTotalVendorEarning)
+        console.log('newTotalAdminCommission:', newTotalAdminCommission, 'newTotalVendorEarning:', newTotalVendorEarning)
+        console.log('commissionAdded:', commissionAdded, 'vendorEarningAdded:', vendorEarningAdded)
+
+        let subtotal = cOrderDetails.subtotal
+        let taxRate = Number(process.env.TAX_RATE)
+        let commissionRate = Number(process.env.COMMISSION_RATE)
+        let calculatedTax, shipping, gatewayFee;
+
+        cOrderDetails.hasOwnProperty('tax') ? calculatedTax = helpers.tax(taxRate, subtotal, shipping) : calculatedTax = 0
+        cOrderDetails.hasOwnProperty('shippingCost') ? shipping = cOrderDetails.shippingCost : shipping = 0
+        aOrderDetails.hasOwnProperty('gatewayFee') ? gatewayFee = aOrderDetails.gatewayFee : gatewayFee = 0
 
 
-        // expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
-        // expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
-        // // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
-        // if (cOrderDetails.tax) expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
-        // if (cOrderDetails.shippingMethod) expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod).toBeTruthy()
-        // if (cOrderDetails.shippingCost) expect(cOrderDetails.shippingCost === aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost).toBeTruthy()
-        // expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
-        // expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
-        // expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        let calculatedOrderTotal = helpers.orderTotal(subtotal, calculatedTax, shipping)
+        let calculatedAdminCommission = helpers.adminCommission(subtotal, commissionRate, calculatedTax, shipping, gatewayFee)
+        let calculatedVendorEarning = helpers.vendorEarning(subtotal, calculatedAdminCommission, calculatedTax, shipping, gatewayFee)
+        console.log('Calculated Data:', 'tax:', calculatedTax, 'orderTotal:', calculatedOrderTotal, 'commission:', calculatedAdminCommission, 'vendorEarning', calculatedVendorEarning)
+
+
+
+        //all assertions
+        console.log(`orderNumber :  c:${cOrderDetails.orderNumber}, a:${aOrderDetails.orderNumber}, v:${vOrderDetails.orderNumber}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderStatus}, a:${aOrderDetails.orderStatus}, v:${vOrderDetails.orderStatus}`)
+        console.log(`orderStatus :  c:${cOrderDetails.orderDate}, a:${aOrderDetails.orderDate}, v:${vOrderDetails.orderDate}`)
+        console.log(`subtotal :  c:${cOrderDetails.subtotal}`)
+        if (cOrderDetails.shippingMethod) console.log(`shipping :  c:${cOrderDetails.shippingMethod}, v:${vOrderDetails.shippingMethod}`)
+        if (cOrderDetails.shippingCost) console.log(`shipping :  c:${cOrderDetails.shippingCost}, a:${aOrderDetails.shippingCost}, v:${vOrderDetails.shippingCost}`)
+        if (cOrderDetails.tax) console.log(`tax : cal:${calculatedTax}, c:${cOrderDetails.tax}, a:${aOrderDetails.tax}, v:${vOrderDetails.tax}`)
+        console.log(`orderTotal : cal:${calculatedOrderTotal}, c:${cOrderDetails.orderTotal}, a:${aOrderDetails.orderTotal}, v:${vOrderDetails.orderTotal}`)
+        console.log(`commission : cal:${calculatedAdminCommission}, a:${aOrderDetails.commission}`)
+        console.log(`vendorEarning : cal:${calculatedVendorEarning}, a:${aOrderDetails.vendorEarning}, v:${vOrderDetails.vendorEarning}`)
+        console.log(`commissionAdded : FromTotalAdminCommission:${commissionAdded}, addedCommission:${aOrderDetails.commission + gatewayFee}, commission:${aOrderDetails.commission}  gatewayFee:${gatewayFee}`)
+        console.log(`vendorEarningAdded : fromTotalVendorEarning:${vendorEarningAdded}, addedVendorEarning:${vOrderDetails.vendorEarning}`)
+
+
+        expect(cOrderDetails.orderNumber === aOrderDetails.orderNumber && cOrderDetails.orderNumber === vOrderDetails.orderNumber).toBeTruthy()
+        expect(cOrderDetails.orderStatus === aOrderDetails.orderStatus && cOrderDetails.orderStatus === vOrderDetails.orderStatus).toBeTruthy()
+        // expect(cOrderDetails.orderDate === aOrderDetails.orderDate && cOrderDetails.orderDate === vOrderDetails.orderDate).toBeTruthy()
+        if (cOrderDetails.tax) expect(calculatedTax === cOrderDetails.tax && calculatedTax === aOrderDetails.tax && calculatedTax === vOrderDetails.tax).toBeTruthy()
+        if (cOrderDetails.shippingMethod) expect(cOrderDetails.shippingMethod === vOrderDetails.shippingMethod).toBeTruthy()
+        if (cOrderDetails.shippingCost) expect(cOrderDetails.shippingCost === aOrderDetails.shippingCost && cOrderDetails.shippingCost === vOrderDetails.shippingCost).toBeTruthy()
+        expect(calculatedOrderTotal === cOrderDetails.orderTotal && calculatedOrderTotal === aOrderDetails.orderTotal && calculatedOrderTotal === vOrderDetails.orderTotal).toBeTruthy()
+        expect(calculatedAdminCommission === aOrderDetails.commission).toBeTruthy()
+        expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
+        expect(commissionAdded === aOrderDetails.commission + gatewayFee).toBeTruthy()
+        expect(vendorEarningAdded === vOrderDetails.vendorEarning).toBeTruthy()
 
     }, timeout)
 

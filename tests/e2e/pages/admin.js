@@ -1304,8 +1304,14 @@ module.exports = {
   },
 
   async getOrderDetails(orderNumber) { //TODO: separate function to get order details form inside order details page
-    await base.hover(selector.admin.aDashboard.dokan)
-    await base.clickAndWait(selector.admin.dokan.reportsMenu)
+    let subMenuOpened = await base.getElementClassValue(selector.admin.aDashboard.dokanMenu)
+    if (subMenuOpened.includes('opensub')) {
+      await base.hover(selector.admin.aDashboard.dokan)
+      await base.clickAndWait(selector.admin.dokan.reportsMenu)
+    }else{
+      await base.click(selector.admin.dokan.reportsMenu)
+      await base.wait(2)
+    }
     await base.click(selector.admin.dokan.reports.allLogs)
     await base.wait(3)
     await page.type(selector.admin.dokan.reports.searchByOrder, orderNumber)
