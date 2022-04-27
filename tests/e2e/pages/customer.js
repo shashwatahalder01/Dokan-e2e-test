@@ -20,28 +20,28 @@ module.exports = {
 
 
     async goToMyAccount() {
-        await base.goto('my-account')
+        await base.goIfNotThere('my-account')
 
         const url = await page.url()
         expect(url).toMatch('my-account')
     },
 
     async goToShop() {
-        await base.goto('shop')
+        await base.goIfNotThere('shop')
 
         const url = await page.url()
         expect(url).toMatch('shop')
     },
 
     async goToStoreList() {
-        await base.goto('store-listing')
+        await base.goIfNotThere('store-listing')
 
         const url = await page.url()
         expect(url).toMatch('store-listing')
     },
 
     async goToCart() {
-        await base.goto('cart')
+        await base.goIfNotThere('cart')
 
         const url = await page.url()
         expect(url).toMatch('cart')
@@ -106,18 +106,26 @@ module.exports = {
         await page.type(selector.customer.cDashboard.vatNumber, vatNumber)
         await page.type(selector.customer.cDashboard.bankName, bankName)
         await page.type(selector.customer.cDashboard.bankIban, bankIban)
-        await base.clickAndWaitIfVisible(selector.customer.cDashboard.termsAndConditions)
+        await base.clickIfVisible(selector.customer.cDashboard.termsAndConditions)
+        let subscriptionPackIsVisible = await base.isVisible(selector.customer.cDashboard.subscriptionPack)
+        console.log(subscriptionPackIsVisible)
+        await base.click(selector.customer.cDashboard.becomeAVendor)
+        await base.wait(4)
+        if (subscriptionPackIsVisible) {
+            console.log('subscription pack is visible')
+            await this.placeOrder('bank', false, false, true)//TODO: dont work: handle vendor subscription pack scenario
+        }
 
-        await base.clickAndWait(selector.customer.cDashboard.becomeAVendor)
     },
 
     // customer become wholesale customer
     async customerBecomeWholesaleCustomer() {
         let currentUser = await base.getCurrentUser()
         await page.click(selector.customer.cDashboard.becomeWholesaleCustomer)
-        await base.wait(2)
+        await base.wait(4)
 
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
+        console.log(returnMessage)
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
@@ -274,7 +282,7 @@ module.exports = {
         await base.waitForSelector(selector.customer.cStoreList.visitStore(vendorName))
         let cartIsVisible = await base.isVisible(selector.customer.cStoreList.visitStore(vendorName))
         expect(cartIsVisible).toBe(true)
-        await base.wait(0.5)
+        // await base.wait(0.5)
     },
 
     //customer follow vendor
@@ -283,11 +291,13 @@ module.exports = {
 
         let currentStoreFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         if (currentStoreFollowStatus == "Following") {
-            await base.click(selector.customer.cStoreList.followUnFollowStore(vendorName))
-            await base.wait(1)
+            console.log('if')
+            await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
+            // await base.wait(1)
         }
-        await base.click(selector.customer.cStoreList.followUnFollowStore(vendorName))
-        await base.wait(1)
+        console.log('notif')
+        await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
+        // await base.wait(1)
         let storeFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         expect(storeFollowStatus).toMatch('Following')
     },
@@ -381,11 +391,11 @@ module.exports = {
         await this.goToProductDetails(productName)
 
         await page.click(selector.customer.cSingleProduct.reportAbuse)
-        await base.wait(2)
+        // await base.wait(2)
         await base.click(selector.customer.cSingleProduct.reportReasonByName(reportReason))
         await page.type(selector.customer.cSingleProduct.reportDescription, reportReasonDescription)
         await page.click(selector.customer.cSingleProduct.reportSubmit)
-        await base.wait(2.5)
+        // await base.wait(2.5)
 
         let successMessage = await base.getElementText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
         expect(successMessage).toMatch('Your report has been submitted. Thank you for your response.')
@@ -399,10 +409,10 @@ module.exports = {
         await this.goToProductDetails(productName)
 
         await page.click(selector.customer.cSingleProduct.productEnquiry)
-        await base.wait(1)
+        // await base.wait(1)
         await page.type(selector.customer.cSingleProduct.enquiryMessage, enquiryDetails)
         await page.click(selector.customer.cSingleProduct.submitEnquiry)
-        await base.wait(2.5)
+        // await base.wait(2.5)
 
         let successMessage = await base.getElementText(selector.customer.cSingleProduct.submitEnquirySuccessMessage)
         expect(successMessage).toMatch('Email sent successfully!')
@@ -466,7 +476,7 @@ module.exports = {
     //go to cart from shop page
     async goToCartFromShop() {
         await page.click(selector.customer.cShop.viewCart)
-        await base.wait(2)
+        // await base.wait(2)  
 
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
@@ -477,7 +487,7 @@ module.exports = {
     //go to cart from product details page
     async goToCartFromSingleProductPage() {
         await page.click(selector.customer.cSingleProduct.viewCart)
-        await base.wait(2)
+        // await base.wait(2)
 
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
@@ -487,7 +497,7 @@ module.exports = {
     //got to checkout from cart
     async goToCheckoutFromCart() {
         await page.click(selector.customer.cCart.proceedToCheckout)
-        await base.wait(2)
+        // await base.wait(2)
         await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
@@ -551,11 +561,13 @@ module.exports = {
     },
 
     //customer place order
-    async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails) {
+    async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails= false) {
         //TODO:handle billing address warning or shipping address warning
-        // await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
-        // await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
+        console.log('place order #1')
+        if (billingDetails) await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
+        if (shippingDetails) await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
         await base.wait(6)
+        console.log('place order #2')
 
         switch (paymentMethod) {
             case 'bank':

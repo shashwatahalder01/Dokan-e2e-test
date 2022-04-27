@@ -1,7 +1,9 @@
 require('dotenv').config()
+const { PendingXHR } = require('pending-xhr-puppeteer');
+
 // This page contains all necessary puppeteer automation methods 
 
-let regexXpath = /^(\/\/|\(\/\/)/
+// let regexXpath = /^(\/\/|\(\/\/)/
 module.exports = {
 
     //check whether element is ready or not
@@ -39,10 +41,77 @@ module.exports = {
     //click element and wait until network idle
     async clickAndWait(selector) {
         let element = await this.getElement(selector)
-        await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait for network idle
-        // await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle0' })]) //wait for network idle
-        // await Promise.all([await element.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' })]) //wait util dom content loaded
-        // await Promise.race([await element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait on both simultaneously and handle whichever occurs first
+        await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // consider navigation to be finished when there are no more than 2 network connections for at least 500 ms.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle0' })]) // consider navigation to be finished when there are no more than 0 network connections for at least 500 ms.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' })]) // consider navigation to be finished when the DOMContentLoaded event is fired.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'load' })]) // consider navigation to be finished when the load event is fired.
+        // await Promise.race([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait on both simultaneously and handle whichever occurs first
+    },
+
+    //click element and wait until network idle
+    async clickAndWaitForResponse(selector) {
+        let element = await this.getElement(selector)
+        // page.waitForRequest() // TODO: implement this
+        await Promise.all([element.click(), page.waitForResponse(response => response.status() === 200)])
+    },
+
+    //click element and wait until network idle
+    async clickAndWaitForHTMLRendered(selector) {
+        let element = await this.getElement(selector)
+        await element.click()
+        await this.waitTillHTMLRendered(page)
+    },
+
+
+    // Wait for all xhr triggered by all the events of the page
+    async clickAndWaitForAllXhrTest(selector) {
+        const pendingXHR = new PendingXHR(page)
+        let element = await this.getElement(selector)
+        await element.click()
+        // console.log(pendingXHR.pendingXhrCount())
+        // await pendingXHR.waitForAllXhrFinished()
+        // await Promise.all([element.click(), pendingXHR.waitForAllXhrFinished()])
+
+        // await page.waitForNavigation({waitUntil: 'load'})
+        // await page.waitForNavigation({waitUntil: 'networkidle0'})
+
+        // await page.waitForFunction(() => document.readyState === "complete")
+        // await page.once('load', () => console.log('Page loaded!'));
+        // await page.waitForFunction('window.status === "ready"');
+
+
+        // await this.waitTillHTMLRendered(page) // working
+        console.log("Clicked and waited for response")
+    },
+
+    // Wait for all xhr triggered by all the events of the page with promise.race
+    async clickAndWaitForAllXhrWithRacePromise(selector) {
+        const pendingXHR = new PendingXHR(page)
+        let element = await this.getElement(selector)
+        await element.click()
+        await Promise.race([pendingXHR.waitForAllXhrFinished(), new Promise(resolve => { setTimeout(resolve, 10000) }),
+        ]);
+    },
+
+    // Wait for all xhr triggered by all the events of the page
+    async clickAndWaitForAllXhr(selector) {
+        const pendingXHR = new PendingXHR(page)
+        let element = await this.getElement(selector)
+        await element.click()
+        console.log(pendingXHR.pendingXhrCount())
+        await pendingXHR.waitForAllXhrFinished()
+        // await Promise.all([element.click(), pendingXHR.waitForAllXhrFinished()])
+    },
+
+    // Wait for all xhr triggered by an event of the page
+    async clickAndWaitOnceForAllXhr(selector) {
+        const pendingXHR = new PendingXHR(page)
+        let element = await this.getElement(selector)
+        // await element.click()
+        // console.log(pendingXHR.pendingXhrCount())
+        // await pendingXHR.waitOnceForAllXhrFinished()
+        await Promise.all([element.click(), pendingXHR.waitOnceForAllXhrFinished()])
+        await this.wait(0.5)
     },
 
     //wait for element and then click
@@ -250,11 +319,13 @@ module.exports = {
     //get element handle for xpath or css selector 
     async getElement(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
-            await page.waitForXPath(selector)
+            await Promise.race([page.waitForXPath(selector), page.waitForNavigation({ waitUntil: "networkidle2" })])
+            // await page.waitForXPath(selector)
             let [element] = await page.$x(selector)
             return element
         } else {
-            await page.waitForSelector(selector)
+            await Promise.race([page.waitForSelector(selector), page.waitForNavigation({ waitUntil: "networkidle2" })])
+            // await page.waitForSelector(selector)
             let element = await page.$(selector)
             return element
         }
@@ -449,7 +520,7 @@ module.exports = {
 
     //iframe click element
     async iframeClick(iframe, selector) {
-        let element = await this.getIframeElement(iframe,selector)
+        let element = await this.getIframeElement(iframe, selector)
         await element.click()
 
     },
@@ -480,6 +551,12 @@ module.exports = {
         })
         page.evaluate(() => alert('500'))
     },
+    //     class: Dialog   //TODO: implement this diaglog class
+    // dialog.accept([promptText])
+    // dialog.defaultValue()
+    // dialog.dismiss()
+    // dialog.message()
+    // dialog.type()
 
 
     // get page content
@@ -498,6 +575,7 @@ module.exports = {
     },
 
     //TODO: add function for grab console error
+    //TODO: use event console.error
 
 
 
@@ -557,11 +635,11 @@ module.exports = {
     // upload image
     async wpUploadFile(filePath) {
         //wp image upload
-        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@id='menu-item-upload']"
         let uploadedMedia = ".attachment-preview"
-        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
-        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
-        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-insert')]"
         await this.wait(1)
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
@@ -584,11 +662,11 @@ module.exports = {
     // upload image if no image is uploaded
     async wpUploadFileIfNotUploaded(filePath) {
         //wp image upload
-        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@id='menu-item-upload']"
         let uploadedMedia = ".attachment-preview"
-        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
-        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
-        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-insert')]"
 
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
@@ -620,15 +698,15 @@ module.exports = {
 
     //get wordpress current user
     async getCurrentUser() {
-        const cookies = await page.cookies();
+        const cookies = await page.cookies()
         const cookie = cookies.find(c => {
-            var _c$name;
-            return !!(c !== null && c !== void 0 && (_c$name = c.name) !== null && _c$name !== void 0 && _c$name.startsWith('wordpress_logged_in_'));
-        });
+            var _c$name
+            return !!(c !== null && c !== void 0 && (_c$name = c.name) !== null && _c$name !== void 0 && _c$name.startsWith('wordpress_logged_in_'))
+        })
         if (!(cookie !== null && cookie !== void 0 && cookie.value)) {
-            return;
+            return
         }
-        return decodeURIComponent(cookie.value).split('|')[0];
+        return decodeURIComponent(cookie.value).split('|')[0]
     },
 
 
@@ -636,28 +714,64 @@ module.exports = {
     //--------------------------------------------------- extra -----------------------------------------------//
 
 
+    // ## S-1
+    //     const puppeteer = require('puppeteer');
 
-    // Network handle methods
+    // puppeteer.launch().then(async browser => {
+    //   const page = await browser.newPage();
+    //   page.on('console', consoleObj => console.log(consoleObj.text()));
+    //   page.on('load', await () => { //set listener before you go to the page.
+    //      // Now do something...
+    //   });
+    //   await page.goto('http://localhost:58080');
+    //   // What to do to wait for the completion of the ajax call done after
+    //   // document is ready?
+    //   console.log('[puppeteer] Sleeping');
+    //   await new Promise(resolve => setTimeout(resolve, 1000));
+    //   console.log('[puppeteer] Closing');
+    //   await browser.close();
 
-    //option 1
-    // You can wait on both simultaneously and handle whichever occurs first:
-    // await Promise.race([page.waitForNavigation({ waitUntil: "networkidle0" }),page.waitForSelector(".Error")])
+    // });
 
-    //option 2
-    // age.waitForResponse( response => response.status() === 200 )   
 
-    //option 3
-    // await page.waitForNavigation({ waitUntil: 'domcontentloaded' })   
 
-    //option 4
-    // Since v1.6.0 there's page.waitForResponse.  
+    // ## S-2
+    // Sometimes waitForNavigation just timeout. I came up with other solution using the waitForFunction, checking if document is in ready state.
+    // await page.waitForFunction(() => document.readyState === "complete")
 
-    //option 5
-    // Create promise object before event trigger, If you want to satisfy any one of the condition to wait use
-    // const watchDog2 = [page.waitForSelector('.form .error'),page.waitForNavigation({ waitUntil: 'networkidle2' })]
-    // await continueButton.evaluate(continueButton => continueButton.click())
-    // await await Promise.race(watchDog2)
 
+
+
+    async waitTillHTMLRendered(page, timeout = 30000) {
+        const checkDurationMsecs = 1000;
+        const maxChecks = timeout / checkDurationMsecs;
+        let lastHTMLSize = 0;
+        let checkCounts = 1;
+        let countStableSizeIterations = 0;
+        const minStableSizeIterations = 3;
+
+        while (checkCounts++ <= maxChecks) {
+            let html = await page.content();
+            let currentHTMLSize = html.length;
+
+            let bodyHTMLSize = await page.evaluate(() => document.body.innerHTML.length);
+
+            console.log('last: ', lastHTMLSize, ' <> curr: ', currentHTMLSize, " body html size: ", bodyHTMLSize);
+
+            if (lastHTMLSize != 0 && currentHTMLSize == lastHTMLSize)
+                countStableSizeIterations++;
+            else
+                countStableSizeIterations = 0; //reset the counter
+
+            if (countStableSizeIterations >= minStableSizeIterations) {
+                console.log("Page rendered fully..");
+                break;
+            }
+
+            lastHTMLSize = currentHTMLSize;
+            await page.waitFor(checkDurationMsecs); //TODO: waitFor is deprecated. 
+        }
+    },
 
 }
 

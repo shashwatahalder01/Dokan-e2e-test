@@ -3063,6 +3063,7 @@ module.exports = {
             bankName: '#dokan-bank-name',
             bankIban: '#dokan-bank-iban',
             termsAndConditions: '#tc_agree',
+            subscriptionPack: "#dokan-subscription-pack",
             becomeAVendor: '.dokan-btn',
 
             //become wholesale customer

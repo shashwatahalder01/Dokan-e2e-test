@@ -53,7 +53,7 @@ describe('vendor functionality test', () => {
       await vendorPage.addExternalProduct(data.product.name.external, data.product.price, data.product.category)
    }, timeout)
 
-   it.only('vendor can add auction product', async () => {
+   it('vendor can add auction product', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice,data.product.auction.startDate, data.product.auction.endDate, data.product.category)
    }, timeout)
@@ -84,7 +84,7 @@ describe('vendor functionality test', () => {
       await vendorPage.addAutoWithdrawDisbursementSchedule('dokan_custom', 'weekly', '5', '15')
    }, timeout)
 
-   it.only('vendor can add default withdraw payment methods ', async () => {
+   it.skip('vendor can add default withdraw payment methods ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.addDefaultWithdrawPaymentMethods('Skrill')
       // cleanup
@@ -93,7 +93,7 @@ describe('vendor functionality test', () => {
 
    // vendor settings
 
-   it('vendor can set store settings ', async () => {
+   it.skip('vendor can set store settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.setStoreSettings(process.env.VENDOR, data.vendorInfo.productsPerPage, data.vendorInfo.phone, data.vendorInfo.street1, data.vendorInfo.street2, data.vendorInfo.city, data.vendorInfo.zipCode, data.vendorInfo.countrySelectValue,

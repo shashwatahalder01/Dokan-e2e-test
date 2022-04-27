@@ -323,7 +323,7 @@ describe('dokan calculation functionality test', () => {
     }, timeout)
 
 
-    it('calculation test with tax-shipping', async () => {
+    it.only('calculation test with tax-shipping', async () => {
 
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.enableTax(true)
@@ -547,7 +547,7 @@ describe('dokan calculation functionality test', () => {
 
     }, timeout)
 
-    it.only('should update order status to completed', async () => {
+    it('should update order status to completed', async () => {
 
         // await loginPage.switchUser(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         // let productName ='p2_v4'

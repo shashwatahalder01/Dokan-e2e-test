@@ -48,3 +48,4 @@
 //TODO: wait for ajax request to complete
 //TODO: duplicate line vs function call
 //TODO: add commission increase & vendor earning increase in calculation function
+//TODO: add permalink setup after dokan subscription enabled
