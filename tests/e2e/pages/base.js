@@ -551,7 +551,7 @@ module.exports = {
         })
         page.evaluate(() => alert('500'))
     },
-    //     class: Dialog   //TODO: implement this diaglog class
+    //     class: Dialog   //TODO: implement this dialog class
     // dialog.accept([promptText])
     // dialog.defaultValue()
     // dialog.dismiss()
@@ -635,11 +635,11 @@ module.exports = {
     // upload image
     async wpUploadFile(filePath) {
         //wp image upload
-        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@id='menu-item-upload']"
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
         let uploadedMedia = ".attachment-preview"
-        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@class='browser button button-hero']"
-        let select = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-select')]"
-        let crop = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-insert')]"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
         await this.wait(1)
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
@@ -662,11 +662,11 @@ module.exports = {
     // upload image if no image is uploaded
     async wpUploadFileIfNotUploaded(filePath) {
         //wp image upload
-        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@id='menu-item-upload']"
+        let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
         let uploadedMedia = ".attachment-preview"
-        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative']//button[@class='browser button button-hero']"
-        let select = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-select')]"
-        let crop = "//div[@class='supports-drag-drop' and @style='position: relative']//button[contains(@class, 'media-button-insert')]"
+        let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
+        let select = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
+        let crop = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-insert')]"
 
         let uploadedMediaIsVisible = await this.isVisible(uploadedMedia)
         if (uploadedMediaIsVisible) {
