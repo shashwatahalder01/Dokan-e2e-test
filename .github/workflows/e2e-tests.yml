@@ -4,9 +4,8 @@ on:
     pull_request:
     push:
         branches:
-            - develop
-    schedule:
-    - cron:  '0 7 * * *'
+            - gitaction
+    workflow_dispatch:
     
 
 # Cancels all previous workflow runs for pull requests that have not completed.
@@ -32,18 +31,6 @@ jobs:
                   node-version: 14
                   cache: npm
 
-            - name: Npm install and build
-              run: |
-                  npm ci
-                  npm run build
-                  grunt
-
-            - name: Composer install and build
-              run: |
-                  composer install
-                  composer update
-                  composer dump-autoload -o
-
             - name: Setup WordPress
               run: |
                   npm run env:start
@@ -58,7 +45,7 @@ jobs:
                 timeout_seconds: 15
                 max_attempts: 3
                 retry_on: error
-                command: npm run test_interactive_single
+                command: npm run test:customer
 
             - name: Archive debug artifacts (screenshots, HTML snapshots)
               uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
