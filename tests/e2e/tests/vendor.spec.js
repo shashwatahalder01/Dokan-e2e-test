@@ -6,7 +6,12 @@ const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('vendor functionality test', () => {
-   // beforeAll(async () => {})
+   beforeAll(async () => {
+      await vendorPage.vendorRegisterIfNotExists(process.env.VENDOR, process.env.VENDOR_PASSWORD, process.env.VENDOR, data.vendorInfo.lastName,
+         process.env.VENDOR, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, true, data.vendorSetupWizard)
+      await vendorPage.addSimpleProduct(data.simpleProduct[0], data.product.price, data.product.category)
+      await vendorPage.addCoupon(data.couponCode[0], data.coupon.amount)
+   })
    // afterAll(async () => {await browser.close())
    // beforeEach(async () => {})
    // afterEach(async () => {await browser.close())
@@ -20,7 +25,6 @@ describe('vendor functionality test', () => {
 
    it('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard() //TODO: check if this is needed
    }, timeout)
 
    it('vendor can logout', async () => {
@@ -55,12 +59,12 @@ describe('vendor functionality test', () => {
 
    it('vendor can add auction product', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice,data.product.auction.startDate, data.product.auction.endDate, data.product.category)
+      await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
    }, timeout)
 
    it('vendor can add booking product', async () => {
-      await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)     
-      await vendorPage.addBookingProduct(data.product.booking.productName, data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock,data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
+      await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+      await vendorPage.addBookingProduct(data.product.booking.productName, data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
    }, timeout)
 
    it('vendor can add coupon', async () => {

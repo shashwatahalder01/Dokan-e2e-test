@@ -8,7 +8,8 @@
     "./wp-content/plugins/dokan/",
     "./wp-content/plugins/dokan-pro/",
     "https://downloads.wordpress.org/plugin/woocommerce.6.3.1.zip",
-    "woocommerce/woocommerce#trunk" 
+    "woocommerce/woocommerce#trunk", 
+    "weDevsOfficial/dokan#develop"
   ], 
   "themes": [
     "wp-content/themes/storefront" ,

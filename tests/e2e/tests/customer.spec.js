@@ -11,12 +11,16 @@ const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('customer functionality test', () => {
-    // beforeAll(async () => {
-    // await loginPage.customerRegister(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-    // })
+    beforeAll(async () => {
+        await customerPage.customerRegisterIfNotExists(process.env.CUSTOMER , process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.addBillingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, process.env.CUSTOMER + '@gmail.com')
+        await customerPage.addShippingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
+        await customerPage.customerLogout()
+    },timeout)
     // afterAll(async () => {await browser.close()})
     // beforeEach(async () => {})
-    // afterEach(async () => {await browser.close()})
+    // afterEach(async () => {})
 
 
     it('customer register', async () => {
@@ -34,20 +38,17 @@ describe('customer functionality test', () => {
     }, timeout)
 
     it.skip('customer become a vendor', async () => {
-        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
         await customerPage.customerBecomeVendor(data.vendorInfo.firstName, data.vendorInfo.lastName, data.vendorInfo.shopName, data.vendorInfo.street1, data.vendorInfo.phone, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban)
         await vendorPage.vendorSetupWizardChoice(true, data.vendorSetupWizard)
     }, timeout)
 
     it('customer become a wholesale customer', async () => {
-        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
         await customerPage.customerBecomeWholesaleCustomer()
     }, timeout)
 
     it('customer add customer details', async () => {
-        // await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
         await customerPage.addCustomerDetails(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.firstName, data.customerInfo.userEmail, data.customerInfo.password, data.customerInfo.password1)
     }, timeout)
@@ -66,45 +67,44 @@ describe('customer functionality test', () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.clearCart()
         await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('p1_v1')
+        await customerPage.addProductToCartFromShop(data.simpleProduct[0])
         await customerPage.goToCartFromShop()
-        // await customerPage.applyCoupon('VC_RJHHN')
         await customerPage.goToCheckoutFromCart()
         await customerPage.placeOrder()
     }, timeout)
 
     it('customer can review product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.reviewProduct('p1_v1', data.product.rating)
+        await customerPage.reviewProduct(data.simpleProduct[0], data.product.rating)
     }, timeout)
 
     it('customer can report product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.reportProduct('p1_v1', data.product.reportReason, data.product.reportReasonDescription)
+        await customerPage.reportProduct(data.simpleProduct[0], data.product.reportReason, data.product.reportReasonDescription)
     }, timeout)
 
     it('customer can enquire product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.enquireProduct('p1_v1', data.product.enquiryDetails)
+        await customerPage.enquireProduct(data.simpleProduct[0], data.product.enquiryDetails)
     }, timeout)
 
     it('customer can search product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.searchProduct('p1_v1')
+        await customerPage.searchProduct(data.simpleProduct[0])
     }, timeout)
 
     it('customer can apply coupon', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('p1_v1')
+        await customerPage.addProductToCartFromShop(data.simpleProduct[0])
         await customerPage.goToCartFromShop()
-        await customerPage.applyCoupon('c_v1')
+        await customerPage.applyCoupon(data.couponCode[0])
     }, timeout)
 
     it('customer can add product to cart', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
-        await customerPage.addProductToCartFromShop('p1_v1')
+        await customerPage.addProductToCartFromShop(data.simpleProduct[0])
         await customerPage.goToCartFromShop()
         await customerPage.goToCheckoutFromCart()
         await customerPage.placeOrder()
@@ -115,7 +115,7 @@ describe('customer functionality test', () => {
         await customerPage.searchVendor(process.env.VENDOR)
     }, timeout)
 
-    it.only('customer can follow vendor', async () => {
+    it('customer can follow vendor', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.followVendor(process.env.VENDOR)
     }, timeout)
@@ -138,10 +138,10 @@ describe('customer functionality test', () => {
 
     it.skip('customer can send return request ', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        let cOrderDetails = await customerPage.buyProduct(productName, false, true)
+        let cOrderDetails = await customerPage.buyProduct(data.simpleProduct[0], false, true)
         await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await vendorPage.changeOrderStatus(cOrderDetails.orderNumber, data.orderStatus[1])
-        await customerPage.sendWarrantyRequest( cOrderDetails.orderNumber, 'p1_v1', data.order.refundRequestType, data.order.refundRequestReasons, data.order.refundRequestDetails)
+        await customerPage.sendWarrantyRequest(cOrderDetails.orderNumber, data.simpleProduct[0], data.order.refundRequestType, data.order.refundRequestReasons, data.order.refundRequestDetails)
     }, timeout)
 
 

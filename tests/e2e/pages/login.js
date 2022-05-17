@@ -55,6 +55,24 @@ module.exports = {
     async createUser(username, userDetails) {
         let password = createUser(username, userDetails)
         return password
+    },
+
+    async checkUserExists(username, password) {
+        await base.goIfNotThere("wp-login.php")
+        let emailField = await base.isVisible(selector.backend.email)
+        if (emailField) {
+            await base.clearAndType(selector.backend.email, username)
+            await base.clearAndType(selector.backend.password, password)
+            await base.clickAndWait(selector.backend.login)
+        }
+
+        let loginError = await base.isVisible(selector.backend.loginError)
+        if (loginError) {
+            let errorMessage = await base.getElementText(selector.backend.loginError)
+            expect(errorMessage).toMatch(`Error: The username ${username} is not registered on this site. If you are unsure of your username, try your email address instead.`)
+            return false
+        }
+        return true
     }
 
 }

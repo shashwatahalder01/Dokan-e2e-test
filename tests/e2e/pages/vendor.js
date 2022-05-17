@@ -1,5 +1,6 @@
 const base = require("../pages/base.js")
 const adminPage = require('../pages/admin.js')
+const customerPage = require('../pages/customer.js')
 const loginPage = require('../pages/login.js')
 const selector = require("../pages/selectors.js")
 const helpers = require("../../e2e/utils/helpers.js")
@@ -45,10 +46,19 @@ module.exports = {
 
     //-------------------------------------------------- setup wizard ---------------------------------------------------//
 
+
+    //vendor register if not exists
+    async vendorRegisterIfNotExists(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
+        let UserExists = await loginPage.checkUserExists(userEmail, password)
+        if (!UserExists) {
+            await this.vendorRegister(userEmail + '@gmail.com', password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData)
+        }
+    },
+
     //vendor registration
     async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
-        await base.goto("my-account")
-        await base.clickAndWait(selector.frontend.myAccount)
+        await customerPage.goToMyAccount()
+
         await page.type(selector.vendor.vRegistration.regEmail, userEmail)
         await page.type(selector.vendor.vRegistration.regPassword, password)
         await base.click(selector.vendor.vRegistration.regVendor)
@@ -77,7 +87,7 @@ module.exports = {
         if (setupWizardChoice) {
             await this.vendorSetupWizard(
                 setupWizardData.storeProductsPerPage, setupWizardData.street1, setupWizardData.street2, setupWizardData.city, setupWizardData.zipCode,
-                setupWizardData.country, setupWizardData.state, setupWizardData.paypal, setupWizardData.bankAccountName, setupWizardData.bankAccountNumber,
+                setupWizardData.country, setupWizardData.state, setupWizardData.paypal, setupWizardData.bankAccountName, setupWizardData.bankAccountType, setupWizardData.bankAccountNumber,
                 setupWizardData.bankName, setupWizardData.bankAddress, setupWizardData.bankRoutingNumber, setupWizardData.bankIban, setupWizardData.bankSwiftCode,
                 setupWizardData.customPayment, setupWizardData.skrill)
         }
@@ -91,7 +101,7 @@ module.exports = {
     },
 
     //vendor setup wizard
-    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment, skrill) {
+    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountType, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment, skrill) {
         await page.click(selector.vendor.vSetup.letsGo)
 
         await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, storeProductsPerPage)
@@ -108,14 +118,19 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
 
         await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
+     
         await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
+        await base.select(selector.vendor.vSetup.bankAccountType, bankAccountType)
+        await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
         await base.type(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
         await base.type(selector.vendor.vSetup.bankName, bankName)
         await base.type(selector.vendor.vSetup.bankAddress, bankAddress)
-        await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
         await base.type(selector.vendor.vSetup.bankIban, bankIban)
         await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
+        await base.check(selector.vendor.vSetup.declaration)
+
         await base.type(selector.vendor.vSetup.customPayment, customPayment)
+
         await base.clearAndType(selector.vendor.vSetup.skrill, skrill)
         await base.clickAndWait(selector.vendor.vSetup.continuePaymentSetup)
 
@@ -745,7 +760,7 @@ module.exports = {
     async setPaypalMarketPlace(email) {
         //paypal marketplace
         // await base.clearAndType(selector.vendor.vPaymentSettings.paypalMarketplace, paypalMarketplace)
-        // await base.clickAndWait(selector.vendor.vPaymentSettings.paypalMarketplaceSigUp)
+        // await base.clickAndWait(selector.vendor.vPaymentSettings.paypalMarketplaceSignUp)
     },
 
     //razorpay payment settings
@@ -1153,9 +1168,10 @@ module.exports = {
         await base.hover(selector.vendor.vReviews.reviewRow(reviewMessage))
         await base.click(selector.vendor.vReviews.approveReview(reviewMessage))
         await base.wait(2)
+        await base.clickAndWait(selector.vendor.vReviews.approved)
 
         let reviewIsVisible = await base.isVisible(selector.vendor.vReviews.reviewRow(reviewMessage))
-        expect(reviewIsVisible).toBe(false)
+        expect(reviewIsVisible).toBe(true)
     },
 
     async approveReturnRequest(orderId, productName) {
@@ -1255,13 +1271,13 @@ module.exports = {
         await page.click(selector.vendor.vOrders.edit)
         await page.select(selector.vendor.vOrders.orderStatus, orderStatus)
         await base.click(selector.vendor.vOrders.updateOrderStatus)
-        await base.wait(2)
+        await base.wait(3)
 
         let currentOrderStatus = await base.getElementText(selector.vendor.vOrders.currentOrderStatus)
         expect(currentOrderStatus.toLowerCase()).toMatch((orderStatus.replace(/(^wc)|(\W)/g, '')).toLowerCase())
     },
 
-    async refundOrder(orderNumber, productName, partialRefund=false) {
+    async refundOrder(orderNumber, productName, partialRefund = false) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.orders)
         await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
@@ -1306,19 +1322,19 @@ module.exports = {
         }
         vOrderDetails.orderStatus = (await base.getElementText(selector.vendor.vOrders.currentOrderStatus)).replace('-', ' ')
         let orderDate = (await base.getElementText(selector.vendor.vOrders.orderDate)).split(':')[1].trim()
-        vOrderDetails.orderDate  = orderDate.substring(0, orderDate.indexOf(',', orderDate.indexOf(',')+1))
+        vOrderDetails.orderDate = orderDate.substring(0, orderDate.indexOf(',', orderDate.indexOf(',') + 1))
         vOrderDetails.discount = helpers.price(await base.getElementText(selector.vendor.vOrders.discount))
         let shippingMethodIsVisible = await base.isVisible(selector.vendor.vOrders.shippingMethod)
-        if(shippingMethodIsVisible) vOrderDetails.shippingMethod = await base.getElementText(selector.vendor.vOrders.shippingMethod)
+        if (shippingMethodIsVisible) vOrderDetails.shippingMethod = await base.getElementText(selector.vendor.vOrders.shippingMethod)
         vOrderDetails.shippingCost = helpers.price(await base.getElementText(selector.vendor.vOrders.shippingCost))
         let taxIsVisible = await base.isVisible(selector.vendor.vOrders.tax)
-        if(taxIsVisible) vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
+        if (taxIsVisible) vOrderDetails.tax = helpers.price(await base.getElementText(selector.vendor.vOrders.tax))
         vOrderDetails.refunded = helpers.price(await base.getElementText(selector.vendor.vOrders.refunded))
-        
-        return vOrderDetails
-},
 
-//get total vendor earnings
+        return vOrderDetails
+    },
+
+    //get total vendor earnings
     async getTotalVendorEarning() {
         await this.goToVendorDashboard()
 

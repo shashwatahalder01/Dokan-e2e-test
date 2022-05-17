@@ -139,6 +139,9 @@ module.exports = {
    //Stripe express
    iDealBanks: ['abn_amro', 'asn_bank', 'bunq', 'handelsbanken', 'ing', 'knab', 'rabobank', 'regiobank', 'revolut', 'sns_bank', 'triodos_bank', 'van_lanschot'],
 
+   //bank details
+   bankAccountType: ['personal', 'business'],
+
 
    //------------------------------------------------ Generated  test data ------------------------------------------------------//
 
@@ -233,6 +236,7 @@ module.exports = {
       state: 'New York',
       paypal: faker.internet.email(),
       bankAccountName: 'accountName',
+      bankAccountType: faker.helpers.arrayElement(['personal', 'business']),
       bankAccountNumber: faker.random.alphaNumeric(10),
       bankName: 'bankName',
       bankAddress: 'bankAddress',
@@ -251,17 +255,17 @@ module.exports = {
          grouped: faker.commerce.productName() + (' (Grouped)'),
          simpleSubscription: faker.commerce.productName() + (' (Simple Subscription)'),
          variableSubscription: faker.commerce.productName() + (' (Variable Subscription)'),
-         dokanSubscription: 'Dokan Subscription ' + faker.random.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium'],) + ' ' + faker.random.alpha({ count: 5, upcase: true },) + (' (Product Pack)'),
+         dokanSubscription: 'Dokan Subscription ' + faker.helpers.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium'],) + ' ' + faker.random.alpha({ count: 5, upcase: true },) + (' (Product Pack)'),
          booking: faker.commerce.productName() + (' (Booking)'),
          auction: faker.commerce.productName() + (' (Auction)'),
       },
       // price: faker.commerce.price(100, 200, 2),
       // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
       // price: faker.finance.amount(1, 200, 2), 
-      price: faker.finance.amount(100, 200, faker.random.arrayElement([0, 2])),
+      price: faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])),
       auctionPrice: faker.commerce.price(10, 100, 0),
       category: 'Uncategorized',
-      categories: faker.random.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
+      categories: faker.helpers.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
       attribute: 'size',
       attributeTerms: ['s', 'l', 'm'],
       vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1],
@@ -289,9 +293,10 @@ module.exports = {
       rating: faker.datatype.number({ min: 1, max: 5 }),
       reviewMessage: faker.datatype.uuid(),
       // reviewMessage: faker.lorem.word()
-
+      // 
       //report
-      reportReason: faker.random.arrayElement(['This content is spam', 'This content should marked as adult', 'This content is abusive', 'This content is violent', 'This content suggests the author might be risk of hurting themselves', 'This content infringes upon my copyright', 'This content contains my private information', 'Other', 'This product is fake']),
+      // reportReason: faker.random.arrayElement(['This content is spam', 'This content should marked as adult', 'This content is abusive', 'This content is violent', 'This content suggests the author might be risk of hurting themselves', 'This content infringes upon my copyright', 'This content contains my private information', 'Other', 'This product is fake']),
+      reportReason: faker.helpers.arrayElement(['This content is spam', 'This content should marked as adult', 'This content is abusive', 'This content is violent', 'This content suggests the author might be risk of hurting themselves', 'This content infringes upon my copyright', 'This content contains my private information', 'Other']),
       reportReasonDescription: 'report reason description',
 
       //enquiry
@@ -299,7 +304,7 @@ module.exports = {
    },
 
    store: {
-      rating: faker.random.arrayElement(['width: 20%', 'width: 40%', 'width: 60%', 'width: 80%', 'width: 100%']),
+      rating: faker.helpers.arrayElement(['width: 20%', 'width: 40%', 'width: 60%', 'width: 80%', 'width: 100%']),
       storeReviewTitle: 'store review title',
       storeReviewMessage: 'store review message',
 
@@ -359,6 +364,22 @@ module.exports = {
    },
 
 
+   //------------------------------------------------ predefined  test data ------------------------------------------------------/
+
+   simpleProduct: ['p1_v1 (simple)', 'p2_v1 (simple)', 'p1_F1_v1 (simple)', 'p2_F2_v1 (simple)'],
+   variableProduct: ['p1_v1 (variable)'],
+   simpleSubscription: ['p1_v1 (simple subscription)'],
+   variableSubscription: ['p1_v1 (variable subscription)'],
+   externalProduct: ['p1_v1 (external/affiliate)'],
+   auctionProduct: ['p1_v1 (auction)'],
+   bookingProduct: ['p1_v1 (booking)'],
+   saleProduct: ['p1_v1 (sale)'],
+   couponCode: ['C1_v1'],
+
+
+
+
+
 
 
    // some sample data
@@ -369,7 +390,5 @@ module.exports = {
    productCategories: ["SmartPhones", "Laptops", "Accessories", "Shirts", "T-Shirts", "Polo Shirts", "Jeans", "Pants", "Shoes", "Bags",],
    productAttributes: ["Size", "Color"],
    attributeValues: [["S", "M", "L", "XL", "XXL"], ["Red", "Blue", "Black", "Yellow", "White", "Deep blue"],],
-
-
 }
 

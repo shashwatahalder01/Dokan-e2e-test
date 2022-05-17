@@ -69,11 +69,17 @@ module.exports = {
 
     //-------------------------------------------------- customer details ---------------------------------------------------//
 
-
+    //customer register if not exists
+    async customerRegisterIfNotExists(userEmail, password) {
+        let UserExists = await loginPage.checkUserExists(userEmail, password)
+        if (!UserExists) {
+            await this.customerRegister(userEmail + '@gmail.com', password)
+        }
+    },
 
     //customer register
     async customerRegister(userEmail, password) {
-        await base.goto("my-account")
+        await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
             await this.customerLogout()
@@ -89,6 +95,38 @@ module.exports = {
         // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
+
+
+    // //customer register
+    // async customerRegister(userEmail, password) {
+    //     await this.goToMyAccount()
+    //     let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
+    //     if (!loginIsVisible) {
+    //         await this.customerLogout()
+    //     }
+    //     await page.type(selector.customer.cRegistration.regEmail, userEmail)
+    //     await page.type(selector.customer.cRegistration.regPassword, password)
+    //     await base.click(selector.customer.cRegistration.regCustomer)
+    //     await base.click(selector.customer.cRegistration.register)
+    //     await base.wait(3)
+
+    //     let wooCommerceError = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
+    //     if (wooCommerceError) {
+    //         let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
+    //         expect(errorMessage).toMatch('Error: An account is already registered with your email address. Please log in.')
+    //         return
+    //     }
+
+    //     await base.waitForNavigation()
+
+    //     let username = (userEmail.split("@")[0]).toLowerCase()
+    //     let loggedInUser = await base.getCurrentUser()
+    //     expect(loggedInUser).toBe(username)
+    //     // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
+    //     // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
+    // },
+
+
 
 
     //customer become vendor
@@ -561,7 +599,7 @@ module.exports = {
     },
 
     //customer place order
-    async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails= false) {
+    async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
         //TODO:handle billing address warning or shipping address warning
         console.log('place order #1')
         if (billingDetails) await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')

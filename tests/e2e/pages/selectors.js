@@ -52,6 +52,8 @@ module.exports = {
         logout: "#wp-admin-bar-logout a",
         //logout message
         logoutSuccessMessage: "#login p",
+        //login error
+        loginError: '#login_error',
     },
 
 
@@ -1580,13 +1582,15 @@ module.exports = {
             //paypal
             paypal: "//input[@name='settings[paypal][email]']",
             //bank
-            bankAccountName: "//input[@placeholder='Your bank account name']",
-            bankAccountNumber: "//input[@placeholder='Your bank account number']",
-            bankName: "//input[@placeholder='Name of bank']",
-            bankAddress: "//textarea[@placeholder='Address of your bank']",
-            bankRoutingNumber: "//input[@placeholder='Routing number']",
-            bankIban: "//input[@placeholder='IBAN']",
-            bankSwiftCode: "//input[@placeholder='Swift code']",
+            bankAccountName: "#ac_name",
+            bankAccountType:"#ac_type",
+            bankRoutingNumber: "//input[@name='settings[bank][routing_number]']",
+            bankAccountNumber: "//input[@name='settings[bank][ac_number]']",
+            bankName: "//input[@name='settings[bank][bank_name]']",
+            bankAddress:"//textarea[@name='settings[bank][bank_addr]']",
+            bankIban: "//input[@name='settings[bank][iban]']",
+            bankSwiftCode: "//input[@name='settings[bank][swift]']",
+            declaration: "#declaration",
             //custom payment method
             customPayment: "//input[@name='settings[dokan_custom][value]']",
             //paypal marketplace

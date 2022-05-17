@@ -574,6 +574,11 @@ module.exports = {
         await page.waitForTimeout(seconds * 1000)
     },
 
+    //wait for navigation
+    async waitForNavigation() {
+       await page.waitForNavigation({ waitUntil: 'networkidle2' })
+    },
+
     //TODO: add function for grab console error
     //TODO: use event console.error
 

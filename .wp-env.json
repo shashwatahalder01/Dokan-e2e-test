@@ -1,20 +1,20 @@
 {
-  "phpVersion": "8.0",
-  "WP_DEBUG": "true",
-  "SCRIPT_DEBUG": "true",
-  "plugins": [
-    "./wp-content/plugins/dokan/",
-    "./wp-content/plugins/dokan-pro/",
-    "./wp-content/plugins/woocommerce/",
-    "./wp-content/plugins/woocommerce-bookings/",
-    "./wp-content/plugins/woocommerce-product-addons/",
-    "./wp-content/plugins/woocommerce-subscriptions/",
-    "./wp-content/plugins/woocommerce-simple-auctions/"
-
-  ],
-  "themes": [
-    "./wp-content/themes/storefront/" 
-  ]
-
+    "phpVersion": "8.0",
+    "WP_DEBUG": "true",
+    "SCRIPT_DEBUG": "true",
+    "plugins": [
+      "./wp-content/plugins/dokan/",
+      "./wp-content/plugins/dokan-pro/",
+      "./wp-content/plugins/woocommerce/",
+      "./wp-content/plugins/woocommerce-bookings/",
+      "./wp-content/plugins/woocommerce-product-addons/",
+      "./wp-content/plugins/woocommerce-subscriptions/",
+      "./wp-content/plugins/woocommerce-simple-auctions/"
+      
+    ],
+    "themes": [
+      "./wp-content/themes/storefront/" 
+    ]
   
-}
+    
+  }

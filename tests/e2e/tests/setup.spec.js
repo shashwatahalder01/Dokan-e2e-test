@@ -52,17 +52,17 @@ describe('Environment setup test', () => {
         await vendorPage.addSimpleProduct('p2_v1 (simple)', data.product.price, data.product.category)
         await vendorPage.addSimpleProduct('p1_F1_v1 (simple)', data.product.price, data.product.category)
         await vendorPage.addSimpleProduct('p2_F2_v1 (simple)', data.product.price, data.product.category)
-        await vendorPage.addVariableProduct('p1_v1 (variable)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-        await vendorPage.addSimpleSubscription('p1_v1 (simple subscription)', data.product.price, data.product.category)
-        await vendorPage.addVariableSubscription('p1_v1 (variable subscription)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-        await vendorPage.addExternalProduct('p1_v1 (external)', data.product.price, data.product.category)
-        await vendorPage.addAuctionProduct('p1_v1 (auction)', data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
-        await vendorPage.addBookingProduct('p1_v1 (booking)', data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
-        //add discount product
-        await vendorPage.addSimpleProduct('p1_v1 (sale)', data.product.price, data.product.category)
-        //add minmax products
-        await vendorPage.addSimpleProduct('p1_v1 (minmax)', data.product.price, data.product.category)
-        //add coupons
+        // await vendorPage.addVariableProduct('p1_v1 (variable)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
+        // await vendorPage.addSimpleSubscription('p1_v1 (simple subscription)', data.product.price, data.product.category)
+        // await vendorPage.addVariableSubscription('p1_v1 (variable subscription)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
+        // await vendorPage.addExternalProduct('p1_v1 (external)', data.product.price, data.product.category)
+        // await vendorPage.addAuctionProduct('p1_v1 (auction)', data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
+        // await vendorPage.addBookingProduct('p1_v1 (booking)', data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
+        // //add discount product
+        // await vendorPage.addSimpleProduct('p1_v1 (sale)', data.product.price, data.product.category)
+        // //add minmax products
+        // await vendorPage.addSimpleProduct('p1_v1 (minmax)', data.product.price, data.product.category)
+        // //add coupons
         await vendorPage.addCoupon('COUPON_V1', data.coupon.amount)
         await vendorPage.vendorLogout()
 
