@@ -33,7 +33,7 @@ jobs:
 
             - name: Setup WordPress
               run: |
-                  npm run env:start
+                  npm run start-env
 
             - name: Activate storefront
               run: |
