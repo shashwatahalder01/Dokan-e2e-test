@@ -3,7 +3,7 @@
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
   "plugins": [
-    "https://shashwata.ajaira.website/wp-content/ws.zip"
+    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/ws.zip"
   ],
   "themes": [
     "https://downloads.wordpress.org/theme/storefront.latest-stable.zip"
