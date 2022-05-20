@@ -32,7 +32,7 @@ describe('customer functionality test', () => {
         await adminPage.setWoocommerceSettings()
     }, timeout)
 
-    it('customer register', async () => {
+    it.only('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
