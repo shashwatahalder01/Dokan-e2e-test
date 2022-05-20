@@ -41,11 +41,12 @@ jobs:
                   npm run activate-sf-test
 
             - name: Running the e2e tests
-              uses: nick-fields/retry@v2
-              with:
-                timeout_seconds: 30000
-                max_attempts: 3
-                retry_on: error
+            #   uses: nick-fields/retry@v2
+            #   with:
+            #     timeout_seconds: 30000
+            #     max_attempts: 3
+            #     retry_on: error
+              run: |  
                 command: npm run test:customer
 
             - name: Archive debug artifacts (screenshots, HTML snapshots)
