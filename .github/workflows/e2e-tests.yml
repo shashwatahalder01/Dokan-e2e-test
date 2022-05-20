@@ -48,6 +48,7 @@ jobs:
                 retry_on: error
                 command: npm run test:customer
             #   run: |  
+            #       npm run test:customer            #   run: |  
             #       npm run test:customer
 
             - name: Archive debug artifacts (screenshots, HTML snapshots)
