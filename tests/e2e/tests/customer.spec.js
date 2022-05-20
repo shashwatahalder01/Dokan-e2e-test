@@ -23,7 +23,19 @@ describe('customer functionality test', () => {
     // afterEach(async () => {})
 
 
-    it.only('customer register', async () => {
+    it.only('setup', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // check plugin is installed
+        await adminPage.checkPluginActivationConfirmation(data.PluginSlugList)
+        // set wp general settings & permalink settings
+        await adminPage.setWpSettings()
+        // set wooCommerce settings
+        await adminPage.setWoocommerceSettings()
+        // set payment gateway settings
+        await adminPage.setupBasicPaymentMethods()
+    }, timeout)
+    
+        it.only('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
