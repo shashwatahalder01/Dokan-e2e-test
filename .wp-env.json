@@ -3,7 +3,14 @@
   "WP_DEBUG": "true",
   "SCRIPT_DEBUG": "true",
   "plugins": [
-    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/ws.zip"
+    "https://downloads.wordpress.org/plugin/woocommerce.6.5.0.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/ws.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/wb.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/wpad.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/wsa.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/wl.zip",
+    "http://shashwata.ajaira.website/wp-content/uploads/2022/05/wp.zip",
+    "http://shashwata.ajaira.website/wp-content/ws.zip"
   ],
   "themes": [
     "https://downloads.wordpress.org/theme/storefront.latest-stable.zip"
