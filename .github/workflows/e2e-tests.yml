@@ -33,19 +33,17 @@ jobs:
 
             - name: Setup WordPress
               run: |
-                  ls
                   npm install
                   npm run wp-env start
 
             - name: Activate storefront
               run: |
-                  ls
                   npm run activate-sf-test
 
             - name: Running the e2e tests
               uses: nick-fields/retry@v2
               with:
-                timeout_seconds: 15
+                timeout_seconds: 3000
                 max_attempts: 3
                 retry_on: error
                 command: npm run test:customer
