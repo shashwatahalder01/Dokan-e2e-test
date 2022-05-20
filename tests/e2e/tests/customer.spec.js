@@ -12,11 +12,11 @@ jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('customer functionality test', () => {
     // beforeAll(async () => {
-        // await customerPage.customerRegisterIfNotExists(process.env.CUSTOMER , process.env.CUSTOMER_PASSWORD)
-        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        // await customerPage.addBillingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, process.env.CUSTOMER + '@gmail.com')
-        // await customerPage.addShippingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
-        // await customerPage.customerLogout()
+    // await customerPage.customerRegisterIfNotExists(process.env.CUSTOMER , process.env.CUSTOMER_PASSWORD)
+    // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+    // await customerPage.addBillingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, process.env.CUSTOMER + '@gmail.com')
+    // await customerPage.addShippingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
+    // await customerPage.customerLogout()
     // },timeout)
     // afterAll(async () => {await browser.close()})
     // beforeEach(async () => {})
@@ -34,8 +34,8 @@ describe('customer functionality test', () => {
         // set payment gateway settings
         await adminPage.setupBasicPaymentMethods()
     }, timeout)
-    
-        it.only('customer register', async () => {
+
+    it('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
