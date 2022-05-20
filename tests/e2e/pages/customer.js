@@ -24,6 +24,7 @@ module.exports = {
 
         const url = await page.url()
         expect(url).toMatch('my-account')
+        console.log('on page my-account')
     },
 
     async goToShop() {
@@ -86,6 +87,7 @@ module.exports = {
         }
         await page.type(selector.customer.cRegistration.regEmail, userEmail)
         await page.type(selector.customer.cRegistration.regPassword, password)
+        console.log(await base.isVisible(selector.customer.cRegistration.regPassword))
         await base.click(selector.customer.cRegistration.regCustomer)
         await base.clickAndWait(selector.customer.cRegistration.register)
 
