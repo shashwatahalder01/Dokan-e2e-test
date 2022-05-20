@@ -23,7 +23,7 @@ describe('customer functionality test', () => {
     // afterEach(async () => {})
 
 
-    it('setup', async () => {
+    it.only('setup', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // check plugin is installed
         // set wp general settings & permalink settings
@@ -32,17 +32,17 @@ describe('customer functionality test', () => {
         await adminPage.setWoocommerceSettings()
     }, timeout)
 
-    it('customer register', async () => {
+    it.only('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
 
-    it('customer login', async () => {
+    it.only('customer login', async () => {
         await customerPage.customerRegister(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
     }, timeout)
 
-    it('customer logout', async () => {
+    it.only('customer logout', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.customerLogout()
     }, timeout)
@@ -53,22 +53,22 @@ describe('customer functionality test', () => {
         await vendorPage.vendorSetupWizardChoice(true, data.vendorSetupWizard)
     }, timeout)
 
-    it('customer become a wholesale customer', async () => {
+    it.only('customer become a wholesale customer', async () => {
         await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
         await customerPage.customerBecomeWholesaleCustomer()
     }, timeout)
 
-    it('customer add customer details', async () => {
+    it.only('customer add customer details', async () => {
         await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
         await customerPage.addCustomerDetails(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.firstName, data.customerInfo.userEmail, data.customerInfo.password, data.customerInfo.password1)
     }, timeout)
 
-    it('customer add billing details', async () => {
+    it.only('customer add billing details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.addBillingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
     }, timeout)
 
-    it('customer add shipping details', async () => {
+    it.only('customer add shipping details', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
     }, timeout)
