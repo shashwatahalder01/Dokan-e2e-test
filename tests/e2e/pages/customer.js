@@ -82,6 +82,7 @@ module.exports = {
     async customerRegister(userEmail, password) {
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
+        console.log('loginIsVisible: ' + loginIsVisible)
         if (!loginIsVisible) {
             await this.customerLogout()
         }

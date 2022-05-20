@@ -23,7 +23,7 @@ describe('customer functionality test', () => {
     // afterEach(async () => {})
 
 
-    it('customer register', async () => {
+    it.only('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
