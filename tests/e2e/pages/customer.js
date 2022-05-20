@@ -24,7 +24,6 @@ module.exports = {
 
         const url = await page.url()
         expect(url).toMatch('my-account')
-        console.log('on page my-account')
     },
 
     async goToShop() {
