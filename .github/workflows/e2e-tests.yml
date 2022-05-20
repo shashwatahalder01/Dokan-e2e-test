@@ -46,8 +46,9 @@ jobs:
             #     timeout_seconds: 30000
             #     max_attempts: 3
             #     retry_on: error
+            #     command: npm run test:customer
               run: |  
-                command: npm run test:customer
+                  npm run test:customer
 
             - name: Archive debug artifacts (screenshots, HTML snapshots)
               uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2

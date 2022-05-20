@@ -83,11 +83,12 @@ module.exports = {
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         console.log('loginIsVisible: ' + loginIsVisible)
         if (!loginIsVisible) {
+            console.log('logging-out  user')
             await this.customerLogout()
         }
         await page.type(selector.customer.cRegistration.regEmail, userEmail)
         await page.type(selector.customer.cRegistration.regPassword, password)
-        console.log(await base.isVisible(selector.customer.cRegistration.regPassword))
+        console.log('reg pass ',await base.isVisible(selector.customer.cRegistration.regPassword))
         await base.click(selector.customer.cRegistration.regCustomer)
         await base.clickAndWait(selector.customer.cRegistration.register)
 
