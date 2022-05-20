@@ -163,7 +163,7 @@ module.exports = {
         await base.wait(4)
 
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
-        console.log(returnMessage)
+ 
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
@@ -329,11 +329,9 @@ module.exports = {
 
         let currentStoreFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         if (currentStoreFollowStatus == "Following") {
-            console.log('if')
             await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
             // await base.wait(1)
         }
-        console.log('notif')
         await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
         // await base.wait(1)
         let storeFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
@@ -601,11 +599,9 @@ module.exports = {
     //customer place order
     async placeOrder(paymentMethod, getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
         //TODO:handle billing address warning or shipping address warning
-        console.log('place order #1')
         if (billingDetails) await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         if (shippingDetails) await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
         await base.wait(6)
-        console.log('place order #2')
 
         switch (paymentMethod) {
             case 'bank':
@@ -755,8 +751,6 @@ module.exports = {
 
         cOrderDetails.paymentMethod = await base.getElementText(selector.customer.cOrders.paymentMethod)
         cOrderDetails.orderTotal = helpers.price(await base.getElementText(selector.customer.cOrders.orderTotal))
-
-        // console.log(cOrderDetails)
         return cOrderDetails
     },
 
