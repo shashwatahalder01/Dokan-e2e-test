@@ -39,26 +39,6 @@ jobs:
                 path: "plugins/dokan"
                 ref: 'develop'
 
-            # - name: Clone dokan-pro
-            #   uses: actions/checkout@5a4ac9002d0be2fb38bd78e4b4dbde5606d7042f # v2.3.4
-            #   with:
-            #     repository: weDevsOfficial/dokan-pro
-            #     token: ${{ secrets.ACCESS_TOKEN }}
-            #     path: "plugins/dokan-pro"
-            #     ref: 'develop'
-
-            # - name: Dokan-pro Composer install and build 
-            #   run: |
-            #       cd plugins/dokan-pro
-            #       composer install
-            #       composer update
-            #       composer dump-autoload -o
-
-            # - name: Dokan-pro Npm install and build
-            #   run: |
-            #       cd plugins/dokan-pro
-            #       npm i
-            #       npm run build
 
             - name: Dokan Composer install and build
               run: |
@@ -76,20 +56,10 @@ jobs:
 
             - name: Setup test environment
               run: |
-
                   npm i
-
-            # - name: Setup WordPress 
-            #   uses: nick-fields/retry@v2
-            #   with:
-            #     timeout_seconds: 3000000
-            #     max_attempts: 3
-            #     retry_on: error
-            #     command: npm run wp-env start
 
             - name: Activate storefront
               run: |
-
                   npm run start-env
                   npm run activate-sf-test
 
