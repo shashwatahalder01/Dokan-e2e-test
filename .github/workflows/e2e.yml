@@ -76,7 +76,7 @@ jobs:
 
             - name: Setup test environment
               run: |
-                  cd tests/e2e  
+
                   npm i
 
             # - name: Setup WordPress 
@@ -89,7 +89,7 @@ jobs:
 
             - name: Activate storefront
               run: |
-                  cd tests/e2e 
+
                   npm run start-env
                   npm run activate-sf-test
 
@@ -99,7 +99,7 @@ jobs:
                 timeout_seconds: 3000
                 max_attempts: 2
                 retry_on: error
-                command: cd tests/e2e && npm run test:admin
+                command: npm run test:admin
 
             - name: Archive debug artifacts (screenshots, HTML snapshots)
               uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
