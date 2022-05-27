@@ -39,17 +39,21 @@ jobs:
 
             - name: Tests
               run: |
+                cd ~
                 pwd
                 ls
 
+                cd ~
                 cd home
                 pwd
                 ls 
 
+                cd ~
                 cd home/runner
                 pwd
                 ls  
-
+                
+                cd ~
                 cd home/runner/work
                 pwd
                 ls
