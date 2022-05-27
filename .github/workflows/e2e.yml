@@ -44,7 +44,7 @@ jobs:
                 ls
 
                 cd ~
-                cd home/runner/work
+                cd work
                 pwd
                 ls
 
