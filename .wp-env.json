@@ -1,14 +1,7 @@
 {
-  "phpVersion": "7.4",
-  "WP_DEBUG": "true",
-  "SCRIPT_DEBUG": "true",
   "plugins": [
     "./plugins/dokan/",
-    "https://downloads.wordpress.org/plugin/woocommerce.6.5.0.zip",
-    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/ws.zip",
-    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wb.zip",
-    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wpad.zip",
-    "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wsa.zip"
+    "https://downloads.wordpress.org/plugin/woocommerce.6.5.0.zip"
   ],
   "themes": [
     "https://downloads.wordpress.org/theme/storefront.latest-stable.zip"

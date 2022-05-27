@@ -39,6 +39,8 @@ jobs:
 
             - name: Dokan Composer install and build
               run: |
+                  cd
+                  rm -rf .wp-env
                   cd plugins/dokan
                   composer install
                   composer dump-autoload -o
