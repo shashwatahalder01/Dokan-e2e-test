@@ -57,6 +57,7 @@ jobs:
 
             - name: Activate storefront
               run: |
+                  ls
                   npm run start-env
                   npm run activate-sf-test
 
