@@ -58,15 +58,14 @@ jobs:
                   npm run dev:build
                   grunt
 
-            # - name: Setup test environment
-            #   run: |
-            #       rm -rf node_modules && rm ./package-lock.json && npm install
+            - name: Setup test environment
+              run: |
+                   npm install
 
             - name: Activate storefront
               run: |
                   ls
-                  npm run wp-env destroy  
-                  npm run wp-env start --debug",
+                  npm run delete-all
                   npm run activate-sf-test
 
             - name: Running the e2e tests
