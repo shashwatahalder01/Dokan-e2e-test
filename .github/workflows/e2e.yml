@@ -65,7 +65,8 @@ jobs:
             - name: Activate storefront
               run: |
                   ls
-                  npm run delete-all
+                  npm run wp-env destroy  
+                  npm run wp-env start --debug",
                   npm run activate-sf-test
 
             - name: Running the e2e tests
