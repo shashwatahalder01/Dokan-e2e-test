@@ -37,22 +37,16 @@ jobs:
                 ref: 'develop'
 
 
-            - name: Tests
-              run: |
-                cd ~
-                pwd
-                ls
-
-                cd ~
-                cd work
-                pwd
-                ls
+            # - name: Tests
+            #   run: |
+            #     cd ~
+            #     cd work
+            #     pwd
+            #     ls
 
               
             - name: Dokan Composer install and build
               run: |
-                  docker stop $(docker ps -a -q)
-                  docker rm $(docker ps -a -q)
                   cd plugins/dokan
                   composer install
                   composer dump-autoload -o
@@ -64,14 +58,14 @@ jobs:
                   npm run dev:build
                   grunt
 
-            - name: Setup test environment
-              run: |
-                  rm -rf node_modules && rm ./package-lock.json && npm install
+            # - name: Setup test environment
+            #   run: |
+            #       rm -rf node_modules && rm ./package-lock.json && npm install
 
             - name: Activate storefront
               run: |
                   ls
-                  npm run start-env
+                  npm run delete-alls
                   npm run activate-sf-test
 
             - name: Running the e2e tests

@@ -9,7 +9,7 @@
     "stop-env": "wp-env stop",
     "restart-env": "wp-env stop && wp-env start",
     "reset-db": "wp-env clean all && wp-env start",
-    "delete-all": "wp-env destroy all && wp-env start",
+    "delete-all": "wp-env destroy  && wp-env start --debug",
     "dev-user-list": "wp-env run cli wp user list",
     "activate-sf-dev": "npm run wp-env run cli 'wp theme activate storefront'",
     "activate-sf-test": "wp-env run tests-cli 'wp theme activate storefront'",
