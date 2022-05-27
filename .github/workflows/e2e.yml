@@ -37,10 +37,28 @@ jobs:
                 ref: 'develop'
 
 
+            - name: Tests
+              run: |
+                pwd
+                ls
+
+                cd home
+                pwd
+                ls 
+
+                cd home/runner
+                pwd
+                ls  
+
+                cd home/runner/work
+                pwd
+                ls
+
+              
             - name: Dokan Composer install and build
               run: |
-                  cd
-                  rm -rf .wp-env
+                  docker stop $(docker ps -a -q)
+                  docker rm $(docker ps -a -q)
                   cd plugins/dokan
                   composer install
                   composer dump-autoload -o
