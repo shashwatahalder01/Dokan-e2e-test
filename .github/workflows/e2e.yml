@@ -65,7 +65,7 @@ jobs:
             - name: Activate storefront
               run: |
                   ls
-                  npm run delete-all
+                  npm run start-env
                   npm run activate-sf-test
 
             - name: Running the e2e tests
