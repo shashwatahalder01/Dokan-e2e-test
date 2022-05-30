@@ -64,7 +64,6 @@ jobs:
           npm ci
           npm run dev:build
           npm run build
-          grunt
 
       - name: Composer install and build (dokan-pro)
         run: |
