@@ -23,11 +23,11 @@ describe('vendor functionality test', () => {
       await vendorPage.vendorLogout()
    }, timeout)
 
-   it('vendor can login', async () => {
+   it.only('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
    }, timeout)
 
-   it('vendor can logout', async () => {
+   it.only('vendor can logout', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.vendorLogout()
    }, timeout)

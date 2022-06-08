@@ -23,7 +23,7 @@ describe('customer functionality test', () => {
     // afterEach(async () => {})
 
 
-    it.only('setup', async () => {
+    it('setup', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // check plugin is installed
         // set wp general settings & permalink settings
@@ -32,7 +32,7 @@ describe('customer functionality test', () => {
         await adminPage.setWoocommerceSettings()
     }, timeout)
 
-    it.only('customer register', async () => {
+    it('customer register', async () => {
         await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)

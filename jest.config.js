@@ -1,15 +1,28 @@
 
 require('dotenv').config()
 module.exports = {
-  // ...require( '@wordpress/scripts/config/jest-e2e.config' ),
+  ...require('puppeteer'),
+  ...require( '@wordpress/scripts/config/jest-e2e.config' ),
   preset: "jest-puppeteer", // Allow  Jest with Puppeteer
 
-//   bail: 5, // Stop running tests after `n` failures
-//   testPathIgnorePatterns: ['/node_modules/', 'dist'],
-//   testMatch: ["**/tests/e2e/tests/**/*.spec.js"], // In testMatch we are only saying in which folder and for which files Jest should be looking for.
-  testTimeout:Number(process.env.TIME_OUT), // Timeout of a test in milliseconds.
+
+  projects: [{
+    "displayName": "Initial setup",
+    "testMatch": ["**/tests/e2e/tests/**/*setup.spec.js"],
+    // "runner": "jest-serial-runner"
+  },
+  {
+    "displayName": "e2e tests",
+    "testMatch": ["**/tests/e2e/tests/**/*.spec.js"],
+  }
+],
+
+  //   bail: 5, // Stop running tests after `n` failures
+  //   testPathIgnorePatterns: ['/node_modules/', 'dist'],
+  //   testMatch: ["**/tests/e2e/tests/**/*.spec.js"], // In testMatch we are only saying in which folder and for which files Jest should be looking for.
+  // testTimeout:Number(process.env.TIME_OUT), // Timeout of a test in milliseconds.
   // maxWorkers: 1, // Specifies the maximum number of workers the worker-pool will spawn for running tests.
-//   verbose: true, // Show details of tests, if false show only summary
+  //   verbose: true, // Show details of tests, if false show only summary
 
   // Jest allure reporter
   // testRunner: "jest-jasmine2", // test runner for allure report . after jest 24> jest-circus is default test runner.
