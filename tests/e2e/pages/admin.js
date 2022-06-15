@@ -494,7 +494,7 @@ module.exports = {
     await page.click(selector.admin.wooCommerce.settings.taxTable) //TODO: recheck if it required
     await base.wait(1)
     await page.click(selector.admin.wooCommerce.settings.taxRateSaveChanges)
-    await base.wait(1)
+    await base.wait(3)
 
     let newTaxRate = await base.getElementValue(selector.admin.wooCommerce.settings.taxRate)
     expect(newTaxRate).toBe('5.0000')
@@ -509,11 +509,10 @@ module.exports = {
 
   //admin setup wooCommerce settings
   async setWoocommerceSettings() {
-    await this.goToWooCommerceSettings()
     await this.enablePasswordInputField()
-    // await this.addStandardTaxRate()
-    // await this.setCurrencyOptions()
-    // await this.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+    await this.addStandardTaxRate()
+    await this.setCurrencyOptions()
+    await this.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
     // await this.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
     // await this.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
     // await this.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
@@ -525,7 +524,7 @@ module.exports = {
 
 
   //enable password field
-  async enablePasswordInputField() {
+  async    enablePasswordInputField() {
     await this.goToWooCommerceSettings()
     await base.clickAndWait(selector.admin.wooCommerce.settings.accounts)
     await base.uncheck(selector.admin.wooCommerce.settings.automaticPasswordGeneration)
@@ -560,7 +559,7 @@ module.exports = {
 
   // admin add shipping method
   async addShippingMethod(shippingZone, shippingCountry, selectShippingMethod, shippingMethod) {
-
+    await this.goToWooCommerceSettings()
     await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
     // await base.wait(2)
 
@@ -1048,7 +1047,7 @@ module.exports = {
         await page.type(selector.admin.products.attribute.attributeTermSlug, attributeTerm)
         await page.click(selector.admin.products.attribute.addAttributeTerm)
 
-        await base.waitForSelector(selector.admin.products.attribute.attributeTerm(attributeTerm))
+        await base.waitForSelector(selector.admin.products.attribute.attributeTermCell(attributeTerm))
         let attributeTermIsVisible = await base.isVisible(selector.admin.products.attribute.attributeTermCell(attributeTerm))
         expect(attributeTermIsVisible).toBe(true)
       }
@@ -1197,7 +1196,7 @@ module.exports = {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // add new simple product
+    // add new dokan subscription product
     await page.select(selector.admin.products.product.productType, 'product_pack')
     await page.type(selector.admin.products.product.regularPrice, productPrice)
     //category

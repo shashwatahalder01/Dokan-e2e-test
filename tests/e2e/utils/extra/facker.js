@@ -101,6 +101,9 @@ const randomLines = faker.lorem.lines()
 
 
 
-for (let i = 0; i < 100; i++) {
-console.log(faker.finance.amount(100, 200, faker.random.arrayElement([0,2])))
-}
+// for (let i = 0; i < 100; i++) {
+// console.log(faker.finance.amount(100, 200, faker.random.arrayElement([0,2])))
+// }
+
+
+console.log(faker.helpers.arratElement(['abc', 'def']))

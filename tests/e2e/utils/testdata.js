@@ -9,7 +9,8 @@ module.exports = {
 
    //--------------------------------------------------- Fixed  test data ---------------------------------------------//
    // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
-   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
+   // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
+   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce'],
 
 
    // wooCommerce
@@ -262,6 +263,7 @@ module.exports = {
       // price: faker.commerce.price(100, 200, 2),
       // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
       // price: faker.finance.amount(1, 200, 2), 
+      price_int: faker.finance.amount(100, 200),
       price: faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])),
       auctionPrice: faker.commerce.price(10, 100, 0),
       category: 'Uncategorized',

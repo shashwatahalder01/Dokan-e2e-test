@@ -49,3 +49,4 @@
 //TODO: duplicate line vs function call
 //TODO: add commission increase & vendor earning increase in calculation function
 //TODO: add permalink setup after dokan subscription enabled
+//TODO: check user exists or not before login & registration

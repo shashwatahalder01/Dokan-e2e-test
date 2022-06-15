@@ -3,7 +3,7 @@ module.exports = {
   ...require('@wordpress/scripts/config/jest-e2e.config'),
   "preset": "jest-puppeteer", // Allow  Jest with Puppeteer
 
-  "bail": 15, // Stop running tests after `n` failures
+  // "bail": 15, // Stop running tests after `n` failures
   "testPathIgnorePatterns": ['/node_modules/'],
   "testMatch": ["**/tests/e2e/tests/**/*.spec.js"], // In testMatch we are only saying in which folder and for which files Jest should be looking for.
   "testSequencer": "./customSequencer.js", //  test run will follow custom order

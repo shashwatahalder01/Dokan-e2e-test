@@ -84,14 +84,23 @@ module.exports = {
         if (!loginIsVisible) {
             await this.customerLogout()
         }
-        await page.type(selector.customer.cRegistration.regEmail, userEmail)
-        await page.type(selector.customer.cRegistration.regPassword, password)
+        await base.clearAndType(selector.customer.cRegistration.regEmail, userEmail + '@gmail.com')
+        await base.clearAndType(selector.customer.cRegistration.regPassword, password)
         await base.click(selector.customer.cRegistration.regCustomer)
         await base.clickAndWait(selector.customer.cRegistration.register)
 
-        let username = (userEmail.split("@")[0]).toLowerCase()
+        let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
+        if (registrationErrorIsVisible) {
+            let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
+            if (errorMessage.includes('Error: An account is already registered with your email address. Please log in.')) {
+                return
+                // await loginPage.login(userEmail, password)
+            }
+        }
+
+        // let username = (userEmail.split("@")[0]).toLowerCase()
         let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBe(username)
+        expect(loggedInUser).toBe(userEmail)
         // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },

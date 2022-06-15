@@ -51,33 +51,45 @@ module.exports = {
     async vendorRegisterIfNotExists(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
         let UserExists = await loginPage.checkUserExists(userEmail, password)
         if (!UserExists) {
-            await this.vendorRegister(userEmail + '@gmail.com', password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData)
+            await this.vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData)
         }
     },
 
     //vendor registration
     async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
         await customerPage.goToMyAccount()
+        let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
+        if (!loginIsVisible) {
+            await this.customerLogout()
+        }
 
-        await page.type(selector.vendor.vRegistration.regEmail, userEmail)
-        await page.type(selector.vendor.vRegistration.regPassword, password)
+        await base.clearAndType(selector.vendor.vRegistration.regEmail, userEmail + '@gmail.com')
+        await base.clearAndType(selector.vendor.vRegistration.regPassword, password)
         await base.click(selector.vendor.vRegistration.regVendor)
-        await page.type(selector.vendor.vRegistration.firstName, firstName)
-        await page.type(selector.vendor.vRegistration.lastName, lastName)
-        await page.type(selector.vendor.vRegistration.shopName, shopName)
-        // await page.type(selector.vendor.shopUrl, shopUrl)
+        await base.clearAndType(selector.vendor.vRegistration.firstName, firstName)
+        await base.clearAndType(selector.vendor.vRegistration.lastName, lastName)
+        await base.clearAndType(selector.vendor.vRegistration.shopName, shopName)
+        // await base.clearAndType(selector.vendor.shopUrl, shopUrl)
         await page.click(selector.vendor.vRegistration.shopUrl)
-        await page.type(selector.vendor.vRegistration.companyName, companyName)
-        await page.type(selector.vendor.vRegistration.companyId, companyId)
-        await page.type(selector.vendor.vRegistration.vatNumber, vatNumber)
-        await page.type(selector.vendor.vRegistration.bankName, bankName)
-        await page.type(selector.vendor.vRegistration.bankIban, bankIban)
-        await page.type(selector.vendor.vRegistration.phone, phone)
+        await base.clearAndType(selector.vendor.vRegistration.companyName, companyName)
+        await base.clearAndType(selector.vendor.vRegistration.companyId, companyId)
+        await base.clearAndType(selector.vendor.vRegistration.vatNumber, vatNumber)
+        await base.clearAndType(selector.vendor.vRegistration.bankName, bankName)
+        await base.clearAndType(selector.vendor.vRegistration.bankIban, bankIban)
+        await base.clearAndType(selector.vendor.vRegistration.phone, phone)
         let subscriptionPackIsVisible = await base.isVisible(selector.vendor.vWithdraw.subscriptionPack)
         if (subscriptionPackIsVisible) {
-            await page.select(selector.vendor.vRegistration.subscriptionPack, "") //TODO:select subscription pack
+            await page.select(selector.vendor.vRegistration.subscriptionPack, "v_sub_1") //TODO:select subscription pack
         }
         await base.clickAndWait(selector.vendor.vRegistration.register)
+        let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
+        if (registrationErrorIsVisible) {
+            let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
+            if (errorMessage.includes('Error: An account is already registered with your email address. Please log in.')) {
+                return
+                //  await loginPage.login(userEmail, password)
+            }
+        }
 
         await this.vendorSetupWizardChoice(setupWizardChoice, setupWizardData)
     },
@@ -118,7 +130,7 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
 
         await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
-     
+
         await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
         await base.select(selector.vendor.vSetup.bankAccountType, bankAccountType)
         await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
