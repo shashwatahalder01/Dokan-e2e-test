@@ -617,8 +617,8 @@ module.exports = {
         // let pageContent = pageContent.toLowerCase()  
         let pageContent = await page.content()
 
-        if ((pageContent.includes('Warning')) || (pageContent.includes('Fatal error')) || (pageContent.includes('Notice:'))) {
-            await page.screenshot({ path: 'tests/e2e/screenshot/phpError' + Date.now() + '.png', fullPage: true })
+        if ((pageContent.includes("PHP Warning:")) || (pageContent.includes("Fatal error:")) || (pageContent.includes("PHP Notice:"))) {
+            await page.screenshot({ path: 'artifacts/phpError' + Date.now() + '.png', fullPage: true })
             throw new Error("PHP Error!!")
         }
     },
