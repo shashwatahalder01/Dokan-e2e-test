@@ -32,7 +32,6 @@
     "test-interactive:watch": "npm run test-e2e:watch -- --puppeteer-interactive",
     "test-e2e:debug": "wp-scripts --inspect-brk test-e2e --puppeteer-devtools",
     "container_path": "wp-env install-path",
-
     "wp-env": "wp-env"
   },
   "keywords": [],
@@ -48,7 +47,9 @@
     "dotenv": "^16.0.0",
     "expect-puppeteer": "^6.1.0",
     "jest-allure": "^0.1.3",
+    "jest-circus": "27.5.1",
     "jest-puppeteer": "^6.1.0",
+    "jest-serial-runner": "^1.2.0",
     "jest-stare": "^2.3.0",
     "open": "^8.4.0",
     "puppeteer-testing-library": "^0.6.0"
