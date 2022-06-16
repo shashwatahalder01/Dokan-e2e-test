@@ -33,7 +33,7 @@ describe('Environment setup test', () => {
         await adminPage.checkActivePlugins(data.PluginSlugList)
     }, timeout)
 
-    it.only('admin check Active modules ', async () => {
+    it('admin check Active modules ', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // check plugin is installed
         await adminPage.checkActiveModules()
