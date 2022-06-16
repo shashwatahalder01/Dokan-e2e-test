@@ -23,11 +23,11 @@ describe('vendor functionality test', () => {
       await vendorPage.vendorLogout()
    }, timeout)
 
-   it.only('vendor can login', async () => {
+   it('vendor can login', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
    }, timeout)
 
-   it.only('vendor can logout', async () => {
+   it('vendor can logout', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.vendorLogout()
    }, timeout)
@@ -134,32 +134,32 @@ describe('vendor functionality test', () => {
       await vendorPage.sendCompanyVerificationRequest()
    }, timeout)
 
-   it('vendor can set delivery time settings ', async () => {
+   it.skip('vendor can set delivery time settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setDeliveryTimeSettings()
    }, timeout)
 
-   it('vendor can set flat rate shipping ', async () => {
+   it.skip('vendor can set flat rate shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setShippingSettings('US', 'Flat Rate', 'flat_rate')
    }, timeout)
 
-   it('vendor can set free shipping shipping ', async () => {
+   it.skip('vendor can set free shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setShippingSettings('US', 'Free Shipping', 'free_shipping')
    }, timeout)
 
-   it('vendor can set local pickup shipping ', async () => {
+   it.skip('vendor can set local pickup shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setShippingSettings('US', 'Local Pickup', 'local_pickup')
    }, timeout)
 
-   it('vendor can set table rate shipping shipping ', async () => {
+   it.skip('vendor can set table rate shipping shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setShippingSettings('US', 'Table Rate', 'dokan_table_rate_shipping')
    }, timeout)
 
-   it('vendor can set dokan distance rate shipping ', async () => {
+   it.skip('vendor can set dokan distance rate shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.setShippingSettings('US', 'Distance Rate', 'dokan_distance_rate_shipping')
    }, timeout)

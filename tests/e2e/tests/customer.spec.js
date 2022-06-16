@@ -28,11 +28,11 @@ describe('customer functionality test', () => {
         await customerPage.customerLogout()
     }, timeout)
 
-    it.only('customer login', async () => {
+    it('customer login', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
     }, timeout)
 
-    it.only('customer logout', async () => {
+    it('customer logout', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.customerLogout()
     }, timeout)

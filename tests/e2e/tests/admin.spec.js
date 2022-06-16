@@ -22,7 +22,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSettings()
     }, timeout)
 
-    it.only('admin can login', async () => {
+    it('admin can login', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     }, timeout)
 
@@ -168,7 +168,7 @@ describe('admin functionality test', () => {
         await adminPage.setupDokanRazorpay()
     }, timeout)
 
-    it('admin can add strip express payment method', async () => {
+    it.skip('admin can add strip express payment method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToWooCommerceSettings()
         await adminPage.setupStripeExpress()
