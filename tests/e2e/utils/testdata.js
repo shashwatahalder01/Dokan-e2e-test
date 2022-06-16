@@ -263,8 +263,10 @@ module.exports = {
       // price: faker.commerce.price(100, 200, 2),
       // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
       // price: faker.finance.amount(1, 200, 2), 
-      price_int: faker.finance.amount(100, 200),
-      price: faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])),
+      price_int: faker.finance.amount(100, 200, 0),
+      price: faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])), // 0 = no decimals, 2 = 2 decimals
+      price_frac: faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2])),
+      price_frac_comma: (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.',','),
       auctionPrice: faker.commerce.price(10, 100, 0),
       category: 'Uncategorized',
       categories: faker.helpers.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),

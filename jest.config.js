@@ -10,7 +10,7 @@ module.exports = {
 
   // testTimeout:Number(process.env.TIME_OUT), // Timeout of a test in milliseconds.
   // maxWorkers: 1, // Specifies the maximum number of workers the worker-pool will spawn for running tests.
-  // verbose: true, // Show details of tests, if false show only summary
+  verbose: true, // Show details of tests, if false show only summary
 
   // Jest allure reporter
   // testRunner: "jest-jasmine2", // test runner for allure report . after jest 24> jest-circus is default test runner.

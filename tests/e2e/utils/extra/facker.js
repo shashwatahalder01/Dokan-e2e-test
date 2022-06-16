@@ -106,4 +106,12 @@ const randomLines = faker.lorem.lines()
 // }
 
 
-console.log(faker.helpers.arratElement(['abc', 'def']))
+// console.log(faker.helpers.arratElement(['abc', 'def']))
+
+
+// const a = faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))
+
+// console.log(a.replace('.',','))
+// // console.log(a)
+// console.log(typeof(a))
+console.log(faker.finance.amount(100, 200, 0))

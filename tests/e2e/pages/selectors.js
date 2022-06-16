@@ -72,7 +72,7 @@ module.exports = {
             pages: ".menu-icon-page .wp-menu-name",
             comments: ".menu-icon-comments .wp-menu-name",
             emailLog: ".toplevel_page_email-log .wp-menu-name",
-            dokanMenu:"#toplevel_page_dokan",
+            dokanMenu: "#toplevel_page_dokan",
             dokan: "#toplevel_page_dokan .wp-menu-name",
             wooCommerce: ".toplevel_page_woocommerce .wp-menu-name",
             products: ".menu-icon-product .wp-menu-name",
@@ -415,10 +415,13 @@ module.exports = {
                 moduleActivationSwitch: ".switch.tips span",
                 moduleCard: ".module-card",
                 moduleCheckbox: ".module-checkbox input",
+                moduleName: ".module-details a",
                 //all module activation
                 selectAllBulkAction: ".bulk-actions li input",
                 activeAll: ".activate",
                 deActivateAll: ".deactivate",
+                //no modules message
+                noModulesFound: ".not-found h5",
             },
             //tools
             tools: {
@@ -1555,6 +1558,7 @@ module.exports = {
             bankIban: "#dokan-bank-iban",
             phone: "#shop-phone",
             subscriptionPack: "#dokan-subscription-pack",
+            subscriptionPackOptions: "#dokan-subscription-pack option",
             //register button
             register: ".woocommerce-Button",
         },
@@ -1583,11 +1587,11 @@ module.exports = {
             paypal: "//input[@name='settings[paypal][email]']",
             //bank
             bankAccountName: "#ac_name",
-            bankAccountType:"#ac_type",
+            bankAccountType: "#ac_type",
             bankRoutingNumber: "//input[@name='settings[bank][routing_number]']",
             bankAccountNumber: "//input[@name='settings[bank][ac_number]']",
             bankName: "//input[@name='settings[bank][bank_name]']",
-            bankAddress:"//textarea[@name='settings[bank][bank_addr]']",
+            bankAddress: "//textarea[@name='settings[bank][bank_addr]']",
             bankIban: "//input[@name='settings[bank][iban]']",
             bankSwiftCode: "//input[@name='settings[bank][swift]']",
             declaration: "#declaration",
@@ -1990,7 +1994,10 @@ module.exports = {
             marketplaceCoupons: "//ul[@class='dokan_tabs']//a[contains(text(), 'Marketplace Coupons')]",
 
             //coupon dashboard
-            createdCoupon: ".coupon-code.column-primary strong span"
+            createdCoupon: ".coupon-code.column-primary strong span",
+
+            //coupon error
+            couponError: ".dokan-alert.dokan-alert-danger",
         },
 
         //reports
@@ -2560,7 +2567,7 @@ module.exports = {
             city: "#dokan_address\\[city\\]",
             postOrZipCode: "#dokan_address\\[zip\\]",
             country: "#dokan_address_country",
-            state: "#dokan_address_state",
+            state: "#dokan-states-box #dokan_address_state",
             saveLocation: "#dokan-save-store-location-btn",
             cancelSaveLocation: "#cancel-store-location-section-btn",
             deleteSaveLocation: ".store-pickup-location-delete-btn",
@@ -3096,7 +3103,7 @@ module.exports = {
             subTotal: "//th[contains(text(),'Subtotal:')]/..//span",
             orderDiscount: "//th[contains(text(),'Order Discount:')]/..//span",
             quantityDiscount: "//th[contains(text(),'Quantity Discount:')]/..//span",
-            discount:"//th[text()='Discount:']/..//span",
+            discount: "//th[text()='Discount:']/..//span",
             shipping: "//th[contains(text(),'Shipping:')]/..//td", //TODO:delete this when shipping method is fixed
             shippingCost: "//th[contains(text(),'Shipping:')]/..//span",
             shippingMethod: "//th[contains(text(),'Shipping:')]/..//small",

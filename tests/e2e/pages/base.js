@@ -20,7 +20,7 @@ module.exports = {
         }
         return false
     },
-
+ 
     //check whether element is visible or not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
@@ -205,6 +205,7 @@ module.exports = {
     //set value based on select options text
     async selectOptionByText(selectSelector, OptionSelector, textContent) {
         let elements = await page.$$(OptionSelector)
+
         for (let element of elements) {
             const text = await page.evaluate(element => element.textContent, element)
             if (textContent.toLowerCase() == (text.trim()).toLowerCase()) {
@@ -576,7 +577,7 @@ module.exports = {
 
     //wait for navigation
     async waitForNavigation() {
-       await page.waitForNavigation({ waitUntil: 'networkidle2' })
+        await page.waitForNavigation({ waitUntil: 'networkidle2' })
     },
 
     //TODO: add function for grab console error
@@ -589,7 +590,8 @@ module.exports = {
 
     //delete element if exist (only first will delete) dokan specific :rma,report abuse
     async deleteIfExists(selector) { //TODO: there may be alternative solution, this method might not needed
-        if (await page.$x(selector) !== null) {
+        let elementExists = await this.isVisible(selector)
+        if (elementExists) {
             let [element] = await page.$x(selector)
             await element.click()
         }
@@ -612,7 +614,7 @@ module.exports = {
     // },
 
     //check for php error
-    async checkPHPError() {
+    async checkPHPError() { 
         // let pageContent = await page.content()
         // let pageContent = pageContent.toLowerCase()  
         let pageContent = await page.content()

@@ -65,7 +65,7 @@ module.exports = {
   //--------------------------------------------- wordpress site settings ------------------------------------------------//
 
   //plugin activation check
-  async checkPluginActivationConfirmation(PluginSlugList) {
+  async checkActivePlugins(PluginSlugList) {
     await this.goToPlugins()
     for (let pluginSlug of PluginSlugList) {
       let classValue = await base.getElementClassValue(selector.admin.plugins.plugin(pluginSlug))
@@ -124,6 +124,7 @@ module.exports = {
     await this.setDokanGeneralSettings()
     await this.setDokanSellingSettings()
     await this.setDokanWithdrawSettings()
+    await this.setPageSettings()
     await this.setDokanAppearanceSettings()
     await this.setDokanPrivacyPolicySettings()
     await this.setDokanStoreSupportSettings()
@@ -142,7 +143,7 @@ module.exports = {
   async setDokanGeneralSettings() {
 
     //site options
-    // await base.check(selector.admin.dokan.settings.adminAreaAccess)
+    await base.uncheck(selector.admin.dokan.settings.adminAreaAccess)
     await base.clearAndType(selector.admin.dokan.settings.vendorStoreUrl, 'store')
     await page.select(selector.admin.dokan.settings.sellingProductTypes, 'sell_both')
     //vendor store options
@@ -230,12 +231,25 @@ module.exports = {
     expect(successMessage).toMatch('Setting has been saved successfully.')
   },
 
+  //admin set dokan page settings
+  async setPageSettings() {
+    await base.click(selector.admin.dokan.settings.pageSettings)
+
+    //page settings
+    await base.select(selector.admin.dokan.settings.termsAndConditionsPage, 'Sample Page')
+    await base.click(selector.admin.dokan.settings.pageSaveChanges)
+
+    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
+    expect(successMessage).toMatch('Setting has been saved successfully.')
+
+  },
+
   //admin set dokan appearance settings
   async setDokanAppearanceSettings() {
     await base.click(selector.admin.dokan.settings.appearance)
 
     //appearance settings
-    await page.click(selector.admin.dokan.settings.showMapOnStorePage)
+    await base.check(selector.admin.dokan.settings.showMapOnStorePage)
     await base.check(selector.admin.dokan.settings.mapApiSourceGoogleMaps)
     await base.clearAndType(selector.admin.dokan.settings.googleMapApiKey, process.env.GOOGLE_MAP_API_KEY)
     await page.click(selector.admin.dokan.settings.storeHeaderTemplate2)
@@ -571,6 +585,7 @@ module.exports = {
       // await page.select(selector.admin.wooCommerce.settings.zoneRegions, shippingCountry)
       await page.click(selector.admin.wooCommerce.settings.zoneRegions)
       await page.type(selector.admin.wooCommerce.settings.zoneRegions, 'United States (US)')
+      await base.wait(2)
       await page.keyboard.press('Enter')
     } else {
       // edit shipping zone
@@ -578,7 +593,7 @@ module.exports = {
       await base.clickAndWait(selector.admin.wooCommerce.settings.editShippingMethod(shippingZone))
     }
 
-    let methodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(helper.replaceAndCapitalize(shippingMethod)))
+    let methodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(helpers.replaceAndCapitalize(shippingMethod)))
     if (!methodIsVisible) {
       // add shipping method
       await page.click(selector.admin.wooCommerce.settings.addShippingMethods)
@@ -726,7 +741,7 @@ module.exports = {
       await base.wait(2)
     } else {
       await base.click(selector)
-      await base.wait(1)
+      await base.wait(2)
       await base.click(selector)
       await base.wait(2)
     }
@@ -1366,7 +1381,26 @@ module.exports = {
     await base.waitForSelector(selector.admin.dokan.refunds.refundCell(orderNumber))
     let searchedRefundRequestIsVisible = await base.isVisible(selector.admin.dokan.refunds.refundCell(orderNumber))
     expect(searchedRefundRequestIsVisible).toBe(true)
-  }
+  },
 
 
+  //-------------------------------------------- Dokan Modules ----------------------------------------------//
+
+    //module activation check
+    async checkActiveModules() {
+      await base.hover(selector.admin.aDashboard.dokan)
+      await base.clickAndWait(selector.admin.dokan.modulesMenu)
+      await base.wait(2)
+      await base.click(selector.admin.dokan.modules.inActive)
+      await base.wait(2)
+
+      let noModulesMessage = await base.isVisible(selector.admin.dokan.modules.noModulesFound)
+      if(noModulesMessage){
+        let noModulesMessageText = await base.getElementText(selector.admin.dokan.modules.noModulesFound)
+        expect(noModulesMessageText).toMatch('No modules found.')
+      }else{
+        let inActiveModuleNames = await base.getMultipleElementTexts(selector.admin.dokan.modules.moduleName)
+        throw new Error("Inactive module exists: " + inActiveModuleNames)
+      }
+    },
 }

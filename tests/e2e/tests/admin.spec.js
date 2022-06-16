@@ -15,7 +15,7 @@ describe('admin functionality test', () => {
 
     it('admin can add test settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.checkPluginActivationConfirmation(data.PluginSlugList)
+        await adminPage.checkActivePlugins(data.PluginSlugList)
         await adminPage.setWpSettings()
         await adminPage.setWoocommerceSettings()
         await adminPage.setPaymentSettings()

@@ -131,55 +131,46 @@ describe('vendor functionality test', () => {
 
    it('vendor can send company verification request ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.sendCompanyVerificationRequest()
    }, timeout)
 
    it('vendor can set delivery time settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setDeliveryTimeSettings()
    }, timeout)
 
    it('vendor can set flat rate shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setShippingSettings('US', 'Flat Rate', 'flat_rate')
    }, timeout)
 
    it('vendor can set free shipping shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setShippingSettings('US', 'Free Shipping', 'free_shipping')
    }, timeout)
 
    it('vendor can set local pickup shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setShippingSettings('US', 'Local Pickup', 'local_pickup')
    }, timeout)
 
    it('vendor can set table rate shipping shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setShippingSettings('US', 'Table Rate', 'dokan_table_rate_shipping')
    }, timeout)
 
    it('vendor can set dokan distance rate shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setShippingSettings('US', 'Distance Rate', 'dokan_distance_rate_shipping')
    }, timeout)
 
    it('vendor can set social profile settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setSocialProfile(data.urls)
    }, timeout)
 
    it('vendor can set rma settings ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.goToVendorDashboard()
       await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
    }, timeout)
 
