@@ -13,15 +13,6 @@ describe('admin functionality test', () => {
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
 
-    it('admin can add test settings', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.checkActivePlugins(data.PluginSlugList)
-        await adminPage.setWpSettings()
-        await adminPage.setWoocommerceSettings()
-        await adminPage.setPaymentSettings()
-        await adminPage.setDokanSettings()
-    }, timeout)
-
     it('admin can login', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     }, timeout)
@@ -261,7 +252,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSpmvSettings()
     }, timeout)
 
-    it('admin can set dokan vendor subscription settings', async () => {
+    it.skip('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanVendorSubscriptionSettings()

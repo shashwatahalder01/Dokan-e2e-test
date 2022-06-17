@@ -225,7 +225,7 @@ describe('Environment setup test', () => {
     it('add test vendor1 coupons', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add coupons
-        await vendorPage.addCoupon('COUPON_V1', data.coupon.amount)
+        await vendorPage.addCoupon('C1_V1', data.coupon.amount)
     }, timeout)
 
     it('add test vendor1 address', async () => {
@@ -265,7 +265,7 @@ describe('Environment setup test', () => {
     it.skip('add test vendor2 coupons', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add coupons
-        await vendorPage.addCoupon('COUPON_V2', data.coupon.amount)
+        await vendorPage.addCoupon('C1_V2', data.coupon.amount)
     }, timeout)
 
     it.skip('add test vendor2 address', async () => {

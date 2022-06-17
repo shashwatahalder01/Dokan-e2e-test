@@ -380,6 +380,8 @@ module.exports = {
    saleProduct: ['p1_v1 (sale)'],
    couponCode: ['C1_v1'],
 
+   vendorStores:['vendorStore1','vendorStore2'],
+
 
 
 

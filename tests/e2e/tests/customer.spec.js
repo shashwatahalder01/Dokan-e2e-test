@@ -112,17 +112,17 @@ describe('customer functionality test', () => {
 
     it('customer can search vendor', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.searchVendor(process.env.VENDOR)
+        await customerPage.searchVendor(data.vendorStores[0])
     }, timeout)
 
     it('customer can follow vendor', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.followVendor(process.env.VENDOR)
+        await customerPage.followVendor(data.vendorStores[0])
     }, timeout)
 
     it('customer can review store', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.reviewStore(process.env.VENDOR, data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
+        await customerPage.reviewStore(data.vendorStores[0], data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
     }, timeout)
 
     it('customer can ask for get support ', async () => {
