@@ -57,5 +57,6 @@ module.exports = {
 
   // "reporters": ["default", "github-actions"]
   // "reporters": ["default", "jest-github-reporter"]
+  "reporters": [ "default", "jest-junit" ]
 
 }
