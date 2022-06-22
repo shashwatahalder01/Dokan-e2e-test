@@ -53,7 +53,7 @@ jobs:
         id: test-report               # Set ID reference for step
         if: success() || failure()    # run this step even if previous step failed
         with:
-          name: JEST Tests            # Name of the check run which will be created
+          name: e2e tests result            # Name of the check run which will be created
           path: artifacts/reports/junit.xml    # Path to test results
           reporter: jest-junit  
 
@@ -65,13 +65,10 @@ jobs:
           path: artifacts
           if-no-files-found: ignore
 
-
-
-
-      # - name: Archive flaky tests report
-      #   uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
-      #   if: always()
-      #   with:
-      #     name: flaky-tests-report
-      #     path: flaky-tests
-      #     if-no-files-found: ignore
+      - name: Archive flaky tests report
+        uses: actions/upload-artifact@e448a9b857ee2131e752b06002bf0e093c65e571 # v2.2.2
+        if: always()
+        with:
+          name: flaky-tests-report
+          path: flaky-tests
+          if-no-files-found: ignore
