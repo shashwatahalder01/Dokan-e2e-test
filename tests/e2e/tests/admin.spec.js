@@ -9,9 +9,9 @@ jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('admin functionality test', () => {
     // beforeAll(async () => {})
-    // afterAll(async () => {await browser.close()})
+    // afterAll(async () => {})
     // beforeEach(async () => {})
-    // afterEach(async () => {await browser.close()})
+    // afterEach(async () => {})
 
     it('admin can login', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)

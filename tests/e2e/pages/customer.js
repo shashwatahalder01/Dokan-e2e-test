@@ -98,9 +98,9 @@ module.exports = {
             }
         }
 
-        // let username = (userEmail.split("@")[0]).toLowerCase()
+        let username = (userEmail.split("@")[0]).toLowerCase()
         let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBe(userEmail)
+        expect(loggedInUser).toBe(username)
         // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
         // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
     },
@@ -313,9 +313,9 @@ module.exports = {
         // await base.clearAndType(selector.customer.cAccountDetails.email, email) 
         await this.updatePassword(currentPassword, newPassword)
 
-        //cleanup
-        await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
-        await this.updatePassword(newPassword, currentPassword)
+        // //cleanup
+        // await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
+        // await this.updatePassword(newPassword, currentPassword)
     },
 
     //customer search vendor
@@ -329,7 +329,7 @@ module.exports = {
         await base.waitForSelector(selector.customer.cStoreList.visitStore(vendorName))
         let cartIsVisible = await base.isVisible(selector.customer.cStoreList.visitStore(vendorName))
         expect(cartIsVisible).toBe(true)
-        // await base.wait(0.5)
+        await base.wait(0.5)
     },
 
     //customer follow vendor

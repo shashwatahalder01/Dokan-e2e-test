@@ -484,7 +484,7 @@ module.exports = {
 
     //vendor request withdraw 
     async requestWithdraw(withdrawMethod, withdrawAmount) {
-        await vendorPage.goToVendorDashboard()
+        await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
 
@@ -502,10 +502,10 @@ module.exports = {
         }
 
         let minimumWithdrawAmount = await base.getElementText(selector.vendor.vWithdraw.minimumWithdrawAmount)
-        minimumWithdrawAmount = helper.price(minimumWithdrawAmount)
+        minimumWithdrawAmount = helpers.price(minimumWithdrawAmount)
         // console.log(minimumWithdrawAmount)
         let balance = await base.getElementText(selector.vendor.vWithdraw.balance)
-        balance = helper.price(balance)
+        balance = helpers.price(balance)
         // console.log(balance)
 
         if (balance > minimumWithdrawAmount) {
@@ -537,7 +537,7 @@ module.exports = {
     //vendor add auto withdraw disbursement schedule
     async addAutoWithdrawDisbursementSchedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
 
-        await vendorPage.goToVendorDashboard()
+        await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
         await page.click(selector.vendor.vWithdraw.editSchedule)
@@ -551,7 +551,7 @@ module.exports = {
 
     // vendor add default withdraw payment methods
     async addDefaultWithdrawPaymentMethods(preferredSchedule) {
-        await vendorPage.goToVendorDashboard()
+        await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
         let defaultMethod = base.isVisible(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
@@ -711,8 +711,8 @@ module.exports = {
             await page.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
             await page.click(selector.vendor.vStoreSettings.confirmDeleteSavedVacationSchedule)
         }
-        let vacationDayFrom = helper.addDays(helper.currentDate, helper.getRandomArbitraryInteger(31, 365))
-        let vacationDayTo = helper.addDays(vacationDayFrom, 31)
+        let vacationDayFrom = helpers.addDays(helpers.currentDate, helpers.getRandomArbitraryInteger(31, 365))
+        let vacationDayTo = helpers.addDays(vacationDayFrom, 31)
         await base.check(selector.vendor.vStoreSettings.goToVacation)
         await base.select(selector.vendor.vStoreSettings.closingStyle, 'datewise')
         await base.type(selector.vendor.vStoreSettings.vacationDateRangeFrom, vacationDayFrom)
@@ -766,7 +766,7 @@ module.exports = {
 
         //add addon
         await base.clickAndWait(selector.vendor.vAddonSettings.createNewAddon)
-        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
+        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helpers.randomNumber())
         await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
         await page.click(selector.vendor.vAddonSettings.productCategories,)
         await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
@@ -796,7 +796,7 @@ module.exports = {
 
         //add addon
         await base.clickAndWait(selector.vendor.vAddonSettings.editAddon(addon))
-        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helper.randomNumber())
+        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helpers.randomNumber())
         await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
         await page.click(selector.vendor.vAddonSettings.productCategories,)
         await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')

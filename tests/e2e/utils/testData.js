@@ -1,7 +1,7 @@
 require('dotenv').config()
 const { faker } = require('@faker-js/faker')
 const { isThemeInstalled } = require('@wordpress/e2e-test-utils')
-const helper = require("./helpers.js")
+const helpers = require("./helpers.js")
 
 
 
@@ -156,6 +156,7 @@ module.exports = {
       userEmail: faker.internet.email(),
       password: process.env.CUSTOMER_PASSWORD,
       password1: '02dokan02',
+      // firstName: faker.name.findName(),
       firstName: faker.name.firstName('male'),
       lastName: faker.name.lastName('male'),
       userEmail: faker.internet.email(),
@@ -289,8 +290,8 @@ module.exports = {
          blockCost: '10',
       },
       auction: {
-         startDate: helper.currentDateTime.replace(/,/g, ''),
-         endDate: helper.addDays(helper.currentDateTime, 60).replace(/,/g, ''),
+         startDate: helpers.currentDateTime.replace(/,/g, ''),
+         endDate: helpers.addDays(helpers.currentDateTime, 60).replace(/,/g, ''),
       },
 
       //review

@@ -6,15 +6,10 @@ const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('vendor functionality test', () => {
-   // beforeAll(async () => {
-   //    await vendorPage.vendorRegisterIfNotExists(process.env.VENDOR, process.env.VENDOR_PASSWORD, process.env.VENDOR, data.vendorInfo.lastName,
-   //       process.env.VENDOR, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, true, data.vendorSetupWizard)
-   //    await vendorPage.addSimpleProduct(data.simpleProduct[0], data.product.price, data.product.category)
-   //    await vendorPage.addCoupon(data.couponCode[0], data.coupon.amount)
-   // })
-   // afterAll(async () => {await browser.close())
+   // beforeAll(async () => {})
+   // afterAll(async () => {)
    // beforeEach(async () => {})
-   // afterEach(async () => {await browser.close())
+   // afterEach(async () => {)
 
 
    it('vendor can register', async () => {
@@ -72,18 +67,18 @@ describe('vendor functionality test', () => {
       await vendorPage.addCoupon(data.coupon.title, data.coupon.amount)
    }, timeout)
 
-   it('vendor can request withdraw', async () => {
+   it.skip('vendor can request withdraw', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.requestWithdraw('paypal')
    }, timeout)
 
-   it('vendor can cancel request withdraw', async () => {
+   it.skip('vendor can cancel request withdraw', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.cancelRequestWithdraw()
    }, timeout)
 
-   it('vendor can add auto withdraw disbursement schedule ', async () => {
+   it('vendor can add auto withdraw disbursement schedule', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.addAutoWithdrawDisbursementSchedule('dokan_custom', 'weekly', '5', '15')
    }, timeout)

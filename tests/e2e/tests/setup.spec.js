@@ -60,9 +60,28 @@ describe('Environment setup test', () => {
         await adminPage.setCurrencyOptions()
     }, timeout)
 
-    it('admin set shipping method', async () => {
+    it('admin set flat rate shipping method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+    }, timeout)
+
+
+    it('admin set vendor Table Rate shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+    }, timeout)
+
+
+    it.only('admin set vendor distance rate shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+
+    }, timeout)
+
+
+    it('admin set vendor shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
     }, timeout)
 
     it('admin set basic payments', async () => {
@@ -117,7 +136,7 @@ describe('Environment setup test', () => {
     }, timeout)
 
     it('admin set dokan appearance settings', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)                
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanAppearanceSettings()
     }, timeout)
@@ -129,7 +148,7 @@ describe('Environment setup test', () => {
     }, timeout)
 
     it('admin set dokan store support settings', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)        
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanStoreSupportSettings()
     }, timeout)
@@ -156,30 +175,30 @@ describe('Environment setup test', () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanDeliveryTimeSettings()
-    }, timeout)    
+    }, timeout)
 
     it('admin set dokan product advertising settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanProductAdvertisingSettings()
-    }, timeout)    
+    }, timeout)
 
     it('admin set dokan geolocation settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanGeolocationSettings()
-    }, timeout)    
-    
+    }, timeout)
+
     it('admin set dokan product report abuse settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanProductReportAbuseSettings()
-    }, timeout)    
+    }, timeout)
 
     it('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
-  
+
         await adminPage.setDokanSpmvSettings()
     }, timeout)
 

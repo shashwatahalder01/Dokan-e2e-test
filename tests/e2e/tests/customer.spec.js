@@ -11,20 +11,14 @@ const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('customer functionality test', () => {
-    // beforeAll(async () => {
-    //     await customerPage.customerRegisterIfNotExists(process.env.CUSTOMER , process.env.CUSTOMER_PASSWORD)
-    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-    //     await customerPage.addBillingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, process.env.CUSTOMER + '@gmail.com')
-    //     await customerPage.addShippingAddress(process.env.CUSTOMER, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
-    //     await customerPage.customerLogout()
-    // },timeout)
-    // afterAll(async () => {await browser.close()})
+    // beforeAll(async () => {})
+    // afterAll(async () => {})
     // beforeEach(async () => {})
     // afterEach(async () => {})
 
 
-    it('customer register', async () => {
-        await customerPage.customerRegister(data.customerInfo.userEmail, data.customerInfo.password)
+    it.only('customer register', async () => {
+        await customerPage.customerRegister(faker.name.firstName(), data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
 
@@ -38,18 +32,18 @@ describe('customer functionality test', () => {
     }, timeout)
 
     it.skip('customer become a vendor', async () => {
-        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.customerRegister(faker.name.firstName(), data.customerInfo.password)
         await customerPage.customerBecomeVendor(data.vendorInfo.firstName, data.vendorInfo.lastName, data.vendorInfo.shopName, data.vendorInfo.street1, data.vendorInfo.phone, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban)
         await vendorPage.vendorSetupWizardChoice(true, data.vendorSetupWizard)
     }, timeout)
 
     it('customer become a wholesale customer', async () => {
-        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.customerRegister(faker.name.firstName(), data.customerInfo.password)
         await customerPage.customerBecomeWholesaleCustomer()
     }, timeout)
 
     it('customer add customer details', async () => {
-        await customerPage.customerRegister(faker.internet.email(), data.customerInfo.password)
+        await customerPage.customerRegister(faker.name.firstName(), data.customerInfo.password)
         await customerPage.addCustomerDetails(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.firstName, data.customerInfo.userEmail, data.customerInfo.password, data.customerInfo.password1)
     }, timeout)
 
@@ -127,7 +121,7 @@ describe('customer functionality test', () => {
 
     it('customer can ask for get support ', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.askForGetSupport(process.env.VENDOR, data.customerInfo.getSupportSubject, data.customerInfo.getSupportMessage)
+        await customerPage.askForGetSupport(data.vendorStores[0], data.customerInfo.getSupportSubject, data.customerInfo.getSupportMessage)
     }, timeout)
 
     it.skip('customer can add payment method', async () => {
