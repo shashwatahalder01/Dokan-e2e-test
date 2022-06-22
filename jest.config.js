@@ -56,6 +56,6 @@ module.exports = {
   // "testRegex": ["tests/e2e/tests/.*[^setup].spec.js$"],
 
   // "reporters": ["default", "github-actions"]
-  "reporters": ["default", "jest-github-reporter"]
+  // "reporters": ["default", "jest-github-reporter"]
 
 }
