@@ -60,12 +60,13 @@ module.exports = {
   "reporters": [ "default", [
 
     "jest-junit", {
-      "suiteName": "jest tests",
+      "suiteName": "Dokan E2E tests",
       "outputDirectory": "artifacts/reports/",
       "outputName": "junit.xml",
       "uniqueOutputName": "false",
-      "classNameTemplate": "{classname}-{title}",
-      "titleTemplate": "{classname}-{title}",
+      "suiteNameTemplate": "{filepath}",
+      "classNameTemplate": "{classname}",
+      "titleTemplate": "{title}",
       "ancestorSeparator": " › ",
       "usePathForSuiteName": "true"
     }
