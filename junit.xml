@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuites name="jest tests" tests="41" failures="0" errors="0" time="20.658">
+  <testsuite name="admin functionality test" errors="0" failures="0" skipped="39" timestamp="2022-06-22T08:14:56" time="20.467" tests="41">
+    <testcase classname="admin functionality test admin can login" name="admin functionality test admin can login" time="13.138">
+    </testcase>
+    <testcase classname="admin functionality test admin can logout" name="admin functionality test admin can logout" time="3.253">
+    </testcase>
+    <testcase classname="admin functionality test admin can add vendor" name="admin functionality test admin can add vendor" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add simple product" name="admin functionality test admin can add simple product" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add variable product" name="admin functionality test admin can add variable product" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add simple subscription " name="admin functionality test admin can add simple subscription " time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add variable subscription " name="admin functionality test admin can add variable subscription " time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add external product" name="admin functionality test admin can add external product" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add dokan subscription " name="admin functionality test admin can add dokan subscription " time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add auction product" name="admin functionality test admin can add auction product" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add booking product" name="admin functionality test admin can add booking product" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add categories" name="admin functionality test admin can add categories" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add attributes" name="admin functionality test admin can add attributes" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set standard tax rate" name="admin functionality test admin can set standard tax rate" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set flat rate shipping" name="admin functionality test admin can set flat rate shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set free shipping" name="admin functionality test admin can set free shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set local pickup shipping" name="admin functionality test admin can set local pickup shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set table rate shipping" name="admin functionality test admin can set table rate shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set distance rate shipping" name="admin functionality test admin can set distance rate shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set vendor shipping" name="admin functionality test admin can set vendor shipping" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add basic payment methods" name="admin functionality test admin can add basic payment methods" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add strip payment method" name="admin functionality test admin can add strip payment method" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add paypal marketplace payment method" name="admin functionality test admin can add paypal marketplace payment method" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add dokan mangopay payment method" name="admin functionality test admin can add dokan mangopay payment method" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add dokan razorpay payment method" name="admin functionality test admin can add dokan razorpay payment method" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can add strip express payment method" name="admin functionality test admin can add strip express payment method" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan general settings" name="admin functionality test admin can set dokan general settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan selling settings" name="admin functionality test admin can set dokan selling settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan withdraw settings" name="admin functionality test admin can set dokan withdraw settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan appearance settings" name="admin functionality test admin can set dokan appearance settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan privacy policy settings" name="admin functionality test admin can set dokan privacy policy settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan store support settings" name="admin functionality test admin can set dokan store support settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan rma settings" name="admin functionality test admin can set dokan rma settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan wholesale settings" name="admin functionality test admin can set dokan wholesale settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan eu compliance settings" name="admin functionality test admin can set dokan eu compliance settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan delivery time settings" name="admin functionality test admin can set dokan delivery time settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan product advertising settings" name="admin functionality test admin can set dokan product advertising settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan geolocation settings" name="admin functionality test admin can set dokan geolocation settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan product report abuse settings" name="admin functionality test admin can set dokan product report abuse settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan spmv settings" name="admin functionality test admin can set dokan spmv settings" time="0">
+      <skipped/>
+    </testcase>
+    <testcase classname="admin functionality test admin can set dokan vendor subscription settings" name="admin functionality test admin can set dokan vendor subscription settings" time="0">
+      <skipped/>
+    </testcase>
+  </testsuite>
+</testsuites>

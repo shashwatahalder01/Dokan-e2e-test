@@ -57,6 +57,18 @@ module.exports = {
 
   // "reporters": ["default", "github-actions"]
   // "reporters": ["default", "jest-github-reporter"]
-  "reporters": [ "default", "jest-junit" ]
+  "reporters": [ "default", [
+
+    "jest-junit", {
+      "suiteName": "jest tests",
+      "outputDirectory": "artifacts/rreports",
+      "outputName": "junit.xml",
+      "uniqueOutputName": "false",
+      "classNameTemplate": "{classname}-{title}",
+      "titleTemplate": "{classname}-{title}",
+      "ancestorSeparator": " › ",
+      "usePathForSuiteName": "true"
+    }
+  ] ]
 
 }
