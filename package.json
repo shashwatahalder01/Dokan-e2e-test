@@ -19,6 +19,7 @@
     "test:vendor": "wp-scripts test-e2e vendor.spec.js",
     "test:customer": "wp-scripts test-e2e customer.spec.js",
     "test:se": "wp-scripts test-e2e stripeExpress.spec.js",
+    "test:ex": "wp-scripts test-e2e exploratory-vendor.spec.js",
     "test:set": "wp-scripts test-e2e setup.spec.js",
     "test:calculation": "wp-scripts test-e2e calculation.spec.js",
     "test-interactive": "wp-scripts test-e2e -- --puppeteer-interactive",
