@@ -15,9 +15,9 @@ module.exports = {
     ], // chrome arguments
 
     // defaultViewport: null, //  Ignore default viewport size
-    defaultViewport: process.env.HEADLESS == 'false' ? null : {width:1920,height:1080} , // choose viewpoint based on GUI/Non-GUI settings
+    // defaultViewport: process.env.HEADLESS == 'false' ? null : {width:1920,height:1080} , // choose viewpoint based on GUI/Non-GUI settings
     
-    // defaultViewport: {width:1920,height:1080} // viewport for each page. Defaults to an 800x600 viewport.
+    defaultViewport: {width:1920,height:1080} // viewport for each page. Defaults to an 800x600 viewport.
 
 
   },
