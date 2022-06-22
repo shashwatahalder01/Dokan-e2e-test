@@ -17,7 +17,7 @@ describe('customer functionality test', () => {
     // afterEach(async () => {})
 
 
-    it.only('customer register', async () => {
+    it('customer register', async () => {
         await customerPage.customerRegister(faker.name.firstName(), data.customerInfo.password)
         await customerPage.customerLogout()
     }, timeout)
