@@ -46,7 +46,7 @@ jobs:
           timeout_seconds: 30000
           max_attempts: 1
           retry_on: error
-          command: npm run test:customer
+          command: npm run test:admin
 
       - name: Test Report
         uses: phoenix-actions/test-reporting@v8
