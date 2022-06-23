@@ -26,7 +26,7 @@ module.exports = {
 
     //login user form WP login dashboard
     async loginBackend(username, password) {
-        await base.goIfNotThere("wp-admin")
+        await base.goIfNotThere("wp-login.php")
         let emailField = await base.isVisible(selector.backend.email)
         if (emailField) {
             await base.clearAndType(selector.backend.email, username)

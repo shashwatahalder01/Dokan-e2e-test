@@ -143,7 +143,7 @@ module.exports = {
   async setDokanGeneralSettings() {
 
     //site options
-    await base.uncheck(selector.admin.dokan.settings.adminAreaAccess)
+    await base.check(selector.admin.dokan.settings.adminAreaAccess)
     await base.clearAndType(selector.admin.dokan.settings.vendorStoreUrl, 'store')
     await page.select(selector.admin.dokan.settings.sellingProductTypes, 'sell_both')
     //vendor store options

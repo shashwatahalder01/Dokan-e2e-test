@@ -1263,7 +1263,7 @@ module.exports = {
 
     //----------------------------------------------------Vendor functions---------------------------------------//
 
-    async approveProductReview(reviewMessage) {
+    async approveProductReviews(reviewMessage) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.reviews)
 

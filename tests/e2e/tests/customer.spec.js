@@ -57,7 +57,7 @@ describe('customer functionality test', () => {
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
     }, timeout)
 
-    it.skip('customer can buy product', async () => {
+    it('customer can buy product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.clearCart()
         await customerPage.goToShop()
@@ -67,7 +67,7 @@ describe('customer functionality test', () => {
         await customerPage.placeOrder()
     }, timeout)
 
-    it('customer can review product', async () => {
+    it.skip('customer can review product', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.reviewProduct(data.simpleProduct[0], data.product.rating)
     }, timeout)
@@ -100,8 +100,6 @@ describe('customer functionality test', () => {
         await customerPage.goToShop()
         await customerPage.addProductToCartFromShop(data.simpleProduct[0])
         await customerPage.goToCartFromShop()
-        await customerPage.goToCheckoutFromCart()
-        await customerPage.placeOrder()
     }, timeout)
 
     it('customer can search vendor', async () => {
