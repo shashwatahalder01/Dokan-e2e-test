@@ -22,7 +22,7 @@ describe('customer functionality test', () => {
         await customerPage.customerLogout()
     }, timeout)
 
-    it('customer login', async () => {
+    it.only('customer login', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
     }, timeout)
 
@@ -87,7 +87,7 @@ describe('customer functionality test', () => {
         await customerPage.searchProduct(data.simpleProduct[0])
     }, timeout)
 
-    it.only('customer can apply coupon', async () => {
+    it('customer can apply coupon', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
         await customerPage.addProductToCartFromShop(data.simpleProduct[0])
@@ -95,7 +95,7 @@ describe('customer functionality test', () => {
         await customerPage.applyCoupon(data.couponCode[0])
     }, timeout)
 
-    it.only('customer can add product to cart', async () => {
+    it('customer can add product to cart', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.goToShop()
         await customerPage.addProductToCartFromShop(data.simpleProduct[0])
