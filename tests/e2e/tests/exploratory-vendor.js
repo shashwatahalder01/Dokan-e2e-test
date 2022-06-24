@@ -2,8 +2,6 @@ const loginPage = require('../pages/login.js')
 const vendorPage = require('../pages/vendor.js')
 const vDashboardPage = require('../pages/vdashboard.js')
 const vDashboardLocators = require("../pages/vdashboard-locators.js")
-
-
 const data = require('../utils/testData.js')  //Fakerjs
 const base = require("../pages/base.js")  //Actions
 const { goto, waitForSelector } = require('../pages/base.js')

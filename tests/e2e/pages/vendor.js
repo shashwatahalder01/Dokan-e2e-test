@@ -1,5 +1,4 @@
 const base = require("../pages/base.js")
-const adminPage = require('../pages/admin.js')
 const customerPage = require('../pages/customer.js')
 const loginPage = require('../pages/login.js')
 const selector = require("../pages/selectors.js")
@@ -84,11 +83,9 @@ module.exports = {
 
         let subscriptionPackIsVisible = await base.isVisible(selector.vendor.vRegistration.subscriptionPack)
         if (subscriptionPackIsVisible) {
-            console.log('if res:   ',subscriptionPackIsVisible)
             await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack,selector.vendor.vRegistration.subscriptionPackOptions, "Dokan_subscription_Non_recurring")
         }
-        await base.wait(8)
-        
+                
         await base.clickAndWait(selector.vendor.vRegistration.register)
         let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
         if (registrationErrorIsVisible) {
@@ -1263,7 +1260,7 @@ module.exports = {
 
     //----------------------------------------------------Vendor functions---------------------------------------//
 
-    async approveProductReviews(reviewMessage) {
+    async approveProductReview(reviewMessage) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.reviews)
 

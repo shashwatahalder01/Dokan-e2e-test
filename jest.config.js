@@ -1,7 +1,5 @@
 require('dotenv').config()
 
-let a= process.env.ENV
-
 module.exports = {
   ...require('@wordpress/scripts/config/jest-e2e.config'),
   "preset": "jest-puppeteer", // Allow  Jest with Puppeteer
@@ -10,9 +8,15 @@ module.exports = {
   "testPathIgnorePatterns": ['/node_modules/'],
   "testMatch": ["**/tests/e2e/tests/**/*.spec.js"], // In testMatch we are only saying in which folder and for which files Jest should be looking for.
   "testSequencer": "./customSequencer.js", //  test run will follow custom order
-  "testTimeout":Number(process.env.TIME_OUT), // Timeout of a test in milliseconds.
+  "testTimeout": Number(process.env.TIME_OUT), // Timeout of a test in milliseconds.
   // maxWorkers: 1, // Specifies the maximum number of workers the worker-pool will spawn for running tests.
   "verbose": true, // Show details of tests, if false show only summary
+  // "setupFiles": ["dotenv/config"], //setupFile will be run once per test file &  will be run once per test file.
+  // "setupFiles": [
+  //   './tests/e2e/pages/login.js',
+  //   './tests/e2e/pages/admin.js',
+  //   './tests/e2e/pages/vendor.js',
+  // ], //setupFile will be run once per test file &  will be run once per test file.
 
   // Jest allure reporter
   // testRunner: "jest-jasmine2", // test runner for allure report . after jest 24> jest-circus is default test runner.
@@ -41,7 +45,7 @@ module.exports = {
   // ]
 
   // Junit reporter( Git Action)
-  "reporters": [ "default", [
+  "reporters": ["default", [
 
     "jest-junit", {
       "suiteName": "e2e test results",
@@ -54,7 +58,7 @@ module.exports = {
       "ancestorSeparator": " › ",
       "usePathForSuiteName": "true"
     }
-  ] ]
+  ]]
 
   // "projects": [
   //   {
@@ -70,5 +74,5 @@ module.exports = {
   //     "testSequencer": "./customSequencer.js",
   //   }
   // ],
-  
+
 }

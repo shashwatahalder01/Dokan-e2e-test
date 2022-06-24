@@ -297,7 +297,7 @@ module.exports = {
     await base.click(selector.admin.dokan.settings.rma)
 
     //rma settings
-    await page.select(selector.admin.dokan.settings.orderStatus, 'processing')
+    await page.select(selector.admin.dokan.settings.orderStatus, 'wc-processing')
     await page.select(selector.admin.dokan.settings.enableRefundRequests, 'yes')
     await page.select(selector.admin.dokan.settings.enableCouponRequests, 'yes')
     let rmaReasons = ['Defective', 'Wrong Product', 'Other']

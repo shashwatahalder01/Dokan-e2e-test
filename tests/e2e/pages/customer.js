@@ -424,11 +424,12 @@ module.exports = {
         let submittedReviewMessage = await base.getElementText(selector.customer.cSingleProduct.submittedReview(reviewMessage))
         expect(submittedReviewMessage).toMatch(reviewMessage)
 
-        let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
-        if (awaitingApprovalReviewIsVisible) {
-            await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-            await vendorPage.approveProductReviews(reviewMessage)
-        }
+        //TODO: uncomment after handling circular issue
+        // let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
+        // if (awaitingApprovalReviewIsVisible) {
+        //     await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //     await vendorPage.approveProductReview(reviewMessage)
+        // }
 
     },
 
@@ -611,11 +612,9 @@ module.exports = {
     //customer place order
     async placeOrder(paymentMethod='bank', getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
         //TODO:handle billing address warning or shipping address warning
-        console.log('place order #1')
         if (billingDetails) await customerPage.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         if (shippingDetails) await customerPage.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
-        await base.wait(6)
-        console.log('place order #2')
+        await base.wait(5)
 
         switch (paymentMethod) {
             case 'bank':

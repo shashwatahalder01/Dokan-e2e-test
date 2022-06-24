@@ -4,10 +4,6 @@ const adminPage = require('../pages/admin.js')
 const vendorPage = require('../pages/vendor.js')
 const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
-const { faker } = require('@faker-js/faker')
-const { users } = require('../pages/wp.js')
-const { productsName, rmaLength } = require('../utils/testData.js')
-const base = require('../pages/base.js')
 const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
@@ -99,13 +95,13 @@ describe('Environment setup test', () => {
         await adminPage.addAttributes(data.product.attribute, data.product.attributeTerms)
     }, timeout)
 
-    it.skip('admin add dokan subscription', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        // add dokan subscriptions
-        await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
-    }, timeout)
+    // it.skip('admin add dokan subscription', async () => {
+    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     // add dokan subscriptions
+    //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
+    // }, timeout)
 
-    // it.skip('admin set dokan general settings', async () => {
+    // it.skip('admin set dokan  settings', async () => {
     //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanSettings()
