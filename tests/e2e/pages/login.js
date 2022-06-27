@@ -40,7 +40,16 @@ module.exports = {
 
     //admin login
     async adminLogin(username, password) {
-        await this.loginBackend(username, password)
+        await base.goIfNotThere("wp-admin")
+        let emailField = await base.isVisible(selector.backend.email)
+        if (emailField) {
+            await base.clearAndType(selector.backend.email, username)
+            await base.clearAndType(selector.backend.password, password)
+            await base.clickAndWait(selector.backend.login)
+
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(username)
+        }
     },
 
     //switcher user

@@ -1,5 +1,7 @@
 require('dotenv').config()
 const { PendingXHR } = require('pending-xhr-puppeteer');
+const p = require('puppeteer-extra-commands');
+
 
 // This page contains all necessary puppeteer automation methods 
 
@@ -353,6 +355,16 @@ module.exports = {
         // console.log(value)
         return value
     },
+
+        // get element property value
+        async getElementValueCSS(selector) {
+            let element = await this.getElement(selector)
+            // let value = await page.$eval(element, el => window.getComputedStyle(el).getPropertyValue('background-color'))
+            let value = element => window.getComputedStyle(element).getPropertyValue('background-color')
+            // let value = await p.getCssProperty()
+            console.log(value)
+            return value
+        },
 
     // get element class value
     async getElementClassValue(selector) {

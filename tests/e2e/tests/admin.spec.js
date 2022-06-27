@@ -179,7 +179,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSellingSettings()
     })
 
-    it('admin can set dokan withdraw settings', async () => {
+    it.only('admin can set dokan withdraw settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanWithdrawSettings()
@@ -251,7 +251,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSpmvSettings()
     })
 
-    it.skip('admin can set dokan vendor subscription settings', async () => {
+    it('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanVendorSubscriptionSettings()
