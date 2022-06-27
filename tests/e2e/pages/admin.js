@@ -164,13 +164,12 @@ module.exports = {
     await base.click(selector.admin.dokan.settings.adminAreaAccess)
     await base.clearAndType(selector.admin.dokan.settings.vendorStoreUrl, 'store')
     await base.click(selector.admin.dokan.settings.sellingProductTypes('sell_both'))
-    // await base.getElementValueCSS(selector.admin.dokan.settings.sellingProductTypes)
 
     //vendor store options
     await base.click(selector.admin.dokan.settings.storeTermsAndConditions)
     await base.clearAndType(selector.admin.dokan.settings.storeProductPerPage, '12')
     await base.click(selector.admin.dokan.settings.enableTermsAndCondition)
-    // await base.select(selector.admin.dokan.settings.storCategory, 'none')
+    await base.select(selector.admin.dokan.settings.storCategory('none'))
     await base.click(selector.admin.dokan.settings.storCategory)
     await base.click(selector.admin.dokan.settings.generalSaveChanges)
 

@@ -506,7 +506,6 @@ module.exports = {
 
                 //general
                 //site options
-                // adminAreaAccess: "#dokan_general\\[admin_access\\]", //
                 adminAreaAccess: ".admin_access .switch",
 
                 vendorStoreUrl: "#dokan_general\\[custom_store_url\\]",
@@ -519,63 +518,40 @@ module.exports = {
                 cancelDataClear: ".swal2-cancel",
 
                 //vendor store options
-                // storeTermsAndConditions: "#dokan_general\\[seller_enable_terms_and_conditions\\]", //
                 storeTermsAndConditions: ".seller_enable_terms_and_conditions .switch",
                 storeProductPerPage: "#dokan_general\\[store_products_per_page\\]",
-                // enableTermsAndCondition: "#dokan_general\\[enable_tc_on_reg\\]", //
                 enableTermsAndCondition: ".enable_tc_on_reg .switch",
                 enableSingSellerMode: "#dokan_general\\[enable_single_seller_mode\\]",
-                // storCategory: "#dokan_general\\[store_category_type\\]",
-                storCategory: "//label[@for='dokan_general[store_category_type][none]']",
+                storCategory: (category) => `//label[@for='dokan_general[store_category_type][${category}]']`,
                 generalSaveChanges: "#submit",
 
                 //selling options
                 //commission
                 commissionType: "#dokan_selling\\[commission_type\\]",
                 adminCommission: "#dokan_selling\\[admin_percentage\\]",
-                // shippingFeeRecipient: "#dokan_selling\\[shipping_fee_recipient\\]",
                 shippingFeeRecipient: (feeReceiver) => `//label[@for='dokan_selling[shipping_fee_recipient][${feeReceiver}]']`,
-                // taxFeeRecipient: "#dokan_selling\\[tax_fee_recipient\\]",
                 taxFeeRecipient: (feeReceiver) => `//label[@for='dokan_selling[tax_fee_recipient][${feeReceiver}]']`,
                 processRefundViaAPI: "#dokan_selling\\[automatic_process_api_refund\\]",
 
                 //vendor capability
-                // newVendorProductUpload: "#dokan_selling\\[new_seller_enable_selling\\]",
                 newVendorProductUpload: ".new_seller_enable_selling .switch",
-                // disableProductPopup: "#dokan_selling\\[disable_product_popup\\]",
                 disableProductPopup: ".disable_product_popup .switch",
-                // orderStatusChange: "#dokan_selling\\[order_status_change\\]",
                 orderStatusChange: ".order_status_change .switch",
-                // newProductStatus: "#dokan_selling\\[product_status\\]",
                 newProductStatus: (status) => `//label[@for='dokan_selling[product_status][${status}]']`,
-                // duplicateProduct: "#dokan_selling\\[vendor_duplicate_product\\]",
                 duplicateProduct: ".vendor_duplicate_product .switch",
-                // editedProductStatus: "#dokan_selling\\[edited_product_status\\]",
                 editedProductStatus: ".edited_product_status .switch",
-                // productMailNotification: "#dokan_selling\\[product_add_mail\\]",
                 productMailNotification: ".product_add_mail .switch",
-                // productCategorySelection: "#dokan_selling\\[product_category_style\\]",
                 productCategorySelection: (category) => `//label[@for='dokan_selling[product_category_style][${category}]']`,
-                // vendorsCanCreateTags: "#dokan_selling\\[product_vendors_can_create_tags\\]",
                 vendorsCanCreateTags: ".product_vendors_can_create_tags .switch",
-                // orderDiscount: "#dokan_selling\\[discount_edit\\]\\[order-discount\\]",
-                // productDiscount: "#dokan_selling\\[discount_edit\\]\\[product-discount\\]",
                 orderDiscount: "//div[contains(text(),'Order Discount')]//label[@class='switch tips']",
                 productDiscount: "//div[contains(text(),'Product Discount')]//label[@class='switch tips']",
 
-                // hideCustomerInfo: "#dokan_selling\\[hide_customer_info\\]",
                 hideCustomerInfo: ".hide_customer_info .switch",
-                // vendorProductReview: "#dokan_selling\\[seller_review_manage\\]",
                 vendorProductReview: ".seller_review_manage .switch",
-                // guestProductEnquiry: "#dokan_selling\\[enable_guest_user_enquiry\\]",
                 guestProductEnquiry: ".enable_guest_user_enquiry .switch",
-                // newVendorEnableAuction: "#dokan_selling\\[new_seller_enable_auction\\]",
                 newVendorEnableAuction: ".new_seller_enable_auction .switch",
-                // enableMinMaxQuantities: "#dokan_selling\\[enable_min_max_quantity\\]",
                 enableMinMaxQuantities: ".enable_min_max_quantity .switch",
-                // enableMinMaxAmount: "#dokan_selling\\[enable_min_max_amount\\]",
                 enableMinMaxAmount: ".enable_min_max_amount .switch",
-                // disableShipping: "#dokan_selling\\[disable_shipping_tab\\]",
                 disableShipping: ".disable_shipping_tab .switch",
                 sellingOptionsSaveChanges: "#submit",
 
@@ -649,7 +625,6 @@ module.exports = {
                 appearanceSaveChanges: "#submit",
 
                 //privacy policy
-                // enablePrivacyPolicy: "#dokan_privacy\\[enable_privacy\\]",
                 enablePrivacyPolicy: ".enable_privacy .switch",
                 privacyPage: "#dokan_privacy\\[privacy_page\\]",
                 privacyPolicyIframe: 'iframe',
@@ -661,7 +636,6 @@ module.exports = {
                 liveSearchSaveChanges: "#submit",
 
                 //store support
-                // displayOnOrderDetails: "#dokan_store_support_setting\\[enabled_for_customer_order\\]",
                 displayOnOrderDetails: ".enabled_for_customer_order .switch",
                 displayOnSingleProductPage: "#dokan_store_support_setting\\[store_support_product_page\\]",
                 supportButtonLabel: "#dokan_store_support_setting\\[support_button_label\\]",
@@ -744,9 +718,7 @@ module.exports = {
 
                 //rma
                 orderStatus: "#dokan_rma\\[rma_order_status\\]",
-                // enableRefundRequests: "#dokan_rma\\[rma_enable_refund_request\\]",
                 enableRefundRequests: ".rma_enable_refund_request .switch",
-                // enableCouponRequests: "#dokan_rma\\[rma_enable_coupon_request\\]",
                 enableCouponRequests: ".rma_enable_coupon_request .switch",
                 reasonsForRmaSingle: (reason) => `//li[contains(text(),'${reason}')]//span[@class="dashicons dashicons-no-alt remove-item"]`,
                 reasonsForRma: ".remove-item",
@@ -758,11 +730,8 @@ module.exports = {
                 rmaSaveChanges: "#submit",
 
                 //wholesale
-                // whoCanSeeWholesalePriceAllUsers: "#dokan_wholesale\\[wholesale_price_display\\]\\[all_user\\]",
                 whoCanSeeWholesalePrice: (type) => `//div[@class='wholesale_price_display dokan-settings-field-type-radio'] //label[@for='dokan_wholesale[wholesale_price_display][${type}]']`,
-                // showWholesalePriceOnShopArchive: "#dokan_wholesale\\[display_price_in_shop_archieve\\]",
                 showWholesalePriceOnShopArchive: ".display_price_in_shop_archieve .switch",
-                // needApprovalForCustomer: "#dokan_wholesale\\[need_approval_for_wholesale_customer\\]",
                 needApprovalForCustomer: ".need_approval_for_wholesale_customer .switch",
                 wholesaleSaveChanges: "#submit",
 
@@ -777,28 +746,17 @@ module.exports = {
                 customerExtraFieldsVatOrTaxNumber: "//input[@value='billing_dokan_vat_number']//..",
                 customerExtraFieldsNameOfBank: "//input[@value='billing_dokan_bank_name']//..",
                 customerExtraFieldsBankIban: "//input[@value='billing_dokan_bank_iban']//..",
-                // enableGermanizedSupportForVendors: "#dokan_germanized\\[enabled_germanized\\]",
                 enableGermanizedSupportForVendors: ".enabled_germanized .switch",
-                // vendorsWillBeAbleToOverrideInvoiceNumber: "#dokan_germanized\\[override_invoice_number\\]",
                 vendorsWillBeAbleToOverrideInvoiceNumber: ".override_invoice_number .switch",
                 euComplianceFieldsSaveChanges: "#submit",
 
                 //delivery time
-                // allowVendorSettings: "#dokan_delivery_time\\[allow_vendor_override_settings\\]",
                 allowVendorSettings: ".allow_vendor_override_settings .switch",
                 deliveryDateLabel: "#dokan_delivery_time\\[delivery_date_label\\]",
                 deliveryBlockedBuffer: "#dokan_delivery_time\\[preorder_date\\]",
                 deliveryBoxInfo: "#dokan_delivery_time\\[delivery_box_info\\]",
-                // requireDeliveryDateAndTime: "#dokan_delivery_time\\[selection_required\\]",
                 requireDeliveryDateAndTime: ".selection_required .switch",
                 deliveryDay: (day) =>`//div[contains(text(), '${day}')]//label[@class='switch tips']`,
-                // deliveryDaySunday: "#dokan_delivery_time\\[delivery_day\\]\\[sunday\\]",
-                // deliveryDayMonday: "#dokan_delivery_time\\[delivery_day\\]\\[monday\\]",
-                // deliveryDayTuesday: "#dokan_delivery_time\\[delivery_day\\]\\[tuesday\\]",
-                // deliveryDayWednesday: "#dokan_delivery_time\\[delivery_day\\]\\[wednesday\\]",
-                // deliveryDayThursday: "#dokan_delivery_time\\[delivery_day\\]\\[thursday\\]",
-                // deliveryDayFriday: "#dokan_delivery_time\\[delivery_day\\]\\[friday\\]",
-                // deliveryDaySaturday: "#dokan_delivery_time\\[delivery_day\\]\\[saturday\\]",
                 openingTime: "#dokan_delivery_time\\[opening_time\\]",
                 closingTime: "#dokan_delivery_time\\[closing_time\\]",
                 timeSlot: "#dokan_delivery_time\\[time_slot_minutes\\]",
@@ -808,29 +766,19 @@ module.exports = {
                 //product advertising
                 noOfAvailableSlot: "#dokan_product_advertisement\\[total_available_slot\\]",
                 expireAfterDays: "#dokan_product_advertisement\\[expire_after_days\\]",
-                // vendorCanPurchaseAdvertisement: "#dokan_product_advertisement\\[per_product_enabled\\]",
                 vendorCanPurchaseAdvertisement: ".per_product_enabled .switch",
                 advertisementCostUsd: "#dokan_product_advertisement\\[cost\\]",
-                // enableAdvertisementInSubscription: "#dokan_product_advertisement\\[vendor_subscription_enabled\\]",
                 enableAdvertisementInSubscription: ".vendor_subscription_enabled .switch",
-                // markAdvertisedProductAsFeatured: "#dokan_product_advertisement\\[featured\\]",
                 markAdvertisedProductAsFeatured: ".featured .switch",
-                // displayAdvertisedProductOnTop: "#dokan_product_advertisement\\[catalog_priority\\]",
                 displayAdvertisedProductOnTop: ".catalog_priority .switch",
-                // outOfStockVisibility: "#dokan_product_advertisement\\[hide_out_of_stock_items\\]",
                 outOfStockVisibility: ".hide_out_of_stock_items .switch",
                 productAdvertisingSaveChanges: "#submit",
 
                 //geolocation
-                // locationMapPosition: "#dokan_geolocation\\[show_locations_map\\]",
                 locationMapPosition: (position) => `//label[@for='dokan_geolocation[show_locations_map][${position}]']`,
-                // showMap: "#dokan_geolocation\\[show_location_map_pages\\]",
                 showMap: (type) => `//label[@for='dokan_geolocation[show_location_map_pages][${type}]']`,
-                // showFiltersBeforeLocationMap: "#dokan_geolocation\\[show_filters_before_locations_map\\]",
                 showFiltersBeforeLocationMap: ".show_filters_before_locations_map .switch",
-                // productLocationTab: "#dokan_geolocation\\[show_product_location_in_wc_tab\\]",
                 productLocationTab: ".show_product_location_in_wc_tab .switch",
-                // radiusSearchUnit: "#dokan_geolocation\\[distance_unit\\]",
                 radiusSearchUnit: (unit) => `//label[@for='dokan_geolocation[distance_unit][${unit}]']`,
                 radiusSearchMinimumDistance: "#dokan_geolocation\\[distance_min\\]",
                 radiusSearchMaximumDistance: "#dokan_geolocation\\[distance_max\\]",
@@ -847,7 +795,6 @@ module.exports = {
                 productReportAbuseSaveChanges: "#submit",
 
                 //single product multi vendor
-                // enableSingleProductMultipleVendor: "#dokan_spmv\\[enable_pricing\\]",
                 enableSingleProductMultipleVendor: ".enable_pricing .switch",
                 sellItemButtonText: "#dokan_spmv\\[sell_item_btn\\]",
                 availableVendorDisplayAreaTitle: "#dokan_spmv\\[available_vendor_list_title\\]",
@@ -860,11 +807,8 @@ module.exports = {
 
                 //vendor subscription
                 subscription: "#dokan_product_subscription\\[subscription_pack\\]",
-                // enableProductSubscription: "#dokan_product_subscription\\[enable_pricing\\]",
                 enableProductSubscription: ".enable_pricing .switch",
-                // enableSubscriptionInRegistrationForm: "#dokan_product_subscription\\[enable_subscription_pack_in_reg\\]",
                 enableSubscriptionInRegistrationForm: ".enable_subscription_pack_in_reg .switch",
-                // enableEmailNotification: "#dokan_product_subscription\\[notify_by_email\\]",
                 enableEmailNotification: ".notify_by_email .switch",
                 noOfDays: "#dokan_product_subscription\\[no_of_days_before_mail\\]",
                 productStatus: "#dokan_product_subscription\\[product_status_after_end\\]",
