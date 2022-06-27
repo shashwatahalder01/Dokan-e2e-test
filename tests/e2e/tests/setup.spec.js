@@ -27,65 +27,64 @@ describe('Environment setup test', () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // check plugin is installed
         await adminPage.checkActivePlugins(data.PluginSlugList)
-    }, timeout)
+    })
 
     it('admin check Active modules ', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // check plugin is installed
         await adminPage.checkActiveModules()
-    }, timeout)
+    })
 
     it('admin set WpSettings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // set wp general settings & permalink settings
         await adminPage.setWpSettings()
-    }, timeout)
+    })
 
     it('admin enable register password field', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.enablePasswordInputField()
-    }, timeout)
+    })
 
     it('admin set tax rate', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addStandardTaxRate()
-    }, timeout)
+    })
 
     it('admin set currency options', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.setCurrencyOptions()
-    }, timeout)
+    })
 
     it('admin set flat rate shipping method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
-    }, timeout)
+    })
 
 
     it('admin set vendor Table Rate shipping method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
-    }, timeout)
+    })
 
 
-    it.only('admin set vendor distance rate shipping method', async () => {
+    it('admin set vendor distance rate shipping method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
-
-    }, timeout)
+    })
 
 
     it('admin set vendor shipping method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
-    }, timeout)
+    })
 
     it('admin set basic payments', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // set payment gateway settings
         await adminPage.goToWooCommerceSettings()
         await adminPage.setupBasicPaymentMethods()
-    }, timeout)
+    })
 
     it('admin add categories and attributes', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
@@ -93,116 +92,116 @@ describe('Environment setup test', () => {
         await adminPage.addCategory('Shirts')
         // add product attributes
         await adminPage.addAttributes(data.product.attribute, data.product.attributeTerms)
-    }, timeout)
+    })
 
     // it.skip('admin add dokan subscription', async () => {
     //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     //     // add dokan subscriptions
     //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
-    // }, timeout)
+    // })
 
     // it.skip('admin set dokan  settings', async () => {
     //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanSettings()
-    // }, timeout)
+    // })
 
     it('admin set dokan general settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanGeneralSettings()
-    }, timeout)
+    })
 
     it('admin set dokan selling settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanSellingSettings()
-    }, timeout)
+    })
 
     it('admin set dokan withdraw settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanWithdrawSettings()
-    }, timeout)
+    })
 
     it('admin set dokan page settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setPageSettings()
-    }, timeout)
+    })
 
     it('admin set dokan appearance settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanAppearanceSettings()
-    }, timeout)
+    })
 
     it('admin set dokan privacy policy settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanPrivacyPolicySettings()
-    }, timeout)
+    })
 
     it('admin set dokan store support settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanStoreSupportSettings()
-    }, timeout)
+    })
 
     it('admin set dokan rma settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanRmaSettings()
-    }, timeout)
+    })
 
     it('admin set dokan wholesale settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanWholesaleSettings()
-    }, timeout)
+    })
 
     it('admin set dokan eu compliance settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanEuComplianceSettings()
-    }, timeout)
+    })
 
     it('admin set dokan delivery time settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanDeliveryTimeSettings()
-    }, timeout)
+    })
 
     it('admin set dokan product advertising settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanProductAdvertisingSettings()
-    }, timeout)
+    })
 
     it('admin set dokan geolocation settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanGeolocationSettings()
-    }, timeout)
+    })
 
     it('admin set dokan product report abuse settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanProductReportAbuseSettings()
-    }, timeout)
+    })
 
     it('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
 
         await adminPage.setDokanSpmvSettings()
-    }, timeout)
+    })
 
     it.skip('admin set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
         await adminPage.setDokanVendorSubscriptionSettings()
-    }, timeout)
+    })
 
 
 
@@ -216,7 +215,7 @@ describe('Environment setup test', () => {
     it('add test vendor1', async () => {
         // add vendor1
         await vendorPage.vendorRegister(process.env.VENDOR, process.env.VENDOR_PASSWORD, 'vendor1', 'v1', 'vendorStore1', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
-    }, timeout)
+    })
 
     it('add test vendor1 products', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
@@ -235,28 +234,28 @@ describe('Environment setup test', () => {
         // await vendorPage.addSimpleProduct('p1_v1 (sale)', data.product.price, data.product.category)
         // //add minmax products
         // await vendorPage.addSimpleProduct('p1_v1 (minmax)', data.product.price, data.product.category)
-    }, timeout)
+    })
 
     it('add test vendor1 coupons', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add coupons
         await vendorPage.addCoupon('C1_V1', data.coupon.amount)
-    }, timeout)
+    })
 
     it('add test vendor1 address', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
-    }, timeout)
+    })
 
     it('add test vendor1 rma settings', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
-    }, timeout)
+    })
 
     it.skip('add test vendor2', async () => {
         // add vendor1
         await vendorPage.vendorRegister(process.env.VENDOR2, process.env.VENDOR_PASSWORD, 'vendor2', 'v2', 'vendorStore2', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
-    }, timeout)
+    })
 
     it.skip('add test vendor2 products', async () => {
         await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
@@ -275,23 +274,23 @@ describe('Environment setup test', () => {
         // await vendorPage.addSimpleProduct('p1_v2 (sale)', data.product.price, data.product.category)
         // //add minmax products
         // await vendorPage.addSimpleProduct('p1_v2 (minmax)', data.product.price, data.product.category)
-    }, timeout)
+    })
 
     it.skip('add test vendor2 coupons', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add coupons
         await vendorPage.addCoupon('C1_V2', data.coupon.amount)
-    }, timeout)
+    })
 
     it.skip('add test vendor2 address', async () => {
         await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
         await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
-    }, timeout)
+    })
 
     it.skip('add test vendor2 rma settings', async () => {
         await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
         await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
-    }, timeout)
+    })
 
 
 
@@ -302,26 +301,26 @@ describe('Environment setup test', () => {
     it('add test customer1', async () => {
         // add customer1
         await customerPage.customerRegister(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-    }, timeout)
+    })
 
     it('add test customer1 addresses', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.addBillingAddress('customer1', 'c1', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
         await customerPage.customerLogout()
-    }, timeout)
+    })
 
     it.skip('add test customer2', async () => {
         // add customer1
         await customerPage.customerRegister(process.env.CUSTOMER2, process.env.CUSTOMER_PASSWORD)
-    }, timeout)
+    })
 
     it.skip('add test customer2 addresses', async () => {
         await loginPage.login(process.env.CUSTOMER2, process.env.CUSTOMER_PASSWORD)
         await customerPage.addBillingAddress('customer2', 'c2', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
         await customerPage.customerLogout()
-    }, timeout)
+    })
 
 
 })

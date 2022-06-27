@@ -22,7 +22,7 @@ module.exports = {
         }
         return false
     },
- 
+
     //check whether element is visible or not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
@@ -121,6 +121,8 @@ module.exports = {
         let element = await this.getElement(selector)
         await element.click()
     },
+
+
 
     //wait for element and then click
     async clickOnly(selector) {
@@ -356,15 +358,38 @@ module.exports = {
         return value
     },
 
-        // get element property value
-        async getElementValueCSS(selector) {
-            let element = await this.getElement(selector)
-            // let value = await page.$eval(element, el => window.getComputedStyle(el).getPropertyValue('background-color'))
-            let value = element => window.getComputedStyle(element).getPropertyValue('background-color')
-            // let value = await p.getCssProperty()
-            console.log(value)
-            return value
-        },
+    // get element property value: background color
+    async getElementBackgroundColor(selector) {
+        let element = await this.getElement(selector)
+        let value = await page.evaluate(element => window.getComputedStyle(element).getPropertyValue('background-color'), element)
+        // console.log(value)
+        return value
+    },
+
+    // get element property value CSS
+    async getElementValueCSS(selector, property) {
+        let element = await this.getElement(selector)
+        // let value = await page.$eval(element, el => window.getComputedStyle(el).getPropertyValue('background-color'))
+        let value = await page.evaluate((element, property) => window.getComputedStyle(element).getPropertyValue(property), element, property)
+        // console.log(value)
+        return value
+    },
+
+    // get element property CSS values
+    async getElementValueCSSAll(selector) {
+        let element = await this.getElement(selector)
+        let value = await page.evaluate(element => {
+            const stylesObject = window.getComputedStyle(element)
+            const styles = {}
+            for (let property in stylesObject) {
+                if (stylesObject.hasOwnProperty(property))
+                    styles[property] = stylesObject[property]
+            }
+            return styles
+        }, element)
+        // console.log(value)
+        return value
+    },
 
     // get element class value
     async getElementClassValue(selector) {
@@ -599,6 +624,22 @@ module.exports = {
 
     //---------------------------------------------- Dokan specific functions ------------------------------------//
 
+    //admin enable switcher , if enabled then skip : admin settings switcher
+    async enableSwitcher(selector) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
+            selector = selector + '//span'
+        } else {
+            selector = selector + ' span'
+        }
+        let value = await this.getElementBackgroundColor(selector)
+        if (value.includes('rgb(0, 144, 255)')) {
+            await this.click(selector)
+            await this.click(selector)
+        } else {
+            await this.click(selector)
+        }
+    },
+
 
     //delete element if exist (only first will delete) dokan specific :rma,report abuse
     async deleteIfExists(selector) { //TODO: there may be alternative solution, this method might not needed
@@ -626,7 +667,7 @@ module.exports = {
     // },
 
     //check for php error
-    async checkPHPError() { 
+    async checkPHPError() {
         // let pageContent = await page.content()
         // let pageContent = pageContent.toLowerCase()  
         let pageContent = await page.content()
