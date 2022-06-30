@@ -133,7 +133,7 @@ dist
 
 # custom files
 # packages & plugins
-.vscode
+.vscode/
 .Ds_store
 wp-content/
 artifacts/

@@ -189,7 +189,7 @@ module.exports = {
                 address: "//div[@class='tab-link']//a[contains(text(), 'Address')]",
                 paymentOptions: "//div[@class='tab-link']//a[contains(text(), 'Payment Options')]",
                 addNewVendorCloseModal: '.modal-close',
-                next: '.button.button-primary.button-hero',
+                next: '.button.button-primary',
 
                 //account info
                 addNewVendor: '.page-title-action',

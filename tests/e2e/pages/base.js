@@ -9,14 +9,15 @@ const p = require('puppeteer-extra-commands');
 module.exports = {
 
     //check whether element is ready or not
-    async isLocatorReady(selector, page) {
-        const isVisibleHandle = await page.evaluateHandle((e) => {
-            const style = window.getComputedStyle(e)
+    async isLocatorReady(selector) {
+        let element = await this.getElement(selector)
+        const isVisibleHandle = await page.evaluateHandle((element) => {
+            const style = window.getComputedStyle(element)
             return (style && style.display !== 'none' &&
                 style.visibility !== 'hidden' && style.opacity !== '0')
-        }, selector)
+        }, el)
         var visible = await isVisibleHandle.jsonValue()
-        const box = await selector.boxModel()
+        const box = await element.boxModel()
         if (visible && box) {
             return true
         }

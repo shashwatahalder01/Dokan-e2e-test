@@ -141,6 +141,7 @@ module.exports = {
 
   //admin set dokan general settings
   async setDokanGeneralSettings() {
+    await base.click(selector.admin.dokan.settings.general)
 
     //site options
     await base.enableSwitcher(selector.admin.dokan.settings.adminAreaAccess)
@@ -280,7 +281,7 @@ module.exports = {
 
     let iframe = await base.switchToIframe(selector.admin.dokan.settings.privacyPolicyIframe)
     await base.iframeClearAndType(iframe, selector.admin.dokan.settings.privacyPolicyHtmlBody, 'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our [dokan_privacy_policy]')
-    
+
     await base.click(selector.admin.dokan.settings.privacyPolicySaveChanges)
 
     let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
@@ -978,8 +979,6 @@ module.exports = {
     await base.type(selector.admin.dokan.vendors.phoneNumber, phoneNumber)
     await base.type(selector.admin.dokan.vendors.email, email)
     await base.click(selector.admin.dokan.vendors.generatePassword)
-    // await base.wait(1)
-    await base.waitForSelector(selector.admin.dokan.vendors.password)
     await base.clearAndType(selector.admin.dokan.vendors.password, password)
     await base.type(selector.admin.dokan.vendors.username, faker.name.firstName('male'))
     await base.type(selector.admin.dokan.vendors.companyName, companyName)
@@ -987,10 +986,9 @@ module.exports = {
     await base.type(selector.admin.dokan.vendors.vatOrTaxNumber, vatOrTaxNumber)
     await base.type(selector.admin.dokan.vendors.nameOfBank, nameOfBank)
     await base.type(selector.admin.dokan.vendors.bankIban, bankIban)
-    await base.waitForSelector(selector.admin.dokan.vendors.next)
+    await base.wait(3)
     await base.click(selector.admin.dokan.vendors.next)
 
-    await base.waitForSelector(selector.admin.dokan.vendors.street1)
     // address  
     await base.type(selector.admin.dokan.vendors.street1, street1)
     await base.type(selector.admin.dokan.vendors.street2, street2)
@@ -1003,7 +1001,6 @@ module.exports = {
     await base.type(selector.admin.dokan.vendors.state, state)
     await base.click(selector.admin.dokan.vendors.next)
 
-    await base.waitForSelector(selector.admin.dokan.vendors.accountName)
     // payment options  
     await base.type(selector.admin.dokan.vendors.accountName, accountName)
     await base.type(selector.admin.dokan.vendors.accountNumber, accountNumber)
@@ -1018,7 +1015,6 @@ module.exports = {
     await base.check(selector.admin.dokan.vendors.makeVendorFeature)
     //create vendor
     await base.click(selector.admin.dokan.vendors.createVendor)
-    await base.wait(2)
     await base.clickAndWait(selector.admin.dokan.vendors.editVendorInfo)
 
     let vendorEmail = await base.getElementValue(selector.admin.dokan.vendors.editVendor.email)
