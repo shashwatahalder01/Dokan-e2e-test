@@ -123,6 +123,11 @@ module.exports = {
         await element.click()
     },
 
+    //wait for element and then click by running the JavaScript HTMLElement.click() method
+    async clickJs(selector) {
+        let element = await this.getElement(selector)
+        await page.evaluate(el => el.click(), element);
+    },
 
 
     //wait for element and then click
@@ -392,6 +397,17 @@ module.exports = {
         return value
     },
 
+    //get pseudo element style
+    async getPseudoElementStyles(selector, pseudoElement, property) {
+        let element = await this.getElement(selector)
+        let value = await page.evaluate((element, pseudoElement, property) => {
+            let stylesObject = window.getComputedStyle(element, '::' + pseudoElement)
+            let style = stylesObject.getPropertyValue(property)
+            return style
+        }, element, pseudoElement, property)
+        return value
+    },
+
     // get element class value
     async getElementClassValue(selector) {
         let element = await this.getElement(selector)
@@ -583,7 +599,7 @@ module.exports = {
         })
     },
 
-    async alertWithValue(value) {//TODO: dont work fix this
+    async alertWithValue(value) {//TODO: don't work fix this
         page.on('dialog', async dialog => {
             // console.log(dialog.message())
             // await dialog.accept()
@@ -625,8 +641,53 @@ module.exports = {
 
     //---------------------------------------------- Dokan specific functions ------------------------------------//
 
+    // enable switch : dokan setup wizard
+    async enableSwitcherSetupWizard(selector) {
+        let value = await this.getElementBackgroundColor(selector + '//span')
+        if (value == 'on') {
+            await this.click(selector)
+            await this.click(selector)
+        } else {
+            await this.click(selector)
+        }
+    },
+
+    //wait for element and then click by running the JavaScript HTMLElement.click() method
+    async enableSwitcherSetupWizard(selector) {
+        let IsVisible = await this.isVisible(selector)
+        if (IsVisible) {
+            let element = await this.getElement(selector)
+            await element.focus()
+            let value = await this.getPseudoElementStyles(selector, 'before', 'background-color')
+            // console.log('before',value)
+            if (value.includes('rgb(251, 203, 196)')) {
+                // console.log('if:',selector)
+                // await this.click(selector)
+                // await element.scrollIntoView()
+                // await page.evaluate(el => {
+                //     el.scrollIntoView()
+                //     el.click()
+                // }, element);
+
+                await page.evaluate(el => el.click(), element);
+                await this.wait(0.3)
+                // await this.click(selector)
+                await page.evaluate(el => el.click(), element);
+                // await page.evaluate(el => {
+                //     el.scrollIntoView()
+                //     el.click()
+                // }, element);
+
+            } else {
+                // console.log('else:',selector)
+                await page.evaluate(el => el.click(), element);
+            }
+
+        }
+    },
+
     //admin enable switcher , if enabled then skip : admin settings switcher
-    async enableSwitcher(selector) {
+    async enableSwitcher(selector) { //no longer needed
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             selector = selector + '//span'
         } else {

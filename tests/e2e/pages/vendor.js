@@ -134,8 +134,9 @@ module.exports = {
         await base.click(selector.vendor.vSetup.email)
         await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
 
+        //paypal
         await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
-
+        //bank transfer
         await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
         await base.select(selector.vendor.vSetup.bankAccountType, bankAccountType)
         await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)

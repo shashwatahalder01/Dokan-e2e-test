@@ -257,6 +257,11 @@ describe('admin functionality test', () => {
         await adminPage.setDokanVendorSubscriptionSettings()
     })
 
+    it.only('admin can set dokan setup wizard', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.setDokanSetupWizard()
+    })
+
 
 
 
