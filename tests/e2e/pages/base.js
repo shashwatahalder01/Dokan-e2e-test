@@ -642,52 +642,60 @@ module.exports = {
     //---------------------------------------------- Dokan specific functions ------------------------------------//
 
     // enable switch : dokan setup wizard
-    async enableSwitcherSetupWizard(selector) {
-        let value = await this.getElementBackgroundColor(selector + '//span')
-        if (value == 'on') {
-            await this.click(selector)
-            await this.click(selector)
-        } else {
-            await this.click(selector)
-        }
-    },
+    // async enableSwitcherSetupWizard(selector) {
+    //     let value = await this.getElementBackgroundColor(selector + '//span')
+    //     if (value == 'on') {
+    //         await this.click(selector)
+    //         await this.click(selector)
+    //     } else {
+    //         await this.click(selector)
+    //     }
+    // },
 
-    //wait for element and then click by running the JavaScript HTMLElement.click() method
+    // enable switch or checkbox: dokan setup wizard
     async enableSwitcherSetupWizard(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
             let element = await this.getElement(selector)
             await element.focus()
             let value = await this.getPseudoElementStyles(selector, 'before', 'background-color')
-            // console.log('before',value)
-            if (value.includes('rgb(251, 203, 196)')) {
-                // console.log('if:',selector)
-                // await this.click(selector)
-                // await element.scrollIntoView()
-                // await page.evaluate(el => {
-                //     el.scrollIntoView()
-                //     el.click()
-                // }, element);
-
-                await page.evaluate(el => el.click(), element);
+            // console.log('before', value)
+            // rgb(251, 203, 196) for switcher & rgb(242, 98, 77) for checkbox
+            if ((value.includes('rgb(251, 203, 196)')) || (value.includes('rgb(242, 98, 77)'))) {
+                // console.log('if:', selector)
+                await page.evaluate(el => el.click(), element)
                 await this.wait(0.3)
-                // await this.click(selector)
-                await page.evaluate(el => el.click(), element);
-                // await page.evaluate(el => {
-                //     el.scrollIntoView()
-                //     el.click()
-                // }, element);
-
+                await page.evaluate(el => el.click(), element)
             } else {
-                // console.log('else:',selector)
-                await page.evaluate(el => el.click(), element);
+                // console.log('else:', selector)
+                await page.evaluate(el => el.click(), element)
             }
+        }
+    },
 
+    // enable switch or checkbox: dokan setup wizard
+    async disableSwitcherSetupWizard(selector) {
+        let IsVisible = await this.isVisible(selector)
+        if (IsVisible) {
+            let element = await this.getElement(selector)
+            await element.focus()
+            let value = await this.getPseudoElementStyles(selector, 'before', 'background-color')
+            // console.log('before', value)
+            // rgb(251, 203, 196) for switcher & rgb(242, 98, 77) for checkbox
+            if ((value.includes('rgb(251, 203, 196)')) || (value.includes('rgb(242, 98, 77)'))) {
+                // console.log('if:', selector)
+                await page.evaluate(el => el.click(), element)
+            } else {
+                // console.log('else:', selector)
+                await page.evaluate(el => el.click(), element)
+                await this.wait(0.3)
+                await page.evaluate(el => el.click(), element)
+            }
         }
     },
 
     //admin enable switcher , if enabled then skip : admin settings switcher
-    async enableSwitcher(selector) { //no longer needed
+    async enableSwitcher(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             selector = selector + '//span'
         } else {
@@ -701,6 +709,22 @@ module.exports = {
             await this.click(selector)
         }
     },
+
+        //admin disable switcher , if disabled then skip : admin settings switcher
+        async disableSwitcher(selector) {
+            if (/^(\/\/|\(\/\/)/.test(selector)) {
+                selector = selector + '//span'
+            } else {
+                selector = selector + ' span'
+            }
+            let value = await this.getElementBackgroundColor(selector)
+            if (value.includes('rgb(0, 144, 255)')) {
+                await this.click(selector)
+            } else {
+                await this.click(selector)
+                await this.click(selector)
+            }
+        },
 
 
     //delete element if exist (only first will delete) dokan specific :rma,report abuse
