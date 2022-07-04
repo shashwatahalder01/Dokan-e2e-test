@@ -172,7 +172,7 @@ module.exports = {
         await base.wait(4)
 
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
-        console.log(returnMessage)
+        // console.log(returnMessage)
         if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
             expect(successMessage).toMatch('You are succefully converted as a wholesale customer')

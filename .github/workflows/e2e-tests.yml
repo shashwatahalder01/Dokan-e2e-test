@@ -40,13 +40,17 @@ jobs:
         run: |
           npm run activate-sf-test
 
+      # - name: Running the e2e tests
+      #   uses: nick-fields/retry@v2
+      #   with:
+      #     timeout_seconds: 30000
+      #     max_attempts: 1
+      #     retry_on: error
+      #     command: npm run test:e2e
+
       - name: Running the e2e tests
-        uses: nick-fields/retry@v2
-        with:
-          timeout_seconds: 30000
-          max_attempts: 1
-          retry_on: error
-          command: npm run test:e2e
+        run: |
+          npm run test:e2e
 
       - name: Generate Test Report
         uses: phoenix-actions/test-reporting@v8
@@ -56,6 +60,10 @@ jobs:
           name: e2e tests result            # Name of the check run which will be created
           path: artifacts/reports/junit.xml    # Path to test results
           reporter: jest-junit  
+          only-summary: 'false' # Allows you to generate only the summary.
+          list-suites: 'failed'  # Limits which test suites are listed: 'all', 'failed'
+          list-tests: 'failed'       # Limits which test cases are listed: 'all','failed', 'none'
+          fail-on-error: 'true'   # Set action as failed if test report contains any failed test
 
       - name: Test results
         run: |
