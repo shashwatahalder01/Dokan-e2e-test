@@ -1,18 +1,15 @@
 require('dotenv').config()
-const { createURL } = require("@wordpress/e2e-test-utils")
 const base = require("./base.js")
-const vendorPage = require("./vendor.js")
-const vDashboardLocators = require("./vdashboard-locators.js")
-const vdashboardLocators = require('./vdashboard-locators.js')
+const vDashboardLocators = require("./vDashboard-locators.js")
 
 
 module.exports = {
 
     // ACTIONS ***->
 
-/*
-*DASHBOARD Page
-*/
+    /*
+    *DASHBOARD Page
+    */
 
     //Dashboard Page Explore
     async vDashboardExplore() {
@@ -20,12 +17,12 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.dashboardPageContent)
         //FATAL Error Check
         await base.checkPHPError()
-        
+
         //Check Banner (PR0)
-        if(process.env.DOKAN_PRO == 'true'){
-        await this.visibilityChecker(vDashboardLocators.vDashboardPage.banner)
-        console.log('Dokan-Pro: Banner')
-        } 
+        if (process.env.DOKAN_PRO == 'true') {
+            await this.visibilityChecker(vDashboardLocators.vDashboardPage.banner)
+            console.log('Dokan-Pro: Banner')
+        }
         //Check Sales Count
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.salesCount)
         //Check Sales Chart of Month
@@ -33,26 +30,26 @@ module.exports = {
         //Check Order Details
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.orderDetails)
         //Check Latest Announcements (PR0)
-        if(process.env.DOKAN_PRO == 'true'){
-        await this.visibilityChecker(vDashboardLocators.vDashboardPage.latestAnnouncement)
-        console.log('Dokan-Pro: Latest Announcement')
+        if (process.env.DOKAN_PRO == 'true') {
+            await this.visibilityChecker(vDashboardLocators.vDashboardPage.latestAnnouncement)
+            console.log('Dokan-Pro: Latest Announcement')
         }
         //Check Reviews Details (PR0)
-        if(process.env.DOKAN_PRO == 'true'){
-        await this.visibilityChecker(vDashboardLocators.vDashboardPage.reviewsDetails)
-        console.log('Dokan-Pro: Reviews Details')
+        if (process.env.DOKAN_PRO == 'true') {
+            await this.visibilityChecker(vDashboardLocators.vDashboardPage.reviewsDetails)
+            console.log('Dokan-Pro: Reviews Details')
         }
         //Check Product Details
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.productsDetails)
-        
-        console.log('Checked all the DIVs')
+
+        console.log('Checked all the DIVs: Vendor Dashboard')
     },
-  
 
 
-/*
-*PRODUCTS Page
-*/
+
+    /*
+    *PRODUCTS Page
+    */
 
     //Product Page Explore
     async vProductExplore() {
@@ -60,37 +57,35 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPageContent)
         //FATAL Error Check
         await base.checkPHPError()
-        
+
         //No Product
         var availableNoProducts = await base.isVisible(vDashboardLocators.vProductsPage.noProduct)
-        if(availableNoProducts){
+        if (availableNoProducts) {
             console.log('No Product was Added')
             return
-
         }
 
         //ELSE -> Product Present
         //Check All + InStock ----- Add Product
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsAll) //All Page
-        console.log('All Page')
+        console.log('Product All Page')
         //----------------Pages----------------//
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOnline) //Online Page
-            await base.clickXpathAndWait(vDashboardLocators.vProductsPage.productsOnline)
-            console.log('Online Page')
-            //await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOnlineStatus)
-         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsDraft) //Draft Page
-            await base.clickXpathAndWait(vDashboardLocators.vProductsPage.productsDraft)
-            console.log('Draft Page')
-           // await this.visibilityChecker(vDashboardLocators.vProductsPage.productdDraftStatus)
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline)
+        console.log('Product Online Page')
+        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsDraft) //Draft Page
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsDraft)
+        console.log('Product Draft Page')
+        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPendingReview) //Pending Review Page
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsPendingReview)
+        console.log('Product Pending Review Page')
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsInStock) //In Stock Page
-            await base.clickXpathAndWait(vDashboardLocators.vProductsPage.productsInStock)
-            console.log('In Stock Page')
-           // await this.visibilityChecker(vDashboardLocators.vProductsPage.productInStockStatus)
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsInStock)
+        console.log('Product In Stock Page')
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOutOfStock) //Out of Stock Page
-            await base.clickXpathAndWait(vDashboardLocators.vProductsPage.productsOutOfStock)
-            console.log('Out of Stock Page')
-           // await this.visibilityChecker(vDashboardLocators.vProductsPage.productOutOfStockStatus)
-        
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsOutOfStock)
+        console.log('Product Out of Stock Page')
+
 
         await this.visibilityChecker(vDashboardLocators.vProductsPage.addNewProductButton)
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsImportButton)
@@ -98,7 +93,7 @@ module.exports = {
 
         //Filter
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterDates)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterCatergory)
+        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterCategory)
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterType)
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterButton)
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterSelect)
@@ -128,7 +123,7 @@ module.exports = {
 
         //Product Category + Tag + Description
         await this.visibilityChecker(vDashboardLocators.vProductsAddPage.selectCategory)
-        await this.visibilityChecker(vDashboardLocators.vProductsAddPage.selecteTags)
+        await this.visibilityChecker(vDashboardLocators.vProductsAddPage.selectTags)
         await this.visibilityChecker(vDashboardLocators.vProductsAddPage.productDescription)
 
         //Add Button + Create & Add
@@ -138,10 +133,10 @@ module.exports = {
         console.log('Product Add Page')
     },
 
-    //Product Deatils Page Explore
+    //Product Details Page Explore
     async vProductDetailsExplore() {
 
-        //await base.clickXpathAndWait(vDashboardLocators.vProductsDetailsPage.productClick1)
+        //await base.clickAndWait(vDashboardLocators.vProductsDetailsPage.productClick1)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditPageTitle)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStatus)
@@ -150,7 +145,7 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditTitle)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditImage)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGalleryImage)
-       
+
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditPermalink)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditEditButton)
 
@@ -171,15 +166,18 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditSKU)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStockStatus)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditInventoryTick1)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditStockQuantityEnable) //Click to Enable
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStockQuantity)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStockThreshold)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAllowBackorders)
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditStockQuantityEnable) //Click to Enable
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStockQuantity)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStockThreshold)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAllowBackorders)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditInventoryTick2)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationTick1)
-        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.prodcutEditGeolocationStoreSettings)
+        //var availableGeoSettings = await base.isVisible(vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings)
+        if (vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings == 'true') {
+            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings)
+        }
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAddonsBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAddonsExpandAll)
@@ -192,17 +190,17 @@ module.exports = {
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxTick1)
-            //await base.clickXpathAndWait(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxTick1) //Click to Disable
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxWeight)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxLength)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxWidth)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxHeight)
+        //await base.clickAndWait(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxTick1) //Click to Disable
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxWeight)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxLength)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxWidth)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxHeight)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxClass)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditShippingTaxSettings)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditLinkedProductsBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditLinkedProductsUpsells)
-        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditLinkedProductsCrosssells)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditLinkedProductsCrossSells)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAttributeBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAttributeCustom)
@@ -211,26 +209,26 @@ module.exports = {
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsTick1)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsOverride) //Click to Enable
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsLabel)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsType)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsPolicy)
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsOverride) //Click to Enable
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsLabel)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsType)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditRMAOptionsPolicy)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesaleBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesaleTick1)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditWholesaleEnable) //Click to Enable
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesalePrice)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesaleQuantity)
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditWholesaleEnable) //Click to Enable
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesalePrice)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesaleQuantity)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxTick1)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditMinMaxEnable) //Click to Enable
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinQuantity)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMaxQuantity)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinAmount)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMaxAmount)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxOrderRules)
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxCategoryRules)
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditMinMaxEnable) //Click to Enable
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinQuantity)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMaxQuantity)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinAmount)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMaxAmount)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxOrderRules)
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxCategoryRules)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditOtherOptionsBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditOtherOptionsStatus)
@@ -240,21 +238,21 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditOtherOptionsEnableReviews)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseProductBlock)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnable) //Click to Open Modal
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnablePopup)
-            await base.clickXpath(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnablePopupCancel) //Click to Close Modal
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnable) //Click to Open Modal
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnablePopup)
+        await base.click(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnablePopupCancel) //Click to Close Modal
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditSaveChangesButton)
-        
+
         console.log('Product Details Page')
-        
+
     },
 
 
 
-/*
-*ORDERS Page
-*/
+    /*
+    *ORDERS Page
+    */
 
     //Orders Page Explore
     async vOrdersExplore() {
@@ -262,10 +260,10 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPageContent)
         //FATAL Error Check
         await base.checkPHPError()
-        
+
         //No Orders
         var availableNoOrders = await base.isVisible(vDashboardLocators.vOrdersPage.noOrder)
-        if(availableNoOrders){
+        if (availableNoOrders) {
             console.log('No Order was Placed')
             return
 
@@ -276,32 +274,32 @@ module.exports = {
         *
         *Orders Page */
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersAll) //All Page
-        console.log('All Page')
+        console.log('Orders All Page')
         //----------------Pages----------------//
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCompleted) //Completed Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersCompleted)
-            console.log('Completed Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCompleted)
+        console.log('Orders Completed Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersProcessing) //Processing Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersProcessing)
-            console.log('Processing Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersProcessing)
+        console.log('Orders Processing Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOnHold) //On Hold Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersOnHold)
-            console.log('On Hold Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersOnHold)
+        console.log('Orders On-Hold Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPending) //Pending Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersPending)
-            console.log('Pending Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersPending)
+        console.log('Orders Pending Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCancelled) //Cancelled Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersCancelled)
-            console.log('Cancelled Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCancelled)
+        console.log('Orders Cancelled Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersRefunded) //Refunded Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersRefunded)
-            console.log('Refunded Page')
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersRefunded)
+        console.log('Orders Refunded Page')
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFailed) //Failed Page
-            await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersFailed)
-            console.log('Failed Page')
-        
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersFailed)
+        console.log('Orders Failed Page')
+
         //Return to All
-        await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
+        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterDate)
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterCustomer)
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterButton)
@@ -321,45 +319,61 @@ module.exports = {
 
     //Order Details Page Explore
     async vOrdersDetailsExplore() {
-       
-       
-        await base.clickXpathAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
-        
+
+
+        await base.click(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
+        console.log('Here 1')
         //Details Page
-        await base.clickXpathAndWait(vdashboardLocators.vOrdersDetailsPage.ordersCompletedOrder1)
+        await base.clickAndWait(vDashboardLocators.vOrdersDetailsPage.ordersCompletedOrder1)
+        console.log('Here 2')
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsPage)
+        console.log('Here 3')
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsHeading)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.oderDetailsBody)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsBackButton)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsPage)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsRequestRefund)
+        await base.click(vDashboardLocators.vOrdersDetailsPage.orderDetailsRequestRefund)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsRefundItems)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsHeading)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.oderDetailsBody)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsBackButton)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsBillingAddress)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsShippingAddress)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsRequestRefund)
-            await base.clickXpath(vdashboardLocators.vOrdersDetailsPage.orderDetailsRequestRefund)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsRefundItems)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsDownloadableProductsSection)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsDownloadableProductsSelect)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsGrantAccess)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsBillingAddress)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsShippingAddress)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsGeneralDetailsSection)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsOrderNotesSection)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesTextBox)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsDownladableProductsSection)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsDownladableProductsSelect)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsGrantAccess)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesCustomer)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesButton)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsGeneralDetailsSection)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsOrderNotesSection)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesTextBox)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumber)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberName)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberValue)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberDate)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberAddDetails)
+        await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberClose)
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesCustomer)
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsAddNotesButton)
+        console.log('Orders Details Page')
 
-        await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumber)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberName)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberValue)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberDate)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberAddDetails)
-            await this.visibilityChecker(vdashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberClose)
+    },
 
-            console.log('Orders Details Page')
+
+
+    /*
+    *USER SUBSCRIPTIONS Page
+    */
+
+    //User Subscriptions Page Explore
+    async vUserSubscriptionsPageExplore() {
+
+    },
+
+    //User Subscriptions Details Page Explore
+    async vUserSubscriptionsDetailsPageExplore() {
 
     },
 
@@ -368,20 +382,28 @@ module.exports = {
 
 
 
-    
 
 
-/*
-.
-.
-.
-.
-.
-*/
 
-/* 
-*Checker FUNCTION 
-*/
+
+
+
+
+
+
+    /*
+    .
+    .
+    .
+    .
+    .
+    *Checker FUNCTION 
+    .
+    .
+    .
+    .
+    .
+    */
 
     //-[Checker FUNCTION]
     async visibilityChecker(locator) {
@@ -390,5 +412,5 @@ module.exports = {
     }
 
 
-    
+
 }

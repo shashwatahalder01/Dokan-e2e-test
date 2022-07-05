@@ -1,14 +1,9 @@
-const { createURL } = require("@wordpress/e2e-test-utils")
-const base = require("./base.js")
-const vendorPage = require("./vendor.js")
-
-
 module.exports = {
 
-/**LOCATORS**/   
-/*
-Dashboard Page Locators
-*/
+    /**LOCATORS**/
+    /*
+    Dashboard Page Locators
+    */
     vDashboardPage: {
         // dashboard Home
         dashboardPageContent: '//div[@class="dokan-dashboard-content"]',
@@ -25,31 +20,33 @@ Dashboard Page Locators
 
 
 
-/*
-Products Page Locators
-*/
+    /*
+    Products Page Locators
+    */
     vProductsPage: {
         productsPageContent: '//div[@class="dokan-dashboard-content dokan-product-listing"]',
-        
+
         noProduct: '//h4[normalize-space()="No Products Found!"]',
-        
+
         productsAll: '//li[@class="active"]',
-        productsOnline: '//a[normalize-space()="Online (5)"]',
-            productsOnlineStatus: '//tbody/tr[2]/td[3]/label[1]',
-        productsInStock: '//a[normalize-space()="In stock (5)"]',
-            productsInStockStatus: '//tbody/tr[2]/td[6]',
-        productsDraft: '//a[normalize-space()="Draft (1)"]',
-            productdsDraftStatus: '//label[normalize-space()="Draft"]',
-        productsOutOfStock:'//a[normalize-space()="Out of stock (1)"]',
-            productsOutOfStockStatus: '//td[@data-title="Stock"]',
+        productsOnline: '//a[normalize-space()="Online (3)"]', //TODO: Generalize locator[specified value used in locator]
+        //productsOnlineStatus: '//tbody/tr[2]/td[3]/label[1]',
+        productsDraft: '//a[normalize-space()="Draft (1)"]', //TODO: Generalize locator[specified value used in locator]
+        //productsDraftStatus: '//label[normalize-space()="Draft"]',
+        productsPendingReview: '//a[normalize-space()="Pending Review (1)"]',//TODO: Generalize locator[specified value used in locator]
+        //productsPendingReviewStatus: '',
+        productsInStock: '//a[normalize-space()="In stock (4)"]',//TODO: Generalize locator[specified value used in locator]
+        //productsInStockStatus: '//tbody/tr[2]/td[6]',
+        productsOutOfStock: '//a[normalize-space()="Out of stock (1)"]',//TODO: Generalize locator[specified value used in locator]
+        //productsOutOfStockStatus: '//td[@data-title="Stock"]',
 
 
         addNewProductButton: '//a[@class="dokan-btn dokan-btn-theme dokan-add-new-product"]',
         productsImportButton: '//a[@class="dokan-btn"][normalize-space()="Import"]',
         productsExportButton: '//a[normalize-space()="Export"]',
-        
+
         productsFilterDates: '//select[@id="filter-by-date"]',
-        productsFilterCatergory: '//form[@class="dokan-form-inline dokan-w8 dokan-product-date-filter"]//select[@id="product_cat"]',
+        productsFilterCategory: '//form[@class="dokan-form-inline dokan-w8 dokan-product-date-filter"]//select[@id="product_cat"]',
         productsFilterType: '//select[@id="filter-by-type"]',
         productsFilterButton: '//button[normalize-space()="Filter"]',
         productsFilterSelect: '//select[@name="filter_by_other"]',
@@ -74,18 +71,18 @@ Products Page Locators
         productGalleryImage: '//li[@class="add-image add-product-images tips"]',
 
         selectCategory: '//div[@class="product-full-container"]//span[@id="select2-product_cat-container"]',
-        selecteTags: '//input[@placeholder="Select product tags"]',
+        selectTags: '//input[@placeholder="Select product tags"]',
         productDescription: '//textarea[@placeholder="Enter some short description about this product..."]',
-       
+
         createProductButton: '//input[@id="dokan-create-new-product-btn"]',
         createAndAddNewButton: '//input[@id="dokan-create-and-add-new-product-btn"]',
 
     },
 
     vProductsDetailsPage: {
-        productClick1: '//a[normalize-space()="One Plus 10T Pro"]',
-        productClick2: '//a[normalize-space()="iPhone 13"]',
-       
+        productClick1: '//a[normalize-space()="One Plus 10T Pro"]', //TODO: Generalize locator[specified value used in locator]
+        productClick2: '//a[normalize-space()="iPhone 13"]', //TODO: Generalize locator[specified value used in locator]
+
         productEditPageTitle: '//header[@class="dokan-dashboard-header dokan-clearfix"]//h1[@class="entry-title"]',
         productEditStatus: '//span[@class="dokan-label dokan-label-success dokan-product-status-label"]',
         viewEditProductButton: '//span[@class="dokan-right"]',
@@ -108,7 +105,7 @@ Products Page Locators
 
         productEditDownloadableTick: '//div[@class="content-half-part downloadable-checkbox"]',
         productEditVirtualTick: '//div[@class="content-half-part virtual-checkbox"]',
-    
+
         productEditPrice: '//input[@id="_regular_price"]',
         productEditDiscountedPrice: '//input[@id="_sale_price"]',
 
@@ -122,16 +119,16 @@ Products Page Locators
         productEditSKU: '//input[@id="_sku"]',
         productEditStockStatus: '//select[@id="_stock_status"]',
         productEditInventoryTick1: '//label[normalize-space()="Enable product stock management"]',
-            productEditStockQuantityEnable: '//label[normalize-space()="Enable product stock management"]',  //Click Checkbox
-            productEditStockQuantity: '//input[@name="_stock"]',
-            productEditStockThreshold: '//input[@name="_low_stock_amount"]',
-            productEditAllowBackorders: '//select[@id="_backorders"]',
+        productEditStockQuantityEnable: '//label[normalize-space()="Enable product stock management"]',  //Click Checkbox
+        productEditStockQuantity: '//input[@name="_stock"]',
+        productEditStockThreshold: '//input[@name="_low_stock_amount"]',
+        productEditAllowBackorders: '//select[@id="_backorders"]',
         productEditInventoryTick2: '//label[@for="_sold_individually"]',
 
         //Geolocation
         productEditGeolocationBlock: '//div[@class="dokan-geolocation-options dokan-edit-row dokan-clearfix"]',
         productEditGeolocationTick1: '//label[normalize-space()="Same as store"]',
-        prodcutEditGeolocationStoreSettings: '//a[normalize-space()="store settings"]',
+        productEditGeolocationStoreSettings: '//a[normalize-space()="store settings"]',
 
         //Add-Ons
         productEditAddonsBlock: '//div[@id="dokan-product-addons-options"]',
@@ -147,18 +144,18 @@ Products Page Locators
         //Shipping and Tax
         productEditShippingTaxBlock: '//h2[normalize-space()="Shipping and Tax"]',
         productEditShippingTaxTick1: '//label[normalize-space()="This product requires shipping"]',
-            productEditShippingTaxTick1: '//input[@id="_disable_shipping"]', //Click to Disable
-            productEditShippingTaxWeight: '//input[@id="_weight"]',
-            productEditShippingTaxLength: '//input[@id="_length"]',
-            productEditShippingTaxWidth: '//input[@id="_width"]',
-            productEditShippingTaxHeight: '//input[@id="_height"]',
+        productEditShippingTaxTick1: '//input[@id="_disable_shipping"]', //Click to Disable
+        productEditShippingTaxWeight: '//input[@id="_weight"]',
+        productEditShippingTaxLength: '//input[@id="_length"]',
+        productEditShippingTaxWidth: '//input[@id="_width"]',
+        productEditShippingTaxHeight: '//input[@id="_height"]',
         productEditShippingTaxClass: '//select[@id="product_shipping_class"]',
         productEditShippingTaxSettings: '//a[normalize-space()="shipping settings"]',
 
         //Linked Products
         productEditLinkedProductsBlock: '//div[contains(@class,"dokan-linked-product-options dokan-edit-row dokan-clearfix hide_if_external")]',
-        productEditLinkedProductsUpsells: '//div[@class="content-half-part dokan-form-group hide_if_variation"]',     
-        productEditLinkedProductsCrosssells: '//div[contains(@class,"dokan-linked-product-options dokan-edit-row dokan-clearfix hide_if_external")]//div[contains(@class,"dokan-section-content")]//div[1]',
+        productEditLinkedProductsUpsells: '//div[@class="content-half-part dokan-form-group hide_if_variation"]',
+        productEditLinkedProductsCrossSells: '//div[contains(@class,"dokan-linked-product-options dokan-edit-row dokan-clearfix hide_if_external")]//div[contains(@class,"dokan-section-content")]//div[1]', //TODO: Shorten if possible
 
         //Attribute
         productEditAttributeBlock: '//div[contains(@class,"dokan-attribute-variation-options dokan-edit-row dokan-clearfix hide_if_external")]',
@@ -169,44 +166,44 @@ Products Page Locators
         //RMA Options
         productEditRMAOptionsBlock: '//div[contains(@class,"dokan-rma-options dokan-edit-row dokan-clearfix hide_if_external")]',
         productEditRMAOptionsTick1: '//label[@for="dokan_rma_product_override"]',
-            productEditRMAOptionsOverride: '//input[@id="dokan_rma_product_override"]', //Click Checkbox
-            productEditRMAOptionsLabel: '//input[@id="dokan-rma-label"]',
-            productEditRMAOptionsType: '//select[@id="dokan-warranty-type"]',
-            productEditRMAOptionsPolicy: '//div[@id="wp-warranty_policy-wrap"]',            
+        productEditRMAOptionsOverride: '//input[@id="dokan_rma_product_override"]', //Click Checkbox
+        productEditRMAOptionsLabel: '//input[@id="dokan-rma-label"]',
+        productEditRMAOptionsType: '//select[@id="dokan-warranty-type"]',
+        productEditRMAOptionsPolicy: '//div[@id="wp-warranty_policy-wrap"]',
 
         //Wholesale Options
         productEditWholesaleBlock: '//div[contains(@class,"dokan-wholesale-options dokan-edit-row dokan-clearfix show_if_simple show_if_external")]',
         productEditWholesaleTick1: '//div[@class="dokan-wholesale-options dokan-edit-row dokan-clearfix show_if_simple show_if_external"]//div[@class="dokan-form-group"]',
-            productEditWholesaleEnable: '//label[normalize-space()="Enable wholesale for this product"]', //Click Checkbox
-            productEditWholesalePrice: '//input[@id="dokan-wholesale-price"]',
-            productEditWholesaleQuantity: '//input[@id="dokan-wholesale-qty"]',
+        productEditWholesaleEnable: '//label[normalize-space()="Enable wholesale for this product"]', //Click Checkbox
+        productEditWholesalePrice: '//input[@id="dokan-wholesale-price"]',
+        productEditWholesaleQuantity: '//input[@id="dokan-wholesale-qty"]',
 
 
         //Min-Max Options
         productEditMinMaxBlock: '//div[contains(@class,"dokan-edit-row dokan-clearfix dokan-border-top dokan-form-group dokan-product-type-container show_if_simple")]',
         productEditMinMaxTick1: '//label[normalize-space()="Enable Min Max Rule for this product"]',
-            productEditMinMaxEnable: '//label[normalize-space()="Enable Min Max Rule for this product"]', //Click Checkbox
-            productEditMinQuantity: '//input[@id="min_quantity"]',
-            productEditMaxQuantity: '//input[@id="max_quantity"]',
-            productEditMinAmount: '//input[@id="min_amount"]',
-            productEditMaxAmount: '//input[@id="max_amount"]',
-            productEditMinMaxOrderRules: '//label[normalize-space()="Order rules: Do not count"]',
-            productEditMinMaxCategoryRules: '//label[normalize-space()="Category rules: Exclude"]',
+        productEditMinMaxEnable: '//label[normalize-space()="Enable Min Max Rule for this product"]', //Click Checkbox
+        productEditMinQuantity: '//input[@id="min_quantity"]',
+        productEditMaxQuantity: '//input[@id="max_quantity"]',
+        productEditMinAmount: '//input[@id="min_amount"]',
+        productEditMaxAmount: '//input[@id="max_amount"]',
+        productEditMinMaxOrderRules: '//label[normalize-space()="Order rules: Do not count"]',
+        productEditMinMaxCategoryRules: '//label[normalize-space()="Category rules: Exclude"]',
 
 
         //Other Options
         productEditOtherOptionsBlock: '//div[contains(@class,"dokan-other-options dokan-edit-row dokan-clearfix")]',
         productEditOtherOptionsStatus: '//select[@id="post_status"]',
         productEditOtherOptionsVisibilityOptions: '//select[@id="_visibility"]',
-        
+
         productEditOtherOptionsPurchaseNote: '//textarea[@id="_purchase_note"]',
         productEditOtherOptionsEnableReviews: '//label[normalize-space()="Enable product reviews"]',
 
         //Advertise Product
         productEditAdvertiseProductBlock: '//div[contains(@class,"dokan-edit-row dokan-proudct-advertisement dokan-clearfix")]',
-            productEditAdvertiseEnable: '//label[@for="dokan_advertise_single_product"]', //Click Checkbox
-            productEditAdvertiseEnablePopup: '//div[@class="swal2-popup swal2-modal swal2-icon-warning swal2-show"]',
-            productEditAdvertiseEnablePopupCancel: '//button[@class="swal2-cancel swal2-styled swal2-default-outline"]', //Click Cancel Button
+        productEditAdvertiseEnable: '//label[@for="dokan_advertise_single_product"]', //Click Checkbox
+        productEditAdvertiseEnablePopup: '//div[@class="swal2-popup swal2-modal swal2-icon-warning swal2-show"]',
+        productEditAdvertiseEnablePopupCancel: '//button[@class="swal2-cancel swal2-styled swal2-default-outline"]', //Click Cancel Button
 
 
         //Save Changes
@@ -217,22 +214,22 @@ Products Page Locators
 
 
 
-/*
-Orders Page Locators
-*/
+    /*
+    Orders Page Locators
+    */
     vOrdersPage: {
         ordersPageContent: '//article[@class="dokan-orders-area"]',
 
         noOrder: '//div[@class="dokan-error"]',
 
-        ordersAll: '//a[normalize-space()="All (4)"]',
-        ordersCompleted: '//a[normalize-space()="Completed (1)"]',
-        ordersProcessing: '//a[normalize-space()="Processing (1)"]', 
-        ordersOnHold: '//a[normalize-space()="On-hold (1)"]',
-        ordersPending: '//a[normalize-space()="Pending (0)"]', 
-        ordersCancelled: '//a[normalize-space()="Cancelled (1)"]',
-        ordersRefunded: '//a[normalize-space()="Refunded (0)"]',
-        ordersFailed: '//a[normalize-space()="Failed (0)"]',
+        ordersAll: '//a[normalize-space()="All (7)"]',  //TODO: Generalize locator[specified value used in locator]
+        ordersCompleted: '//a[normalize-space()="Completed (4)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersProcessing: '//a[normalize-space()="Processing (1)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersOnHold: '//a[normalize-space()="On-hold (1)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersPending: '//a[normalize-space()="Pending (0)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersCancelled: '//a[normalize-space()="Cancelled (1)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersRefunded: '//a[normalize-space()="Refunded (0)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersFailed: '//a[normalize-space()="Failed (0)"]', //TODO: Generalize locator[specified value used in locator]
 
         ordersFilterDate: '//input[@id="order_date_filter"]',
         ordersFilterCustomer: '//span[@class="select2-selection__placeholder"]',
@@ -249,21 +246,21 @@ Orders Page Locators
 
     vOrdersDetailsPage: {
 
-        ordersCompletedOrder1: '//strong[normalize-space()="Order 26"]',  //Order in the List
+        ordersCompletedOrder1: '//strong[normalize-space()="Order 46"]',  //Order in the List //TODO: Generalize locator[specified value used in locator]
 
-        orderDetailsPage: '//div[@class="dokan-dashboard-content dokan-orders-content"]',
+        orderDetailsPage: '//article[@class="dokan-orders-area"]',
 
-        orderDetailsHeading: '//strong[normalize-space()="Order#26"]',
+        orderDetailsHeading: '//strong[normalize-space()="Order#46"]', //TODO: Generalize locator[specified value used in locator]
         oderDetailsBody: '//div[@id="woocommerce-order-items"]',
         orderDetailsBackButton: '//a[contains(text(),"← Orders")]',
         orderDetailsRequestRefund: '//button[normalize-space()="Request Refund"]',
-            orderDetailsRefundItems: '//div[@class="wc-order-data-row wc-order-refund-items"]',
+        orderDetailsRefundItems: '//div[@class="wc-order-data-row wc-order-refund-items"]',
 
         orderDetailsBillingAddress: '//div[@class="dokan-left dokan-order-billing-address"]',
         orderDetailsShippingAddress: '//div[@class="dokan-left dokan-order-shipping-address"]',
 
-        orderDetailsDownladableProductsSection: '//div[@class="order_download_permissions wc-metaboxes-wrapper"]',
-        orderDetailsDownladableProductsSelect: '//input[@placeholder="Choose a downloadable product…"]',
+        orderDetailsDownloadableProductsSection: '//div[@class="order_download_permissions wc-metaboxes-wrapper"]',
+        orderDetailsDownloadableProductsSelect: '//input[@placeholder="Choose a downloadable product…"]',
         orderDetailsGrantAccess: '//button[normalize-space()="Grant Access"]',
 
         orderDetailsGeneralDetailsSection: '//div[@class="dokan-panel-body general-details"]',
@@ -274,17 +271,62 @@ Orders Page Locators
         orderDetailsAddNotesButton: '//input[@name="add_order_note"]',
 
         orderDetailsTrackingNumber: '//input[@id="dokan-add-tracking-number"]',
-            orderDetailsTrackingNumberName: '//input[@id="shipping_provider"]',
-            orderDetailsTrackingNumberValue: '//input[@id="tracking_number"]',
-            orderDetailsTrackingNumberDate: '//input[@id="shipped-date"]',
-            orderDetailsTrackingNumberAddDetails: '//input[@id="add-tracking-details"]',
-            orderDetailsTrackingNumberClose: '//button[@id="dokan-cancel-tracking-note"]'
+        orderDetailsTrackingNumberName: '//input[@id="shipping_provider"]',
+        orderDetailsTrackingNumberValue: '//input[@id="tracking_number"]',
+        orderDetailsTrackingNumberDate: '//input[@id="shipped-date"]',
+        orderDetailsTrackingNumberAddDetails: '//input[@id="add-tracking-details"]',
+        orderDetailsTrackingNumberClose: '//button[@id="dokan-cancel-tracking-note"]'
+
+    },
+
+    /*
+    User Subscriptions Page Locators
+    */
+    vUserSubscriptionsPage: {
+        userSubscriptionsContent: '//article[@class="dashboard-user-subscription-area"]',
+        userSubscriptionsHeader: '//h1[normalize-space()="User Subscriptions"]',
+
+        userSubscriptionsFilterInputBox: '//input[@id="order_date_filter"]',
+        userSubscriptionsFilterButton: '//input[@name="dokan_order_filter"]',
+
+        userSubscriptionsItemTable: '//table[@class="dokan-table"]'
+
+    },
+
+    vUserSubscriptionsDetailsPage: {
+
+        ordersCompletedOrder1: '',  //User Subscription in the List
+
+        userSubscriptionsDetailsContent: '',
+
+        userSubscriptionsDetailsHeading: '//strong[normalize-space()="Subscription#64"]', //TODO: Generalize locator[specified value used in locator]
+        userSubscriptionsDetailsBody: '//div[@id="woocommerce-order-items"]',
+
+        userSubscriptionsDetailsBillingAddress: '//div[@class="dokan-left dokan-order-billing-address"]',
+        userSubscriptionsDetailsShippingAddress: '//div[@class="dokan-left dokan-order-shipping-address"]',
+
+        userSubscriptionsDetailsDownloadableProductsSection: '//div[@class="order_download_permissions wc-metaboxes-wrapper"]',
+        userSubscriptionsDetailsDownloadableProductsSelect: '//input[@placeholder="Choose a downloadable product…"]',
+        userSubscriptionsDetailsGrantAccess: '//button[normalize-space()="Grant Access"]',
+
+        userSubscriptionsDetailsRelatedOrders: '//strong[normalize-space()="Related orders"]',
+        userSubscriptionsDetailsRelatedOrders: '//table[@class="dokan-table"]',
+
+
+        userSubscriptionsDetailsGeneralDetailsSection: '//div[@class="dokan-panel-body general-details"]',
+
+        userSubscriptionsDetailsSubscriptionScheduleSection: '//form[@id="dokan-subscription-schedule-form"]',
+        userSubscriptionsDetailsSubscriptionScheduleNextDate: '//div[@id="subscription-next_payment-date"]',
+        userSubscriptionsDetailsSubscriptionScheduleEndDate: '//div[@id="subscription-end-date"]',
+        userSubscriptionsDetailsSubscriptionScheduleUpdateSchedule: '//input[@name="dokan_change_subscription_schedule"]',
+
+        userSubscriptionsDetailsSubscriptionNotes: '//div[@id="dokan-order-notes"]',
+        userSubscriptionsDetailsSubscriptionNotesInput: '//textarea[@id="add-note-content"]',
+        userSubscriptionsDetailsSubscriptionNotesType: '//select[@id="order_note_type"]',
+        userSubscriptionsDetailsSubscriptionNotesAdd: '//input[@name="add_order_note"]',
+
 
     }
-
-
-
-
 
 
 
