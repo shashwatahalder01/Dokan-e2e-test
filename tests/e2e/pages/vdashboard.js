@@ -23,7 +23,6 @@ module.exports = {
         //Check Banner (PR0)
         if (process.env.DOKAN_PRO == 'true') {
             await this.visibilityChecker(vDashboardLocators.vDashboardPage.banner)
-            console.log('Dokan-Pro: Banner')
         }
         //Check Sales Count
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.salesCount)
@@ -34,16 +33,13 @@ module.exports = {
         //Check Latest Announcements (PR0)
         if (process.env.DOKAN_PRO == 'true') {
             await this.visibilityChecker(vDashboardLocators.vDashboardPage.latestAnnouncement)
-            console.log('Dokan-Pro: Latest Announcement')
         }
         //Check Reviews Details (PR0)
         if (process.env.DOKAN_PRO == 'true') {
             await this.visibilityChecker(vDashboardLocators.vDashboardPage.reviewsDetails)
-            console.log('Dokan-Pro: Reviews Details')
         }
         //Check Product Details
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.productsDetails)
-        console.log('Checked all the DIVs: Vendor Dashboard')
     },
 
 
@@ -76,19 +72,19 @@ module.exports = {
             //----------------Pages----------------//
             await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOnline) //Online Page
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline)
-            console.log('Product Online Page')
+ 
             await this.visibilityChecker(vDashboardLocators.vProductsPage.productsDraft) //Draft Page
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsDraft)
-            console.log('Product Draft Page')
+
             await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPendingReview) //Pending Review Page
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsPendingReview)
-            console.log('Product Pending Review Page')
+
             await this.visibilityChecker(vDashboardLocators.vProductsPage.productsInStock) //In Stock Page
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsInStock)
-            console.log('Product In Stock Page')
+
             await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOutOfStock) //Out of Stock Page
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsOutOfStock)
-            console.log('Product Out of Stock Page')
+
 
             await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline) //return to online page
 
@@ -139,8 +135,6 @@ module.exports = {
         //Add Button + Create & Add
         await this.visibilityChecker(vDashboardLocators.vProductsAddPage.createProductButton)
         await this.visibilityChecker(vDashboardLocators.vProductsAddPage.createAndAddNewButton)
-
-        console.log('Product Add Page')
     },
 
     //Product Details Page Explore
@@ -255,9 +249,6 @@ module.exports = {
         await base.click(vDashboardLocators.vProductsDetailsPage.productEditAdvertiseEnablePopupCancel) //Click to Close Modal
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditSaveChangesButton)
-
-        console.log('Product Details Page')
-
     },
 
 
@@ -286,29 +277,29 @@ module.exports = {
             // Orders Present
             /*Orders Page */
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersAll) //All Page
-            console.log('Orders All Page')
+
             //----------------Pages----------------//
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCompleted) //Completed Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCompleted)
-            console.log('Orders Completed Page')
+ 
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersProcessing) //Processing Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersProcessing)
-            console.log('Orders Processing Page')
+
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOnHold) //On Hold Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersOnHold)
-            console.log('Orders On-Hold Page')
+
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPending) //Pending Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersPending)
-            console.log('Orders Pending Page')
+  
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCancelled) //Cancelled Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCancelled)
-            console.log('Orders Cancelled Page')
+ 
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersRefunded) //Refunded Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersRefunded)
-            console.log('Orders Refunded Page')
+ 
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFailed) //Failed Page
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersFailed)
-            console.log('Orders Failed Page')
+ 
 
             //Return to All
             await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
@@ -325,8 +316,6 @@ module.exports = {
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.orderBulkActionApply)
 
             await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOrderList)
-
-            console.log('Orders Page')
         
     },
 
@@ -334,13 +323,11 @@ module.exports = {
     async vOrdersDetailsExplore() {
         await base.goto('dashboard/orders')
 
-        // await base.click(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
-        console.log('Here 1')
         //Details Page
         await base.clickAndWait(vDashboardLocators.vOrdersDetailsPage.existingOrder)
-        console.log('Here 2')
+
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsPage)
-        console.log('Here 3')
+ 
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsHeading)
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.oderDetailsBody)
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsBackButton)
@@ -369,8 +356,6 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberDate)
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberAddDetails)
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsTrackingNumberClose)
-
-        console.log('Orders Details Page')
 
     },
 

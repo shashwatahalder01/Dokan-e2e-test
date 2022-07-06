@@ -7,8 +7,6 @@ const base = require("../pages/base.js")  //Actions
 const data = require('../utils/testData.js')
 
 
-
-
 describe('Vendor Exploration test', () => {
 
 
@@ -19,7 +17,6 @@ describe('Vendor Exploration test', () => {
     */
     //Vendor > Dashboard Page
     it('1.0: Explore Vendor DASHBOARD', async () => {
-        //TODO: vendor must exist
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //Explore Dashboard
         await vDashboardPage.vDashboardExplore();
@@ -31,22 +28,19 @@ describe('Vendor Exploration test', () => {
     */
     //Vendor > Dashboard > Products Page
     it('2.0: Explore Vendor > PRODUCTS', async () => {
-        //TODO: product must exist: publish,draft,pending review
-        // await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //Explore Products
         await vDashboardPage.vProductExplore();
     });
 
-    //Product Add
+    //Product Add Page
     it('2.1: Explore Vendor > PRODUCTS > ADD', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //Explore Products > Add
         await vDashboardPage.vProductAddExplore();
     });
 
-    // Product Details
+    // Product Details Page
     it('2.2: Explore Vendor > PRODUCTS > DETAILS [Single Product]', async () => {
         //TODO: enable min-max settings, enable geolocation module
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
@@ -60,8 +54,6 @@ describe('Vendor Exploration test', () => {
     */
     //Vendor > Dashboard > Orders Page
     it('3.0: Explore Vendor > Orders', async () => {
-        //TODO: multiple customer order
-        // await customerPage.buyProduct('p1_v1', false, false, 'bank')
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //Explore Products
         await vDashboardPage.vOrdersExplore();
@@ -69,9 +61,6 @@ describe('Vendor Exploration test', () => {
 
     //Order Details
     it('3.1: Explore Vendor > Orders > Details', async () => {
-        // await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        // await customerPage.buyProduct('p1_v1', false, false, 'bank')
-        // await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //Explore Products
         await vDashboardPage.vOrdersDetailsExplore();
