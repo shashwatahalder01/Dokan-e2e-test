@@ -1322,11 +1322,14 @@ module.exports = {
                 //tags
                 tagInput: '#new-tag-product_tag',
                 addTag: '.tagadd',
+                //status
+                editStatus:".edit-post-status.hide-if-no-js",
+                status:"#post-status-select #post_status",
                 //publish
                 saveDraft: '#save-post',
                 preview: '#post-preview',
                 publish: '#publish',
-                updatedSuccessMessage: ".updated.notice.notice-success",
+                updatedSuccessMessage: ".updated.notice.notice-success p",
             },
 
             // categories

@@ -13,6 +13,8 @@ module.exports = {
 
     //Dashboard Page Explore
     async vDashboardExplore() {
+        await base.goto('dashboard')
+
         //Check Dashboard Page
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.dashboardPageContent)
         //FATAL Error Check
@@ -41,7 +43,6 @@ module.exports = {
         }
         //Check Product Details
         await this.visibilityChecker(vDashboardLocators.vDashboardPage.productsDetails)
-
         console.log('Checked all the DIVs: Vendor Dashboard')
     },
 
@@ -53,6 +54,8 @@ module.exports = {
 
     //Product Page Explore
     async vProductExplore() {
+        await base.goto('dashboard/products')
+
         //Check Dashboard Page
         await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPageContent)
         //FATAL Error Check
@@ -63,52 +66,59 @@ module.exports = {
         if (availableNoProducts) {
             console.log('No Product was Added')
             return
-        }
+        } 
 
-        //ELSE -> Product Present
-        //Check All + InStock ----- Add Product
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsAll) //All Page
-        console.log('Product All Page')
-        //----------------Pages----------------//
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOnline) //Online Page
-        await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline)
-        console.log('Product Online Page')
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsDraft) //Draft Page
-        await base.clickAndWait(vDashboardLocators.vProductsPage.productsDraft)
-        console.log('Product Draft Page')
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPendingReview) //Pending Review Page
-        await base.clickAndWait(vDashboardLocators.vProductsPage.productsPendingReview)
-        console.log('Product Pending Review Page')
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsInStock) //In Stock Page
-        await base.clickAndWait(vDashboardLocators.vProductsPage.productsInStock)
-        console.log('Product In Stock Page')
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOutOfStock) //Out of Stock Page
-        await base.clickAndWait(vDashboardLocators.vProductsPage.productsOutOfStock)
-        console.log('Product Out of Stock Page')
+            //Product Present
+
+            //Check All + InStock ----- Add Product
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsAll) //All Page
+            console.log('Product All Page')
+            //----------------Pages----------------//
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOnline) //Online Page
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline)
+            console.log('Product Online Page')
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsDraft) //Draft Page
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsDraft)
+            console.log('Product Draft Page')
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsPendingReview) //Pending Review Page
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsPendingReview)
+            console.log('Product Pending Review Page')
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsInStock) //In Stock Page
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsInStock)
+            console.log('Product In Stock Page')
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsOutOfStock) //Out of Stock Page
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsOutOfStock)
+            console.log('Product Out of Stock Page')
+
+            await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline) //return to online page
 
 
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.addNewProductButton)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsImportButton)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsExportButton)
 
-        //Filter
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterDates)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterCategory)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterType)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterButton)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterSelect)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsSearchProducts)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsSearchButton)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.addNewProductButton)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsImportButton)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsExportButton)
 
-        //Bulk Action + Product Status
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsBulkActions)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsApplyButton)
-        await this.visibilityChecker(vDashboardLocators.vProductsPage.productsStatus)
+            //Filter
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterDates)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterCategory)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterType)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterButton)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsFilterSelect)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsSearchProducts)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsSearchButton)
 
+            //Bulk Action + Product Status
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsBulkActions)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsApplyButton)
+            await this.visibilityChecker(vDashboardLocators.vProductsPage.productsStatus)
+        
     },
 
     //Product Add Page Explore
     async vProductAddExplore() {
+        await base.goto('dashboard/products')
+        await base.click(vDashboardLocators.vProductsPage.addNewProductButton)
+
         //Check Product Add Pop-up
         await this.visibilityChecker(vDashboardLocators.vProductsAddPage.productsAddPageContent)
         //FATAL Error Check
@@ -136,7 +146,11 @@ module.exports = {
     //Product Details Page Explore
     async vProductDetailsExplore() {
 
-        //await base.clickAndWait(vDashboardLocators.vProductsDetailsPage.productClick1)
+        await base.goto('dashboard/products')
+
+        await base.clickAndWait(vDashboardLocators.vProductsPage.productsOnline)
+
+        await base.clickAndWait(vDashboardLocators.vProductsDetailsPage.existingProductDetails)
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditPageTitle)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditStatus)
@@ -174,10 +188,8 @@ module.exports = {
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationTick1)
-        //var availableGeoSettings = await base.isVisible(vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings)
-        if (vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings == 'true') {
-            await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings)
-        }
+        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditGeolocationStoreSettings)
+
 
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAddonsBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditAddonsExpandAll)
@@ -220,7 +232,7 @@ module.exports = {
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesalePrice)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditWholesaleQuantity)
 
-        await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxBlock)
+        // await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxBlock)
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinMaxTick1)
         await base.click(vDashboardLocators.vProductsDetailsPage.productEditMinMaxEnable) //Click to Enable
         await this.visibilityChecker(vDashboardLocators.vProductsDetailsPage.productEditMinQuantity)
@@ -256,6 +268,8 @@ module.exports = {
 
     //Orders Page Explore
     async vOrdersExplore() {
+        await base.goto('dashboard/orders')
+
         //Check Dashboard Page
         await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPageContent)
         //FATAL Error Check
@@ -267,64 +281,63 @@ module.exports = {
             console.log('No Order was Placed')
             return
 
-        }
+        } 
 
-        /*ELSE -> Orders Present
-        *
-        *
-        *Orders Page */
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersAll) //All Page
-        console.log('Orders All Page')
-        //----------------Pages----------------//
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCompleted) //Completed Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCompleted)
-        console.log('Orders Completed Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersProcessing) //Processing Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersProcessing)
-        console.log('Orders Processing Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOnHold) //On Hold Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersOnHold)
-        console.log('Orders On-Hold Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPending) //Pending Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersPending)
-        console.log('Orders Pending Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCancelled) //Cancelled Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCancelled)
-        console.log('Orders Cancelled Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersRefunded) //Refunded Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersRefunded)
-        console.log('Orders Refunded Page')
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFailed) //Failed Page
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersFailed)
-        console.log('Orders Failed Page')
+            // Orders Present
+            /*Orders Page */
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersAll) //All Page
+            console.log('Orders All Page')
+            //----------------Pages----------------//
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCompleted) //Completed Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCompleted)
+            console.log('Orders Completed Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersProcessing) //Processing Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersProcessing)
+            console.log('Orders Processing Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOnHold) //On Hold Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersOnHold)
+            console.log('Orders On-Hold Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersPending) //Pending Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersPending)
+            console.log('Orders Pending Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersCancelled) //Cancelled Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersCancelled)
+            console.log('Orders Cancelled Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersRefunded) //Refunded Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersRefunded)
+            console.log('Orders Refunded Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFailed) //Failed Page
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersFailed)
+            console.log('Orders Failed Page')
 
-        //Return to All
-        await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterDate)
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterCustomer)
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterButton)
+            //Return to All
+            await base.clickAndWait(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
 
-        //Filter
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersExpandAllButton)
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersExportFilteredButton)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterDate)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterCustomer)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersFilterButton)
 
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersBulkAction)
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.orderBulkActionApply)
+            //Filter
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersExpandAllButton)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersExportFilteredButton)
 
-        await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOrderList)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersBulkAction)
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.orderBulkActionApply)
 
-        console.log('Orders Page')
+            await this.visibilityChecker(vDashboardLocators.vOrdersPage.ordersOrderList)
 
+            console.log('Orders Page')
+        
     },
 
     //Order Details Page Explore
     async vOrdersDetailsExplore() {
+        await base.goto('dashboard/orders')
 
-
-        await base.click(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
+        // await base.click(vDashboardLocators.vOrdersPage.ordersAll) //Click to return to All
         console.log('Here 1')
         //Details Page
-        await base.clickAndWait(vDashboardLocators.vOrdersDetailsPage.ordersCompletedOrder1)
+        await base.clickAndWait(vDashboardLocators.vOrdersDetailsPage.existingOrder)
         console.log('Here 2')
         await this.visibilityChecker(vDashboardLocators.vOrdersDetailsPage.orderDetailsPage)
         console.log('Here 3')

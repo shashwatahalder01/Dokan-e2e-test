@@ -84,7 +84,7 @@ module.exports = {
 
 
         // await this.waitTillHTMLRendered(page) // working
-        console.log("Clicked and waited for response")
+        // console.log("Clicked and waited for response")
     },
 
     // Wait for all xhr triggered by all the events of the page with promise.race
@@ -206,7 +206,7 @@ module.exports = {
         }
     },
 
-    //wait for select element then set value based on options value
+    // wait for select element then set value based on options value
     async select(selector, value) {
         let element = await this.getElement(selector)
         await element.select(value)
@@ -527,7 +527,7 @@ module.exports = {
     //scroll element into view
     async scrollIntoView(selector) {  //TODO: doesn't work
         let element = await this.getElement(selector)
-        await page.evaluate((element) => { element.scrollIntoView() }, element)
+        await page.evaluate(element => element.scrollIntoView(), element)
     },
 
     // close single tab
@@ -710,21 +710,21 @@ module.exports = {
         }
     },
 
-        //admin disable switcher , if disabled then skip : admin settings switcher
-        async disableSwitcher(selector) {
-            if (/^(\/\/|\(\/\/)/.test(selector)) {
-                selector = selector + '//span'
-            } else {
-                selector = selector + ' span'
-            }
-            let value = await this.getElementBackgroundColor(selector)
-            if (value.includes('rgb(0, 144, 255)')) {
-                await this.click(selector)
-            } else {
-                await this.click(selector)
-                await this.click(selector)
-            }
-        },
+    //admin disable switcher , if disabled then skip : admin settings switcher
+    async disableSwitcher(selector) {
+        if (/^(\/\/|\(\/\/)/.test(selector)) {
+            selector = selector + '//span'
+        } else {
+            selector = selector + ' span'
+        }
+        let value = await this.getElementBackgroundColor(selector)
+        if (value.includes('rgb(0, 144, 255)')) {
+            await this.click(selector)
+        } else {
+            await this.click(selector)
+            await this.click(selector)
+        }
+    },
 
 
     //delete element if exist (only first will delete) dokan specific :rma,report abuse
@@ -769,11 +769,8 @@ module.exports = {
         let pageContent = await page.content()
 
         if (pageContent.includes('Oops! That page can\'t be found.')) {
-            await page.screenshot({ path: 'tests/e2e/screenshot/pageNotExists' + Date.now() + '.png', fullPage: true })
+            await page.screenshot({ path: 'e2e/artifacts/screenshot/pageNotExists' + Date.now() + '.png', fullPage: true })
             //TODO: save permalink
-        }
-        else {
-            console.log('Page exists')
         }
     },
 

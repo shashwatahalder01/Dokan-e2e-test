@@ -51,3 +51,4 @@
 //TODO: add permalink setup after dokan subscription enabled
 //TODO: check user exists or not before login & registration
 //TODO: remove all predefined data form page to test data >> subscription pack on vendor page
+//TODO: check if dokan upgrade exist is exists then upgrade it

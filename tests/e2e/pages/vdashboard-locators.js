@@ -28,16 +28,16 @@ module.exports = {
 
         noProduct: '//h4[normalize-space()="No Products Found!"]',
 
-        productsAll: '//li[@class="active"]',
-        productsOnline: '//a[normalize-space()="Online (3)"]', //TODO: Generalize locator[specified value used in locator]
+        productsAll: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'All')]",
+        productsOnline: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'Online')]",
         //productsOnlineStatus: '//tbody/tr[2]/td[3]/label[1]',
-        productsDraft: '//a[normalize-space()="Draft (1)"]', //TODO: Generalize locator[specified value used in locator]
+        productsDraft: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'Draft')]",
         //productsDraftStatus: '//label[normalize-space()="Draft"]',
-        productsPendingReview: '//a[normalize-space()="Pending Review (1)"]',//TODO: Generalize locator[specified value used in locator]
+        productsPendingReview: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'Pending Review')]",
         //productsPendingReviewStatus: '',
-        productsInStock: '//a[normalize-space()="In stock (4)"]',//TODO: Generalize locator[specified value used in locator]
+        productsInStock: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'In stock')]",
         //productsInStockStatus: '//tbody/tr[2]/td[6]',
-        productsOutOfStock: '//a[normalize-space()="Out of stock (1)"]',//TODO: Generalize locator[specified value used in locator]
+        productsOutOfStock: "//ul[contains(@class,'subsubsub')]//li//a[contains(text(),'Out of stock')]",
         //productsOutOfStockStatus: '//td[@data-title="Stock"]',
 
 
@@ -80,8 +80,7 @@ module.exports = {
     },
 
     vProductsDetailsPage: {
-        productClick1: '//a[normalize-space()="One Plus 10T Pro"]', //TODO: Generalize locator[specified value used in locator]
-        productClick2: '//a[normalize-space()="iPhone 13"]', //TODO: Generalize locator[specified value used in locator]
+        existingProductDetails: 'tr strong a', 
 
         productEditPageTitle: '//header[@class="dokan-dashboard-header dokan-clearfix"]//h1[@class="entry-title"]',
         productEditStatus: '//span[@class="dokan-label dokan-label-success dokan-product-status-label"]',
@@ -89,7 +88,8 @@ module.exports = {
 
         //Product basics
         productEditTitle: '//input[@id="post_title"]',
-        productEditImage: '//div[@class="image-wrap"]',
+        productEditImage: '.instruction-inside',
+        productEditImageUploaded: '//div[@class="image-wrap"]',
         productEditGalleryImage: '//li[@class="add-image add-product-images tips"]',
 
         productEditPermalink: '//span[@id="sample-permalink"]',
@@ -222,14 +222,14 @@ module.exports = {
 
         noOrder: '//div[@class="dokan-error"]',
 
-        ordersAll: '//a[normalize-space()="All (7)"]',  //TODO: Generalize locator[specified value used in locator]
-        ordersCompleted: '//a[normalize-space()="Completed (4)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersProcessing: '//a[normalize-space()="Processing (1)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersOnHold: '//a[normalize-space()="On-hold (1)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersPending: '//a[normalize-space()="Pending (0)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersCancelled: '//a[normalize-space()="Cancelled (1)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersRefunded: '//a[normalize-space()="Refunded (0)"]', //TODO: Generalize locator[specified value used in locator]
-        ordersFailed: '//a[normalize-space()="Failed (0)"]', //TODO: Generalize locator[specified value used in locator]
+        ordersAll: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'All')]",  
+        ordersCompleted: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Completed')]", 
+        ordersProcessing: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Processing')]",
+        ordersOnHold: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'On-hold')]", 
+        ordersPending: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Pending')]", 
+        ordersCancelled: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Cancelled')]", 
+        ordersRefunded: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Refunded')]" , 
+        ordersFailed: "//ul[contains(@class,'order-statuses-filter')]//li//a[contains(text(),'Failed')]",
 
         ordersFilterDate: '//input[@id="order_date_filter"]',
         ordersFilterCustomer: '//span[@class="select2-selection__placeholder"]',
@@ -246,11 +246,11 @@ module.exports = {
 
     vOrdersDetailsPage: {
 
-        ordersCompletedOrder1: '//strong[normalize-space()="Order 46"]',  //Order in the List //TODO: Generalize locator[specified value used in locator]
+        existingOrder: "//td[contains(@class,'dokan-order-id')]",  //Order in the List 
 
         orderDetailsPage: '//article[@class="dokan-orders-area"]',
 
-        orderDetailsHeading: '//strong[normalize-space()="Order#46"]', //TODO: Generalize locator[specified value used in locator]
+        orderDetailsHeading: ".dokan-panel-heading strong",
         oderDetailsBody: '//div[@id="woocommerce-order-items"]',
         orderDetailsBackButton: '//a[contains(text(),"← Orders")]',
         orderDetailsRequestRefund: '//button[normalize-space()="Request Refund"]',

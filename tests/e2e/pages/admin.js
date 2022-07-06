@@ -660,6 +660,7 @@ module.exports = {
         //vendor shipping
         await base.clearAndType(selector.admin.wooCommerce.settings.vendorShippingMethodTitle, shippingMethod)
         await base.select(selector.admin.wooCommerce.settings.vendorShippingTaxStatus, 'taxable')
+        break
 
       default:
         break
@@ -1079,7 +1080,7 @@ module.exports = {
   },
 
   //admin add simple product
-  async addSimpleProduct(productName, productPrice, categoryName, vendor) {
+  async addSimpleProduct(productName, productPrice, categoryName, vendor, status = 'publish', stockStatus=false) {
     await base.hover(selector.admin.aDashboard.products)
     // await base.click(selector.admin.aDashboard.products)
     // await base.wait(2)
@@ -1090,16 +1091,48 @@ module.exports = {
     await base.type(selector.admin.products.product.regularPrice, productPrice)
     //category
     await base.click(selector.admin.products.product.category(categoryName))
+    //stock status
+    if (stockStatus){
+      await this.editStockStatus('outofstock')
+    }
     //vendor
     // await base.selectByText(selector.admin.products.product.vendor, vendor)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.vendor, selector.admin.products.product.vendorOptions, vendor)
     // name
     await base.type(selector.admin.products.product.productName, productName) // TODO: publish element is blocked by other element that's why name is filled later
-    //publish
-    await base.clickAndWait(selector.admin.products.product.publish)
 
-    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
-    expect(productCreateSuccessMessage).toMatch('Product published. ')
+
+
+    switch (status) {
+      case 'publish':
+        //publish
+        await base.wait(1)
+        await base.clickAndWait(selector.admin.products.product.publish)
+        let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage).toMatch('Product published. ')
+        break
+
+      case 'draft':
+        //draft
+        await base.clickAndWait(selector.admin.products.product.saveDraft)
+        let draftProductCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
+        expect(draftProductCreateSuccessMessage).toMatch('Product draft updated. ')
+        break
+
+      case 'pending':
+        //pending
+        await base.click(selector.admin.products.product.editStatus)
+        await base.select(selector.admin.products.product.status, 'draft')
+        await base.wait(1)
+        await base.clickAndWait(selector.admin.products.product.saveDraft)
+        let pendingProductCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
+        expect(pendingProductCreateSuccessMessage).toMatch('Product updated. ')
+        break
+
+      default:
+        break
+    }
+
   },
 
   //admin add variable product
@@ -1309,6 +1342,12 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch('Product published. ')
   },
 
+  //admin update product stock status
+  async editStockStatus(status){
+          await base.click(selector.admin.products.product.inventory)
+          await base.select(selector.admin.products.product.stockStatus,status)
+  },
+
 
 
   //-------------------------------------------- Wholesale customer ----------------------------------------------//
@@ -1415,10 +1454,10 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.dokanSetupWizard.googleMapApiKey, process.env.GOOGLE_MAP_API_KEY)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.shareEssentialsOff)
     await base.click(selector.admin.dokan.dokanSetupWizard.sellingProductTypes)
-    await base.setDropdownOptionSpan(selector.admin.dokan.dokanSetupWizard.sellingProductTypes,'Both')
+    await base.setDropdownOptionSpan(selector.admin.dokan.dokanSetupWizard.sellingProductTypes, 'Both')
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.continue)
     // await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.skipThisStep)
-    
+
     //Selling
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.newVendorEnableSelling)
     await base.click(selector.admin.dokan.dokanSetupWizard.commissionType)

@@ -205,8 +205,6 @@ describe('Environment setup test', () => {
 
 
 
-
-
     //----------------------------------------- Vendor details -------------------------------------------//
 
 
@@ -290,6 +288,14 @@ describe('Environment setup test', () => {
     it.skip('add test vendor2 rma settings', async () => {
         await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
         await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
+    })
+
+    it('admin add test vendor products ', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'publish', false)
+        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'draft', false)
+        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'pending', false)
+        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'publish', true)
     })
 
 
