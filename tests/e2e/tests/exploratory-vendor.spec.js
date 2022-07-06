@@ -1,8 +1,8 @@
 const loginPage = require('../pages/login.js')
-const adminPage = require('../pages/admin.js')
-const customerPage = require('../pages/customer.js')
 const vDashboardPage = require('../pages/vDashboard.js')
 const vDashboardLocators = require("../pages/vDashboard-locators.js")
+const adminPage = require('../pages/admin.js')
+const customerPage = require('../pages/customer.js')
 const base = require("../pages/base.js")  //Actions
 const data = require('../utils/testData.js')
 
@@ -21,8 +21,6 @@ describe('Vendor Exploration test', () => {
         //Explore Dashboard
         await vDashboardPage.vDashboardExplore();
     });
-
-
 
     /**Option-2 
     */
@@ -48,8 +46,6 @@ describe('Vendor Exploration test', () => {
         await vDashboardPage.vProductDetailsExplore();
     });
 
-
-
     /**Option-3
     */
     //Vendor > Dashboard > Orders Page
@@ -65,8 +61,6 @@ describe('Vendor Exploration test', () => {
         //Explore Products
         await vDashboardPage.vOrdersDetailsExplore();
     });
-
-
 
     // /**Option-4
     // */
@@ -86,8 +80,6 @@ describe('Vendor Exploration test', () => {
     //     await vDashboardPage.vUserSubscriptionsDetailsPageExplore();
     // });
 
-
-
     // /**Option-5
     // */    
     // //Vendor > Dashboard > Request Quotes
@@ -97,11 +89,5 @@ describe('Vendor Exploration test', () => {
     //         //Explore Products
     //         await vDashboardPage.vRequestQuotes();
     //     });
-
-
-
-
-
-
 
 });

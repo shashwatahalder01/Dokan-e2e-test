@@ -4,7 +4,6 @@ const adminPage = require('../pages/admin.js')
 const vendorPage = require('../pages/vendor.js')
 const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
-const timeout = process.env.TIME_OUT
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('Environment setup test', () => {
