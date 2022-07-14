@@ -548,7 +548,8 @@ module.exports = {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
-        let defaultMethod = base.isVisible(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
+        let defaultMethod = await base.isVisible(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
+        console.log(defaultMethod)
         if (defaultMethod) {
             await base.clickAndWait(selector.vendor.vWithdraw.customMethodMakeDefault(preferredSchedule))
 
@@ -978,8 +979,8 @@ module.exports = {
         //     await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedResidenceProof)
         //     await base.wait(4)
         // }
-        await base.waitForSelector(selector.vendor.vVerificationSettings.uploadResidenceProof)
-        await page.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
+  
+        await base.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
         await base.wait(2)
         let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {

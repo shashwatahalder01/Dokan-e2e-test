@@ -214,7 +214,7 @@ describe('Environment setup test', () => {
         await vendorPage.vendorRegister(process.env.VENDOR, process.env.VENDOR_PASSWORD, 'vendor1', 'v1', 'vendorStore1', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
     })
 
-    it('add test vendor1 products', async () => {
+    it.only('add test vendor1 products', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add products
         await vendorPage.addSimpleProduct('p1_v1 (simple)', data.product.price_int, data.product.category)

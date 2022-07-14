@@ -109,10 +109,10 @@ describe('customer functionality test', () => {
         await customerPage.followVendor(data.vendorStores[0])
     })
 
-    it.skip('customer can review store', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
-        await customerPage.reviewStore(data.vendorStores[0], data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
-    })
+    // it.skip('customer can review store', async () => {
+    //     await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.reviewStore(data.vendorStores[0], data.store.rating, data.store.storeReviewTitle, data.store.storeReviewMessage)
+    // })
 
     it('customer can ask for get support ', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)

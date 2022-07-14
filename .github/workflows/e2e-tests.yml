@@ -50,7 +50,7 @@ jobs:
 
       - name: Running the e2e tests
         run: |
-          npm run test:e2e
+          npm run test:setup && npm run test:customer
 
       - name: Generate Test Report
         uses: phoenix-actions/test-reporting@v8
@@ -61,8 +61,8 @@ jobs:
           path: artifacts/reports/junit.xml    # Path to test results
           reporter: jest-junit  
           only-summary: 'false' # Allows you to generate only the summary.
-          list-suites: 'failed'  # Limits which test suites are listed: 'all', 'failed'
-          list-tests: 'failed'       # Limits which test cases are listed: 'all','failed', 'none'
+          list-suites: 'all'  # Limits which test suites are listed: 'all', 'failed'
+          list-tests: 'all'       # Limits which test cases are listed: 'all','failed', 'none'
           fail-on-error: 'true'   # Set action as failed if test report contains any failed test
 
       - name: Test results

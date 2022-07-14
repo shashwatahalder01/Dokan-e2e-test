@@ -45,20 +45,20 @@ describe('admin functionality test', () => {
         await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.product.vendor[1])
     })
 
-    it.skip('admin can add variable product', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.addVariableProduct(data.product.name.variable, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
-    })
+    // it.skip('admin can add variable product', async () => {
+    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await adminPage.addVariableProduct(data.product.name.variable, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
+    // })
 
     it('admin can add simple subscription ', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.addSimpleSubscription(data.product.name.simpleSubscription, data.product.price, data.product.category, data.product.vendor[1])
     })
 
-    it.skip('admin can add variable subscription ', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-        await adminPage.addVariableSubscription(data.product.name.variableSubscription, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
-    })
+    // it.skip('admin can add variable subscription ', async () => {
+    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await adminPage.addVariableSubscription(data.product.name.variableSubscription, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
+    // })
 
     it('admin can add external product', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
@@ -168,7 +168,7 @@ describe('admin functionality test', () => {
         await adminPage.setupDokanRazorpay()
     })
 
-    it.skip('admin can add strip express payment method', async () => {
+    it('admin can add strip express payment method', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToWooCommerceSettings()
         await adminPage.setupStripeExpress()

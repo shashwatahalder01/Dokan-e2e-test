@@ -22,6 +22,24 @@ module.exports = {
             let loggedInUser = await base.getCurrentUser()
             expect(loggedInUser).toBe(username)
         }
+        else {
+            let loggedInUser = await base.getCurrentUser()
+            if (username != loggedInUser) {
+                await this.logoutFrontend()
+            }
+
+        }
+    },
+
+    //logout from frontend
+    async logoutFrontend() {
+        await base.goIfNotThere("my-account")
+        await base.clickAndWait(selector.frontend.customerLogout)
+
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBeUndefined()
+        // let homeIsVisible = await base.isVisible( selector.frontend.home)
+        // expect(homeIsVisible).toBe(false)
     },
 
     //login user form WP login dashboard
@@ -51,6 +69,9 @@ module.exports = {
             expect(loggedInUser).toBe(username)
         }
     },
+
+
+
 
     //switcher user
     async switchUser(username, password) {
