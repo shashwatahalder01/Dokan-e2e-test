@@ -1122,7 +1122,7 @@ module.exports = {
       case 'pending':
         //pending
         await base.click(selector.admin.products.product.editStatus)
-        await base.select(selector.admin.products.product.status, 'draft')
+        await base.select(selector.admin.products.product.status, 'pending')
         await base.wait(1)
         await base.clickAndWait(selector.admin.products.product.saveDraft)
         let pendingProductCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)

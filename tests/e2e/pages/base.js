@@ -434,12 +434,14 @@ module.exports = {
     // set element value
     async setElementValue(selector, value) {
         let element = await this.getElement(selector)
-        page.evaluate((element, value) => element.value = value, element, value)
+        await page.evaluate((element, value) => element.value = value, element, value)
     },
 
     // remove element attribute
     async removeElementAttribute(selector, attribute) { //TODO: need to test
-        await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
+        // await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
+        let element = await this.getElement(selector)
+        await page.evaluate((element, attribute) => element.removeAttribute(attribute), element, attribute)
     },
 
     // get element count
