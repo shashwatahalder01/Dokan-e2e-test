@@ -50,7 +50,7 @@ jobs:
 
       - name: Running the e2e tests
         run: |
-          npm run test:setup && npm run test:customer
+          npm run test:setup 
 
       - name: Generate Test Report
         uses: phoenix-actions/test-reporting@v8
