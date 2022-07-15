@@ -1,4 +1,3 @@
-require('dotenv').config()
 const loginPage = require('../pages/login.js')
 const vendorPage = require('../pages/vendor.js')
 const customerPage = require('../pages/customer.js')

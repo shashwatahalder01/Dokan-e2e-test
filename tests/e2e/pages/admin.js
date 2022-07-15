@@ -1,4 +1,3 @@
-require('dotenv').config()
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
 const helpers = require("../../e2e/utils/helpers.js")
@@ -77,6 +76,7 @@ module.exports = {
   // admin set wordpress site settings
   async setWpSettings() {
     await this.setWpGeneralSettings()
+    await base.goIfNotThere("wp-admin")
     await this.setPermalinkSettings()
 
   },

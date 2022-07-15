@@ -1,5 +1,3 @@
-
-require('dotenv').config()
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js')
 const vendorPage = require('../pages/vendor.js')
@@ -610,7 +608,7 @@ module.exports = {
     },
 
     //customer place order
-    async placeOrder(paymentMethod='bank', getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
+    async placeOrder(paymentMethod = 'bank', getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
         //TODO:handle billing address warning or shipping address warning
         if (billingDetails) await this.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
         if (shippingDetails) await this.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')

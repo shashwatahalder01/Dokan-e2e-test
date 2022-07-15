@@ -1,4 +1,3 @@
-require('dotenv').config()
 const { faker } = require('@faker-js/faker')
 const { isThemeInstalled } = require('@wordpress/e2e-test-utils')
 const helpers = require("./helpers.js")

@@ -1,4 +1,3 @@
-require('dotenv').config()
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js')
 const vendorPage = require('../pages/vendor.js')
@@ -34,13 +33,13 @@ describe('Environment setup test', () => {
         await adminPage.checkActiveModules()
     })
 
-    it('admin set WpSettings', async () => {
+    it.only('admin set WpSettings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         // set wp general settings & permalink settings
         await adminPage.setWpSettings()
     })
 
-    it('admin enable register password field', async () => {
+    it.only('admin enable register password field', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.enablePasswordInputField()
     })
@@ -189,7 +188,7 @@ describe('Environment setup test', () => {
         await adminPage.setDokanProductReportAbuseSettings()
     })
 
-    it.only('admin set dokan spmv settings', async () => {
+    it('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
 

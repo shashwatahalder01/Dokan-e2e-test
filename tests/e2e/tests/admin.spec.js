@@ -1,4 +1,3 @@
-require('dotenv').config()
 const adminPage = require('../pages/admin.js')
 const loginPage = require('../pages/login.js')
 const data = require('../utils/testData.js')
