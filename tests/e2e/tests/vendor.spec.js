@@ -118,7 +118,7 @@ describe('vendor functionality test', () => {
       await vendorPage.sendIdVerificationRequest()
    })
 
-   it.only('vendor can send address verification request ', async () => {
+   it('vendor can send address verification request ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.sendAddressVerificationRequest()
