@@ -189,7 +189,7 @@ describe('Environment setup test', () => {
         await adminPage.setDokanProductReportAbuseSettings()
     })
 
-    it('admin set dokan spmv settings', async () => {
+    it.only('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.goToDokanSettings()
 
@@ -209,12 +209,12 @@ describe('Environment setup test', () => {
 
 
 
-    it('add test vendor1', async () => {
+    it.only('add test vendor1', async () => {
         // add vendor1
         await vendorPage.vendorRegister(process.env.VENDOR, process.env.VENDOR_PASSWORD, 'vendor1', 'v1', 'vendorStore1', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
     })
 
-    it('add test vendor1 products', async () => {
+    it.only('add test vendor1 products', async () => {
         await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
         //add products
         await vendorPage.addSimpleProduct('p1_v1 (simple)', data.product.price_int, data.product.category)
@@ -303,12 +303,12 @@ describe('Environment setup test', () => {
 
 
 
-    it('add test customer1', async () => {
+    it.only('add test customer1', async () => {
         // add customer1
         await customerPage.customerRegister(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
     })
 
-    it('add test customer1 addresses', async () => {
+    it.only('add test customer1 addresses', async () => {
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.addBillingAddress('customer1', 'c1', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
