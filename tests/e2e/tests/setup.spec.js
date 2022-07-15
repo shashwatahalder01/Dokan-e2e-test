@@ -22,172 +22,172 @@ describe('Environment setup test', () => {
 
 
 
-    // it.skip('admin check Active plugins ', async () => {
+    it.skip('admin check Active plugins ', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // check plugin is installed
+        await adminPage.checkActivePlugins(data.PluginSlugList)
+    })
+
+    it('admin check Active modules ', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // check plugin is installed
+        await adminPage.checkActiveModules()
+    })
+
+    it('admin set WpSettings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // set wp general settings & permalink settings
+        await adminPage.setWpSettings()
+    })
+
+    it('admin enable register password field', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.enablePasswordInputField()
+    })
+
+    it('admin set tax rate', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addStandardTaxRate()
+    })
+
+    it('admin set currency options', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.setCurrencyOptions()
+    })
+
+    it('admin set flat rate shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+    })
+
+
+    it('admin set vendor Table Rate shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+    })
+
+
+    it('admin set vendor distance rate shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+    })
+
+
+    it('admin set vendor shipping method', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
+    })
+
+    it('admin set basic payments', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // set payment gateway settings
+        await adminPage.goToWooCommerceSettings()
+        await adminPage.setupBasicPaymentMethods()
+    })
+
+    it('admin add categories and attributes', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        // add product categories
+        await adminPage.addCategory('Shirts')
+        // add product attributes
+        await adminPage.addAttributes(data.product.attribute, data.product.attributeTerms)
+    })
+
+    // it.skip('admin add dokan subscription', async () => {
     //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // check plugin is installed
-    //     await adminPage.checkActivePlugins(data.PluginSlugList)
+    //     // add dokan subscriptions
+    //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
     // })
 
-    // it('admin check Active modules ', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // check plugin is installed
-    //     await adminPage.checkActiveModules()
-    // })
-
-    // it('admin set WpSettings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // set wp general settings & permalink settings
-    //     await adminPage.setWpSettings()
-    // })
-
-    // it('admin enable register password field', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.enablePasswordInputField()
-    // })
-
-    // it('admin set tax rate', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addStandardTaxRate()
-    // })
-
-    // it('admin set currency options', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.setCurrencyOptions()
-    // })
-
-    // it('admin set flat rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
-    // })
-
-
-    // it('admin set vendor Table Rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
-    // })
-
-
-    // it('admin set vendor distance rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
-    // })
-
-
-    // it('admin set vendor shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
-    // })
-
-    // it('admin set basic payments', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // set payment gateway settings
-    //     await adminPage.goToWooCommerceSettings()
-    //     await adminPage.setupBasicPaymentMethods()
-    // })
-
-    // it('admin add categories and attributes', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // add product categories
-    //     await adminPage.addCategory('Shirts')
-    //     // add product attributes
-    //     await adminPage.addAttributes(data.product.attribute, data.product.attributeTerms)
-    // })
-
-    // // it.skip('admin add dokan subscription', async () => {
-    // //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    // //     // add dokan subscriptions
-    // //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
-    // // })
-
-    // // it.skip('admin set dokan  settings', async () => {
-    // //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    // //     await adminPage.goToDokanSettings()
-    // //     await adminPage.setDokanSettings()
-    // // })
-
-    // it('admin set dokan general settings', async () => {
+    // it.skip('admin set dokan  settings', async () => {
     //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
     //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanGeneralSettings()
+    //     await adminPage.setDokanSettings()
     // })
 
-    // it('admin set dokan selling settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanSellingSettings()
-    // })
+    it('admin set dokan general settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanGeneralSettings()
+    })
 
-    // it('admin set dokan withdraw settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanWithdrawSettings()
-    // })
+    it('admin set dokan selling settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanSellingSettings()
+    })
 
-    // it('admin set dokan page settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setPageSettings()
-    // })
+    it('admin set dokan withdraw settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanWithdrawSettings()
+    })
 
-    // it('admin set dokan appearance settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanAppearanceSettings()
-    // })
+    it('admin set dokan page settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setPageSettings()
+    })
 
-    // it('admin set dokan privacy policy settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanPrivacyPolicySettings()
-    // })
+    it('admin set dokan appearance settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanAppearanceSettings()
+    })
 
-    // it('admin set dokan store support settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanStoreSupportSettings()
-    // })
+    it('admin set dokan privacy policy settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanPrivacyPolicySettings()
+    })
 
-    // it('admin set dokan rma settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanRmaSettings()
-    // })
+    it('admin set dokan store support settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanStoreSupportSettings()
+    })
 
-    // it('admin set dokan wholesale settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanWholesaleSettings()
-    // })
+    it('admin set dokan rma settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanRmaSettings()
+    })
 
-    // it('admin set dokan eu compliance settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanEuComplianceSettings()
-    // })
+    it('admin set dokan wholesale settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanWholesaleSettings()
+    })
 
-    // it('admin set dokan delivery time settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanDeliveryTimeSettings()
-    // })
+    it('admin set dokan eu compliance settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanEuComplianceSettings()
+    })
 
-    // it('admin set dokan product advertising settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanProductAdvertisingSettings()
-    // })
+    it('admin set dokan delivery time settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanDeliveryTimeSettings()
+    })
 
-    // it('admin set dokan geolocation settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanGeolocationSettings()
-    // })
+    it('admin set dokan product advertising settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanProductAdvertisingSettings()
+    })
 
-    // it('admin set dokan product report abuse settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanProductReportAbuseSettings()
-    // })
+    it('admin set dokan geolocation settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanGeolocationSettings()
+    })
+
+    it('admin set dokan product report abuse settings', async () => {
+        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+        await adminPage.goToDokanSettings()
+        await adminPage.setDokanProductReportAbuseSettings()
+    })
 
     it('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
