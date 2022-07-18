@@ -117,13 +117,13 @@ describe('vendor functionality test', () => {
       await vendorPage.sendIdVerificationRequest()
    })
 
-   // it('vendor can send address verification request ', async () => {
+   // it.skip('vendor can send address verification request ', async () => {
    //    await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
    //    await vendorPage.goToVendorDashboard()
    //    await vendorPage.sendAddressVerificationRequest()
    // })
 
-   // it('vendor can send company verification request ', async () => {
+   // it.skip('vendor can send company verification request ', async () => {
    //    await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
    //    await vendorPage.sendCompanyVerificationRequest()
    // })
