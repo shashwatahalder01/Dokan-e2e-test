@@ -480,7 +480,7 @@ module.exports = {
     //customer search product
     async searchProduct(productName) {
         await this.goToShop()
-
+        
         await page.type(selector.customer.cShop.searchProduct, productName)
         await base.clickAndWait(selector.customer.cShop.search)
 
