@@ -2887,7 +2887,7 @@ module.exports = {
             postOrZipCode: "#dokan_address\\[zip\\]",
             country: "#dokan_address_country",
             state: "#dokan_address_state",
-            uploadResidenceProof: "#vendor-proof-url",
+            uploadResidenceProof: "#vendor-proof",
             previousUploadedResidenceProof: ".vendor_img_container img",
             removePreviousUploadedResidenceProof: ".dokan-close.dokan-remove-proof-image",
             submitAddress: "#dokan_v_address_submit",

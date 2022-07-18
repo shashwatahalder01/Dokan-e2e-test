@@ -2,7 +2,7 @@ const base = require("../pages/base.js")
 const customerPage = require('../pages/customer.js')
 const loginPage = require('../pages/login.js')
 const selector = require("../pages/selectors.js")
-const helpers = require("../../e2e/utils/helpers.js")
+const helpers = require("../utils/helpers.js")
 const { faker } = require('@faker-js/faker')
 
 
@@ -630,7 +630,7 @@ module.exports = {
         await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
         await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
         await page.click(selector.vendor.vStoreSettings.profilePicture)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar2.png')
+        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar.png')
     },
 
     //vendor set basic info settings
@@ -990,11 +990,13 @@ module.exports = {
             await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
         }
 
+        await base.click(selector.vendor.vVerificationSettings.select)
         await page.click(selector.vendor.vVerificationSettings.submitAddress)
         await base.wait(2)
 
-        // let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
-        // expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
+
+        let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
+        expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
     },
 
     //vendor send company verification request

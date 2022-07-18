@@ -1,6 +1,6 @@
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
-const helpers = require("../../e2e/utils/helpers.js")
+const helpers = require("../utils/helpers.js")
 const { faker } = require('@faker-js/faker')
 
 module.exports = {

@@ -1,9 +1,8 @@
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js')
-const vendorPage = require('../pages/vendor.js')
 const base = require("../pages/base.js")
 const selector = require("../pages/selectors.js")
-const helpers = require("../../e2e/utils/helpers.js")
+const helpers = require("../utils/helpers.js")
 const { faker } = require('@faker-js/faker')
 
 module.exports = {
@@ -156,10 +155,10 @@ module.exports = {
         console.log(subscriptionPackIsVisible)
         await base.click(selector.customer.cDashboard.becomeAVendor)
         await base.wait(4)
-        if (subscriptionPackIsVisible) {
-            console.log('subscription pack is visible')
-            await this.placeOrder('bank', false, false, true)//TODO: dont work: handle vendor subscription pack scenario
-        }
+        // if (subscriptionPackIsVisible) {
+        //     console.log('subscription pack is visible')
+        //     await this.placeOrder('bank', false, false, true)//TODO: don't work: handle vendor subscription pack scenario
+        // }
 
     },
 

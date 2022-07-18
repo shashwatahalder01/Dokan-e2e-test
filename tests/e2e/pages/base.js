@@ -280,7 +280,7 @@ module.exports = {
         let element = await this.getElement(selector)
         const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
         await fileChooser.accept([image])
-        await this.wait(3)
+        await this.wait(5)
     },
 
     // Navigation

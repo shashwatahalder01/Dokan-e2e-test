@@ -117,7 +117,7 @@ describe('vendor functionality test', () => {
       await vendorPage.sendIdVerificationRequest()
    })
 
-   it('vendor can send address verification request ', async () => {
+   it.only('vendor can send address verification request ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
       await vendorPage.sendAddressVerificationRequest()
@@ -128,10 +128,10 @@ describe('vendor functionality test', () => {
       await vendorPage.sendCompanyVerificationRequest()
    })
 
-   it('vendor can set delivery time settings ', async () => {
-      await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-      await vendorPage.setDeliveryTimeSettings()
-   })
+   // it.skip('vendor can set delivery time settings ', async () => {
+   //    await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+   //    await vendorPage.setDeliveryTimeSettings()
+   // })
 
    it('vendor can set flat rate shipping ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
