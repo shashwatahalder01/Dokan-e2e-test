@@ -82,7 +82,7 @@ describe('vendor functionality test', () => {
       await vendorPage.addAutoWithdrawDisbursementSchedule('dokan_custom', 'weekly', '5', '15')
    })
 
-   // it.only('vendor can add default withdraw payment methods ', async () => {
+   // it('vendor can add default withdraw payment methods ', async () => {
    //    await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
    //    await vendorPage.addDefaultWithdrawPaymentMethods('Skrill')
    //    // cleanup

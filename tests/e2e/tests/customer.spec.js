@@ -54,7 +54,6 @@ describe('customer functionality test', () => {
     })
 
     it('customer can buy product', async () => {
-        // for (let i =0 ; i<15; i++){
         await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
         await customerPage.clearCart()
         await customerPage.goToShop()
@@ -62,7 +61,7 @@ describe('customer functionality test', () => {
         await customerPage.goToCartFromShop()
         await customerPage.goToCheckoutFromCart()
         await customerPage.placeOrder()
-        // }
+
     })
 
     it('customer can review product', async () => {
