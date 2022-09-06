@@ -964,53 +964,53 @@ module.exports = {
 
 
   //admin add new vendors
-  async addVendor(firstName, lastName, storeName, phoneNumber, emailAddress, userName, password, companyName, companyIdEuidNumber, vatOrTaxNumber, nameOfBank, bankIban,
-    street1, street2, city, zip, country, state, accountName, accountNumber, bankName, bankAddress, routingNumber, iban, swift, payPalEmail) {
+  async addVendor(vendorInfo) {
 
-    let email = faker.internet.email()
+    let firstName = vendorInfo.firstName()
+    let email = vendorInfo.email()
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.vendorsMenu)
 
     //add new vendor
     await base.click(selector.admin.dokan.vendors.addNewVendor)
     // account info
-    await base.type(selector.admin.dokan.vendors.firstName, faker.name.firstName('male')) //TODO: update this for test settings
-    await base.type(selector.admin.dokan.vendors.lastName, faker.name.lastName('male'),)
-    await base.type(selector.admin.dokan.vendors.storeName, storeName)
-    await base.type(selector.admin.dokan.vendors.phoneNumber, phoneNumber)
+    await base.type(selector.admin.dokan.vendors.firstName, firstName)
+    await base.type(selector.admin.dokan.vendors.lastName, vendorInfo.lastName())
+    await base.type(selector.admin.dokan.vendors.storeName, vendorInfo.storeName)
+    await base.type(selector.admin.dokan.vendors.phoneNumber, vendorInfo.phoneNumber)
     await base.type(selector.admin.dokan.vendors.email, email)
     await base.click(selector.admin.dokan.vendors.generatePassword)
-    await base.clearAndType(selector.admin.dokan.vendors.password, password)
-    await base.type(selector.admin.dokan.vendors.username, faker.name.firstName('male'))
-    await base.type(selector.admin.dokan.vendors.companyName, companyName)
-    await base.type(selector.admin.dokan.vendors.companyIdEuidNumber, companyIdEuidNumber)
-    await base.type(selector.admin.dokan.vendors.vatOrTaxNumber, vatOrTaxNumber)
-    await base.type(selector.admin.dokan.vendors.nameOfBank, nameOfBank)
-    await base.type(selector.admin.dokan.vendors.bankIban, bankIban)
+    await base.clearAndType(selector.admin.dokan.vendors.password, vendorInfo.password)
+    await base.type(selector.admin.dokan.vendors.username, firstName)
+    await base.type(selector.admin.dokan.vendors.companyName, vendorInfo.companyName)
+    await base.type(selector.admin.dokan.vendors.companyIdEuidNumber, vendorInfo.companyIdEuidNumber)
+    await base.type(selector.admin.dokan.vendors.vatOrTaxNumber, vendorInfo.vatOrTaxNumber)
+    await base.type(selector.admin.dokan.vendors.nameOfBank, vendorInfo.nameOfBank)
+    await base.type(selector.admin.dokan.vendors.bankIban, vendorInfo.bankIban)
     await base.wait(3)
     await base.click(selector.admin.dokan.vendors.next)
 
     // address  
-    await base.type(selector.admin.dokan.vendors.street1, street1)
-    await base.type(selector.admin.dokan.vendors.street2, street2)
-    await base.type(selector.admin.dokan.vendors.city, city)
-    await base.type(selector.admin.dokan.vendors.zip, zip)
+    await base.type(selector.admin.dokan.vendors.street1, vendorInfo.street1)
+    await base.type(selector.admin.dokan.vendors.street2, vendorInfo.street2)
+    await base.type(selector.admin.dokan.vendors.city, vendorInfo.city)
+    await base.type(selector.admin.dokan.vendors.zip, vendorInfo.zip)
     await base.click(selector.admin.dokan.vendors.country)
-    await base.type(selector.admin.dokan.vendors.countryInput, country)
+    await base.type(selector.admin.dokan.vendors.countryInput, vendorInfo.country)
     await page.keyboard.press('Enter')
     await base.click(selector.admin.dokan.vendors.state)
-    await base.type(selector.admin.dokan.vendors.state, state)
+    await base.type(selector.admin.dokan.vendors.state, vendorInfo.state)
     await base.click(selector.admin.dokan.vendors.next)
 
     // payment options  
-    await base.type(selector.admin.dokan.vendors.accountName, accountName)
-    await base.type(selector.admin.dokan.vendors.accountNumber, accountNumber)
-    await base.type(selector.admin.dokan.vendors.bankName, bankName)
-    await base.type(selector.admin.dokan.vendors.bankAddress, bankAddress)
-    await base.type(selector.admin.dokan.vendors.routingNumber, routingNumber)
-    await base.type(selector.admin.dokan.vendors.iban, iban)
-    await base.type(selector.admin.dokan.vendors.swift, swift)
-    await base.type(selector.admin.dokan.vendors.payPalEmail, payPalEmail)
+    await base.type(selector.admin.dokan.vendors.accountName, vendorInfo.accountName)
+    await base.type(selector.admin.dokan.vendors.accountNumber, vendorInfo.accountNumber)
+    await base.type(selector.admin.dokan.vendors.bankName, vendorInfo.bankName)
+    await base.type(selector.admin.dokan.vendors.bankAddress, vendorInfo.bankAddress)
+    await base.type(selector.admin.dokan.vendors.routingNumber, vendorInfo.routingNumber)
+    await base.type(selector.admin.dokan.vendors.iban, vendorInfo.iban)
+    await base.type(selector.admin.dokan.vendors.swift, vendorInfo.swift)
+    await base.type(selector.admin.dokan.vendors.payPalEmail, vendorInfo.payPalEmail)
     await base.check(selector.admin.dokan.vendors.enableSelling)
     await base.check(selector.admin.dokan.vendors.publishProductDirectly)
     await base.check(selector.admin.dokan.vendors.makeVendorFeature)
@@ -1080,7 +1080,7 @@ module.exports = {
   },
 
   //admin add simple product
-  async addSimpleProduct(productName, productPrice, categoryName, vendor, status = 'publish', stockStatus=false) {
+  async addSimpleProduct(productName, productPrice, categoryName, vendor, status = 'publish', stockStatus = false) {
     await base.hover(selector.admin.aDashboard.products)
     // await base.click(selector.admin.aDashboard.products)
     // await base.wait(2)
@@ -1092,7 +1092,7 @@ module.exports = {
     //category
     await base.click(selector.admin.products.product.category(categoryName))
     //stock status
-    if (stockStatus){
+    if (stockStatus) {
       await this.editStockStatus('outofstock')
     }
     //vendor
@@ -1343,9 +1343,9 @@ module.exports = {
   },
 
   //admin update product stock status
-  async editStockStatus(status){
-          await base.click(selector.admin.products.product.inventory)
-          await base.select(selector.admin.products.product.stockStatus,status)
+  async editStockStatus(status) {
+    await base.click(selector.admin.products.product.inventory)
+    await base.select(selector.admin.products.product.stockStatus, status)
   },
 
 

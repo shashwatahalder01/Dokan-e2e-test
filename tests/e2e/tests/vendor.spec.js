@@ -108,7 +108,7 @@ describe('vendor functionality test', () => {
    it.skip('vendor can edit addon request ', async () => {
       await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
       await vendorPage.goToVendorDashboard()
-      await vendorPage.editAddon('Add-ons Group #370')
+      await vendorPage.editAddon('Add-ons Group #370') //TODO: recheck this specified value
    })
 
    it('vendor can send id verification request ', async () => {

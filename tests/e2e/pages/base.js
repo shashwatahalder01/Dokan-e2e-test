@@ -437,7 +437,7 @@ module.exports = {
     },
 
     // remove element attribute
-    async removeElementAttribute(selector, attribute) { //TODO: need to test
+    async removeElementAttribute(selector, attribute) { 
         // await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
         let element = await this.getElement(selector)
         await page.evaluate((element, attribute) => element.removeAttribute(attribute), element, attribute)

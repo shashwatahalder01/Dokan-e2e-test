@@ -41,7 +41,7 @@ module.exports = {
    setupWizardShippingFeeRecipient: ['Vendor', 'Admin'],
    setupWizardTaxFeeRecipient: ['Vendor', 'Admin'],
    setupWizardMapApiSource: ['Google Maps', 'Mapbox'],
-   setupWizardSellingProductTypes: ['Physical','Digital','Both'],
+   setupWizardSellingProductTypes: ['Physical', 'Digital', 'Both'],
    setupWizardCommissionType: ['Flat', 'Percentage', 'Combine'],
 
    //admin
@@ -192,48 +192,6 @@ module.exports = {
       getSupportMessage: 'get Support Message',
    },
 
-
-   vendorInfo: {
-      userEmail: faker.internet.email(),
-      password: process.env.VENDOR_PASSWORD,
-      firstName: faker.name.firstName('male'),
-      lastName: faker.name.lastName('male'),
-      userName: faker.name.firstName('male'),
-      shopName: faker.company.companyName(),
-      // shopUrl: faker.company.companyName(),
-      companyName: faker.company.companyName(),
-      companyId: faker.random.alphaNumeric(5),
-      vatNumber: faker.random.alphaNumeric(10),
-      bankName: faker.address.state(),
-      bankIban: faker.finance.iban(),
-      phone: faker.phone.phoneNumber('(###) ###-####'),
-      street1: 'abc street',
-      street2: 'xyz street',
-      country: 'United States (US)',
-      countrySelectValue: 'US',
-      stateSelectValue: 'NY',
-      city: 'New York',
-      zipCode: '10006',
-      state: 'New York',
-      accountName: 'accountName',
-      accountNumber: faker.random.alphaNumeric(10),
-      bankName: 'bankName',
-      bankAddress: 'bankAddress',
-      routingNumber: faker.random.alphaNumeric(10),
-      swiftCode: faker.random.alphaNumeric(10),
-      iban: faker.random.alphaNumeric(10),
-
-      //shop details
-      productsPerPage: '12',
-      mapLocation: 'New York',
-      minimumOrderAmount: '200',
-      minimumOrderAmountPercentage: '10',
-      minimumProductQuantity: '1',
-      maximumProductQuantity: '20',
-      minimumAmountToPlace: '10',
-      maximumAmountToPlace: '1000000',
-   },
-
    vendorSetupWizard: {
       storeProductsPerPage: '12',
       street1: 'abc street',
@@ -279,7 +237,7 @@ module.exports = {
       categories: faker.helpers.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
       attribute: 'size',
       attributeTerms: ['s', 'l', 'm'],
-      vendor: [process.env.ADMIN,process.env.VENDOR, process.env.VENDOR1],
+      vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1],
       booking: {
          productName: faker.commerce.productName() + (' (Booking)'),
          category: 'Uncategorized',
@@ -403,5 +361,235 @@ module.exports = {
    productCategories: ["SmartPhones", "Laptops", "Accessories", "Shirts", "T-Shirts", "Polo Shirts", "Jeans", "Pants", "Shoes", "Bags",],
    productAttributes: ["Size", "Color"],
    attributeValues: [["S", "M", "L", "XL", "XXL"], ["Red", "Blue", "Black", "Yellow", "White", "Deep blue"],],
+
+
+
+
+
+
+   WpSettings: {
+      saveSuccessMessage: 'Your settings have been saved.',
+      general: {
+         timezone: 'UTC+6',
+         saveSuccessMessage: 'Settings saved.',
+      },
+      permalink: {
+         customBaseInput: '/product/',
+         saveSuccessMessage: 'Permalink structure updated.',
+      },
+   },
+
+   tax: {
+      taxRate: '5',
+      saveSuccessMessage: 'Your settings have been saved.',
+   },
+
+   shipping: {
+      enableShipping: 'Ship to all countries you sell to',
+      disableShipping: 'Disable shipping & shipping calculations',
+      shippingZone: 'US',
+      zoneRegions: 'United States (US)',
+      shippingCountry: 'country:US',
+      selectShippingMethod: 'country:US',
+      shippingMethod: 'Flat rate',
+      shippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping', 'dokan_vendor_shipping'],
+      shippingTaxStatus: 'taxable',
+      saveSuccessMessage: 'Your settings have been saved.',
+   },
+
+   payment: {
+      saveSuccessMessage: 'Your settings have been saved.',
+      currency: {
+         dollar: 'United States (US) dollar ($)',
+         euro: 'Euro (€)',
+         rupee: 'Indian rupee (₹)',
+      }
+   },
+
+   dokanSettings: {
+      saveSuccessMessage: 'Setting has been saved successfully.',
+      general: {
+         vendorStoreUrl: 'store',
+         sellingProductTypes: 'sell_both',
+         storeProductPerPage: '12',
+         storCategory: 'none',
+      },
+      selling: {
+         commissionType: 'percentage',
+         adminCommission: '10',
+         shippingFeeRecipient: 'seller',
+         taxFeeRecipient: 'seller',
+         newProductStatus: 'publish',
+         productCategorySelection: 'single',
+      },
+      withdraw: {
+         customMethodName: 'Bksh',
+         customMethodType: 'Phone',
+         minimumWithdrawAmount: '5',
+         withdrawThreshold: '0',
+         quarterlyScheduleMonth: 'march',
+         quarterlyScheduleWeek: '1',
+         quarterlyScheduleDay: 'monday',
+         monthlyScheduleWeek: '1',
+         monthlyScheduleDay: 'monday',
+         biweeklyScheduleWeek: '1',
+         biweeklyScheduleDay: 'monday',
+         weeklyScheduleDay: 'monday',
+      },
+      page: {
+      },
+      appreance: {
+         googleMapApiKey: process.env.GOOGLE_MAP_API_KEY,
+         storeBannerWidth: '625',
+         storeBannerHeight: '300',
+      },
+      privacyPolicy: {
+         privacyPage: '2',
+         privacyPolicyHtmlBody: 'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our [dokan_privacy_policy]',
+      },
+      storeSupport: {
+         displayOnSingleProductPage: 'above_tab',
+         supportButtonLabel: 'Get Support',
+      },
+      rma: {
+         orderStatus: 'wc-processing',
+         rmaReasons: ['Defective', 'Wrong Product', 'Other'],
+         refundPolicyHtmlBody: 'Refund Policy',
+      },
+      wholesale: {
+         whoCanSeeWholesalePrice: 'all_user',
+      },
+      euCompliance: {
+      },
+      deliveryTime: {
+         deliveryDateLabel: 'Delivery Date',
+         deliveryBlockedBuffer: '0',
+         deliveryBoxInfo: 'This store needs %DAY% day(s) to process your delivery request',
+         deliveryDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+         openingTime: '12:00 AM',
+         closingTime: '11:30 PM',
+         timeSlot: '30',
+         orderPerSlot: '0',
+      },
+      productAdvertising: {
+         noOfAvailableSlot: '100',
+         expireAfterDays: '10',
+         advertisementCostUsd: '15',
+      },
+      geolocation: {
+         locationMapPosition: 'top',
+         showMap: 'all',
+         radiusSearchUnit: 'km',
+         radiusSearchMinimumDistance: '0',
+         radiusSearchMaximumDistance: '10',
+         mapZoomLevel: '11',
+         defaultLocation: 'New York',
+      },
+      productReportAbuse: {
+         reasonsForAbuseReport: 'This product is fake',
+      },
+      spmv: {
+         sellItemButtonText: 'Sell This Item',
+         availableVendorDisplayAreaTitle: 'Other Available Vendor',
+         availableVendorSectionDisplayPosition: 'below_tabs',
+         showSpmvProducts: 'show_all',
+      },
+      vendorSubscription: {
+         subscriptionDisplayPage: '2',
+         noOfDays: '2',
+         productStatus: 'draft',
+         cancellingEmailSubject: 'Subscription Package Cancel notification',
+         cancellingEmailBody: 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.',
+         alertEmailSubject: 'Subscription Ending Soon',
+         alertEmailBody: 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely',
+      },
+
+   },
+
+   module: {
+      noModuleMessage: 'No modules found.',
+   },
+
+   dokanSetupWizard: {
+      vendorStoreURL: 'store',
+      shippingFeeRecipientValues: 'Vendor',
+      taxFeeRecipientValues: 'Vendor',
+      mapApiSource: 'Google Maps',
+      googleMapApiKey: process.env.GOOGLE_MAP_API_KEY,
+      sellingProductTypes: 'Both',
+      commissionTypeValues: 'Percentage',
+      adminCommission: '10',
+      minimumWithdrawLimit: '50',
+   },
+
+   subUrls: {
+      backend: {
+         login: 'wp-login.php',
+         adminLogin: 'wp-admin',
+         adminDashboard: 'wp-admin/index.php',
+         dokanSettings: 'wp-admin/admin.php?page=dokan#/settings',
+         plugins: 'wp-admin/plugins.php',
+      },
+      frontend: {
+         myAccount: 'my-account',
+
+      },
+
+   },
+
+   admin: {
+      username: process.env.ADMIN,
+      password: process.env.ADMIN_PASSWORD,
+   },
+   vendor: {
+      username: process.env.VENDOR,
+      password: process.env.VENDOR_PASSWORD,
+
+      vendorInfo: {
+         email: ()=> faker.internet.email(),
+         password: process.env.VENDOR_PASSWORD,
+         firstName: ()=> faker.name.firstName('male'),
+         lastName: ()=> faker.name.lastName('male'),
+         userName: faker.name.firstName('male'),
+         shopName: faker.company.companyName(),
+         shopUrl: faker.company.companyName(),
+         companyName: faker.company.companyName(),
+         companyId: faker.random.alphaNumeric(5),
+         vatNumber: faker.random.alphaNumeric(10),
+         bankName: faker.address.state(),
+         bankIban: faker.finance.iban(),
+         phone: faker.phone.phoneNumber('(###) ###-####'),
+         street1: 'abc street',
+         street2: 'xyz street',
+         country: 'United States (US)',
+         countrySelectValue: 'US',
+         stateSelectValue: 'NY',
+         city: 'New York',
+         zipCode: '10006',
+         state: 'New York',
+         accountName: 'accountName',
+         accountNumber: faker.random.alphaNumeric(10),
+         bankName: 'bankName',
+         bankAddress: 'bankAddress',
+         routingNumber: faker.random.alphaNumeric(10),
+         swiftCode: faker.random.alphaNumeric(10),
+         iban: faker.random.alphaNumeric(10),
+   
+         //shop details
+         productsPerPage: '12',
+         mapLocation: 'New York',
+         minimumOrderAmount: '200',
+         minimumOrderAmountPercentage: '10',
+         minimumProductQuantity: '1',
+         maximumProductQuantity: '20',
+         minimumAmountToPlace: '10',
+         maximumAmountToPlace: '1000000',
+      },
+   },
+   customer: {
+      username: process.env.ADMIN,
+      password: process.env.ADMIN_PASSWORD,
+   }
+
 }
 

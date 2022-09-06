@@ -1,98 +1,85 @@
-const { loginUser, createUser, } = require("@wordpress/e2e-test-utils")
+const { createUser } = require("@wordpress/e2e-test-utils")
 const base = require("../pages/base.js")
+const data = require('../utils/testData.js')
 const selector = require("../pages/selectors.js")
+
 
 module.exports = {
 
     // user login
-    async login(username, password) {
-        await this.loginFrontend(username, password)
-        // await this.loginBackend(username, password)
+    async login(user) {
+        await this.loginFrontend(user)
     },
 
-    //login from frontend
-    async loginFrontend(username, password) {
-        // await base.goIfNotThere("my-account")
-        // let emailField = await base.isVisible(selector.frontend.username)
-        // if (emailField) {
-        //     await base.clearAndType(selector.frontend.username, username)
-        //     await base.clearAndType(selector.frontend.userPassword, password)
-        //     await base.clickAndWait(selector.frontend.logIn)
-
-        //     let loggedInUser = await base.getCurrentUser()
-        //     expect(loggedInUser).toBe(username)
-        // }
-        // else {
-        //     let loggedInUser = await base.getCurrentUser()
-        //     if (username !== loggedInUser) {
-        //         await this.logoutFrontend()
-        //     }
-
-        // }
-
+    // login from frontend
+    async loginFrontend(user) {
         let currentUser = await base.getCurrentUser()
-
-        if (username === currentUser) {
+        if (user.username === currentUser) { // skip if user is already loggedin 
             return
-        } else if ((username !== currentUser) && (currentUser !== undefined)) {
+        } else if ((user.username !== currentUser) && (currentUser !== undefined)) { // logout if other user is already loggedin
             await this.logoutFrontend()
         }
-        await base.goIfNotThere("my-account")
-        await base.clearAndType(selector.frontend.username, username)
-        await base.clearAndType(selector.frontend.userPassword, password)
-        await base.clickAndWait(selector.frontend.logIn)
+        //login user
+        await base.goIfNotThere(data.subUrls.frontend.myAccount)
+        let emailField = await base.isVisible(selector.frontend.username)
+        if (emailField) {
+            await base.clearAndType(selector.frontend.username, user.username)
+            await base.clearAndType(selector.frontend.userPassword, user.password)
+            await base.clickAndWait(selector.frontend.logIn)
 
-        let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBe(username)
+            let loggedInUser = await base.getCurrentUser()
+            expect(loggedInUser).toBe(user.username)
+        }
+        else {
+            let loggedInUser = await base.getCurrentUser()
+            if (user.username !== loggedInUser) {
+                await this.logoutFrontend()
+            }
+        }
     },
 
-    //logout from frontend
+    // logout from frontend
     async logoutFrontend() {
-        await base.goIfNotThere("my-account")
+        await base.goIfNotThere(data.subUrls.frontend.myAccount)
         await base.clickAndWait(selector.frontend.customerLogout)
 
         let loggedInUser = await base.getCurrentUser()
         expect(loggedInUser).toBeUndefined()
-        // let homeIsVisible = await base.isVisible( selector.frontend.home)
-        // expect(homeIsVisible).toBe(false)
     },
 
-    //login user form WP login dashboard
-    async loginBackend(username, password) {
-        await base.goIfNotThere("wp-login.php")
+    // login user form WP login dashboard
+    async loginBackend(user) {
+        await base.goIfNotThere(data.subUrls.backend.login)
         let emailField = await base.isVisible(selector.backend.email)
         if (emailField) {
-            await base.clearAndType(selector.backend.email, username)
-            await base.clearAndType(selector.backend.password, password)
+            await base.clearAndType(selector.backend.email, user.username)
+            await base.clearAndType(selector.backend.password, user.password)
             await base.clickAndWait(selector.backend.login)
 
             let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBe(username)
+            expect(loggedInUser).toBe(user.username)
         }
     },
 
-    //admin login
-    async adminLogin(username, password) {
-        await base.goIfNotThere("wp-admin")
+    // admin login
+    async adminLogin(user) {
+        await base.goIfNotThere(data.subUrls.backend.adminLogin)
         let emailField = await base.isVisible(selector.backend.email)
         if (emailField) {
-            await base.clearAndType(selector.backend.email, username)
-            await base.clearAndType(selector.backend.password, password)
+            await base.clearAndType(selector.backend.email, user.username)
+            await base.clearAndType(selector.backend.password, user.password)
             await base.clickAndWait(selector.backend.login)
 
             let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBe(username)
+            expect(loggedInUser).toBe(user.username)
         }
     },
 
-
-
-
-    //switcher user
-    async switchUser(username, password) {
+    // switcher user
+    async switchUser(user) {
         let currentUser = await base.getCurrentUser()
-        if (currentUser !== username) {
-            await this.loginBackend(username, password)
+        if (currentUser !== user.username) {
+            await this.loginBackend(user)
         }
     },
 
@@ -102,22 +89,22 @@ module.exports = {
         return password
     },
 
-    async checkUserExists(username, password) {
-        await base.goIfNotThere("wp-login.php")
-        let emailField = await base.isVisible(selector.backend.email)
-        if (emailField) {
-            await base.clearAndType(selector.backend.email, username)
-            await base.clearAndType(selector.backend.password, password)
-            await base.clickAndWait(selector.backend.login)
-        }
-
-        let loginError = await base.isVisible(selector.backend.loginError)
-        if (loginError) {
-            let errorMessage = await base.getElementText(selector.backend.loginError)
-            expect(errorMessage).toMatch(`Error: The username ${username} is not registered on this site. If you are unsure of your username, try your email address instead.`)
-            return false
-        }
-        return true
-    }
+    // //TODO: delete this not necessary
+    // async checkUserExists(user) {
+    //     await base.goIfNotThere(data.subUrls.backend.login)
+    //     let emailField = await base.isVisible(selector.backend.email)
+    //     if (emailField) {
+    //         await base.clearAndType(selector.backend.email, user.username)
+    //         await base.clearAndType(selector.backend.password, user.password)
+    //         await base.clickAndWait(selector.backend.login)
+    //     }
+    //     let loginError = await base.isVisible(selector.backend.loginError)
+    //     if (loginError) {
+    //         let errorMessage = await base.getElementText(selector.backend.loginError)
+    //         expect(errorMessage).toMatch(`Error: The username ${user.username} is not registered on this site. If you are unsure of your username, try your email address instead.`)
+    //         return false
+    //     }
+    //     return true
+    // }
 
 }
