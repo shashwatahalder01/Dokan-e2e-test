@@ -6,11 +6,9 @@ const helpers = require("./helpers.js")
 
 module.exports = {
 
-   //--------------------------------------------------- Fixed  test data ---------------------------------------------//
-   // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
-   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
-   // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce'],
+   // Fixed  test data 
 
+   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
 
    // wooCommerce
 
@@ -150,7 +148,7 @@ module.exports = {
    bankAccountType: ['personal', 'business'],
 
 
-   //------------------------------------------------ Generated  test data ------------------------------------------------------//
+   // Generated  test data 
 
    wpCustomer: {
       firstName: 'customer10005',
@@ -214,34 +212,153 @@ module.exports = {
    },
 
    product: {
-      name: {
-         simple: faker.commerce.productName() + (' (Simple)'),
-         variable: faker.commerce.productName() + (' (Variable)'),
-         external: faker.commerce.productName() + (' (External/Affiliate)'),
-         grouped: faker.commerce.productName() + (' (Grouped)'),
-         simpleSubscription: faker.commerce.productName() + (' (Simple Subscription)'),
-         variableSubscription: faker.commerce.productName() + (' (Variable Subscription)'),
-         dokanSubscription: 'Dokan Subscription ' + faker.helpers.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium'],) + ' ' + faker.random.alpha({ count: 5, upcase: true },) + (' (Product Pack)'),
-         booking: faker.commerce.productName() + (' (Booking)'),
-         auction: faker.commerce.productName() + (' (Auction)'),
+      publishSuccessMessage: 'Product published. ',
+      draftUpdateSuccessMessage: 'Product draft updated. ',
+      pendingProductUpdateSuccessMessage: 'Product updated. ',
+      status: {
+         public: 'public',
+         draft: 'draft',
+         pending: 'pending'
       },
-      // price: faker.commerce.price(100, 200, 2),
-      // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
-      // price: faker.finance.amount(1, 200, 2), 
-      price_int: faker.finance.amount(100, 200, 0),
-      price: faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])), // 0 = no decimals, 2 = 2 decimals
-      price_frac: faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2])),
-      price_frac_comma: (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
-      auctionPrice: faker.commerce.price(10, 100, 0),
-      category: 'Uncategorized',
-      categories: faker.helpers.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
-      attribute: 'size',
-      attributeTerms: ['s', 'l', 'm'],
-      vendor: [process.env.ADMIN, process.env.VENDOR, process.env.VENDOR1],
+      stockStatus: {
+         outOfStock: 'outofstock'
+      },
+
+      //TODO: not edited beloew portion
+      type: {
+         simple: 'simple',
+         variable: 'variable',
+         simpleSubscription: 'subscription',
+         variableSubscription: '',
+         external: 'external',
+         vendorSubscription: 'product_pack',
+      },
+
+      name: {
+         simple: () => faker.commerce.productName() + (' (Simple)'),
+         variable: () => faker.commerce.productName() + (' (Variable)'),
+         external: () => faker.commerce.productName() + (' (External)'),
+         grouped: () => faker.commerce.productName() + (' (Grouped)'),
+         simpleSubscription: () => faker.commerce.productName() + (' (Simple Subscription)'),
+         variableSubscription: () => faker.commerce.productName() + (' (Variable Subscription)'),
+         dokanSubscription: {
+            nonRecurring: () => 'Dokan Subscription ' + faker.helpers.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium'],) + ' ' + faker.random.alpha({ count: 5, upcase: true },) + (' (Product Pack)'),
+         },
+         booking: () => faker.commerce.productName() + (' (Booking)'),
+         auction: () => faker.commerce.productName() + (' (Auction)'),
+      },
+      price: {
+         // price: faker.commerce.price(100, 200, 2),
+         // price: faker.datatype.number({min:1, max:200, precision: 0.01}),
+         // price: faker.finance.amount(1, 200, 2), 
+         price_int: () => faker.finance.amount(100, 200, 0),
+         price_random: () => faker.finance.amount(100, 200, faker.helpers.arrayElement([0, 2])), // 0 = no decimals, 2 = 2 decimals
+         price_frac: () => faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2])),
+         price_frac_comma: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         auctionPrice: () => faker.commerce.price(10, 100, 0),
+         price: () => this.product.price.price_frac_comma()
+      },
+      category: {
+         unCategorized: 'Uncategorized',
+         shirt: 'Shirts',
+         categories: faker.helpers.arrayElement(["Electronic Devices", "Electronic Accessories", "Men's Fashion", "Clothings", "Women's Fashion"]),
+      },
+      store: {
+         adminStore: process.env.ADMIN,
+         vendorStore1: process.env.VENDOR,
+         vendorStore2: process.env.VENDOR1
+      },
+
+      attribute: {
+         size: {
+            attributeName: 'size',
+            attributeTerms: ['s', 'l', 'm'],
+         },
+      },
+
+      simple: {
+         productType: 'simple',
+         productName: () => faker.commerce.productName() + (' (Simple)'),
+         category: 'Uncategorized',
+         regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         storeName: 'vendorStore1',
+         status: 'publish',
+         stockStatus: false,
+      },
+
+      variable: {
+         productType: 'simple',
+         productName: () => faker.commerce.productName() + (' (Variable)'),
+         category: 'Uncategorized',
+         regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         storeName: 'vendorStore1',
+         status: 'publish',
+         stockStatus: false,
+         attribute: '',
+         attributeTerms: '',
+      },
+
+   
+
+      external: {
+         productType: 'external',
+         productName: () => faker.commerce.productName() + (' (External)'),
+         productUrl: 'product/p1_v1/',
+         buttonText: 'Buy product',
+         category: 'Uncategorized',
+         regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         storeName: 'vendorStore1',
+         status: 'publish',
+      },
+
+      simpleSubscription: {
+         productType: 'subscription',
+         productName: () => faker.commerce.productName() + (' (Simple Subscription)'),
+         category: 'Uncategorized',
+         subscriptionPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         subscriptionPeriodInterval: '1',
+         subscriptionPeriod: 'month',
+         expireAfter: '0',
+         subscriptionTrialLength: '0',
+         subscriptionTrialPeriod: 'day',
+         storeName: 'vendorStore1',
+         status: 'publish',
+      },
+
+      variableSubscription: {
+         productType: 'subscription',
+         productName: () => faker.commerce.productName() + (' (Variable Subscription)'),
+         category: 'Uncategorized',
+         subscriptionPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         subscriptionPeriodInterval: '1',
+         subscriptionPeriod: 'month',
+         expireAfter: '0',
+         subscriptionTrialLength: '0',
+         subscriptionTrialPeriod: 'day',
+         storeName: 'vendorStore1',
+         status: 'publish',
+         attribute: '',
+         attributeTerms: '',
+      },
+
+      vendorSubscription: {
+         productType: 'product_pack',
+         productName: () => 'Dokan Subscription ' + faker.helpers.arrayElement(['Gold', 'Silver', 'Platinum', 'Premium'],) + ' ' + faker.random.alpha({ count: 5, upcase: true },) + (' (Product Pack)'),
+         category: 'Uncategorized',
+         regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         numberOfProducts: '-1',
+         packValidity: '0',
+         advertisementSlot: '-1',
+         expireAfterDays: '-1',
+         storeName: 'admin',
+         status: 'publish',
+      },
+
       booking: {
          productName: faker.commerce.productName() + (' (Booking)'),
+         productType: 'booking',
          category: 'Uncategorized',
-         bookingDurationType: 'fixed',
+         bookingDurationType: 'customer',
          bookingDuration: '2',
          bookingDurationUnit: 'day',
          calenderDisplayMode: 'always_visible',
@@ -254,6 +371,15 @@ module.exports = {
          blockCost: '10',
       },
       auction: {
+         productName: faker.commerce.productName() + (' (Auction)'),
+         productType: 'auction',
+         category: 'Uncategorized',
+         itemCondition: 'new',
+         auctionType: 'normal',
+         regularPrice: (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         bidIncrement: '50',
+         reservedPriced: () => String(Number(this.product.auction.regularPrice) + 500),
+         buyItNowPrice: () => String(Number(this.product.auction.regularPrice) + 1000),
          startDate: helpers.currentDateTime.replace(/,/g, ''),
          endDate: helpers.addDays(helpers.currentDateTime, 60).replace(/,/g, ''),
       },
@@ -381,6 +507,7 @@ module.exports = {
 
    tax: {
       taxRate: '5',
+      enableTax: true,
       saveSuccessMessage: 'Your settings have been saved.',
    },
 
@@ -388,11 +515,57 @@ module.exports = {
       enableShipping: 'Ship to all countries you sell to',
       disableShipping: 'Disable shipping & shipping calculations',
       shippingZone: 'US',
-      zoneRegions: 'United States (US)',
-      shippingCountry: 'country:US',
-      selectShippingMethod: 'country:US',
-      shippingMethod: 'Flat rate',
-      shippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping', 'dokan_vendor_shipping'],
+      shippingMethods: {
+         flatRate: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'flat_rate',
+            shippingMethod: 'Flat rate',
+            taxStatus: 'taxable',
+            shippingCost: '20'
+         },
+
+         freeShipping: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'free_shipping',
+            shippingMethod: 'Free shipping',
+            freeShippingRequires: 'min_amount',
+            freeShippingMinimumOrderAmount: '200',
+         },
+
+         localPickup: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'local_pickup',
+            shippingMethod: 'Local pickup',
+            taxStatus: 'taxable',
+            shippingCost: '20'
+         },
+
+         tableRateShipping: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'dokan_table_rate_shipping',
+            shippingMethod: 'Vendor Table Rate',
+         },
+
+         distanceRateShipping: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'dokan_distance_rate_shipping',
+            shippingMethod: 'Vendor Distance Rate',
+         },
+
+         vendorShipping: {
+            shippingZone: 'US',
+            shippingCountry: 'United States (US)',
+            selectShippingMethod: 'dokan_vendor_shipping',
+            shippingMethod: 'Vendor Shipping',
+            taxStatus: 'taxable',
+         },
+      },
+
       shippingTaxStatus: 'taxable',
       saveSuccessMessage: 'Your settings have been saved.',
    },
@@ -403,16 +576,93 @@ module.exports = {
          dollar: 'United States (US) dollar ($)',
          euro: 'Euro (€)',
          rupee: 'Indian rupee (₹)',
-      }
+         currencyOptions: {
+            thousandSeparator: ',',
+            decimalSeparator: ',',
+            numberOfDecimals: '2',
+         },
+         saveSuccessMessage: 'Your settings have been saved.',
+      },
+      basicPayment: {
+         toggleEanbledClass: 'woocommerce-input-toggle--enabled',
+         toggleDisabledClass: 'woocommerce-input-toggle--disabled'
+
+      },
+      stripeConnect: {
+         title: 'Dokan Credit card (Stripe)',
+         description: 'Pay with your credit card via Stripe.',
+         displayNoticeInterval: '7',
+         stripeCheckoutLocale: 'English',
+         testPublishableKey: 'pk_test_',
+         testSecretKey: 'sk_test_',
+         testClientId: 'ca_',
+
+      },
+      paypalMarketPlace: {
+         title: 'PayPal Marketplace',
+         description: 'Pay via PayPal Marketplace you can pay with your credit card if you don\'t have a PayPal account',
+         payPalMerchantId: 'partner_',
+         sandboxClientId: 'client_',
+         sandBoxClientSecret: 'secret_',
+         payPalPartnerAttributionId: 'weDevs_SP_Dokan',
+         disbursementMode: 'Delayed',
+         paymentButtonType: 'Smart Payment Buttons',
+         marketplaceLogoPath: '/wp-content/plugins/dokan/assets/images/dokan-logo.png',
+         announcementInterval: '7',
+      },
+      mangoPay: {
+         title: 'MangoPay',
+         description: 'Pay via MangoPay',
+         sandboxClientId: 'client_',
+         sandBoxApiKey: 'secret_',
+         availableCreditCards: 'CB/Visa/Mastercard',
+         availableDirectPaymentServices: 'Sofort*',
+         transferFunds: 'On payment completed',
+         typeOfVendors: 'Either',
+         businessRequirement: 'Any',
+         announcementInterval: '7',
+      },
+      razorPay: {
+         title: 'Razorpay',
+         description: 'Pay securely by Credit or Debit card or Internet Banking through Razorpay.',
+         testKeyId: 'rzp_test',
+         testKeySecret: 'rzp_test',
+         disbursementMode: 'Delayed',
+         announcementInterval: '7',
+
+      },
+      stripeExpress: {
+         titile: 'Dokan Express Payment Methods',
+         description: 'Pay with your credit card via Stripe.',
+         testPublishableKey: 'pk_test_',
+         testSecretKey: 'sk_test_',
+         testWebhookSecret: 'webHook_test_',
+         paymentMethods: {
+            card: 'Credit/Debit Card',
+            ideal: 'iDEAL',
+         },
+         disbursementMode: 'Delayed',
+         customerBankStatement: 'Dokan',
+         paymentRequestButtonType: 'default',
+         paymentRequestButtonTheme: 'dark',
+         paymentRequestButtonLocation: {
+            product: 'Product',
+            cart: 'Cart'
+         },
+         announcementInterval: '7,'
+
+      },
+
    },
 
    dokanSettings: {
-      saveSuccessMessage: 'Setting has been saved successfully.',
+
       general: {
          vendorStoreUrl: 'store',
          sellingProductTypes: 'sell_both',
          storeProductPerPage: '12',
          storCategory: 'none',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       selling: {
          commissionType: 'percentage',
@@ -421,6 +671,7 @@ module.exports = {
          taxFeeRecipient: 'seller',
          newProductStatus: 'publish',
          productCategorySelection: 'single',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       withdraw: {
          customMethodName: 'Bksh',
@@ -435,31 +686,40 @@ module.exports = {
          biweeklyScheduleWeek: '1',
          biweeklyScheduleDay: 'monday',
          weeklyScheduleDay: 'monday',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       page: {
+         termsAndConditionsPage: 'Sample Page',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       appreance: {
          googleMapApiKey: process.env.GOOGLE_MAP_API_KEY,
          storeBannerWidth: '625',
          storeBannerHeight: '300',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       privacyPolicy: {
          privacyPage: '2',
          privacyPolicyHtmlBody: 'Your personal data will be used to support your experience throughout this website, to manage access to your account, and for other purposes described in our [dokan_privacy_policy]',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       storeSupport: {
          displayOnSingleProductPage: 'above_tab',
          supportButtonLabel: 'Get Support',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       rma: {
          orderStatus: 'wc-processing',
          rmaReasons: ['Defective', 'Wrong Product', 'Other'],
          refundPolicyHtmlBody: 'Refund Policy',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       wholesale: {
          whoCanSeeWholesalePrice: 'all_user',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       euCompliance: {
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       deliveryTime: {
          deliveryDateLabel: 'Delivery Date',
@@ -470,11 +730,13 @@ module.exports = {
          closingTime: '11:30 PM',
          timeSlot: '30',
          orderPerSlot: '0',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       productAdvertising: {
          noOfAvailableSlot: '100',
          expireAfterDays: '10',
-         advertisementCostUsd: '15',
+         advertisementCost: '15',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       geolocation: {
          locationMapPosition: 'top',
@@ -484,24 +746,28 @@ module.exports = {
          radiusSearchMaximumDistance: '10',
          mapZoomLevel: '11',
          defaultLocation: 'New York',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       productReportAbuse: {
          reasonsForAbuseReport: 'This product is fake',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       spmv: {
          sellItemButtonText: 'Sell This Item',
          availableVendorDisplayAreaTitle: 'Other Available Vendor',
          availableVendorSectionDisplayPosition: 'below_tabs',
          showSpmvProducts: 'show_all',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
       vendorSubscription: {
-         subscriptionDisplayPage: '2',
+         displayPage: '2',
          noOfDays: '2',
          productStatus: 'draft',
          cancellingEmailSubject: 'Subscription Package Cancel notification',
          cancellingEmailBody: 'Dear subscriber, Your subscription has expired. Please renew your package to continue using it.',
          alertEmailSubject: 'Subscription Ending Soon',
          alertEmailBody: 'Dear subscriber, Your subscription will be ending soon. Please renew your package in a timely',
+         saveSuccessMessage: 'Setting has been saved successfully.',
       },
 
    },
@@ -512,8 +778,8 @@ module.exports = {
 
    dokanSetupWizard: {
       vendorStoreURL: 'store',
-      shippingFeeRecipientValues: 'Vendor',
-      taxFeeRecipientValues: 'Vendor',
+      shippingFeeRecipient: 'Vendor',
+      taxFeeRecipient: 'Vendor',
       mapApiSource: 'Google Maps',
       googleMapApiKey: process.env.GOOGLE_MAP_API_KEY,
       sellingProductTypes: 'Both',
@@ -528,6 +794,7 @@ module.exports = {
          adminLogin: 'wp-admin',
          adminDashboard: 'wp-admin/index.php',
          dokanSettings: 'wp-admin/admin.php?page=dokan#/settings',
+         woocommerceSettings: 'wp-admin/admin.php?page=wc-settings',
          plugins: 'wp-admin/plugins.php',
       },
       frontend: {
@@ -545,11 +812,16 @@ module.exports = {
       username: process.env.VENDOR,
       password: process.env.VENDOR_PASSWORD,
 
-      vendorInfo: {
-         email: ()=> faker.internet.email(),
+      vendor2: {
+         username: process.env.VENDOR2,
          password: process.env.VENDOR_PASSWORD,
-         firstName: ()=> faker.name.firstName('male'),
-         lastName: ()=> faker.name.lastName('male'),
+      },
+
+      vendorInfo: {
+         email: () => faker.internet.email(),
+         password: process.env.VENDOR_PASSWORD,
+         firstName: () => faker.name.firstName('male'),
+         lastName: () => faker.name.lastName('male'),
          userName: faker.name.firstName('male'),
          shopName: faker.company.companyName(),
          shopUrl: faker.company.companyName(),
@@ -574,7 +846,7 @@ module.exports = {
          routingNumber: faker.random.alphaNumeric(10),
          swiftCode: faker.random.alphaNumeric(10),
          iban: faker.random.alphaNumeric(10),
-   
+
          //shop details
          productsPerPage: '12',
          mapLocation: 'New York',
@@ -587,9 +859,28 @@ module.exports = {
       },
    },
    customer: {
-      username: process.env.ADMIN,
-      password: process.env.ADMIN_PASSWORD,
-   }
+      username: process.env.CUSTOMER,
+      password: process.env.CUSTOMER_PASSWORD,
+
+      customer2: {
+         username: process.env.CUSTOMER2,
+         password: process.env.CUSTOMER_PASSWORD,
+      },
+   },
+
+   key: {
+      arrowDown: 'ArrowDown',
+      enter: 'Enter',
+   },
+   plugin: {
+      // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
+      PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
+      activeClass: 'active',
+   },
+
+   woocommerce: {
+      saveSuccessMessage: 'Your settings have been saved.',
+   },
+
 
 }
-

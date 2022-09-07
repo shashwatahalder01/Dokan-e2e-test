@@ -6,7 +6,11 @@ const data = require('../utils/testData.js')
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('Environment setup test', () => {
-    // beforeAll(async () => {})
+    // beforeAll(async () => {
+    //     let pages = await browser.pages();
+    //         if (pages.length > 1)
+    //             await pages[0].close();
+    // })
     // afterAll(async () => {await browser.close()})
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
@@ -21,71 +25,71 @@ describe('Environment setup test', () => {
 
 
 
-    // it.skip('admin check Active plugins ', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
-    //     // check plugin is installed
-    //     await adminPage.checkActivePlugins(data.PluginSlugList)
-    // })
+    it.skip('admin check Active plugins ', async () => {
+        await loginPage.adminLogin(data.admin)
+        // check plugin is installed
+        await adminPage.checkActivePlugins(data.plugin)
+    })
 
     // it('admin check Active modules ', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     // check plugin is installed
     //     await adminPage.checkActiveModules()
     // })
 
     // it('admin set WpSettings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     // set wp general settings & permalink settings
     //     await adminPage.setWpSettings()
     // })
 
     // it('admin enable register password field', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.enablePasswordInputField()
     // })
 
     // it('admin set tax rate', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.addStandardTaxRate()
     // })
 
     // it('admin set currency options', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.setCurrencyOptions()
     // })
 
     // it('admin set flat rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
     // })
 
 
     // it('admin set vendor Table Rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
     // })
 
 
     // it('admin set vendor distance rate shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
     // })
 
 
     // it('admin set vendor shipping method', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
     // })
 
     // it('admin set basic payments', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     // set payment gateway settings
     //     await adminPage.goToWooCommerceSettings()
     //     await adminPage.setupBasicPaymentMethods()
     // })
 
     // it('admin add categories and attributes', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     // add product categories
     //     await adminPage.addCategory('Shirts')
     //     // add product attributes
@@ -93,110 +97,110 @@ describe('Environment setup test', () => {
     // })
 
     // // it.skip('admin add dokan subscription', async () => {
-    // //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    // //     await loginPage.adminLogin(data.admin)
     // //     // add dokan subscriptions
     // //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
     // // })
 
     // // it.skip('admin set dokan  settings', async () => {
-    // //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    // //     await loginPage.adminLogin(data.admin)
     // //     await adminPage.goToDokanSettings()
     // //     await adminPage.setDokanSettings()
     // // })
 
     // it('admin set dokan general settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanGeneralSettings()
     // })
 
     // it('admin set dokan selling settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanSellingSettings()
     // })
 
     // it('admin set dokan withdraw settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanWithdrawSettings()
     // })
 
     // it('admin set dokan page settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setPageSettings()
     // })
 
     // it('admin set dokan appearance settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanAppearanceSettings()
     // })
 
     // it('admin set dokan privacy policy settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanPrivacyPolicySettings()
     // })
 
     // it('admin set dokan store support settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanStoreSupportSettings()
     // })
 
     // it('admin set dokan rma settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanRmaSettings()
     // })
 
     // it('admin set dokan wholesale settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanWholesaleSettings()
     // })
 
     // it('admin set dokan eu compliance settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanEuComplianceSettings()
     // })
 
     // it('admin set dokan delivery time settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanDeliveryTimeSettings()
     // })
 
     // it('admin set dokan product advertising settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanProductAdvertisingSettings()
     // })
 
     // it('admin set dokan geolocation settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanGeolocationSettings()
     // })
 
     // it('admin set dokan product report abuse settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanProductReportAbuseSettings()
     // })
 
     // it('admin set dokan spmv settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
 
     //     await adminPage.setDokanSpmvSettings()
     // })
 
     // it.skip('admin set dokan vendor subscription settings', async () => {
-    //     await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    //     await loginPage.adminLogin(data.admin)
     //     await adminPage.goToDokanSettings()
     //     await adminPage.setDokanVendorSubscriptionSettings()
     // })
@@ -210,11 +214,11 @@ describe('Environment setup test', () => {
 
     it('add test vendor1', async () => {
         // add vendor1
-        await vendorPage.vendorRegister(process.env.VENDOR, process.env.VENDOR_PASSWORD, 'vendor1', 'v1', 'vendorStore1', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
+        await vendorPage.vendorRegister(data.vendor, 'vendor1', 'v1', 'vendorStore1', data.vendor.vendorInfo.companyName, data.vendor.vendorInfo.companyId, data.vendor.vendorInfo.vatNumber, data.vendor.vendorInfo.bankName, data.vendor.vendorInfo.bankIban, data.vendor.vendorInfo.phone, false, data.vendorSetupWizard)
     })
 
     // it('add test vendor1 products', async () => {
-    //     await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor)
     //     //add products
     //     await vendorPage.addSimpleProduct('p1_v1 (simple)', data.product.price_int, data.product.category)
     //     // await vendorPage.addSimpleProduct('p2_v1 (simple)', data.product.price, data.product.category)
@@ -232,29 +236,29 @@ describe('Environment setup test', () => {
     //     // await vendorPage.addSimpleProduct('p1_v1 (minmax)', data.product.price, data.product.category)
     // })
 
-    // it('add test vendor1 coupons', async () => {
-    //     await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
-    //     //add coupons
-    //     await vendorPage.addCoupon('C1_V1', data.coupon.amount)
-    // })
+    it.only('add test vendor1 coupons', async () => {
+        await loginPage.login(data.vendor)
+        //add coupons
+        await vendorPage.addCoupon('C1_V1', data.coupon.amount)
+    })
 
     // it('add test vendor1 address', async () => {
-    //     await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor)
     //     await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
     // })
 
     // it('add test vendor1 rma settings', async () => {
-    //     await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor)
     //     await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
     // })
 
     // it.skip('add test vendor2', async () => {
     //     // add vendor1
-    //     await vendorPage.vendorRegister(process.env.VENDOR2, process.env.VENDOR_PASSWORD, 'vendor2', 'v2', 'vendorStore2', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
+    //     await vendorPage.vendorRegister(data.vendor.vendor2, 'vendor2', 'v2', 'vendorStore2', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
     // })
 
     // it.skip('add test vendor2 products', async () => {
-    //     await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor.vendor2)
     //     //add products
     //     await vendorPage.addSimpleProduct('p1_v2 (simple)', data.product.price_int, data.product.category)
     //     // await vendorPage.addSimpleProduct('p2_v2 (simple)', data.product.price, data.product.category)
@@ -273,23 +277,23 @@ describe('Environment setup test', () => {
     // })
 
     // it.skip('add test vendor2 coupons', async () => {
-    //     await loginPage.login(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor.vendor2)
     //     //add coupons
     //     await vendorPage.addCoupon('C1_V2', data.coupon.amount)
     // })
 
     // it.skip('add test vendor2 address', async () => {
-    //     await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor.vendor2)
     //     await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
     // })
 
     // it.skip('add test vendor2 rma settings', async () => {
-    //     await loginPage.login(process.env.VENDOR2, process.env.VENDOR_PASSWORD)
+    //     await loginPage.login(data.vendor.vendor2)
     //     await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
     // })
 
-    it.only('admin add test vendor products ', async () => {
-        await loginPage.adminLogin(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+    it('admin add test vendor products ', async () => {
+        await loginPage.adminLogin(data.admin)
         await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'publish', false)
         await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'draft', false)
         await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'pending', false)
@@ -304,11 +308,11 @@ describe('Environment setup test', () => {
 
     it('add test customer1', async () => {
         // add customer1
-        await customerPage.customerRegister(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await customerPage.customerRegister(data.customer)
     })
 
     it('add test customer1 addresses', async () => {
-        await loginPage.login(process.env.CUSTOMER, process.env.CUSTOMER_PASSWORD)
+        await loginPage.login(data.customer)
         await customerPage.addBillingAddress('customer1', 'c1', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
         await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
         await customerPage.customerLogout()
@@ -316,11 +320,11 @@ describe('Environment setup test', () => {
 
     // it.skip('add test customer2', async () => {
     //     // add customer1
-    //     await customerPage.customerRegister(process.env.CUSTOMER2, process.env.CUSTOMER_PASSWORD)
+    //     await customerPage.customerRegister(data.customer.customer2)
     // })
 
     // it.skip('add test customer2 addresses', async () => {
-    //     await loginPage.login(process.env.CUSTOMER2, process.env.CUSTOMER_PASSWORD)
+    //     await loginPage.login(data.customer.customer2)
     //     await customerPage.addBillingAddress('customer2', 'c2', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
     //     await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
     //     await customerPage.customerLogout()

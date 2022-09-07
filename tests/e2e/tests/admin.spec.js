@@ -6,12 +6,15 @@ jest.retryTimes(process.env.RETRY_TIMES) //TODO: add to jest config
 
 
 describe('admin functionality test', () => {
-    // beforeAll(async () => {})
+    // beforeAll(async () => {
+    //     let pages = await browser.pages();
+    //     let page = pages[0]
+    // })
     // afterAll(async () => {})
     // beforeEach(async () => {})
     // afterEach(async () => {})
 
-    it('admin can login', async () => {
+    it.only('admin can login', async () => {
         await loginPage.adminLogin(data.admin)
     })
 
@@ -31,231 +34,203 @@ describe('admin functionality test', () => {
 
     })
 
-    it('admin can add simple product', async () => {
+    it.only('admin can add simple product', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.product.vendor[1])
+        await adminPage.addSimpleProduct(data.product.simple)
     })
 
     // it.skip('admin can add variable product', async () => {
     //     await loginPage.adminLogin(data.admin)
-    //     await adminPage.addVariableProduct(data.product.name.variable, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
+    //     await adminPage.addVariableProduct(data.product.variable)
     // })
 
     it('admin can add simple subscription ', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addSimpleSubscription(data.product.name.simpleSubscription, data.product.price, data.product.category, data.product.vendor[1])
+        await adminPage.addSimpleSubscription(data.product.simpleSubscription)
     })
 
     // it.skip('admin can add variable subscription ', async () => {
     //     await loginPage.adminLogin(data.admin)
-    //     await adminPage.addVariableSubscription(data.product.name.variableSubscription, data.product.price, data.product.category, data.product.vendor[1], data.product.category, data.product.attribute, data.product.attributeTerms)
+    //     await adminPage.addVariableSubscription(data.product.variableSubscription)
     // })
 
     it('admin can add external product', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addExternalProduct(data.product.name.external, data.product.price, data.product.category, data.product.vendor[1])
+        await adminPage.addExternalProduct(data.product.external)
     })
 
-    it('admin can add dokan subscription ', async () => {
+    it('admin can add vendor subscription ', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addDokanSubscription(data.product.name.dokanSubscription, data.product.price, data.product.category, data.product.vendor[0])
+        await adminPage.addDokanSubscription(data.product.vendorSubscription)
     })
 
     it('admin can add auction product', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addAuctionProduct(data.product.name.auction, data.product.price, data.product.auction.startDate, data.product.auction.endDate, data.product.category, data.product.vendor[1])
+        await adminPage.addAuctionProduct(data.product.auction)
     })
 
     it('admin can add booking product', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addBookingProduct(data.product.name.booking, data.product.price, data.product.category, data.product.vendor[1])
+        await adminPage.addBookingProduct(data.product.booking)
     })
 
     it('admin can add categories', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addCategory('Shirts')
+        await adminPage.addCategory(data.product.category.shirt)
     })
 
     it('admin can add attributes', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addAttributes(data.product.attribute, data.product.attributeTerms)
+        await adminPage.addAttributes(data.product.attribute.size)
     })
 
 
-    //settings
+    // settings
 
-    //tax settings
+    // tax settings
     it('admin can set standard tax rate', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        // await adminPage.addStandardTaxRate()
+        await adminPage.addStandardTaxRate(data.tax)
     })
 
-    //shipping settings
+    // shipping settings
     it('admin can set flat rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.flatRate)
     })
 
     it('admin can set free shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'free_shipping', 'Free shipping')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.freeShipping)     
     })
 
     it('admin can set local pickup shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'local_pickup', 'Local pickup')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.localPickup)
     })
 
     it('admin can set table rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.tableRateShipping)
     })
 
     it('admin can set distance rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.distanceRateShipping)
     })
 
     it('admin can set vendor shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.vendorShipping)
     })
 
-    //payment
+    // payment
+
     it('admin can add basic payment methods', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupBasicPaymentMethods()
+        await adminPage.setupBasicPaymentMethods(data.payment)
     })
 
     it('admin can add strip payment method', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupStripeConnect()
+        await adminPage.setupStripeConnect(data.payment)
     })
 
     it('admin can add paypal marketplace payment method', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupPaypalMarketPlace()
+        await adminPage.setupPaypalMarketPlace(data.payment)
     })
 
-    it('admin can add dokan mangopay payment method', async () => {
+    it('admin can add mangopay payment method', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupDokanMangoPay()
+        await adminPage.setupMangoPay(data.payment)
     })
 
-    it('admin can add dokan razorpay payment method', async () => {
+    it('admin can add razorpay payment method', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupDokanRazorpay()
+        await adminPage.setupRazorpay(data.payment)
     })
 
     it('admin can add strip express payment method', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupStripeExpress()
+        await adminPage.setupStripeExpress(data.payment)
     })
-
 
     // dokan settings
 
     it('admin can set dokan general settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanGeneralSettings()
+        await adminPage.setDokanGeneralSettings(data.dokanSettings.general)
     })
 
     it('admin can set dokan selling settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanSellingSettings()
+        await adminPage.setDokanSellingSettings(data.dokanSettings.selling)
     })
 
     it('admin can set dokan withdraw settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanWithdrawSettings()
+        await adminPage.setDokanWithdrawSettings(data.dokanSettings.withdraw)
     })
 
     it('admin can set dokan appearance settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanAppearanceSettings()
+        await adminPage.setDokanAppearanceSettings(data.dokanSettings.appreance)
     })
 
     it('admin can set dokan privacy policy settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanPrivacyPolicySettings()
+        await adminPage.setDokanPrivacyPolicySettings(data.dokanSettings.privacyPolicy)
     })
 
     it('admin can set dokan store support settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanStoreSupportSettings()
+        await adminPage.setDokanStoreSupportSettings(data.dokanSettings.storeSupport)
     })
 
     it('admin can set dokan rma settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanRmaSettings()
+        await adminPage.setDokanRmaSettings(data.dokanSettings.rma)
     })
 
     it('admin can set dokan wholesale settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanWholesaleSettings()
+        await adminPage.setDokanWholesaleSettings(data.dokanSettings.wholesale)
     })
 
     it('admin can set dokan eu compliance settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanEuComplianceSettings()
+        await adminPage.setDokanEuComplianceSettings(data.dokanSettings.euCompliance)
     })
 
     it('admin can set dokan delivery time settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanDeliveryTimeSettings()
+        await adminPage.setDokanDeliveryTimeSettings(data.dokanSettings.deliveryTime)
     })
 
     it('admin can set dokan product advertising settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanProductAdvertisingSettings()
+        await adminPage.setDokanProductAdvertisingSettings(data.dokanSettings.productAdvertising)
     })
 
     it('admin can set dokan geolocation settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanGeolocationSettings()
+        await adminPage.setDokanGeolocationSettings(data.dokanSettings.geolocation)
     })
 
     it('admin can set dokan product report abuse settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanProductReportAbuseSettings()
+        await adminPage.setDokanProductReportAbuseSettings(data.dokanSettings.productReportAbuse)
     })
 
     it('admin can set dokan spmv settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanSpmvSettings()
+        await adminPage.setDokanSpmvSettings(data.dokanSettings.spmv)
     })
 
     it.skip('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanVendorSubscriptionSettings()
+        await adminPage.setDokanVendorSubscriptionSettings(data.dokanSettings.vendorSubscription)
     })
 
 })

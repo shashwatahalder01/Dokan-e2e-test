@@ -769,7 +769,7 @@ module.exports = {
                 noOfAvailableSlot: "#dokan_product_advertisement\\[total_available_slot\\]",
                 expireAfterDays: "#dokan_product_advertisement\\[expire_after_days\\]",
                 vendorCanPurchaseAdvertisement: ".per_product_enabled .switch",
-                advertisementCostUsd: "#dokan_product_advertisement\\[cost\\]",
+                advertisementCost: "#dokan_product_advertisement\\[cost\\]",
                 enableAdvertisementInSubscription: ".vendor_subscription_enabled .switch",
                 markAdvertisedProductAsFeatured: ".featured .switch",
                 displayAdvertisedProductOnTop: ".catalog_priority .switch",
@@ -1044,7 +1044,7 @@ module.exports = {
                     enableDisablePayPalMarketplace: "#woocommerce_dokan_paypal_marketplace_enabled",
                     title: "#woocommerce_dokan_paypal_marketplace_title",
                     description: "#woocommerce_dokan_paypal_marketplace_description",
-                    payPalMerchantIdPartnerId: "#woocommerce_dokan_paypal_marketplace_partner_id",
+                    payPalMerchantId: "#woocommerce_dokan_paypal_marketplace_partner_id",
                     // api credentials
                     payPalSandbox: "#woocommerce_dokan_paypal_marketplace_test_mode",
                     sandboxClientId: "#woocommerce_dokan_paypal_marketplace_test_app_user",
@@ -1244,7 +1244,7 @@ module.exports = {
                 proxyBidding: '#\\_auction_proxy',
                 startPrice: '#\\_auction_start_price',
                 bidIncrement: '#\\_auction_bid_increment',
-                reservePriced: '#\\_auction_reserved_price',
+                reservedPrice: '#\\_auction_reserved_price',
                 buyItNowPrice: "//label[contains(text(),'Buy it now price')]/..//input[@id='_regular_price']",
                 auctionDatesFrom: '#\\_auction_dates_from',
                 auctionDatesTo: '#\\_auction_dates_to',
@@ -1314,7 +1314,7 @@ module.exports = {
                 adminCommissionSingle: '.show_if_simple #admin_commission',
                 adminCommissionCombined: '.additional_fee > .input-text',
                 //vendor
-                vendor: '#dokan_product_author_override',
+                storeName: '#dokan_product_author_override',
                 vendorOptions: "#dokan_product_author_override > option",
 
                 //category

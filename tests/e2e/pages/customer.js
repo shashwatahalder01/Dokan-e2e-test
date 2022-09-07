@@ -58,8 +58,6 @@ module.exports = {
 
         let loggedInUser = await base.getCurrentUser()
         expect(loggedInUser).toBeUndefined()
-        // let homeIsVisible = await base.isVisible( selector.frontend.home)
-        // expect(homeIsVisible).toBe(false)
     },
 
 

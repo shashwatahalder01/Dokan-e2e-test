@@ -13,6 +13,7 @@ module.exports = {
 
     // login from frontend
     async loginFrontend(user) {
+        await base.goIfBlank(data.subUrls.frontend.myAccount)
         let currentUser = await base.getCurrentUser()
         if (user.username === currentUser) { // skip if user is already loggedin 
             return
@@ -20,22 +21,12 @@ module.exports = {
             await this.logoutFrontend()
         }
         //login user
-        await base.goIfNotThere(data.subUrls.frontend.myAccount)
-        let emailField = await base.isVisible(selector.frontend.username)
-        if (emailField) {
-            await base.clearAndType(selector.frontend.username, user.username)
-            await base.clearAndType(selector.frontend.userPassword, user.password)
-            await base.clickAndWait(selector.frontend.logIn)
+        await base.clearAndType(selector.frontend.username, user.username)
+        await base.clearAndType(selector.frontend.userPassword, user.password)
+        await base.clickAndWait(selector.frontend.logIn)
 
-            let loggedInUser = await base.getCurrentUser()
-            expect(loggedInUser).toBe(user.username)
-        }
-        else {
-            let loggedInUser = await base.getCurrentUser()
-            if (user.username !== loggedInUser) {
-                await this.logoutFrontend()
-            }
-        }
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBe(user.username)
     },
 
     // logout from frontend
@@ -62,7 +53,7 @@ module.exports = {
     },
 
     // admin login
-    async adminLogin(user) {
+    async adminLogin(user) { //TODO: update this method according to fronted login
         await base.goIfNotThere(data.subUrls.backend.adminLogin)
         let emailField = await base.isVisible(selector.backend.email)
         if (emailField) {
@@ -106,5 +97,4 @@ module.exports = {
     //     }
     //     return true
     // }
-
 }
