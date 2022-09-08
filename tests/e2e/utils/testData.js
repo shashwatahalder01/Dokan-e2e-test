@@ -146,7 +146,7 @@ module.exports = {
       pendingProductUpdateSuccessMessage: 'Product updated. ',
 
       status: {
-         public: 'public',
+         publish: 'publish', //TODO: publish or public
          draft: 'draft',
          pending: 'pending'
       },
@@ -404,8 +404,8 @@ module.exports = {
    },
 
    coupon: {
-      amount: faker.datatype.number({ min: 1, max: 10 },).toString(),
       title: 'VC_' + faker.random.alpha({ count: 5, upcase: true },),
+      amount: faker.datatype.number({ min: 1, max: 10 },).toString(),
       existingCouponErrorMessage: 'Coupon title already exists',
    },
 
@@ -1095,7 +1095,15 @@ module.exports = {
 
    predefined: {
       simpleProduct: {
-         product1: 'p1_v1 (simple)',
+         product1: {
+            productType: 'simple',
+            productName: () => 'p1_v1 (simple)',
+            category: 'Uncategorized',
+            regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+            storeName: 'vendorStore1',
+            status: 'publish',
+            stockStatus: false,
+         },
          product2: 'p2_v1 (simple)',
          productfrac1: 'p1_F1_v1 (simple)',
          productfrac2: 'p2_F2_v1 (simple)'
@@ -1121,12 +1129,115 @@ module.exports = {
       saleProduct: {
          product1: 'p1_v1 (sale)'
       },
-      couponCode: {
-         coupon1: 'C1_v1'
+      vendorSubscription: {
+         nonRecurring: {
+            productType: 'product_pack',
+            productName: () => 'Dokan_Subscription_Non_recurring',
+            category: 'Uncategorized',
+            regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+            numberOfProducts: '-1',
+            packValidity: '0',
+            advertisementSlot: '-1',
+            expireAfterDays: '-1',
+            storeName: 'admin',
+            status: 'publish',
+         },
+      },
+      coupon: {
+         coupon1: {
+            title: 'C1_v1',
+            amount: faker.datatype.number({ min: 1, max: 10 },).toString(),
+            existingCouponErrorMessage: 'Coupon title already exists',
+         },
+      },
+      vendorInfo: {
+         email: () => faker.internet.email(),
+         emailDomain: '@gmail.com',
+         password: process.env.VENDOR_PASSWORD,
+         password1: process.env.VENDOR_PASSWORD + '1',
+         firstName: () => 'vendor1',
+         lastName: () => 'v1',
+         userName: 'vendor1',
+         shopName: 'vendorStore1',
+         shopUrl: faker.company.companyName(),
+         companyName: faker.company.companyName(),
+         companyId: faker.random.alphaNumeric(5),
+         vatNumber: faker.random.alphaNumeric(10),
+         bankName: faker.address.state(), //TODO: fix this
+         bankIban: faker.finance.iban(),
+         phone: faker.phone.phoneNumber('(###) ###-####'),
+         street1: 'abc street',
+         street2: 'xyz street',
+         country: 'United States (US)',
+         countrySelectValue: 'US',
+         stateSelectValue: 'NY',
+         city: 'New York',
+         zipCode: '10006',
+         state: 'New York',
+         accountName: 'accountName',
+         accountNumber: faker.random.alphaNumeric(10),
+         bankName: 'bankName',
+         bankAddress: 'bankAddress',
+         routingNumber: faker.random.alphaNumeric(10),
+         swiftCode: faker.random.alphaNumeric(10),
+         iban: faker.random.alphaNumeric(10),
+
+         //shop details
+         banner: 'tests/e2e/utils/sampleData/banner.png',
+         profilePicture: 'tests/e2e/utils/sampleData/avatar.png',
+         storeName: 'vendorStore1',
+         productsPerPage: '12',
+         mapLocation: 'New York',
+         termsAndConditions: 'Vendor Terms and Conditions',
+         biography: 'Vendor biography',
+         supportButtonText: 'Get Support',
+         openingClosingTime: {
+            days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
+            openingTime: '06:00 AM',
+            closingTime: '11:30 PM',
+         },
       },
       vendorStores: {
          vendor1: 'vendorStore1',
          venor2: 'vendorStore2'
+      },
+      customerInfo: {
+         emailDomain: '@gmail.com',
+         email: faker.internet.email(),
+         password: process.env.CUSTOMER_PASSWORD,
+         password1: process.env.CUSTOMER_PASSWORD + '1',
+         firstName: () => 'customer1',
+         lastName: () => 'c1',
+         username: () => this.customer.customerInfo.firstName, //TODO: handel callback
+         storename: () => this.customer.customerInfo.firstName + 'store',
+         companyName: faker.company.companyName(),
+         companyId: faker.random.alphaNumeric(5),
+         vatNumber: faker.random.alphaNumeric(10),
+         bankName: faker.address.state(),
+         bankIban: faker.finance.iban(),
+         phone: faker.phone.phoneNumber('(###) ###-####'),
+         street1: 'abc street', //TODO: address should be global or not
+         street2: 'xyz street',
+         country: 'United States (US)',
+         countrySelectValue: 'US',
+         stateSelectValue: 'NY',
+         city: 'New York',
+         zipCode: '10006',
+         state: 'New York',
+         accountName: 'accountName',
+         accountNumber: faker.random.alphaNumeric(10),
+         bankName: 'bankName',
+         bankAddress: 'bankAddress',
+         routingNumber: faker.random.alphaNumeric(10),
+         swiftCode: faker.random.alphaNumeric(10),
+         iban: faker.random.alphaNumeric(10),
+
+         addressChangeSuccessMessage: 'Address changed successfully.',
+         getSupport: {
+            subject: 'get Support Subject',
+            message: 'get Support Message',
+            supportSubmitSuccessMessage: 'Thank you. Your ticket has been submitted!',
+         },
       },
    }
 }

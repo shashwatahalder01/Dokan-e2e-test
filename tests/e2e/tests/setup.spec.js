@@ -6,36 +6,25 @@ const data = require('../utils/testData.js')
 jest.retryTimes(process.env.RETRY_TIMES)
 
 describe('Environment setup test', () => {
-    // beforeAll(async () => {
-    //     let pages = await browser.pages();
-    //         if (pages.length > 1)
-    //             await pages[0].close();
-    // })
+    // beforeAll(async () => {})
     // afterAll(async () => {await browser.close()})
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
-
-
-
-
 
     // Admin Details 
 
     it.skip('admin check Active plugins ', async () => {
         await loginPage.adminLogin(data.admin)
-        // check plugin is installed
         await adminPage.checkActivePlugins(data.plugin)
     })
 
     it('admin check Active modules ', async () => {
         await loginPage.adminLogin(data.admin)
-        // check plugin is installed
         await adminPage.checkActiveModules()
     })
 
     it('admin set WpSettings', async () => {
         await loginPage.adminLogin(data.admin)
-        // set wp general settings & permalink settings
         await adminPage.setWpSettings(data.wpSettings)
     })
 
@@ -46,285 +35,181 @@ describe('Environment setup test', () => {
 
     it('admin set tax rate', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addStandardTaxRate()
+        await adminPage.addStandardTaxRate(data.tax)
     })
 
     it('admin set currency options', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.setCurrencyOptions()
+        await adminPage.setCurrencyOptions(data.payment.currency)
     })
 
-    it('admin set flat rate shipping method', async () => {
+    it('admin set flat rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addShippingMethod('US', 'country:US', 'flat_rate', 'Flat rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.flatRate)
     })
 
-
-    it('admin set vendor Table Rate shipping method', async () => {
+    it('admin set table rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_table_rate_shipping', 'Vendor Table Rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.tableRateShipping)
     })
 
-
-    it('admin set vendor distance rate shipping method', async () => {
+    it('admin set distance rate shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_distance_rate_shipping', 'Vendor Distance Rate')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.distanceRateShipping)
     })
 
-
-    it('admin set vendor shipping method', async () => {
+    it('admin set vendor shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addShippingMethod('US', 'country:US', 'dokan_vendor_shipping', 'Vendor Shipping')
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.vendorShipping)
     })
 
     it('admin set basic payments', async () => {
         await loginPage.adminLogin(data.admin)
-        // set payment gateway settings
-        await adminPage.goToWooCommerceSettings()
-        await adminPage.setupBasicPaymentMethods()
+        await adminPage.setupBasicPaymentMethods(data.payment)
     })
 
     it('admin add categories and attributes', async () => {
         await loginPage.adminLogin(data.admin)
         // add product categories
-        await adminPage.addCategory('Shirts')
+        await adminPage.addCategory(data.product.category.clothings)
         // add product attributes
         await adminPage.addAttributes(data.product.attribute.size)
     })
 
-    // it.skip('admin add dokan subscription', async () => {
-    //     await loginPage.adminLogin(data.admin)
-    //     // add dokan subscriptions
-    //     await adminPage.addDokanSubscription('Dokan_subscription_Non_recurring', data.product.price, data.product.category, data.product.vendor[0])
-    // })
-
-    // it.skip('admin set dokan  settings', async () => {
-    //     await loginPage.adminLogin(data.admin)
-    //     await adminPage.goToDokanSettings()
-    //     await adminPage.setDokanSettings()
-    // })
+    it('admin add dokan subscription', async () => {
+        await loginPage.adminLogin(data.admin)
+        await adminPage.addDokanSubscription(data.predefined.vendorSubscription.nonRecurring)
+    })
 
     it('admin set dokan general settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanGeneralSettings()
+        await adminPage.setDokanGeneralSettings(data.dokanSettings.general)
     })
 
     it('admin set dokan selling settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanSellingSettings()
+        await adminPage.setDokanSellingSettings(data.dokanSettings.selling)
     })
 
     it('admin set dokan withdraw settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanWithdrawSettings()
+        await adminPage.setDokanWithdrawSettings(data.dokanSettings.withdraw)
     })
+
 
     it('admin set dokan page settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setPageSettings()
+        await adminPage.setPageSettings(data.dokanSettings.page)
     })
 
     it('admin set dokan appearance settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanAppearanceSettings()
+        await adminPage.setDokanAppearanceSettings(data.dokanSettings.appreance)
     })
 
     it('admin set dokan privacy policy settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanPrivacyPolicySettings()
+        await adminPage.setDokanPrivacyPolicySettings(data.dokanSettings.privacyPolicy)
     })
 
     it('admin set dokan store support settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanStoreSupportSettings()
+        await adminPage.setDokanStoreSupportSettings(data.dokanSettings.storeSupport)
     })
 
     it('admin set dokan rma settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanRmaSettings()
+        await adminPage.setDokanRmaSettings(data.dokanSettings.rma)
     })
 
     it('admin set dokan wholesale settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanWholesaleSettings()
+        await adminPage.setDokanWholesaleSettings(data.dokanSettings.wholesale)
     })
 
     it('admin set dokan eu compliance settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanEuComplianceSettings()
+        await adminPage.setDokanEuComplianceSettings(data.dokanSettings.euCompliance)
     })
 
     it('admin set dokan delivery time settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanDeliveryTimeSettings()
+        await adminPage.setDokanDeliveryTimeSettings(data.dokanSettings.deliveryTime)
     })
 
     it('admin set dokan product advertising settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanProductAdvertisingSettings()
+        await adminPage.setDokanProductAdvertisingSettings(data.dokanSettings.productAdvertising)
     })
 
     it('admin set dokan geolocation settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanGeolocationSettings()
+        await adminPage.setDokanGeolocationSettings(data.dokanSettings.geolocation)
     })
 
     it('admin set dokan product report abuse settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanProductReportAbuseSettings()
+        await adminPage.setDokanProductReportAbuseSettings(data.dokanSettings.productReportAbuse)
     })
 
     it('admin set dokan spmv settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-
-        await adminPage.setDokanSpmvSettings()
+        await adminPage.setDokanSpmvSettings(data.dokanSettings.spmv)
     })
 
-    it.skip('admin set dokan vendor subscription settings', async () => {
+    it('admin set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.goToDokanSettings()
-        await adminPage.setDokanVendorSubscriptionSettings()
+        await adminPage.setDokanVendorSubscriptionSettings(data.dokanSettings.vendorSubscription)
     })
 
-
-
-    //----------------------------------------- Vendor details -------------------------------------------//
-
-
-
+    // Vendor Details 
 
     it('add test vendor1', async () => {
-        // add vendor1
-        await vendorPage.vendorRegister(data.vendor, 'vendor1', 'v1', 'vendorStore1', data.vendor.vendorInfo.companyName, data.vendor.vendorInfo.companyId, data.vendor.vendorInfo.vatNumber, data.vendor.vendorInfo.bankName, data.vendor.vendorInfo.bankIban, data.vendor.vendorInfo.phone, false, data.vendorSetupWizard)
+        // Add Vendor1
+        await vendorPage.vendorRegister(data.predefined.vendorInfo, false, data.vendorSetupWizard)
     })
 
-    // it('add test vendor1 products', async () => {
-    //     await loginPage.login(data.vendor)
-    //     //add products
-    //     await vendorPage.addSimpleProduct('p1_v1 (simple)', data.product.price_int, data.product.category)
-    //     // await vendorPage.addSimpleProduct('p2_v1 (simple)', data.product.price, data.product.category)
-    //     await vendorPage.addSimpleProduct('p1_F1_v1 (simple)', data.product.price_frac_comma, data.product.category)
-    //     // await vendorPage.addSimpleProduct('p2_F2_v1 (simple)', data.product.price, data.product.category)
-    //     // await vendorPage.addVariableProduct('p1_v1 (variable)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-    //     // await vendorPage.addSimpleSubscription('p1_v1 (simple subscription)', data.product.price, data.product.category)
-    //     // await vendorPage.addVariableSubscription('p1_v1 (variable subscription)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-    //     // await vendorPage.addExternalProduct('p1_v1 (external)', data.product.price, data.product.category)
-    //     // await vendorPage.addAuctionProduct('p1_v1 (auction)', data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
-    //     // await vendorPage.addBookingProduct('p1_v1 (booking)', data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
-    //     // //add discount product
-    //     // await vendorPage.addSimpleProduct('p1_v1 (sale)', data.product.price, data.product.category)
-    //     // //add minmax products
-    //     // await vendorPage.addSimpleProduct('p1_v1 (minmax)', data.product.price, data.product.category)
-    // })
-
-    it.only('add test vendor1 coupons', async () => {
+    it('add test vendor1 products', async () => {
         await loginPage.login(data.vendor)
-        //add coupons
-        await vendorPage.addCoupon('C1_V1', data.coupon.amount)
+        // Add Products
+        await vendorPage.addSimpleProduct(data.predefined.simpleProduct.product1)
     })
 
-    // it('add test vendor1 address', async () => {
-    //     await loginPage.login(data.vendor)
-    //     await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
-    // })
+    it('add test vendor1 coupons', async () => {
+        await loginPage.login(data.vendor)
+        // Add Coupons
+        await vendorPage.addCoupon(data.predefined.coupon.coupon1)
+    })
 
-    // it('add test vendor1 rma settings', async () => {
-    //     await loginPage.login(data.vendor)
-    //     await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
-    // })
+    it('add test vendor1 address', async () => {
+        await loginPage.login(data.vendor)
+        await vendorPage.setStoreAddress(data.vendor.vendorInfo)
+    })
 
-    // it.skip('add test vendor2', async () => {
-    //     // add vendor1
-    //     await vendorPage.vendorRegister(data.vendor.vendor2, 'vendor2', 'v2', 'vendorStore2', data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
-    // })
-
-    // it.skip('add test vendor2 products', async () => {
-    //     await loginPage.login(data.vendor.vendor2)
-    //     //add products
-    //     await vendorPage.addSimpleProduct('p1_v2 (simple)', data.product.price_int, data.product.category)
-    //     // await vendorPage.addSimpleProduct('p2_v2 (simple)', data.product.price, data.product.category)
-    //     await vendorPage.addSimpleProduct('p1_F1_v2 (simple)', data.product.price_frac_comma, data.product.category)
-    //     // await vendorPage.addSimpleProduct('p2_F2_v2 (simple)', data.product.price, data.product.category)
-    //     // await vendorPage.addVariableProduct('p1_v2 (variable)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-    //     // await vendorPage.addSimpleSubscription('p1_v2 (simple subscription)', data.product.price, data.product.category)
-    //     // await vendorPage.addVariableSubscription('p1_v2 (variable subscription)', data.product.price, data.product.category, data.product.attribute, data.product.attributeTerms)
-    //     // await vendorPage.addExternalProduct('p1_v2 (external)', data.product.price, data.product.category)
-    //     // await vendorPage.addAuctionProduct('p1_v2 (auction)', data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
-    //     // await vendorPage.addBookingProduct('p1_v2 (booking)', data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
-    //     // //add discount product
-    //     // await vendorPage.addSimpleProduct('p1_v2 (sale)', data.product.price, data.product.category)
-    //     // //add minmax products
-    //     // await vendorPage.addSimpleProduct('p1_v2 (minmax)', data.product.price, data.product.category)
-    // })
-
-    // it.skip('add test vendor2 coupons', async () => {
-    //     await loginPage.login(data.vendor.vendor2)
-    //     //add coupons
-    //     await vendorPage.addCoupon('C1_V2', data.coupon.amount)
-    // })
-
-    // it.skip('add test vendor2 address', async () => {
-    //     await loginPage.login(data.vendor.vendor2)
-    //     await vendorPage.setStoreAddress('abc street', 'xyz street', 'New York', '10006', 'US', 'NY')
-    // })
-
-    // it.skip('add test vendor2 rma settings', async () => {
-    //     await loginPage.login(data.vendor.vendor2)
-    //     await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
-    // })
+    it('add test vendor1 rma settings', async () => {
+        await loginPage.login(data.vendor)
+        await vendorPage.setRmaSettings(data.vendor.rma)
+    })
 
     it('admin add test vendor products ', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'publish', false)
-        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'draft', false)
-        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'pending', false)
-        await adminPage.addSimpleProduct(data.product.name.simple, data.product.price, data.product.category, data.vendorStores[0], 'publish', true)
+        await adminPage.addSimpleProduct(data.product.simple, 'publish', false)
+        await adminPage.addSimpleProduct(data.product.simple, 'draft', false)
+        await adminPage.addSimpleProduct(data.product.simple, 'pending', false)
+        await adminPage.addSimpleProduct(data.product.simple, 'publish', true)
     })
 
-
-
-    //----------------------------------------- Customer details -------------------------------------------//
-
-
+    // Customer Details 
 
     it('add test customer1', async () => {
-        // add customer1
         await customerPage.customerRegister(data.customer)
-    })
+    }) 
 
     it('add test customer1 addresses', async () => {
         await loginPage.login(data.customer)
-        await customerPage.addBillingAddress('customer1', 'c1', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
-        await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
+        await customerPage.addBillingAddress(data.predefined.customerInfo)
+        await customerPage.addShippingAddress(data.predefined.customerInfo)
         await customerPage.customerLogout()
     })
-
-    // it.skip('add test customer2', async () => {
-    //     // add customer1
-    //     await customerPage.customerRegister(data.customer.customer2)
-    // })
-
-    // it.skip('add test customer2 addresses', async () => {
-    //     await loginPage.login(data.customer.customer2)
-    //     await customerPage.addBillingAddress('customer2', 'c2', data.customerInfo.companyName, data.customerInfo.companyId, data.customerInfo.vatNumber, data.customerInfo.bankName, data.customerInfo.bankIban, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode, data.customerInfo.phone, data.customerInfo.userEmail)
-    //     await customerPage.addShippingAddress(data.customerInfo.firstName, data.customerInfo.lastName, data.customerInfo.companyName, data.customerInfo.country, data.customerInfo.street1, data.customerInfo.street2, data.customerInfo.city, data.customerInfo.city, data.customerInfo.zipCode)
-    //     await customerPage.customerLogout()
-    // })
-
 
 })

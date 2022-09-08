@@ -173,6 +173,12 @@ describe('admin functionality test', () => {
         await adminPage.setDokanWithdrawSettings(data.dokanSettings.withdraw)
     })
 
+
+    it('admin can set dokan page settings', async () => {
+        await loginPage.adminLogin(data.admin)
+        await adminPage.setPageSettings(data.dokanSettings.page)
+    })
+
     it('admin can set dokan appearance settings', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.setDokanAppearanceSettings(data.dokanSettings.appreance)

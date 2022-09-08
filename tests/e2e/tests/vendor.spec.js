@@ -4,14 +4,10 @@ const data = require('../utils/testData.js')
 jest.retryTimes(process.env.RETRY_TIMES) //TODO:
 
 describe('vendor functionality test', () => {
-   // beforeAll(async () => {
-   //    let pages = await browser.pages();
-   //    let page = pages[0]
-   // })
-   // afterAll(async () => {)
-   // beforeEach(async () => {})
-   // afterEach(async () => {)
-
+    // beforeAll(async () => {})
+    // afterAll(async () => {await browser.close()})
+    // beforeEach(async () => {})
+    // afterEach(async () => {await browser.close()})
 
    it('vendor can register', async () => {
       await vendorPage.vendorRegister(data.vendor.vendorInfo, false, data.vendorSetupWizard)
@@ -94,7 +90,7 @@ describe('vendor functionality test', () => {
 
    it.skip('vendor can set store settings ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setStoreSettings(data.vendorInfo)
+      await vendorPage.setStoreSettings(data.vendor.vendorInfo)
    })
 
    it('vendor can add addons', async () => {
