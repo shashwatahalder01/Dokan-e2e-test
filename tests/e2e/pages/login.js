@@ -6,12 +6,17 @@ const selector = require("../pages/selectors.js")
 
 module.exports = {
 
-    // user login
+    // User Login
     async login(user) {
         await this.loginFrontend(user)
     },
 
-    // login from frontend
+    // User Logout
+    async logout(user) {
+        await this.logoutFrontend(user)
+    },
+
+    // Login from Frontend
     async loginFrontend(user) {
         await base.goIfBlank(data.subUrls.frontend.myAccount)
         let currentUser = await base.getCurrentUser()
@@ -20,7 +25,7 @@ module.exports = {
         } else if ((user.username !== currentUser) && (currentUser !== undefined)) { // logout if other user is already loggedin
             await this.logoutFrontend()
         }
-        //login user
+        // Login User
         await base.clearAndType(selector.frontend.username, user.username)
         await base.clearAndType(selector.frontend.userPassword, user.password)
         await base.clickAndWait(selector.frontend.logIn)
@@ -29,7 +34,7 @@ module.exports = {
         expect(loggedInUser).toBe(user.username)
     },
 
-    // logout from frontend
+    // Logout from Frontend
     async logoutFrontend() {
         await base.goIfNotThere(data.subUrls.frontend.myAccount)
         await base.clickAndWait(selector.frontend.customerLogout)
@@ -38,7 +43,7 @@ module.exports = {
         expect(loggedInUser).toBeUndefined()
     },
 
-    // login user form WP login dashboard
+    // Login User Form Wp Login Dashboard
     async loginBackend(user) {
         await base.goIfNotThere(data.subUrls.backend.login)
         let emailField = await base.isVisible(selector.backend.email)
@@ -52,7 +57,7 @@ module.exports = {
         }
     },
 
-    // admin login
+    // Admin Login
     async adminLogin(user) { //TODO: update this method according to fronted login
         await base.goIfNotThere(data.subUrls.backend.adminLogin)
         let emailField = await base.isVisible(selector.backend.email)
@@ -66,7 +71,16 @@ module.exports = {
         }
     },
 
-    // switcher user
+    // Admin Logout
+    async adminLogout() {
+        await base.hover(selector.backend.userMenu)
+        await base.clickAndWait(selector.backend.logout)
+
+        let loggedInUser = await base.getCurrentUser()
+        expect(loggedInUser).toBeUndefined()
+    },
+
+    // Switch User
     async switchUser(user) {
         let currentUser = await base.getCurrentUser()
         if (currentUser !== user.username) {
@@ -74,27 +88,9 @@ module.exports = {
         }
     },
 
-    //create user
+    // Create User
     async createUser(username, userDetails) {
         let password = createUser(username, userDetails)
         return password
     },
-
-    // //TODO: delete this not necessary
-    // async checkUserExists(user) {
-    //     await base.goIfNotThere(data.subUrls.backend.login)
-    //     let emailField = await base.isVisible(selector.backend.email)
-    //     if (emailField) {
-    //         await base.clearAndType(selector.backend.email, user.username)
-    //         await base.clearAndType(selector.backend.password, user.password)
-    //         await base.clickAndWait(selector.backend.login)
-    //     }
-    //     let loginError = await base.isVisible(selector.backend.loginError)
-    //     if (loginError) {
-    //         let errorMessage = await base.getElementText(selector.backend.loginError)
-    //         expect(errorMessage).toMatch(`Error: The username ${user.username} is not registered on this site. If you are unsure of your username, try your email address instead.`)
-    //         return false
-    //     }
-    //     return true
-    // }
 }

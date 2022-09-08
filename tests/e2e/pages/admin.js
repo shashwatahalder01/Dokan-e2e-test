@@ -5,10 +5,8 @@ const selector = require("../pages/selectors.js")
 
 module.exports = {
 
+  // Navigation 
 
-  // navigation 
-
-  // methods
   async goToAdminDashboard() {
     await base.goIfNotThere(data.subUrls.backend.adminDashboard) //TODO: check if goto or goifnothere is applicable
 
@@ -44,23 +42,9 @@ module.exports = {
   },
 
 
-  // wordpress site settings 
+  // Wordpress Site Settings 
 
-
-  // admin logout
-  async adminLogout() {
-    await base.hover(selector.backend.userMenu)
-    await base.clickAndWait(selector.backend.logout)
-
-    let loggedInUser = await base.getCurrentUser()
-    expect(loggedInUser).toBeUndefined()
-  },
-
-
-
-  // wordpress site settings 
-
-  // plugin activation check
+  // Plugin Activation Check
   async checkActivePlugins(plugin) {
     await this.goToPlugins()
     for (let pluginSlug of plugin.pluginSlugList) {
@@ -70,21 +54,22 @@ module.exports = {
   },
 
 
-  // admin set wordpress site settings
-  async setWpSettings() {
-    await this.setWpGeneralSettings()
+  // Admin Set Wordpress Site Settings
+  async setWpSettings(wpSettings) {
+    await this.setWpGeneralSettings(wpSettings.general)
     await this.goToAdminDashboard()
-    await this.setPermalinkSettings()
+    await this.setPermalinkSettings(wpSettings.permalink)
 
   },
 
+  // Set Wp General Settings
   async setWpGeneralSettings(general) {
     await base.hover(selector.admin.aDashboard.settings)
-    //set general settings
+    // Set General Settings
     await base.clickAndWait(selector.admin.settings.general)
-    // enable user registration
+    // Enable User Registration
     await base.check(selector.admin.settings.membership)
-    //timezone
+    // Timezone
     await base.select(selector.admin.settings.timezone, general.timezone)
     await base.clickAndWait(selector.admin.settings.generalSaveChanges)
 
@@ -92,10 +77,10 @@ module.exports = {
     expect(successMessage).toMatch(general.saveSuccessMessage)
   },
 
-  //admin set permalink settings
+  // Admin Set Permalink Settings
   async setPermalinkSettings(permalink) {
     await base.hover(selector.admin.aDashboard.settings)
-    //set permalinks settings
+    // Set Permalinks Settings
     await base.clickAndWait(selector.admin.settings.permalinks)
     await base.click(selector.admin.settings.postName)
     await base.click(selector.admin.settings.customBase)
@@ -107,9 +92,9 @@ module.exports = {
 
   },
 
-  //dokan settings 
+  // Dokan Settings 
 
-  //admin set dokan settings
+  // Admin Set Dokan Settings
   async setDokanSettings() {
     await this.goToDokanSettings()
     await this.setDokanGeneralSettings()
@@ -130,18 +115,18 @@ module.exports = {
     await this.setDokanVendorSubscriptionSettings()
   },
 
-  //admin set dokan general settings
+  // Admin Set Dokan General Settings
   async setDokanGeneralSettings(general) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.general)
 
-    //site options
+    // Site Options
     await base.enableSwitcher(selector.admin.dokan.settings.adminAreaAccess)
     await base.clearAndType(selector.admin.dokan.settings.vendorStoreUrl, general.vendorStoreUrl)
     await base.click(selector.admin.dokan.settings.sellingProductTypes(general.sellingProductTypes))
 
-    //vendor store options
+    // Vendor Store Options
     await base.enableSwitcher(selector.admin.dokan.settings.storeTermsAndConditions)
     await base.clearAndType(selector.admin.dokan.settings.storeProductPerPage, general.storeProductPerPage)
     await base.enableSwitcher(selector.admin.dokan.settings.enableTermsAndCondition)
@@ -152,20 +137,19 @@ module.exports = {
     expect(successMessage).toMatch(general.saveSuccessMessage)
   },
 
-  //admin set dokan selling settings
+  // Admin Set Dokan Selling Settings
   async setDokanSellingSettings(selling) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.sellingOptions)
 
-    //commission settings
+    // Commission Settings
     await base.select(selector.admin.dokan.settings.commissionType, selling.commissionType)
     await base.clearAndType(selector.admin.dokan.settings.adminCommission, selling.adminCommission)
     await base.click(selector.admin.dokan.settings.shippingFeeRecipient(selling.shippingFeeRecipient))
     await base.click(selector.admin.dokan.settings.taxFeeRecipient(selling.taxFeeRecipient))
 
-
-    //vendor capability
+    // Vendor Capability
     await base.enableSwitcher(selector.admin.dokan.settings.newVendorProductUpload)
     await base.enableSwitcher(selector.admin.dokan.settings.orderStatusChange)
     await base.click(selector.admin.dokan.settings.newProductStatus(selling.newProductStatus))
@@ -189,13 +173,13 @@ module.exports = {
     // expect(commission).toMatch(selling.adminCommission)
   },
 
-  //admin set dokan withdraw settings
+  // Admin Set Dokan Withdraw Settings
   async setDokanWithdrawSettings(withdraw) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.withdrawOptions)
 
-    //withdraw options
+    // Withdraw Options
     await base.enableSwitcher(selector.admin.dokan.settings.withdrawMethodsPaypal)
     await base.enableSwitcher(selector.admin.dokan.settings.withdrawMethodsBankTransfer)
     await base.enableSwitcher(selector.admin.dokan.settings.withdrawMethodsDokanCustom)
@@ -207,27 +191,27 @@ module.exports = {
     await base.enableSwitcher(selector.admin.dokan.settings.orderStatusForWithdrawProcessing)
     await base.clearAndType(selector.admin.dokan.settings.withdrawThreshold, withdraw.withdrawThreshold)
 
-    //disbursement schedule settings
+    // Disbursement Schedule Settings
     await base.enableSwitcher(selector.admin.dokan.settings.withdrawDisbursementManual)
     await base.enableSwitcher(selector.admin.dokan.settings.withdrawDisbursementAuto)
 
-    // disbursement schedule
+    // Disbursement Schedule
     await base.enableSwitcher(selector.admin.dokan.settings.disburseMentQuarterlySchedule)
     await base.enableSwitcher(selector.admin.dokan.settings.disburseMentMonthlySchedule)
     await base.enableSwitcher(selector.admin.dokan.settings.disburseMentBiweeklySchedule)
     await base.enableSwitcher(selector.admin.dokan.settings.disburseMentWeeklySchedule)
 
-    // quarterly schedule
+    // Quarterly Schedule
     await base.select(selector.admin.dokan.settings.quarterlyScheduleMonth, withdraw.quarterlyScheduleMonth)
     await base.select(selector.admin.dokan.settings.quarterlyScheduleWeek, withdraw.quarterlyScheduleWeek)
     await base.select(selector.admin.dokan.settings.quarterlyScheduleDay, withdraw.quarterlyScheduleDay)
-    // monthly schedule
+    // Monthly Schedule
     await base.select(selector.admin.dokan.settings.monthlyScheduleWeek, withdraw.monthlyScheduleWeek)
     await base.select(selector.admin.dokan.settings.monthlyScheduleDay, withdraw.monthlyScheduleDay)
-    // biweekly schedule
+    // Biweekly Schedule
     await base.select(selector.admin.dokan.settings.biweeklyScheduleWeek, withdraw.biweeklyScheduleWeek)
     await base.select(selector.admin.dokan.settings.biweeklyScheduleDay, withdraw.biweeklyScheduleDay)
-    // weekly schedule
+    // Weekly Schedule
     await base.select(selector.admin.dokan.settings.weeklyScheduleDay, withdraw.weeklyScheduleDay)
     await base.click(selector.admin.dokan.settings.withdrawSaveChanges)
 
@@ -235,13 +219,13 @@ module.exports = {
     expect(successMessage).toMatch(withdraw.saveSuccessMessage)
   },
 
-  //admin set dokan page settings
+  // Admin Set Dokan Page Settings
   async setPageSettings(page) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.pageSettings)
 
-    //base settings
+    // Base Settings
     await base.select(selector.admin.dokan.settings.termsAndConditionsPage, page.termsAndConditionsPage)
     await base.click(selector.admin.dokan.settings.pageSaveChanges)
 
@@ -250,13 +234,13 @@ module.exports = {
 
   },
 
-  //admin set dokan appearance settings
+  // Admin Set Dokan Appearance Settings
   async setDokanAppearanceSettings(appreance) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.appearance)
 
-    //appearance settings
+    // Appearance Settings
     await base.enableSwitcher(selector.admin.dokan.settings.showMapOnStorePage)
     await base.click(selector.admin.dokan.settings.mapApiSourceGoogleMaps)
     await base.clearAndType(selector.admin.dokan.settings.googleMapApiKey, appreance.googleMapApiKey)
@@ -274,13 +258,13 @@ module.exports = {
     // expect(apiKey).toMatch(appreance.googleMapApiKey)
   },
 
-  //admin set dokan privacy policy settings
+  // Admin Set Dokan Privacy Policy Settings
   async setDokanPrivacyPolicySettings(privacyPolicy) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.privacyPolicy)
 
-    //privacy policy settings
+    // Privacy Policy Settings
     await base.enableSwitcher(selector.admin.dokan.settings.enablePrivacyPolicy)
     await base.select(selector.admin.dokan.settings.privacyPage, privacyPolicy.privacyPage)
 
@@ -293,13 +277,13 @@ module.exports = {
     expect(successMessage).toMatch(privacyPolicy.saveSuccessMessage)
   },
 
-  //admin set dokan store support settings
+  // Admin Set Dokan Store Support Settings
   async setDokanStoreSupportSettings(storeSupport) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.storeSupport)
 
-    //store support settings
+    // Store Support Settings
     await base.wait(0.5) //required
     await base.enableSwitcher(selector.admin.dokan.settings.displayOnOrderDetails)
     await base.select(selector.admin.dokan.settings.displayOnSingleProductPage, storeSupport.displayOnSingleProductPage)
@@ -311,13 +295,13 @@ module.exports = {
     expect(successMessage).toMatch(storeSupport.saveSuccessMessage)
   },
 
-  //admin set dokan rma settings
+  // Admin Set Dokan Rma Settings
   async setDokanRmaSettings(rma) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.rma)
 
-    //rma settings
+    // Rma Settings
     await base.select(selector.admin.dokan.settings.orderStatus, rma.orderStatus)
     await base.enableSwitcher(selector.admin.dokan.settings.enableRefundRequests)
     await base.enableSwitcher(selector.admin.dokan.settings.enableCouponRequests)
@@ -337,13 +321,13 @@ module.exports = {
     expect(successMessage).toMatch(rma.saveSuccessMessage)
   },
 
-  // admin set dokan wholesale settings
+  // Admin Set Dokan Wholesale Settings
   async setDokanWholesaleSettings(wholesale) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.wholesale)
 
-    //wholesale settings
+    // Wholesale Settings
     await base.click(selector.admin.dokan.settings.whoCanSeeWholesalePrice(wholesale.whoCanSeeWholesalePrice))
     await base.enableSwitcher(selector.admin.dokan.settings.showWholesalePriceOnShopArchive)
     await base.enableSwitcher(selector.admin.dokan.settings.needApprovalForCustomer)
@@ -353,13 +337,13 @@ module.exports = {
     expect(successMessage).toMatch(wholesale.saveSuccessMessage)
   },
 
-  //admin set dokan eu compliance settings
+  // Admin Set Dokan Eu Compliance Settings
   async setDokanEuComplianceSettings() {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.euComplianceFields)
 
-    //eu compliance settings
+    // Eu Compliance Settings
     await base.wait(0.5)
     await base.enableSwitcher(selector.admin.dokan.settings.vendorExtraFieldsCompanyName)
     await base.enableSwitcher(selector.admin.dokan.settings.vendorExtraFieldsCompanyIdOrEuidNumber)
@@ -379,13 +363,13 @@ module.exports = {
     expect(successMessage).toMatch(euCompliance.saveSuccessMessage)
   },
 
-  //admin set dokan delivery time settings
+  // Admin Set Dokan Delivery Time Settings
   async setDokanDeliveryTimeSettings(deliveryTime) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.deliveryTime)
 
-    //delivery time settings
+    // Delivery Time Settings
     await base.wait(0.5)
     await base.enableSwitcher(selector.admin.dokan.settings.allowVendorSettings)
     await base.clearAndType(selector.admin.dokan.settings.deliveryDateLabel, deliveryTime.deliveryDateLabel)
@@ -409,13 +393,13 @@ module.exports = {
     expect(successMessage).toMatch(deliveryTime.saveSuccessMessage)
   },
 
-  //admin set dokan product advertising settings
+  // Admin Set Dokan Product Advertising Settings
   async setDokanProductAdvertisingSettings(productAdvertising) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.productAdvertising)
 
-    //product advertising settings
+    // Product Advertising Settings
     await base.clearAndType(selector.admin.dokan.settings.noOfAvailableSlot, productAdvertising.noOfAvailableSlot)
     await base.clearAndType(selector.admin.dokan.settings.expireAfterDays, productAdvertising.expireAfterDays)
     await base.enableSwitcher(selector.admin.dokan.settings.vendorCanPurchaseAdvertisement)
@@ -430,13 +414,13 @@ module.exports = {
     expect(successMessage).toMatch(productAdvertising.saveSuccessMessage)
   },
 
-  //admin set dokan geolocation settings
+  // Admin Set Dokan Geolocation Settings
   async setDokanGeolocationSettings(geolocation) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.geolocation)
 
-    //geolocation settings
+    // Geolocation Settings
     await base.click(selector.admin.dokan.settings.locationMapPosition(geolocation.locationMapPosition))
     await base.click(selector.admin.dokan.settings.showMap(geolocation.showMap))
     await base.enableSwitcher(selector.admin.dokan.settings.showFiltersBeforeLocationMap)
@@ -455,13 +439,13 @@ module.exports = {
     expect(successMessage).toMatch(geolocation.saveSuccessMessage)
   },
 
-  //admin set dokan product report abuse settings
+  // Admin Set Dokan Product Report Abuse Settings
   async setDokanProductReportAbuseSettings(productReportAbuse) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.productReportAbuse)
 
-    //product report abuse settings
+    // Product Report Abuse Settings
     await base.deleteIfExists(selector.admin.dokan.settings.reasonsForAbuseReportSingle(productReportAbuse.reasonsForAbuseReport))
     await base.clearAndType(selector.admin.dokan.settings.reasonsForAbuseReportInput, productReportAbuse.reasonsForAbuseReport)
     await base.click(selector.admin.dokan.settings.reasonsForAbuseReportAdd)
@@ -471,7 +455,7 @@ module.exports = {
     expect(successMessage).toMatch(productReportAbuse.saveSuccessMessage)
   },
 
-  //admin set dokan spmv settings
+  // Admin Set Dokan Spmv Settings
   async setDokanSpmvSettings(spmv) {
     await this.goToDokanSettings()
 
@@ -488,13 +472,13 @@ module.exports = {
     expect(successMessage).toMatch(spmv.saveSuccessMessage)
   },
 
-  //admin set dokan vendor subscription settings
+  // Admin Set Dokan Vendor Subscription Settings
   async setDokanVendorSubscriptionSettings(subscription) {
     await this.goToDokanSettings()
 
     await base.click(selector.admin.dokan.settings.vendorSubscription)
 
-    //vendor subscription settings
+    // Vendor Subscription Settings
     await base.select(selector.admin.dokan.settings.subscription, subscription.displayPage)
     await base.enableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
     await base.enableSwitcher(selector.admin.dokan.settings.enableSubscriptionInRegistrationForm)
@@ -509,17 +493,21 @@ module.exports = {
 
     let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch(subscription.saveSuccessMessage)
+
+    // Disabling Vendor Subscription //TODO: remove after handling buy subscription while vendor signup
+    await base.enableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
+    await base.click(selector.admin.dokan.settings.vendorSubscriptionSaveChanges)
   },
 
 
 
-  // tax 
+  // Tax 
 
-  // admin enable-disable tax
+  // Admin Enable-Disable Tax
   async enableTax(enableTax = true) {
     await this.goToWooCommerceSettings()
 
-    // enable-disable tax
+    // Enable-Disable Tax
     enableTax ? await base.check(selector.admin.wooCommerce.settings.enableTaxes) : await base.uncheck(selector.admin.wooCommerce.settings.enableTaxes)
     await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
@@ -527,14 +515,14 @@ module.exports = {
     expect(successMessage).toMatch(data.tax.saveSuccessMessage)
   },
 
-  //admin add standard tax rate
+  // Admin Add Standard Tax Rate
   async addStandardTaxRate(tax) {
     await this.goToWooCommerceSettings()
 
-    //enable tax
+    // Enable Tax
     await this.enableTax()
 
-    // set tax rate
+    // Set Tax Rate
     await base.clickAndWait(selector.admin.wooCommerce.settings.tax)
     await base.clickAndWait(selector.admin.wooCommerce.settings.standardRates)
     let taxIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.taxRate)
@@ -548,15 +536,15 @@ module.exports = {
     await base.wait(3)
 
     let newTaxRate = await base.getElementValue(selector.admin.wooCommerce.settings.taxRate)
-    expect(newTaxRate).toBe('5.0000') //TODO: update this
+    expect(newTaxRate).toBe(tax.taxRate.toPrecision(5))  
 
 
   },
 
 
-  // Woocommerce settings 
+  // Woocommerce Settings 
 
-  //admin setup wooCommerce settings
+  // Admin Setup Woocommerce Settings
   async setWoocommerceSettings() {
     await this.enablePasswordInputField()
     await this.addStandardTaxRate(data.tax)
@@ -571,8 +559,7 @@ module.exports = {
     // await this.deleteShippingZone(data.shipping.shippingZone)
   },
 
-
-  // Enable password field
+  // Enable Password Field
   async enablePasswordInputField(woocommerce) {
     await this.goToWooCommerceSettings()
     await base.clickAndWait(selector.admin.wooCommerce.settings.accounts)
@@ -583,10 +570,9 @@ module.exports = {
     expect(successMessage).toMatch(woocommerce.saveSuccessMessage)
   },
 
+  // Shipping Methods 
 
-  // Shipping methods 
-
-  // Enable enable-disable shipping 
+  // Enable Enable-Disable Shipping 
 
   async enableShipping(enableShipping = true) {
 
@@ -604,8 +590,7 @@ module.exports = {
 
   },
 
-
-  // Admin add shipping method
+  // Admin Add Shipping Method
   async addShippingMethod(shipping) {
     await this.goToWooCommerceSettings()
 
@@ -613,7 +598,7 @@ module.exports = {
 
     let zoneIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingZoneCell(shipping.shippingZone))
     if (!zoneIsVisible) {
-      //add shipping zone
+      // Add Shipping Zone
       await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingZone)
       await base.clearAndType(selector.admin.wooCommerce.settings.zoneName, shipping.shippingZone)
       // await base.select(selector.admin.wooCommerce.settings.zoneRegions, shippingCountry) //user select values  'country:US',
@@ -622,37 +607,37 @@ module.exports = {
       await base.wait(2)
       await base.press(data.key.enter)
     } else {
-      // edit shipping zone
+      // Edit Shipping Zone
       await base.hover(selector.admin.wooCommerce.settings.shippingZoneCell(shipping.shippingZone))
       await base.clickAndWait(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingZone))
     }
 
     let methodIsVisible = await base.isVisible(selector.admin.wooCommerce.settings.shippingMethodCell(helpers.replaceAndCapitalize(shipping.shippingMethod)))
     if (!methodIsVisible) {
-      // add shipping method
+      // Add Shipping Method
       await base.click(selector.admin.wooCommerce.settings.addShippingMethods)
       await base.select(selector.admin.wooCommerce.settings.shippingMethod, shipping.selectShippingMethod)
       await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingMethod)
       await base.wait(1)
-      //set shipping method options
+      // Set Shipping Method Options
       await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shipping.shippingMethod))
       await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingMethod))
     } else {
-      //edit shipping method
+      // Edit Shipping Method
       await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shipping.shippingMethod))
       await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingMethod))
     }
 
     switch (shipping.selectShippingMethod) {
       case 'flat_rate':
-        //flat rate
+        // Flat Rate
         await base.clearAndType(selector.admin.wooCommerce.settings.flatRateMethodTitle, shipping.shippingMethod)
         await base.select(selector.admin.wooCommerce.settings.flatRateTaxStatus, shipping.taxStatus)
         await base.clearAndType(selector.admin.wooCommerce.settings.flatRateCost, shipping.shippingCost)
         break
 
       case 'free_shipping':
-        //free shipping
+        // Free Shipping
         await base.clearAndType(selector.admin.wooCommerce.settings.freeShippingTitle, shipping.shippingMethod)
         // await base.select(selector.admin.wooCommerce.settings.freeShippingRequires, shipping.freeShippingRequires)
         // await base.clearAndType(selector.admin.wooCommerce.settings.freeShippingMinimumOrderAmount,shipping.freeShippingMinimumOrderAmount)
@@ -660,24 +645,24 @@ module.exports = {
         break
 
       case 'local_pickup':
-        // local pickup
+        // Local Pickup
         await base.clearAndType(selector.admin.wooCommerce.settings.localPickupTitle, shipping.shippingMethod)
         await base.select(selector.admin.wooCommerce.settings.localPickupTaxStatus, shipping.taxStatus)
         await base.clearAndType(selector.admin.wooCommerce.settings.localPickupCost, shipping.shippingCost)
         break
 
       case 'dokan_table_rate_shipping':
-        // dokan table rate shipping
+        // Dokan Table Rate Shipping
         await base.clearAndType(selector.admin.wooCommerce.settings.dokanTableRateShippingMethodTitle, shipping.shippingMethod)
         break
 
       case 'dokan_distance_rate_shipping':
-        //dokan distance rate shipping
+        // Dokan Distance Rate Shipping
         await base.clearAndType(selector.admin.wooCommerce.settings.dokanDistanceRateShippingMethodTitle, shipping.shippingMethod)
         break
 
       case 'dokan_vendor_shipping':
-        //vendor shipping
+        // Vendor Shipping
         await base.clearAndType(selector.admin.wooCommerce.settings.vendorShippingMethodTitle, shipping.shippingMethod)
         await base.select(selector.admin.wooCommerce.settings.vendorShippingTaxStatus, shipping.taxStatus)
         break
@@ -694,7 +679,7 @@ module.exports = {
 
   },
 
-  // admin delete shipping zone
+  // Admin Delete Shipping Zone
   async deleteShippingZone(shippingZone) {
     await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
 
@@ -707,7 +692,7 @@ module.exports = {
     expect(shippingZoneIsVisible).toBe(false)
   },
 
-  // admin delete shipping method
+  // Admin Delete Shipping Method
   async deleteShippingMethod(shipping) {
     await base.clickAndWait(selector.admin.wooCommerce.settings.shipping)
 
@@ -722,10 +707,9 @@ module.exports = {
   },
 
 
+  // Payment Methods 
 
-  //payment methods 
-
-  // admin setup payment settings
+  // Admin Setup Payment Settings
   async setPaymentSettings() {
     await this.goToWooCommerceSettings()
     await this.setupBasicPaymentMethods()
@@ -736,11 +720,11 @@ module.exports = {
     await this.setupStripeExpress()
   },
 
-  // setCurrencyOptions
+  // Admin Set Currency Options
   async setCurrencyOptions(currency) {
     await this.goToWooCommerceSettings()
 
-    //set currency options
+    // Set Currency Options
     await base.clearAndType(selector.admin.wooCommerce.settings.thousandSeparator, currency.currencyOptions.thousandSeparator)
     await base.clearAndType(selector.admin.wooCommerce.settings.decimalSeparator, currency.currencyOptions.decimalSeparator)
     await base.clearAndType(selector.admin.wooCommerce.settings.numberOfDecimals, currency.currencyOptions.numberOfDecimals)
@@ -751,7 +735,7 @@ module.exports = {
 
   },
 
-  // admin set currency
+  // Admin Set Currency
   async setCurrency(currency) {
     await this.goToWooCommerceSettings()
     let currentCurrency = await base.getElementText(selector.admin.wooCommerce.settings.currency)
@@ -766,18 +750,16 @@ module.exports = {
     }
   },
 
-
-
-  // admin setup basic payment methods
+  // Admin Setup Basic Payment Methods
   async setupBasicPaymentMethods(payment) {
     await this.goToWooCommerceSettings()
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
-    //bank transfer
+    // Bank Transfer
     await base.enablePaymentMethod(selector.admin.wooCommerce.settings.enableDirectBankTransfer)
-    //check payments
+    // Check Payments
     await base.enablePaymentMethod(selector.admin.wooCommerce.settings.enableCheckPayments)
-    //cash on delivery
+    // Cash on Delivery
     await base.enablePaymentMethod(selector.admin.wooCommerce.settings.enableCashOnDelivery)
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.paymentMethodsSaveChanges)
@@ -786,7 +768,7 @@ module.exports = {
     expect(successMessage).toMatch(payment.saveSuccessMessage)
   },
 
-  //admin setup Stripe
+  // Admin Setup Stripe
   async setupStripeConnect(payment) {
     await this.goToWooCommerceSettings()
 
@@ -794,7 +776,7 @@ module.exports = {
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanStripeConnect)
-    //setup strip connect
+    // Setup Strip Connect
     await base.check(selector.admin.wooCommerce.settings.stripe.enableDisableStripe)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.title, payment.stripeConnect.title)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.description, payment.stripeConnect.description)
@@ -809,7 +791,7 @@ module.exports = {
     await base.type(selector.admin.wooCommerce.settings.stripe.stripeCheckoutLocale, payment.stripeConnect.stripeCheckoutLocale)
     await base.press(data.key.enter)
     await base.check(selector.admin.wooCommerce.settings.stripe.savedCards)
-    //test credentials
+    // Test Credentials
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testPublishableKey, payment.stripeConnect.testPublishableKey)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testSecretKey, payment.stripeConnect.testSecretKey)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripe.testClientId, payment.stripeConnect.testClientId)
@@ -819,7 +801,7 @@ module.exports = {
     expect(successMessage).toMatch(payment.saveSuccessMessage)
   },
 
-  // admin setup dokan paypal marketplace
+  // Admin Setup Dokan Paypal Marketplace
   async setupPaypalMarketPlace(payment) {
     await this.goToWooCommerceSettings()
 
@@ -827,12 +809,12 @@ module.exports = {
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanPayPalMarketplace)
-    // setup paypal marketplace
+    // Setup Paypal Marketplace
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.enableDisablePayPalMarketplace)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.title, payment.paypalMarketPlace.title)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.description, payment.paypalMarketPlace.description)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.payPalMerchantId, payment.paypalMarketPlace.payPalMerchantId)
-    // api credentials
+    // API Credentials
     await base.check(selector.admin.wooCommerce.settings.paypalMarketPlace.payPalSandbox)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.sandboxClientId, payment.paypalMarketPlace.sandboxClientId)
     await base.clearAndType(selector.admin.wooCommerce.settings.paypalMarketPlace.sandBoxClientSecret, payment.paypalMarketPlace.sandBoxClientSecret)
@@ -851,7 +833,7 @@ module.exports = {
     expect(successMessage).toMatch(payment.saveSuccessMessage)
   },
 
-  //admin setup dokan mangopay
+  // Admin Setup Mangopay
   async setupMangoPay(payment) {
     await this.goToWooCommerceSettings()
 
@@ -859,15 +841,15 @@ module.exports = {
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanMangoPay)
-    // setup dokan mangopay
+    // Setup Mangopay
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.enableDisableMangoPayPayment)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.title, payment.mangoPay.title)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.description, payment.mangoPay.description)
-    //api credentials
+    // API Credentials
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.mangoPaySandbox)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.sandboxClientId, payment.mangoPay.sandboxClientId)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.sandBoxApiKey, payment.mangoPay.sandBoxApiKey)
-    // payment options
+    // Payment Options
     await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards)
     // await base.type(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableCreditCards, 'CB/Visa/Mastercard')
     // await base.press(data.key.enter)
@@ -877,16 +859,16 @@ module.exports = {
     // await base.press(data.key.enter) //TODO: check why commented
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.chooseAvailableDirectPaymentServicesValues, payment.mangoPay.availableDirectPaymentServices)
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.savedCards)
-    // fund transfers and payouts
+    // Fund Transfers and Payouts
     await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.transferFunds)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.transferFundsValues, payment.mangoPay.transferFunds)
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.payoutMode)
-    // types and requirements of vendors
+    // Types and Requirements of Vendors
     await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.typeOfVendors)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.typeOfVendorsValues, payment.mangoPay.typeOfVendors)
     await base.click(selector.admin.wooCommerce.settings.dokanMangoPay.businessRequirement)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.dokanMangoPay.businessRequirementValues, payment.mangoPay.businessRequirement)
-    // advanced settings
+    // Advanced Settings
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.displayNoticeToNonConnectedSellers)
     await base.check(selector.admin.wooCommerce.settings.dokanMangoPay.sendAnnouncementToNonConnectedSellers)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanMangoPay.announcementInterval, payment.mangoPay.announcementInterval)
@@ -896,7 +878,7 @@ module.exports = {
     expect(successMessage).toMatch(payment.saveSuccessMessage)
   },
 
-  //admin setup dokan razorpay
+  // Admin Setup Razorpay
   async setupRazorpay(payment) {
     await this.goToWooCommerceSettings()
 
@@ -904,11 +886,11 @@ module.exports = {
 
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanRazorpay)
-    //setup dokan razorpay
+    // Setup Razorpay
     await base.check(selector.admin.wooCommerce.settings.dokanRazorpay.enableDisableDokanRazorpay)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.title, payment.razorPay.title)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.description, payment.razorPay.description)
-    // api credentials
+    // API Credentials
     await base.check(selector.admin.wooCommerce.settings.dokanRazorpay.razorpaySandbox)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.testKeyId, payment.razorPay.testKeyId)
     await base.clearAndType(selector.admin.wooCommerce.settings.dokanRazorpay.testKeySecret, payment.razorPay.testKeySecret)
@@ -924,7 +906,7 @@ module.exports = {
     expect(successMessage).toMatch(payment.saveSuccessMessage)
   },
 
-  //admin setup Stripe Express
+  // Admin Setup Stripe Express
   async setupStripeExpress(payment) {
     await this.goToWooCommerceSettings()
 
@@ -933,16 +915,16 @@ module.exports = {
     await base.clickAndWait(selector.admin.wooCommerce.settings.payments)
     await base.clickAndWait(selector.admin.wooCommerce.settings.setupDokanStripeExpress)
 
-    // stripe express
+    // Stripe Express
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.enableOrDisableStripeExpress)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.title, payment.stripeExpress.title)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.description, payment.stripeExpress.description)
-    // api credentials
+    // API Credentials
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.testMode)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.testPublishableKey, payment.stripeExpress.testPublishableKey)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.testSecretKey, payment.stripeExpress.testSecretKey)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.testWebhookSecret, payment.stripeExpress.testWebhookSecret)
-    // payment and disbursement
+    // Payment and Disbursement
     await base.click(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethodsValues, payment.stripeExpress.paymentMethods.card)
     await base.click(selector.admin.wooCommerce.settings.stripeExpress.choosePaymentMethods)
@@ -953,7 +935,7 @@ module.exports = {
     await base.click(selector.admin.wooCommerce.settings.stripeExpress.disburseFunds)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.disbursementModeValues, payment.stripeExpress.disbursementMode)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.customerBankStatement, payment.stripeExpress.customerBankStatement)
-    // payment request options (apple pay/google pay)
+    // Payment Request Options (Apple Pay/Google Pay)
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.paymentRequestButtons)
     await base.select(selector.admin.wooCommerce.settings.stripeExpress.buttonType, payment.stripeExpress.paymentRequestButtonType)
     await base.select(selector.admin.wooCommerce.settings.stripeExpress.buttonTheme, payment.stripeExpress.paymentRequestButtonTheme)
@@ -961,7 +943,7 @@ module.exports = {
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.buttonLocationsValues, payment.stripeExpress.paymentRequestButtonLocation.product)
     await base.click(selector.admin.wooCommerce.settings.stripeExpress.buttonLocations)
     await base.setDropdownOptionSpan(selector.admin.wooCommerce.settings.stripeExpress.buttonLocationsValues, payment.stripeExpress.paymentRequestButtonLocation.cart)
-    // advanced settings
+    // Advanced Settings
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.displayNoticeToNonConnectedSellers)
     await base.check(selector.admin.wooCommerce.settings.stripeExpress.sendAnnouncementToNonConnectedSellers)
     await base.clearAndType(selector.admin.wooCommerce.settings.stripeExpress.announcementInterval, payment.stripeExpress.announcementInterval)
@@ -975,7 +957,7 @@ module.exports = {
 
   // Vendors 
 
-  // admin add new vendors
+  // Admin Add New Vendors
   async addVendor(vendorInfo) {
 
     let firstName = vendorInfo.firstName()
@@ -983,9 +965,9 @@ module.exports = {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.vendorsMenu)
 
-    //add new vendor
+    // Add New Vendor
     await base.click(selector.admin.dokan.vendors.addNewVendor)
-    // account info
+    // Account Info
     await base.type(selector.admin.dokan.vendors.firstName, firstName)
     await base.type(selector.admin.dokan.vendors.lastName, vendorInfo.lastName())
     await base.type(selector.admin.dokan.vendors.storeName, vendorInfo.storeName)
@@ -1001,8 +983,7 @@ module.exports = {
     await base.type(selector.admin.dokan.vendors.bankIban, vendorInfo.bankIban)
     await base.wait(3)
     await base.click(selector.admin.dokan.vendors.next)
-
-    // address  
+    // Address  
     await base.type(selector.admin.dokan.vendors.street1, vendorInfo.street1)
     await base.type(selector.admin.dokan.vendors.street2, vendorInfo.street2)
     await base.type(selector.admin.dokan.vendors.city, vendorInfo.city)
@@ -1013,8 +994,7 @@ module.exports = {
     await base.click(selector.admin.dokan.vendors.state)
     await base.type(selector.admin.dokan.vendors.state, vendorInfo.state)
     await base.click(selector.admin.dokan.vendors.next)
-
-    // payment options  
+    // Payment Options  
     await base.type(selector.admin.dokan.vendors.accountName, vendorInfo.accountName)
     await base.type(selector.admin.dokan.vendors.accountNumber, vendorInfo.accountNumber)
     await base.type(selector.admin.dokan.vendors.bankName, vendorInfo.bankName)
@@ -1026,7 +1006,7 @@ module.exports = {
     await base.check(selector.admin.dokan.vendors.enableSelling)
     await base.check(selector.admin.dokan.vendors.publishProductDirectly)
     await base.check(selector.admin.dokan.vendors.makeVendorFeature)
-    //create vendor
+    // Create Vendor
     await base.click(selector.admin.dokan.vendors.createVendor)
     await base.clickAndWait(selector.admin.dokan.vendors.editVendorInfo)
 
@@ -1035,21 +1015,17 @@ module.exports = {
 
   },
 
-
-
   // Products 
 
 
-
-  // Admin add categories
+  // Admin Add Categories
   async addCategory(categoryName) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.categoriesMenu)
 
     let categoryIsVisible = await base.isVisible(selector.admin.products.category.categoryCell(categoryName))
     if (!categoryIsVisible) {
-
-      // Add new category
+      // Add New Category
       await base.type(selector.admin.products.category.name, categoryName)
       await base.type(selector.admin.products.category.slug, categoryName)
       await base.click(selector.admin.products.category.addNewCategory)
@@ -1060,14 +1036,14 @@ module.exports = {
     }
   },
 
-  // Admin add attributes
+  // Admin Add Attributes
   async addAttributes(attribute) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.attributesMenu)
 
     let attributeIsVisible = await base.isVisible(selector.admin.products.attribute.attributeCell(attribute.attributeName))
     if (!attributeIsVisible) {
-      // Add new attribute
+      // Add New Attribute
       await base.type(selector.admin.products.attribute.name, attribute.attributeName)
       await base.type(selector.admin.products.attribute.slug, attribute.attributeName)
       await base.click(selector.admin.products.attribute.addAttribute)
@@ -1078,7 +1054,7 @@ module.exports = {
 
       await base.clickAndWait(selector.admin.products.attribute.configureTerms(attribute.attributeName))
 
-      // Add new term
+      // Add New Term
       for (let attributeTerm of attribute.attributeTerms) {
         await base.type(selector.admin.products.attribute.attributeTerm, attributeTerm)
         await base.type(selector.admin.products.attribute.attributeTermSlug, attributeTerm)
@@ -1091,12 +1067,12 @@ module.exports = {
     }
   },
 
-  // Admin add simple product
+  // Admin Add Simple Product
   async addSimpleProduct(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // Add new simple product
+    // Add New Simple Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
@@ -1145,7 +1121,7 @@ module.exports = {
 
   },
 
-  //admin add variable product
+  // Admin Add Variable Product
   // async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
   //   await base.hover(selector.admin.aDashboard.products)
   //   await base.clickAndWait(selector.admin.products.addNewMenu)
@@ -1199,12 +1175,12 @@ module.exports = {
   //   expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
   // },
 
-  //admin add simple subscription product
+  // Admin Add Simple Subscription Product
   async addSimpleSubscription(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // Add new simple subscription
+    // Add New Simple Subscription
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
@@ -1227,20 +1203,12 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
   },
 
-  // Admin add variable subscription product
-  async addVariableSubscription(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
-  },
-
-  // Admin add group product
-  async addGroupProduct(productName, productPrice, categoryName, vendor) {
-  },
-
-  // Admin add external product
+  // Admin Add External Product
   async addExternalProduct(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // Add new external product
+    // Add New External Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
@@ -1252,7 +1220,6 @@ module.exports = {
     // Vendor Store Name
     // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-
     // Publish
     await base.scrollToTop()
     await base.clickAndWait(selector.admin.products.product.publish)
@@ -1261,19 +1228,19 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
   },
 
-  //admin add dokan subscription product
+  // Admin Add Dokan Subscription Product
   async addDokanSubscription(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // Add new dokan subscription product
+    // Add New Dokan Subscription Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
     await base.type(selector.admin.products.product.regularPrice, product.regularPrice())
     // Category
     await base.click(selector.admin.products.product.category(product.category))
-    // Subscription details
+    // Subscription Details
     await base.type(selector.admin.products.product.numberOfProducts, product.numberOfProducts)
     await base.type(selector.admin.products.product.packValidity, product.packValidity)
     await base.type(selector.admin.products.product.advertisementSlot, product.advertisementSlot)
@@ -1291,31 +1258,28 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
   },
 
-  // Admin add auction product
+  // Admin Add Auction Product
   async addAuctionProduct(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // Add new auction product
+    // Add New Auction Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
-
     await base.select(selector.admin.products.product.itemCondition, product.itemCondition)
     await base.select(selector.admin.products.product.auctionType, product.auctionType)
-    await base.type(selector.admin.products.product.startPrice, product.regularPrice)
+    await base.type(selector.admin.products.product.startPrice, product.regularPrice())
     await base.type(selector.admin.products.product.bidIncrement, product.bidIncrement)
     await base.type(selector.admin.products.product.reservedPrice, product.reservedPrice())
     await base.type(selector.admin.products.product.buyItNowPrice, product.buyItNowPrice())
     await base.type(selector.admin.products.product.auctionDatesFrom, product.startDate)
     await base.type(selector.admin.products.product.auctionDatesTo, product.endDate)
-
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
     // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-
     // Publish
     await base.scrollToTop()
     await base.clickAndWait(selector.admin.products.product.publish)
@@ -1324,26 +1288,23 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch(product.publishSuccessMessage)
   },
 
-  // Admin add booking product
+  // Admin Add Booking Product
   async addBookingProduct(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
-    // add new booking product
+    // Add New Booking Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
-
     await base.select(selector.admin.products.product.productType, product.productType)
     await base.select(selector.admin.products.product.bookingDurationType, product.bookingDurationType)
     await base.clearAndType(selector.admin.products.product.bookingDurationMax, product.bookingDurationMax)
     await base.select(selector.admin.products.product.calendarDisplayMode, product.calendarDisplayMode)
-
-    //costs
+    // Costs
     await base.click(selector.admin.products.product.bookingCosts)
     await base.wait(1)
     await base.clearAndType(selector.admin.products.product.baseCost, product.baseCost)
     await base.clearAndType(selector.admin.products.product.blockCost, product.blockCost)
-
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
@@ -1357,7 +1318,7 @@ module.exports = {
     expect(productCreateSuccessMessage).toMatch(product.publishSuccessMessage)
   },
 
-  //admin update product stock status
+  // Admin Update Product Stock Status
   async editStockStatus(status) {
     await base.click(selector.admin.products.product.inventory)
     await base.select(selector.admin.products.product.stockStatus, status)
@@ -1365,21 +1326,21 @@ module.exports = {
 
 
 
-  // Wholesale customer 
+  // Wholesale Customer 
 
 
 
-  // Admin approve wholesale request
+  // Admin Approve Wholesale Request
   async adminApproveWholesaleRequest(customer) {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.wholesaleCustomerMenu)
     await base.click(selector.admin.dokan.wholesaleCustomer.statusSlider(customer))
 
     let enableStatusSuccessMessage = await base.getElementText(selector.admin.dokan.wholesaleCustomer.enableStatusUpdateSuccessMessage)
-    expect(enableStatusSuccessMessage).toMatch('Wholesale capability activate')
+    expect(enableStatusSuccessMessage).toMatch(data.wholesale.wholesaleCapabilityActivate)
   },
 
-  async getOrderDetails(orderNumber) { //TODO: separate function to get order details form inside order details base
+  async getOrderDetails(orderNumber) { //TODO: separate function to get order details from inside order details base
     let subMenuOpened = await base.getElementClassValue(selector.admin.aDashboard.dokanMenu)
     if (subMenuOpened.includes('opensub')) {
       await base.hover(selector.admin.aDashboard.dokan)
@@ -1408,7 +1369,7 @@ module.exports = {
     return aOrderDetails
   },
 
-  // Get total admin commission from admin dashboard
+  // Get Total Admin Commission from Admin Dashboard
   async getTotalAdminCommission() {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.dashboardMenu)
@@ -1417,6 +1378,7 @@ module.exports = {
     return totalAdminCommission
   },
 
+  // Admin Approve Return Request
   async approveRefundRequest(orderNumber, approve = false) {
     await this.searchRefundRequest(orderNumber)
 
@@ -1432,11 +1394,12 @@ module.exports = {
     expect(refundRequestIsVisible).toBe(false)
   },
 
+  // Search Refund Request
   async searchRefundRequest(orderNumber) {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.refundsMenu)
 
-    //search refund request
+    // Search Refund Request
     await base.type(selector.admin.dokan.refunds.searchRefund, orderNumber)
     // await base.press(data.key.enter)
     await base.wait(3)
@@ -1449,12 +1412,12 @@ module.exports = {
 
   // Dokan Setup Wizard 
 
-  // Admin set dokan setup wizard
+  // Admin Set Dokan Setup Wizard
   async setDokanSetupWizard(dokanSetupWizard) {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.toolsMenu)
 
-    // Open dokan setup wizard
+    // Open Dokan Setup Wizard
     await base.clickAndWait(selector.admin.dokan.tools.openSetupWizard)
 
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.letsGo)
@@ -1481,38 +1444,33 @@ module.exports = {
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.orderStatusChange)
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.continue)
     // await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.skipThisStep)
-
     // Withdraw
-    //TODO: add more payment methods
-    await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.payPal)
+    // await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.payPal)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.bankTransfer)
-    await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.wirecard)
-    await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.stripe)
+    // await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.wirecard)
+    // await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.stripe)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.custom)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.skrill)
     await base.clearAndType(selector.admin.dokan.dokanSetupWizard.minimumWithdrawLimit, dokanSetupWizard.minimumWithdrawLimit)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.orderStatusForWithdrawCompleted)
     await base.enableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.orderStatusForWithdrawProcessing)
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.continue)
-
     // Recommended
     await base.disableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.wooCommerceConversionTracking)
     await base.disableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.weMail)
     await base.disableSwitcherSetupWizard(selector.admin.dokan.dokanSetupWizard.texty)
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.continueRecommended)
-
     // Ready!
     await base.clickAndWait(selector.admin.dokan.dokanSetupWizard.visitDokanDashboard)
 
     await base.waitForSelector(selector.admin.dokan.dashboard.dashboardText)
     let dashboardTextIsVisible = await base.isVisible(selector.admin.dokan.dashboard.dashboardText)
     expect(dashboardTextIsVisible).toBe(true)
-
   },
 
   // Dokan Modules 
 
-  // Module activation check
+  // Module Activation Check
   async checkActiveModules() {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.modulesMenu)
@@ -1523,10 +1481,10 @@ module.exports = {
     let noModulesMessage = await base.isVisible(selector.admin.dokan.modules.noModulesFound)
     if (noModulesMessage) {
       let noModulesMessageText = await base.getElementText(selector.admin.dokan.modules.noModulesFound)
-      expect(noModulesMessageText).toMatch('No modules found.')
+      expect(noModulesMessageText).toMatch(data.module.noModuleMessage)
     } else {
       let inActiveModuleNames = await base.getMultipleElementTexts(selector.admin.dokan.modules.moduleName)
-      throw new Error("Inactive module exists: " + inActiveModuleNames)
+      throw new Error("Inactive modules: " + inActiveModuleNames)
     }
   },
 }

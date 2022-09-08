@@ -14,13 +14,13 @@ describe('admin functionality test', () => {
     // beforeEach(async () => {})
     // afterEach(async () => {})
 
-    it.only('admin can login', async () => {
+    it('admin can login', async () => {
         await loginPage.adminLogin(data.admin)
     })
 
     it('admin can logout', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.adminLogout()
+        await loginPage.adminLogout()
     })
 
     it('admin can set dokan setup wizard', async () => {
@@ -34,25 +34,25 @@ describe('admin functionality test', () => {
 
     })
 
-    it.only('admin can add simple product', async () => {
+    it('admin can add simple product', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.addSimpleProduct(data.product.simple)
     })
 
-    // it.skip('admin can add variable product', async () => {
-    //     await loginPage.adminLogin(data.admin)
-    //     await adminPage.addVariableProduct(data.product.variable)
-    // })
+    it.skip('admin can add variable product', async () => {
+        await loginPage.adminLogin(data.admin)
+        await adminPage.addVariableProduct(data.product.variable)
+    })
 
     it('admin can add simple subscription ', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.addSimpleSubscription(data.product.simpleSubscription)
     })
 
-    // it.skip('admin can add variable subscription ', async () => {
-    //     await loginPage.adminLogin(data.admin)
-    //     await adminPage.addVariableSubscription(data.product.variableSubscription)
-    // })
+    it.skip('admin can add variable subscription ', async () => {
+        await loginPage.adminLogin(data.admin)
+        await adminPage.addVariableSubscription(data.product.variableSubscription)
+    })
 
     it('admin can add external product', async () => {
         await loginPage.adminLogin(data.admin)
@@ -76,7 +76,7 @@ describe('admin functionality test', () => {
 
     it('admin can add categories', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addCategory(data.product.category.shirt)
+        await adminPage.addCategory(data.product.category.clothings)
     })
 
     it('admin can add attributes', async () => {
@@ -228,7 +228,7 @@ describe('admin functionality test', () => {
         await adminPage.setDokanSpmvSettings(data.dokanSettings.spmv)
     })
 
-    it.skip('admin can set dokan vendor subscription settings', async () => {
+    it('admin can set dokan vendor subscription settings', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.setDokanVendorSubscriptionSettings(data.dokanSettings.vendorSubscription)
     })

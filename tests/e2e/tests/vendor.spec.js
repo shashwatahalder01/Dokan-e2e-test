@@ -1,8 +1,7 @@
 const loginPage = require('../pages/login.js')
 const vendorPage = require('../pages/vendor.js')
 const data = require('../utils/testData.js')
-const { faker } = require('@faker-js/faker')
-jest.retryTimes(process.env.RETRY_TIMES)
+jest.retryTimes(process.env.RETRY_TIMES) //TODO:
 
 describe('vendor functionality test', () => {
    // beforeAll(async () => {
@@ -15,9 +14,8 @@ describe('vendor functionality test', () => {
 
 
    it('vendor can register', async () => {
-      await vendorPage.vendorRegister(faker.name.firstName(), process.env.VENDOR_PASSWORD, data.vendorInfo.firstName, data.vendorInfo.lastName,
-         data.vendorInfo.shopName, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.phone, false, data.vendorSetupWizard)
-      await vendorPage.vendorLogout()
+      await vendorPage.vendorRegister(data.vendor.vendorInfo, false, data.vendorSetupWizard)
+      await loginPage.logout()
    })
 
    it.only('vendor can login', async () => {
@@ -26,139 +24,133 @@ describe('vendor functionality test', () => {
 
    it('vendor can logout', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.vendorLogout()
+      await loginPage.logout()
    })
 
    it('vendor can add simple product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addSimpleProduct(data.product.name.simple, data.product.price_frac_comma, data.product.category)
+      await vendorPage.addSimpleProduct(data.product.simple)
    })
 
    it('vendor can add variable product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addVariableProduct(data.product.name.variable, data.product.price_frac_comma, data.product.category, data.product.attribute, data.product.attributeTerms)
+      await vendorPage.addVariableProduct(data.product.variable)
    })
 
    it('vendor can add simple subscription product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addSimpleSubscription(data.product.name.simpleSubscription, data.product.price_frac_comma, data.product.category)
+      await vendorPage.addSimpleSubscription(data.product.simpleSubscription)
    })
 
    it.skip('vendor can add variable subscription product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addVariableSubscription(data.product.name.variableSubscription, data.product.price_frac_comma, data.product.category, data.product.attribute, data.product.attributeTerms)
+      await vendorPage.addVariableSubscription(data.product.variableSubscription)
    })
 
    it('vendor can add external product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addExternalProduct(data.product.name.external, data.product.price_frac_comma, data.product.category)
+      await vendorPage.addExternalProduct(data.product.external)
    })
 
    it('vendor can add auction product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addAuctionProduct(data.product.name.auction, data.product.auctionPrice, data.product.auction.startDate, data.product.auction.endDate, data.product.category)
+      await vendorPage.addAuctionProduct(data.product.auction)
    })
 
    it('vendor can add booking product', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addBookingProduct(data.product.booking.productName, data.product.booking.category, data.product.booking.bookingDurationType, data.product.booking.bookingDuration, data.product.booking.bookingDurationUnit, data.product.booking.calenderDisplayMode, data.product.booking.maxBookingsPerBlock, data.product.booking.minimumBookingWindowIntoTheFutureDate, data.product.booking.minimumBookingWindowIntoTheFutureDateUnit, data.product.booking.maximumBookingWindowIntoTheFutureDate, data.product.booking.maximumBookingWindowIntoTheFutureDateUnit, data.product.booking.baseCost, data.product.booking.blockCost)
+      await vendorPage.addBookingProduct(data.product.booking)
    })
 
    it('vendor can add coupon', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addCoupon(data.coupon.title, data.coupon.amount)
+      await vendorPage.addCoupon(data.coupon)
    })
 
    it('vendor can request withdraw', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.requestWithdraw('paypal')
+      await vendorPage.requestWithdraw(data.vendor.withdraw)
    })
 
-   // it.skip('vendor can cancel request withdraw', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await vendorPage.goToVendorDashboard()
-   //    await vendorPage.cancelRequestWithdraw()
-   // })
+   it.skip('vendor can cancel request withdraw', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.requestWithdraw(data.vendor.withdraw)
+      await vendorPage.cancelRequestWithdraw()
+   })
 
    it('vendor can add auto withdraw disbursement schedule', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.addAutoWithdrawDisbursementSchedule('dokan_custom', 'weekly', '5', '15')
+      await vendorPage.addAutoWithdrawDisbursementSchedule(data.vendor.withdraw)
    })
 
-   // it('vendor can add default withdraw payment methods ', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await vendorPage.addDefaultWithdrawPaymentMethods('Skrill')
-   //    // cleanup
-   //    await vendorPage.addDefaultWithdrawPaymentMethods('PayPal')
-   // })
+   it.skip('vendor can add default withdraw payment methods ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.skrill)
+      // Cleanup
+      await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.paypal)
+   })
 
    // vendor settings
 
    it.skip('vendor can set store settings ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.goToVendorDashboard()
-      await vendorPage.setStoreSettings(process.env.VENDOR, data.vendorInfo.productsPerPage, data.vendorInfo.phone, data.vendorInfo.street1, data.vendorInfo.street2, data.vendorInfo.city, data.vendorInfo.zipCode, data.vendorInfo.countrySelectValue,
-         data.vendorInfo.stateSelectValue, data.vendorInfo.companyName, data.vendorInfo.companyId, data.vendorInfo.vatNumber, data.vendorInfo.bankName, data.vendorInfo.bankIban, data.vendorInfo.mapLocation,
-         data.vendorInfo.minimumOrderAmount, data.vendorInfo.minimumOrderAmountPercentage, 'Get Support', data.vendorInfo.minimumProductQuantity, data.vendorInfo.maximumProductQuantity, data.vendorInfo.minimumAmountToPlace, data.vendorInfo.maximumAmountToPlace)
+      await vendorPage.setStoreSettings(data.vendorInfo)
    })
 
    it('vendor can add addons', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.goToVendorDashboard()
-      await vendorPage.addAddon()
+      await vendorPage.addAddon(data.vendor.addon)
    })
 
    it.skip('vendor can edit addon request ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.goToVendorDashboard()
-      await vendorPage.editAddon('Add-ons Group #370') //TODO: recheck this specified value
+      let addonName = await vendorPage.addAddon(data.vendor.addon) //TODO: check returnd name is the one that is created
+      await vendorPage.editAddon(data.vendor.addon, addonName)
    })
 
    it('vendor can send id verification request ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.goToVendorDashboard()
-      await vendorPage.sendIdVerificationRequest()
+      await vendorPage.sendIdVerificationRequest(data.vendor.verification)
    })
 
-   // it.skip('vendor can send address verification request ', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await vendorPage.goToVendorDashboard()
-   //    await vendorPage.sendAddressVerificationRequest()
-   // })
+   it.skip('vendor can send address verification request ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.sendAddressVerificationRequest(data.vendor.verification)
+   })
 
-   // it.skip('vendor can send company verification request ', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await vendorPage.sendCompanyVerificationRequest()
-   // })
+   it.skip('vendor can send company verification request ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.sendCompanyVerificationRequest(data.vendor.verification)
+   })
 
-   // it.skip('vendor can set delivery time settings ', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await vendorPage.setDeliveryTimeSettings()
-   // })
+   it.skip('vendor can set delivery time settings ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setDeliveryTimeSettings(data.vendor.deliveryTime)
+   })
 
    it('vendor can set flat rate shipping ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setShippingSettings('US', 'Flat Rate', 'flat_rate')
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.flatRate)
    })
 
    it('vendor can set free shipping ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setShippingSettings('US', 'Free Shipping', 'free_shipping')
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.freeShipping)
    })
 
    it('vendor can set local pickup shipping ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setShippingSettings('US', 'Local Pickup', 'local_pickup')
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.localPickup)
    })
 
    it('vendor can set table rate shipping shipping ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setShippingSettings('US', 'Table Rate', 'dokan_table_rate_shipping')
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.tableRateShipping)
    })
 
    it('vendor can set dokan distance rate shipping ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setShippingSettings('US', 'Distance Rate', 'dokan_distance_rate_shipping')
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.distanceRateShipping)
    })
 
    it('vendor can set social profile settings ', async () => {
@@ -168,8 +160,7 @@ describe('vendor functionality test', () => {
 
    it('vendor can set rma settings ', async () => {
       await loginPage.login(data.vendor)
-      await vendorPage.setRmaSettings('Warranty', 'included_warranty', 'limited', '1', 'weeks')
+      await vendorPage.setRmaSettings(data.vendor.rma)
    })
-
 
 }) 

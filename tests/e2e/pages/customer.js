@@ -1,325 +1,219 @@
 const loginPage = require('../pages/login.js')
 const adminPage = require('../pages/admin.js')
 const base = require("../pages/base.js")
-const selector = require("../pages/selectors.js")
+const data = require('../utils/testData.js')
 const helpers = require("../utils/helpers.js")
-const { faker } = require('@faker-js/faker')
+const selector = require("../pages/selectors.js")
+
+
 
 module.exports = {
 
-
-    // methods
-
-
-
-    //-------------------------------------------------- navigation ---------------------------------------------------//
-
-
+    // Navigation 
 
     async goToMyAccount() {
-        await base.goIfNotThere('my-account')
+        await base.goIfNotThere(data.subUrls.frontend.myAccount)
 
         const url = await page.url()
-        expect(url).toMatch('my-account')
+        expect(url).toMatch(data.subUrls.frontend.myAccount)
     },
 
     async goToShop() {
-        await base.goIfNotThere('shop')
+        await base.goIfNotThere(data.subUrls.frontend.shop)
 
         const url = await page.url()
-        expect(url).toMatch('shop')
+        expect(url).toMatch(data.subUrls.frontend.shop)
     },
 
     async goToStoreList() {
-        await base.goIfNotThere('store-listing')
+        await base.goIfNotThere(data.subUrls.frontend.storeListing)
 
         const url = await page.url()
-        expect(url).toMatch('store-listing')
+        expect(url).toMatch(data.subUrls.frontend.storeListing)
     },
 
     async goToCart() {
-        await base.goIfNotThere('cart')
+        await base.goIfNotThere(data.subUrls.frontend.cart)
 
         const url = await page.url()
-        expect(url).toMatch('cart')
+        expect(url).toMatch(data.subUrls.frontend.cart)
     },
 
+    // Customer Details 
 
 
-
-    //-------------------------------------------------- customer logout ---------------------------------------------------//
-
-
-
-    //customer logout
-    async customerLogout() {
-        await this.goToMyAccount()
-        await base.clickAndWait(selector.frontend.customerLogout)
-
-        let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBeUndefined()
-    },
-
-
-
-    //-------------------------------------------------- customer details ---------------------------------------------------//
-
-    //customer register if not exists
-    async customerRegisterIfNotExists(userEmail, password) {
-        let UserExists = await loginPage.checkUserExists(userEmail, password)
-        if (!UserExists) {
-            await this.customerRegister(userEmail + '@gmail.com', password)
-        }
-    },
-
-    //customer register
-    async customerRegister(userEmail, password) {
+    // Customer Register
+    async customerRegister(customerInfo) {
+        let username = customerInfo.username()
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
-            await this.customerLogout()
+            await loginPage.logout()
         }
-        await base.clearAndType(selector.customer.cRegistration.regEmail, userEmail + '@gmail.com')
-        await base.clearAndType(selector.customer.cRegistration.regPassword, password)
+        await base.clearAndType(selector.customer.cRegistration.regEmail, username + data.customer.customerInfo.emailDomain)
+        await base.clearAndType(selector.customer.cRegistration.regPassword, customerInfo.password)
         await base.click(selector.customer.cRegistration.regCustomer)
         await base.clickAndWait(selector.customer.cRegistration.register)
 
         let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
         if (registrationErrorIsVisible) {
             let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
-            if (errorMessage.includes('Error: An account is already registered with your email address. Please log in.')) {
+            if (errorMessage.includes(data.customer.registrationErrorMessage)) {
                 return
-                // await loginPage.login(userEmail, password)
             }
         }
 
-        let username = (userEmail.split("@")[0]).toLowerCase()
         let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBe(username)
-        // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
-        // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
+        expect(username.toLowerCase()).toBe(loggedInUser)
     },
 
 
-    // //customer register
-    // async customerRegister(userEmail, password) {
-    //     await this.goToMyAccount()
-    //     let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
-    //     if (!loginIsVisible) {
-    //         await this.customerLogout()
-    //     }
-    //     await page.type(selector.customer.cRegistration.regEmail, userEmail)
-    //     await page.type(selector.customer.cRegistration.regPassword, password)
-    //     await base.click(selector.customer.cRegistration.regCustomer)
-    //     await base.click(selector.customer.cRegistration.register)
-    //     await base.wait(3)
-
-    //     let wooCommerceError = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
-    //     if (wooCommerceError) {
-    //         let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
-    //         expect(errorMessage).toMatch('Error: An account is already registered with your email address. Please log in.')
-    //         return
-    //     }
-
-    //     await base.waitForNavigation()
-
-    //     let username = (userEmail.split("@")[0]).toLowerCase()
-    //     let loggedInUser = await base.getCurrentUser()
-    //     expect(loggedInUser).toBe(username)
-    //     // let regWelcomeMessage = await base.getElementText(selector.customer.cRegistration.regCustomerWelcomeMessage)
-    //     // expect(regWelcomeMessage.replace(/\s+/g, ' ').trim()).toMatch(`Hello ${customer} (not ${customer}? Log out)`)
-    // },
-
-
-
-
-    //customer become vendor
-    async customerBecomeVendor(firstName, lastName, shopName, address, phone, companyName, companyId, vatNumber, bankName, bankIban) {
+    // Customer Become Vendor
+    async customerBecomeVendor(customerInfo) {
+        firstName = customerInfo.firstName()
         await base.clickAndWait(selector.customer.cDashboard.becomeVendor)
         // vendor registration form
         await base.type(selector.customer.cDashboard.firstName, firstName)
-        await base.type(selector.customer.cDashboard.lastName, lastName)
-        await base.type(selector.customer.cDashboard.shopName, shopName)
+        await base.type(selector.customer.cDashboard.lastName, customerInfo.lastName())
+        await base.type(selector.customer.cDashboard.shopName, customerInfo.storename())
         await base.click(selector.customer.cDashboard.shopUrl)
-        await base.type(selector.customer.cDashboard.address, address)
-        await base.type(selector.customer.cDashboard.phone, phone)
-        await base.type(selector.customer.cDashboard.companyName, companyName)
-        await base.type(selector.customer.cDashboard.companyId, companyId)
-        await base.type(selector.customer.cDashboard.vatNumber, vatNumber)
-        await base.type(selector.customer.cDashboard.bankName, bankName)
-        await base.type(selector.customer.cDashboard.bankIban, bankIban)
+        await base.type(selector.customer.cDashboard.address, customerInfo.street1)
+        await base.type(selector.customer.cDashboard.phone, customerInfo.phone)
+        await base.type(selector.customer.cDashboard.companyName, customerInfo.companyName)
+        await base.type(selector.customer.cDashboard.companyId, customerInfo.companyId)
+        await base.type(selector.customer.cDashboard.vatNumber, customerInfo.vatNumber)
+        await base.type(selector.customer.cDashboard.bankName, customerInfo.bankName)
+        await base.type(selector.customer.cDashboard.bankIban, customerInfo.bankIban)
         await base.clickIfVisible(selector.customer.cDashboard.termsAndConditions)
         let subscriptionPackIsVisible = await base.isVisible(selector.customer.cDashboard.subscriptionPack)
-        console.log(subscriptionPackIsVisible)
         await base.click(selector.customer.cDashboard.becomeAVendor)
         await base.wait(4)
         // if (subscriptionPackIsVisible) {
         //     console.log('subscription pack is visible')
-        //     await this.placeOrder('bank', false, false, true)//TODO: don't work: handle vendor subscription pack scenario
+        //     await this.placeOrder('bank', false, false, true)//TODO: don't work: handle vendor subscription pack scenario and assertion too
         // }
 
     },
 
-    // customer become wholesale customer
+    // Customer Become Wholesale Customer
     async customerBecomeWholesaleCustomer() {
         let currentUser = await base.getCurrentUser()
-        await page.click(selector.customer.cDashboard.becomeWholesaleCustomer)
+        await base.click(selector.customer.cDashboard.becomeWholesaleCustomer)
         await base.wait(4)
-
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
-        // console.log(returnMessage)
-        if (returnMessage != "Your wholesale customer request send to the admin. Please wait for approval") {
+        if (returnMessage != data.wholesale.wholesaleRequestSendMessage) {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-            expect(successMessage).toMatch('You are succefully converted as a wholesale customer')
+            expect(successMessage).toMatch(data.wholesale.becomeWholesaleCustomerSuccessMessage)
         } else {
-            await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
+            await loginPage.switchUser(data.admin)
             await adminPage.adminApproveWholesaleRequest(currentUser)
         }
     },
 
-    //customer add billing address
-    async addBillingAddress(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, billingStreetAddress2, billingTownCity,
-        billingState, billingZipCode, billingPhone, billingEmailAddress) {
+    // Customer Add Billing Address
+    async addBillingAddress(billingInfo) {
         await this.goToMyAccount()
 
         await base.clickAndWait(selector.customer.cMyAccount.addresses)
         //billing address
         await page.$(selector.customer.cMyAccount.addresses) !== null ? await base.clickAndWait(selector.customer.cAddress.editBillingAddress) : await base.clickAndWait(selector.customer.cAddress.editBillingAddress1)
-        await base.clearAndType(selector.customer.cAddress.billingFirstName, billingFirstName)
-        await base.clearAndType(selector.customer.cAddress.billingLastName, billingLastName)
-        await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingCompanyName)
-        await base.clearAndType(selector.customer.cAddress.billingCompanyIDOrEuidNumber, billingCompanyIDOrEuidNumber)
-        await base.clearAndType(selector.customer.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
-        await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingNameOfBank)
-        await base.clearAndType(selector.customer.cAddress.billingBankIban, billingBankIban)
-        await page.click(selector.customer.cAddress.billingCountryOrRegion)
-        await page.type(selector.customer.cAddress.billingCountryOrRegionInput, billingCountryOrRegion)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingCountryOrRegionValues, billingCountryOrRegion)
-        await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingStreetAddress)
-        await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingStreetAddress2)
-        await base.clearAndType(selector.customer.cAddress.billingTownCity, billingTownCity)
-        await page.click(selector.customer.cAddress.billingState)
-        await page.type(selector.customer.cAddress.billingStateInput, billingState)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
-        await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
-        await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
-        await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
+        await base.clearAndType(selector.customer.cAddress.billingFirstName, billingInfo.firstName())
+        await base.clearAndType(selector.customer.cAddress.billingLastName, billingInfo.lastName())
+        await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingInfo.companyName)
+        await base.clearAndType(selector.customer.cAddress.billingCompanyID, billingInfo.companyId)
+        await base.clearAndType(selector.customer.cAddress.billingVatOrTaxNumber, billingInfo.vatNumber)
+        await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingInfo.bankName)
+        await base.clearAndType(selector.customer.cAddress.billingBankIban, billingInfo.bankIban)
+        await base.click(selector.customer.cAddress.billingCountryOrRegion)
+        await base.type(selector.customer.cAddress.billingCountryOrRegionInput, billingInfo.country)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingInfo.street1)
+        await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingInfo.street2)
+        await base.clearAndType(selector.customer.cAddress.billingTownCity, billingInfo.city)
+        await base.click(selector.customer.cAddress.billingState)
+        await base.type(selector.customer.cAddress.billingStateInput, billingInfo.state)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.billingZipCode, billingInfo.zipCode)
+        await base.clearAndType(selector.customer.cAddress.billingPhone, billingInfo.phone)
+        await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingInfo.email)
         await base.clickAndWait(selector.customer.cAddress.billingSaveAddress)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch('Address changed successfully.')
+        expect(successMessage).toMatch(data.customer.customerInfo.addressChangeSuccessMessage)//TODO: decide success message should come from parameter or directly import form data file
     },
 
-    //customer add shipping address
-    async addShippingAddress(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
+    // Customer Add Shipping Address
+    async addShippingAddress(shippingInfo) {
         await this.goToMyAccount()
 
         await base.clickAndWait(selector.customer.cMyAccount.addresses)
         //shipping address
         await base.clickAndWait(selector.customer.cAddress.editShippingAddress)
-        await base.clearAndType(selector.customer.cAddress.shippingFirstName, shippingFirstName)
-        await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingLastName)
-        await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingCompanyName)
-        await page.click(selector.customer.cAddress.shippingCountryOrRegion)
-        await page.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingCountryOrRegion)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
-        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingStreetAddress)
-        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingStreetAddress2)
-        await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingTownCity)
-        await page.click(selector.customer.cAddress.shippingState)
-        await page.type(selector.customer.cAddress.shippingStateInput, shippingState)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
-        await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
+        await base.clearAndType(selector.customer.cAddress.shippingFirstName, shippingInfo.firstName())
+        await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingInfo.lastName())
+        await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingInfo.companyName)
+        await base.click(selector.customer.cAddress.shippingCountryOrRegion)
+        await base.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingInfo.country)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingInfo.street1)
+        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingInfo.street2)
+        await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingInfo.city)
+        await base.click(selector.customer.cAddress.shippingState)
+        await base.type(selector.customer.cAddress.shippingStateInput, shippingInfo.state)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingInfo.zipCode)
         await base.clickAndWait(selector.customer.cAddress.shippingSaveAddress)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch('Address changed successfully.')
+        expect(successMessage).toMatch(data.customer.customerInfo.addressChangeSuccessMessage)
     },
 
-
-    // customer send rma request
+    // Customer Send Rma Request
     async sendRmaMessage(message) {
         await base.clickAndWait(selector.customer.cMyAccount.rmaRequests)
 
-        await page.type(selector.customer.cRma.message, message)
-        await page.click(selector.customer.cRma.sendMessage)
+        await base.type(selector.customer.cRma.message, message)
+        await base.click(selector.customer.cRma.sendMessage)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Message send successfully")
     },
 
-    //customer add payment method
-    async addPaymentMethod(cardNumber, cardExpiryDate, cardCvc) { //TODO: Actual card number required
-        await this.goToMyAccount()
-        await page.click(selector.customer.cMyAccount.paymentMethods)
-        await base.wait(2)
-        await page.click(selector.customer.cPaymentMethods.addPaymentMethod)
-        await base.wait(2)
-
-        //negative test
-        // await base.clickAndWait(selector.customer.cPaymentMethods.addPaymentMethodCard)
-        // let failureMessage = await base.getElementText(selector.customer.cWooSelector.failureMessage)
-        // expect(failureMessage).toMatch("Your card number is incomplete.")
-
-        let stripeCardIframe = await base.switchToIframe(selector.customer.cPaymentMethods.stripeCardIframe)
-        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardNumber, cardNumber)
-        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardExpiryDate, cardExpiryDate)
-        await base.iframeClearAndType(stripeCardIframe, selector.customer.cPaymentMethods.stripeCardCvc, cardCvc)
-        await page.click(selector.customer.cPaymentMethods.addPaymentMethodCard)
-        await base.wait(1)
-
-        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
-        expect(successMessage).toMatch("Unable to process this payment, please try again or use alternative method.")
-    },
-
-    //customer delete payment method
-    async deletePaymentMethod() { //TODO:need to test
-        await base.clickAndWait(selector.customer.cMyAccount.paymentMethods)
-        await page.click(selector.customer.cPaymentMethods.deleteMethod)
-
-        let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch("Payment method deleted.")
-    },
-
-    //customer update password
+    // Customer Update Password
     async updatePassword(currentPassword, newPassword) {
         await base.clearAndType(selector.customer.cAccountDetails.currentPassword, currentPassword)
         await base.clearAndType(selector.customer.cAccountDetails.NewPassword, newPassword)
         await base.clearAndType(selector.customer.cAccountDetails.confirmNewPassword, newPassword)
-        await page.click(selector.customer.cAccountDetails.saveChanges)
+        await base.click(selector.customer.cAccountDetails.saveChanges)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Account details changed successfully.")
     },
 
-    //customer add customer details
-    async addCustomerDetails(firstName, lastName, displayName, email, currentPassword, newPassword) {
+    // Customer Add Customer Details
+    async addCustomerDetails(customerInfo) {
         await this.goToMyAccount()
 
         await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
 
-        await base.clearAndType(selector.customer.cAccountDetails.firstName, firstName)
-        await base.clearAndType(selector.customer.cAccountDetails.lastName, lastName)
-        await base.clearAndType(selector.customer.cAccountDetails.displayName, displayName)
-        // await base.clearAndType(selector.customer.cAccountDetails.email, email) 
-        await this.updatePassword(currentPassword, newPassword)
+        await base.clearAndType(selector.customer.cAccountDetails.firstName, customerInfo.firstName())
+        await base.clearAndType(selector.customer.cAccountDetails.lastName, customerInfo.lastName())
+        await base.clearAndType(selector.customer.cAccountDetails.displayName, customerInfo.firstName())
+        // await base.clearAndType(selector.customer.cAccountDetails.email, customerInfo.email()) 
+        await this.updatePassword(customerInfo.password, customerInfo.password1)
 
-        // //cleanup
+        // Cleanup
         // await base.clickAndWait(selector.customer.cMyAccount.accountDetails)
         // await this.updatePassword(newPassword, currentPassword)
     },
 
-    //customer search vendor
+    // Customer Search Vendor
     async searchVendor(vendorName) {
         await this.goToStoreList()
 
-        await page.click(selector.customer.cStoreList.filter)
-        await page.type(selector.customer.cStoreList.searchVendors, vendorName)
-        await page.click(selector.customer.cStoreList.apply)
+        await base.click(selector.customer.cStoreList.filter)
+        await base.type(selector.customer.cStoreList.searchVendors, vendorName)
+        await base.click(selector.customer.cStoreList.apply)
 
         await base.waitForSelector(selector.customer.cStoreList.visitStore(vendorName))
         let cartIsVisible = await base.isVisible(selector.customer.cStoreList.visitStore(vendorName))
@@ -327,12 +221,12 @@ module.exports = {
         await base.wait(0.5)
     },
 
-    //customer follow vendor
+    // Customer Follow Vendor
     async followVendor(vendorName) {
         await this.searchVendor(vendorName)
 
         let currentStoreFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
-        //unfollow if not already
+        // Unfollow If Not Already
         if (currentStoreFollowStatus == "Following") {
             await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
             await base.wait(1)
@@ -343,70 +237,71 @@ module.exports = {
         expect(storeFollowStatus).toMatch('Following')
     },
 
-    //customer review store
-    async reviewStore(vendorName, rating, reviewTitle) {
+    // Customer Review Store
+    async reviewStore(vendorName, store) {
         await this.searchVendor(vendorName)
 
         await base.clickAndWait(selector.customer.cStoreList.visitStore(vendorName))
 
-        let reviewMessage = faker.datatype.uuid()
+        let reviewMessage = store.reviewMessage()
         await base.clickAndWait(selector.customer.cSingleStore.reviews)
         await base.wait(1)
         let writeAReviewIsVisible = await base.isVisible(selector.customer.cSingleStore.writeAReview)
         if (writeAReviewIsVisible) {
-            await page.click(selector.customer.cSingleStore.writeAReview)
+            await base.click(selector.customer.cSingleStore.writeAReview)
         } else {
-            await page.click(selector.customer.cSingleStore.editReview)
+            await base.click(selector.customer.cSingleStore.editReview)
         }
         await base.wait(2)
         await base.setElementAttributeValue(selector.customer.cSingleStore.rating, 'style', rating)
-        await base.clearAndType(selector.customer.cSingleStore.reviewTitle, reviewTitle)
-        await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
-        await page.click(selector.customer.cSingleStore.submitReview)
+        await base.clearAndType(selector.customer.cSingleStore.reviewTitle, store.reviewTitle)
+        await base.clearAndType(selector.customer.cSingleStore.reviewMessage, store.reviewMessage)
+        await base.click(selector.customer.cSingleStore.submitReview)
         await base.wait(2)
 
         let submittedReviewMessage = await base.getElementText(selector.customer.cSingleStore.submittedReview(reviewMessage))
         expect(submittedReviewMessage).toMatch(reviewMessage)
     },
 
-    //customer ask for get support
-    async askForGetSupport(vendorName, getSupportSubject, getSupportMessage) {
+    // Customer Ask for Get Support
+    async askForGetSupport(vendorName, getSupport) {
         await this.searchVendor(vendorName)
 
         await base.clickAndWait(selector.customer.cStoreList.visitStore(vendorName))
 
-        await page.click(selector.customer.cSingleStore.getSupport)
+        await base.click(selector.customer.cSingleStore.getSupport)
         await base.wait(2)
-        await page.type(selector.customer.cSingleStore.subject, getSupportSubject)
-        await page.type(selector.customer.cSingleStore.message, getSupportMessage)
-        await page.click(selector.customer.cSingleStore.submitGetSupport)
+        await base.type(selector.customer.cSingleStore.subject, getSupport.subject)
+        await base.type(selector.customer.cSingleStore.message, getSupport.message)
+        await base.click(selector.customer.cSingleStore.submitGetSupport)
         await base.wait(2)
 
         let successMessage = await base.getElementText(selector.customer.cDokanSelector.dokanAlertSuccessMessage)
-        expect(successMessage).toMatch('Thank you. Your ticket has been submitted!')
-        //close popup
-        await page.click(selector.customer.cDokanSelector.dokanAlertClose)
+        expect(successMessage).toMatch(getSupport.supportSubmitSuccessMessage)
+
+        // Close Popup
+        await base.click(selector.customer.cDokanSelector.dokanAlertClose)
     },
 
-    //customer add customer support ticket
+    // Customer Add Customer Support Ticket
     async addCustomerSupportTicket(message) {
-        await page.click(selector.customer.cMyAccount.supportTickets)
-        await page.click(selector.customer.cSupportTickets.openTickets)
+        await base.click(selector.customer.cMyAccount.supportTickets)
+        await base.click(selector.customer.cSupportTickets.openTickets)
 
-        // await page.click(selector.customer.cSupportTickets.addReply)
+        // await base.click(selector.customer.cSupportTickets.addReply)
         await base.clearAndType(selector.customer.cSupportTickets.addReply, message)
-        await page.click(selector.customer.cSupportTickets.submitReply)
+        await base.click(selector.customer.cSupportTickets.submitReply)
         //TODO: add assertion
     },
 
-    //customer rate & review product
-    async reviewProduct(productName, rating) {
+    // Customer Rate & Review Product
+    async reviewProduct(productName, review) {
         await this.goToProductDetails(productName)
 
-        let reviewMessage = faker.datatype.uuid()
-        await page.click(selector.customer.cSingleProduct.reviews)
+        let reviewMessage = review.reviewMessage()
+        await base.click(selector.customer.cSingleProduct.reviews)
         await base.wait(2)
-        await page.click(selector.customer.cSingleProduct.rating(rating))
+        await base.click(selector.customer.cSingleProduct.rating(review.rating))
         await base.clearAndType(selector.customer.cSingleProduct.reviewMessage, reviewMessage)
         await base.clickAndWait(selector.customer.cSingleProduct.submitReview)
 
@@ -422,48 +317,48 @@ module.exports = {
         //TODO: uncomment after handling circular issue
         // let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
         // if (awaitingApprovalReviewIsVisible) {
-        //     await loginPage.switchUser(process.env.VENDOR, process.env.VENDOR_PASSWORD)
+        //     await loginPage.switchUser(data.vendor)
         //     await vendorPage.approveProductReview(reviewMessage)
         // }
 
     },
 
-    // customer report product
-    async reportProduct(productName, reportReason, reportReasonDescription) {
+    // Customer Report Product
+    async reportProduct(productName, report) {
         await this.goToProductDetails(productName)
 
-        await page.click(selector.customer.cSingleProduct.reportAbuse)
+        await base.click(selector.customer.cSingleProduct.reportAbuse)
         // await base.wait(2)
-        await base.click(selector.customer.cSingleProduct.reportReasonByName(reportReason))
-        await page.type(selector.customer.cSingleProduct.reportDescription, reportReasonDescription)
-        await page.click(selector.customer.cSingleProduct.reportSubmit)
+        await base.click(selector.customer.cSingleProduct.reportReasonByName(report.reportReason))
+        await base.type(selector.customer.cSingleProduct.reportDescription, report.reportReasonDescription)
+        await base.click(selector.customer.cSingleProduct.reportSubmit)
         // await base.wait(2.5)
 
         let successMessage = await base.getElementText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
-        expect(successMessage).toMatch('Your report has been submitted. Thank you for your response.')
+        expect(successMessage).toMatch(report.reportSubmitSuccessMessage)
 
-        await page.click(selector.customer.cSingleProduct.confirmReportSubmit)
+        await base.click(selector.customer.cSingleProduct.confirmReportSubmit) //TODO: why this line??
 
     },
 
-    // customer enquire product
-    async enquireProduct(productName, enquiryDetails) {
+    // Customer Enquire Product
+    async enquireProduct(productName, enquiry) {
         await this.goToProductDetails(productName)
 
-        await page.click(selector.customer.cSingleProduct.productEnquiry)
+        await base.click(selector.customer.cSingleProduct.productEnquiry)
         // await base.wait(1)
-        await page.type(selector.customer.cSingleProduct.enquiryMessage, enquiryDetails)
-        await page.click(selector.customer.cSingleProduct.submitEnquiry)
+        await base.type(selector.customer.cSingleProduct.enquiryMessage, enquiry.enquiryDetails)
+        await base.click(selector.customer.cSingleProduct.submitEnquiry)
         // await base.wait(2.5)
 
         let successMessage = await base.getElementText(selector.customer.cSingleProduct.submitEnquirySuccessMessage)
-        expect(successMessage).toMatch('Email sent successfully!')
+        expect(successMessage).toMatch(enquiry.enquirySubmitSuccessMessage)
     },
 
     async buyProduct(productName, couponCode = false, getOrderDetails = false, payMentMethod = 'bank', paymentDetails) {
-        //clear cart before buying
+        // Clear Cart before Buying
         // await this.clearCart()
-        //buy product
+        // Buy Product
         await this.searchProduct(productName)
         await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
         await this.goToCartFromShop()
@@ -475,18 +370,18 @@ module.exports = {
         return cOrderDetails
     },
 
-    //customer search product
+    // Customer Search Product
     async searchProduct(productName) {
         await this.goToShop()
-        
-        await page.type(selector.customer.cShop.searchProduct, productName)
+
+        await base.type(selector.customer.cShop.searchProduct, productName)
         await base.clickAndWait(selector.customer.cShop.search)
 
         let searchedProductName = await base.getElementText(selector.customer.cShop.searchedProductName)
         expect(searchedProductName).toMatch(productName)
     },
 
-    //customer go to product(single) details
+    // Customer Go to Product(single) details
     async goToProductDetails(productName) {
         await this.searchProduct(productName)
 
@@ -497,11 +392,11 @@ module.exports = {
     },
 
 
-    //customer add product to cart from shop page
+    // Customer Add Product to Cart from Shop Page
     async addProductToCartFromShop(productName) {
         await this.searchProduct(productName)
 
-        await page.click(selector.customer.cShop.addToCart)
+        await base.click(selector.customer.cShop.addToCart)
 
         await base.waitForSelector(selector.customer.cShop.viewCart)
         let cartIsVisible = await base.isVisible(selector.customer.cShop.viewCart)
@@ -509,7 +404,7 @@ module.exports = {
 
     },
 
-    //customer add product to cart from product details page
+    // Customer Add Product to Cart from Product Details Page
     async addProductToCartFromSingleProductPage(productName) {
         await base.clickAndWait(selector.customer.cSingleProduct.addToCart)
 
@@ -517,9 +412,9 @@ module.exports = {
         expect(successMessage).toMatch(`“${productName}” has been added to your cart.`)
     },
 
-    //go to cart from shop page
+    // Go to Cart from Shop Page
     async goToCartFromShop() {
-        await page.click(selector.customer.cShop.viewCart)
+        await base.click(selector.customer.cShop.viewCart)
         // await base.wait(2)  
 
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
@@ -528,9 +423,9 @@ module.exports = {
     },
 
 
-    //go to cart from product details page
+    // Go to Cart from Product Details Page
     async goToCartFromSingleProductPage() {
-        await page.click(selector.customer.cSingleProduct.viewCart)
+        await base.click(selector.customer.cSingleProduct.viewCart)
         // await base.wait(2)
 
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
@@ -538,16 +433,16 @@ module.exports = {
         expect(cartIsVisible).toBe(true)
     },
 
-    //got to checkout from cart
+    // Got to Checkout from Cart
     async goToCheckoutFromCart() {
-        await page.click(selector.customer.cCart.proceedToCheckout)
+        await base.click(selector.customer.cCart.proceedToCheckout)
         // await base.wait(2)
         await base.waitForSelector(selector.customer.cCheckout.checkoutPageHeader)
         let checkoutIsVisible = await base.isVisible(selector.customer.cCheckout.checkoutPageHeader)
         expect(checkoutIsVisible).toBe(true)
     },
 
-    //clear cart
+    // Clear Cart
     async clearCart() {
         await this.goToCart()
         let cartProductIsVisible = await base.isVisible(selector.customer.cCart.productCrossIcon)
@@ -562,7 +457,7 @@ module.exports = {
         }
     },
 
-    //update product quantity from cart
+    // Update Product Quantity from Cart
     async updateProductQuantityOnCart(productName, quantity) {
         await base.clearAndType(selector.customer.cCart.quantity(productName), quantity)
         await base.click(selector.customer.cCart.updateCart)
@@ -574,18 +469,18 @@ module.exports = {
         expect(updateProductQuantity).toMatch(quantity)
     },
 
-    //customer apply coupon
+    // Customer Apply Coupon
     async applyCoupon(couponCode) {
         let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
         if (couponIsApplied) {
             await this.removeAppliedCoupon(couponCode)
         }
 
-        await page.type(selector.customer.cCart.couponCode, couponCode)
+        await base.type(selector.customer.cCart.couponCode, couponCode)
         await base.click(selector.customer.cCart.applyCoupon)
         await base.wait(6)
 
-        // // negative test
+        // // Negative Test
         // let failureMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         // expect(failureMessage).toMatch(`Coupon "${couponCode}" does not exist!`)
         // expect(failureMessage).toMatch("Sorry, this coupon is not applicable to selected products.") //for other vendor coupons
@@ -595,20 +490,20 @@ module.exports = {
         expect(successMessage).toMatch("Coupon code applied successfully.")
     },
 
-    //customer remove applied coupon
+    // Customer Remove Applied Coupon
     async removeAppliedCoupon(couponCode) {
-        await page.click(selector.customer.cCart.removeCoupon(couponCode))
+        await base.click(selector.customer.cCart.removeCoupon(couponCode))
         await base.wait(5)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch('Coupon has been removed.')
     },
 
-    //customer place order
+    // Customer Place Order
     async placeOrder(paymentMethod = 'bank', getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
         //TODO:handle billing address warning or shipping address warning
-        if (billingDetails) await this.addBillingAddressInCheckout('customer1', 'c1', 'c1company', 'c1companyID', 'c1vat', 'c1bank', 'c1bankIBAN', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006', '0123456789', 'customer1@gamil.com')
-        if (shippingDetails) await this.addShippingAddressInCheckout('customer1', 'c1', 'c1company', 'United States (US)', 'abc street', 'xyz street2', 'New York', 'New York', '10006')
+        if (billingDetails) await this.addBillingAddressInCheckout(data.customer.customerInfo)
+        if (shippingDetails) await this.addShippingAddressInCheckout(data.customer.customerInfo)
         await base.wait(6)
 
         switch (paymentMethod) {
@@ -698,6 +593,7 @@ module.exports = {
         await base.wait(5)
     },
 
+    // Get Order Details after Purchase
     async getOrderDetailsAfterPlaceOrder() {
         let cOrderDetails = {}
         cOrderDetails.orderNumber = await base.getElementText(selector.customer.cOrderReceived.orderNumber)
@@ -720,6 +616,7 @@ module.exports = {
         return cOrderDetails
     },
 
+    // Get Order Details
     async getOrderDetails(orderNumber) {
         await this.goToMyAccount()
 
@@ -760,77 +657,70 @@ module.exports = {
         return cOrderDetails
     },
 
-    //customer add billing address in checkout
-    async addBillingAddressInCheckout(billingFirstName, billingLastName, billingCompanyName, billingCompanyIDOrEuidNumber, billingVatOrTaxNumber, billingNameOfBank, billingBankIban, billingCountryOrRegion, billingStreetAddress, billingStreetAddress2, billingTownCity,
-        billingState, billingZipCode, billingPhone, billingEmailAddress) {
+    // Customer Add Billing Address in Checkout
+    async addBillingAddressInCheckout(billingInfo) {
 
-        //billing address
-        await base.clearAndType(selector.customer.cAddress.billingFirstName, billingFirstName)
-        await base.clearAndType(selector.customer.cAddress.billingLastName, billingLastName)
-        await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingCompanyName)
-        await base.clearAndType(selector.customer.cAddress.billingCompanyIDOrEuidNumber, billingCompanyIDOrEuidNumber)
-        await base.clearAndType(selector.customer.cAddress.billingVatOrTaxNumber, billingVatOrTaxNumber)
-        await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingNameOfBank)
-        await base.clearAndType(selector.customer.cAddress.billingBankIban, billingBankIban)
+        // Billing Address
+        await base.clearAndType(selector.customer.cAddress.billingFirstName, billingInfo.firstName())
+        await base.clearAndType(selector.customer.cAddress.billingLastName, billingInfo.lastName())
+        await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingInfo.companyName)
+        await base.clearAndType(selector.customer.cAddress.billingCompanyID, billingInfo.companyId)
+        await base.clearAndType(selector.customer.cAddress.billingVatOrTaxNumber, billingInfo.vatNumber)
+        await base.clearAndType(selector.customer.cAddress.billingNameOfBank, billingInfo.bankName)
+        await base.clearAndType(selector.customer.cAddress.billingBankIban, billingInfo.bankIban)
         await base.click(selector.customer.cAddress.billingCountryOrRegion)
-        await base.type(selector.customer.cAddress.billingCountryOrRegionInput, billingCountryOrRegion)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.bil–lingCountryOrRegionValues, billingCountryOrRegion)
-        await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingStreetAddress)
-        await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingStreetAddress2)
-        await base.clearAndType(selector.customer.cAddress.billingTownCity, billingTownCity)
+        await base.type(selector.customer.cAddress.billingCountryOrRegionInput, billingInfo.country)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.billingStreetAddress, billingInfo.street1)
+        await base.clearAndType(selector.customer.cAddress.billingStreetAddress2, billingInfo.street2)
+        await base.clearAndType(selector.customer.cAddress.billingTownCity, billingInfo.city)
         await base.click(selector.customer.cAddress.billingState)
-        await base.type(selector.customer.cAddress.billingStateInput, billingState)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.billingStateValues, billingState)
-        await base.clearAndType(selector.customer.cAddress.billingZipCode, billingZipCode)
-        await base.clearAndType(selector.customer.cAddress.billingPhone, billingPhone)
-        await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingEmailAddress)
+        await base.type(selector.customer.cAddress.billingStateInput, billingInfo.state)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.billingZipCode, billingInfo.zipCode)
+        await base.clearAndType(selector.customer.cAddress.billingPhone, billingInfo.phone)
+        await base.clearAndType(selector.customer.cAddress.billingEmailAddress, billingInfo.email)
     },
 
-    //customer add shipping address in checkout
-    async addShippingAddressInCheckout(shippingFirstName, shippingLastName, shippingCompanyName, shippingCountryOrRegion, shippingStreetAddress, shippingStreetAddress2, shippingTownCity, shippingState, shippingZipCode) {
+    // Customer Add Shipping Address in Checkout
+    async addShippingAddressInCheckout(shippingInfo) {
 
         await base.click(selector.customer.cCheckout.shipToADifferentAddress)
-        //shipping address
-        await base.clearAndType(selector.customer.cAddress.shippingFirstName, shippingFirstName)
-        await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingLastName)
-        await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingCompanyName)
+        // Shipping Address
+        await base.clearAndType(selector.customer.cAddress.shippingFirstName, shippingInfo.firstName())
+        await base.clearAndType(selector.customer.cAddress.shippingLastName, shippingInfo.lastName())
+        await base.clearAndType(selector.customer.cAddress.shippingCompanyName, shippingInfo.companyName)
         await base.click(selector.customer.cAddress.shippingCountryOrRegion)
-        await base.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingCountryOrRegion)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingCountryOrRegionValues, shippingCountryOrRegion)
-        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingStreetAddress)
-        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingStreetAddress2)
-        await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingTownCity)
+        await base.type(selector.customer.cAddress.shippingCountryOrRegionInput, shippingInfo.country)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress, shippingInfo.street1)
+        await base.clearAndType(selector.customer.cAddress.shippingStreetAddress2, shippingInfo.street2)
+        await base.clearAndType(selector.customer.cAddress.shippingTownCity, shippingInfo.city)
         await base.click(selector.customer.cAddress.shippingState)
-        await base.type(selector.customer.cAddress.shippingStateInput, shippingState)
-        await page.keyboard.press('Enter')
-        // await base.setDropdownOptionSpan(selector.customer.cAddress.shippingStateValues, shippingState)
-        await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingZipCode)
+        await base.type(selector.customer.cAddress.shippingStateInput, shippingInfo.state)
+        await base.press(data.key.enter)
+        await base.clearAndType(selector.customer.cAddress.shippingZipCode, shippingInfo.zipCode)
         await base.wait(2)
     },
 
-    //customer ask for warranty
-    async sendWarrantyRequest(orderNumber, productName, requestType, requestReason, requestDetails) {
+    // Customer Ask for Warranty
+    async sendWarrantyRequest(orderNumber, productName, refund) {
         await this.goToMyAccount()
 
         await base.clickAndWait(selector.customer.cMyAccount.orders)
         await base.clickAndWait(selector.customer.cOrders.ordersWarrantyRequest(orderNumber))
 
         await base.click(selector.customer.cOrders.warrantyRequestItemCheckbox(productName))
-        // await page.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), itemQuantity)
-        await base.select(selector.customer.cOrders.warrantyRequestType, requestType)
-        // await page.select(selector.customer.cOrders.warrantyRequestReason, requestReason)
-        await base.type(selector.customer.cOrders.warrantyRequestDetails, requestDetails)
+        // await base.type(selector.customer.cOrders.warrantyRequestItemQuantity(productName), refund.itemQuantity)
+        await base.select(selector.customer.cOrders.warrantyRequestType, refund.refundRequestType)
+        // await base.select(selector.customer.cOrders.warrantyRequestReason, refund.refundRequestReasons)
+        await base.type(selector.customer.cOrders.warrantyRequestDetails, refund.refundRequestDetails)
         await base.clickAndWait(selector.customer.cOrders.warrantySubmitRequest)
         await base.wait(2)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch('Request has been successfully submitted')
+        expect(successMessage).toMatch(refund.refundSubmitSuccessMessage)
     },
-
-
 
 }
 

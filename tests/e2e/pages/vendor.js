@@ -1,78 +1,55 @@
 const base = require("../pages/base.js")
 const customerPage = require('../pages/customer.js')
 const loginPage = require('../pages/login.js')
-const selector = require("../pages/selectors.js")
+const data = require('../utils/testData.js')
 const helpers = require("../utils/helpers.js")
+const selector = require("../pages/selectors.js")
 const { faker } = require('@faker-js/faker')
 
 
 
 module.exports = {
 
+    // navigation 
 
-
-    // methods
-
-
-
-    //-------------------------------------------------- navigation ---------------------------------------------------//
-
-
-
-    async goToVendorDashboard() {
-        await base.goIfNotThere('dashboard')
+    async goToMyAccount() {
+        await base.goIfNotThere(data.subUrls.frontend.myAccount)
 
         const url = await page.url()
-        expect(url).toMatch('dashboard')
+        expect(url).toMatch(data.subUrls.frontend.myAccount)
     },
 
-    //-------------------------------------------------- setup wizard ---------------------------------------------------//
+    async goToVendorDashboard() {
+        await base.goIfNotThere(data.subUrls.frontend.dashboard)
 
-
-    // vendor logout
-    async vendorLogout() {
-        await this.goToVendorDashboard()
-        await base.clickAndWait(selector.frontend.vendorLogout)
-
-        let loggedInUser = await base.getCurrentUser()
-        expect(loggedInUser).toBeUndefined()
+        const url = await page.url()
+        expect(url).toMatch(data.subUrls.frontend.dashboard)
     },
 
+    // Setup Wizard 
 
-
-    //-------------------------------------------------- setup wizard ---------------------------------------------------//
-
-
-    //vendor register if not exists
-    async vendorRegisterIfNotExists(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
-        let UserExists = await loginPage.checkUserExists(userEmail, password)
-        if (!UserExists) {
-            await this.vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData)
-        }
-    },
-
-    //vendor registration
-    async vendorRegister(userEmail, password, firstName, lastName, shopName, companyName, companyId, vatNumber, bankName, bankIban, phone, setupWizardChoice, setupWizardData) {
-        await customerPage.goToMyAccount()
+    // Vendor Registration
+    async vendorRegister(vendorInfo, setupWizardChoice, setupWizardData) {
+        await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
             await customerPage.customerLogout()
         }
-
-        await base.clearAndType(selector.vendor.vRegistration.regEmail, userEmail + '@gmail.com')
-        await base.clearAndType(selector.vendor.vRegistration.regPassword, password)
+        username = vendorInfo.firstName()
+        await base.clearAndType(selector.vendor.vRegistration.regEmail, username + data.vendor.vendorInfo.emailDomain)
+        await base.clearAndType(selector.vendor.vRegistration.regPassword, vendorInfo.password)
         await base.click(selector.vendor.vRegistration.regVendor)
-        await base.clearAndType(selector.vendor.vRegistration.firstName, firstName)
-        await base.clearAndType(selector.vendor.vRegistration.lastName, lastName)
-        await base.clearAndType(selector.vendor.vRegistration.shopName, shopName)
+        await base.clearAndType(selector.vendor.vRegistration.firstName, vendorInfo.firstName)
+        await base.clearAndType(selector.vendor.vRegistration.lastName, vendorInfo.lastName)
+        await base.clearAndType(selector.vendor.vRegistration.shopName, vendorInfo.shopName)
         // await base.clearAndType(selector.vendor.shopUrl, shopUrl)
-        await page.click(selector.vendor.vRegistration.shopUrl)
-        await base.clearAndType(selector.vendor.vRegistration.companyName, companyName)
-        await base.clearAndType(selector.vendor.vRegistration.companyId, companyId)
-        await base.clearAndType(selector.vendor.vRegistration.vatNumber, vatNumber)
-        await base.clearAndType(selector.vendor.vRegistration.bankName, bankName)
-        await base.clearAndType(selector.vendor.vRegistration.bankIban, bankIban)
-        await base.clearAndType(selector.vendor.vRegistration.phone, phone)
+        await base.click(selector.vendor.vRegistration.shopUrl)
+        await base.clearAndType(selector.vendor.vRegistration.companyName, vendorInfo.companyName)
+        await base.clearAndType(selector.vendor.vRegistration.companyId, vendorInfo.companyId)
+        await base.clearAndType(selector.vendor.vRegistration.vatNumber, vendorInfo.vatNumber)
+        await base.clearAndType(selector.vendor.vRegistration.bankName, vendorInfo.bankName)
+        await base.clearAndType(selector.vendor.vRegistration.bankIban, vendorInfo.bankIban)
+        await base.clearAndType(selector.vendor.vRegistration.phone, vendorInfo.phone)
         let termsAndConditionsIsVisible = await base.isVisible(selector.customer.cDashboard.termsAndConditions)
         if (termsAndConditionsIsVisible) {
             await base.check(selector.customer.cDashboard.termsAndConditions)
@@ -80,30 +57,61 @@ module.exports = {
 
         let subscriptionPackIsVisible = await base.isVisible(selector.vendor.vRegistration.subscriptionPack)
         if (subscriptionPackIsVisible) {
-            await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack,selector.vendor.vRegistration.subscriptionPackOptions, "Dokan_subscription_Non_recurring")
+            await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack, selector.vendor.vRegistration.subscriptionPackOptions, "Dokan_subscription_Non_recurring")
         }
-                
+
         await base.clickAndWait(selector.vendor.vRegistration.register)
         let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
         if (registrationErrorIsVisible) {
             let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
-            if (errorMessage.includes('Error: An account is already registered with your email address. Please log in.')) {
+            if (errorMessage.includes(data.customer.registrationErrorMessage)) {
                 return
-                //  await loginPage.login(userEmail, password)
             }
         }
 
-        await this.vendorSetupWizardChoice(setupWizardChoice, setupWizardData)
+        await this.vendorSetupWizard(setupWizardChoice, setupWizardData)
     },
 
-    async vendorSetupWizardChoice(setupWizardChoice, setupWizardData) {
-
+    // Vendor Setup Wizard
+    async vendorSetupWizard(vendorSetupWizard) {
         if (setupWizardChoice) {
-            await this.vendorSetupWizard(
-                setupWizardData.storeProductsPerPage, setupWizardData.street1, setupWizardData.street2, setupWizardData.city, setupWizardData.zipCode,
-                setupWizardData.country, setupWizardData.state, setupWizardData.paypal, setupWizardData.bankAccountName, setupWizardData.bankAccountType, setupWizardData.bankAccountNumber,
-                setupWizardData.bankName, setupWizardData.bankAddress, setupWizardData.bankRoutingNumber, setupWizardData.bankIban, setupWizardData.bankSwiftCode,
-                setupWizardData.customPayment, setupWizardData.skrill)
+            await base.click(selector.vendor.vSetup.letsGo)
+
+            await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, vendorSetupWizard.storeProductsPerPage)
+            await base.type(selector.vendor.vSetup.street1, vendorSetupWizard.street1)
+            await base.type(selector.vendor.vSetup.street2, vendorSetupWizard.street2)
+            await base.type(selector.vendor.vSetup.city, vendorSetupWizard.city)
+            await base.type(selector.vendor.vSetup.zipCode, vendorSetupWizard.zipCode)
+            await base.click(selector.vendor.vSetup.country)
+            await base.type(selector.vendor.vSetup.countryInput, vendorSetupWizard.country)
+            await base.press(data.key.enter)
+            await base.type(selector.vendor.vSetup.state, vendorSetupWizard.state)
+            await base.press(data.key.enter)
+            await base.click(selector.vendor.vSetup.email)
+            await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
+
+            // Paypal
+            await base.clearAndType(selector.vendor.vSetup.paypal, vendorSetupWizard.paypal())
+            // Bank Transfer
+            await base.type(selector.vendor.vSetup.bankAccountName, vendorSetupWizard.bankAccountName)
+            await base.select(selector.vendor.vSetup.bankAccountType, vendorSetupWizard.bankAccountType)
+            await base.type(selector.vendor.vSetup.bankRoutingNumber, vendorSetupWizard.bankRoutingNumber)
+            await base.type(selector.vendor.vSetup.bankAccountNumber, vendorSetupWizard.bankAccountNumber)
+            await base.type(selector.vendor.vSetup.bankName, vendorSetupWizard.bankName)
+            await base.type(selector.vendor.vSetup.bankAddress, vendorSetupWizard.bankAddress)
+            await base.type(selector.vendor.vSetup.bankIban, vendorSetupWizard.bankIban)
+            await base.type(selector.vendor.vSetup.bankSwiftCode, vendorSetupWizard.bankSwiftCode)
+            await base.check(selector.vendor.vSetup.declaration)
+
+            await base.type(selector.vendor.vSetup.customPayment, vendorSetupWizard.customPayment)
+
+            await base.clearAndType(selector.vendor.vSetup.skrill, vendorSetupWizard.skrill)
+            await base.clickAndWait(selector.vendor.vSetup.continuePaymentSetup)
+
+            await base.clickAndWait(selector.vendor.vSetup.goToStoreDashboard)
+
+            let dashboardIsVisible = await base.isVisible(selector.vendor.vDashboard.dashboard)
+            expect(dashboardIsVisible).toBe(true)
         }
         else {
             await base.clickAndWait(selector.vendor.vSetup.notRightNow)
@@ -114,313 +122,209 @@ module.exports = {
 
     },
 
-    //vendor setup wizard
-    async vendorSetupWizard(storeProductsPerPage, street1, street2, city, zipCode, country, state, paypal, bankAccountName, bankAccountType, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode, customPayment, skrill) {
-        await page.click(selector.vendor.vSetup.letsGo)
+    // Products 
 
-        await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, storeProductsPerPage)
-        await page.type(selector.vendor.vSetup.street1, street1)
-        await page.type(selector.vendor.vSetup.street2, street2)
-        await page.type(selector.vendor.vSetup.city, city)
-        await page.type(selector.vendor.vSetup.zipCode, zipCode)
-        await page.click(selector.vendor.vSetup.country)
-        await page.type(selector.vendor.vSetup.countryInput, country)
-        await page.keyboard.press('Enter')
-        await page.type(selector.vendor.vSetup.state, state)
-        await page.keyboard.press('Enter')
-        await base.click(selector.vendor.vSetup.email)
-        await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
-
-        //paypal
-        await base.clearAndType(selector.vendor.vSetup.paypal, paypal)
-        //bank transfer
-        await base.type(selector.vendor.vSetup.bankAccountName, bankAccountName)
-        await base.select(selector.vendor.vSetup.bankAccountType, bankAccountType)
-        await base.type(selector.vendor.vSetup.bankRoutingNumber, bankRoutingNumber)
-        await base.type(selector.vendor.vSetup.bankAccountNumber, bankAccountNumber)
-        await base.type(selector.vendor.vSetup.bankName, bankName)
-        await base.type(selector.vendor.vSetup.bankAddress, bankAddress)
-        await base.type(selector.vendor.vSetup.bankIban, bankIban)
-        await base.type(selector.vendor.vSetup.bankSwiftCode, bankSwiftCode)
-        await base.check(selector.vendor.vSetup.declaration)
-
-        await base.type(selector.vendor.vSetup.customPayment, customPayment)
-
-        await base.clearAndType(selector.vendor.vSetup.skrill, skrill)
-        await base.clickAndWait(selector.vendor.vSetup.continuePaymentSetup)
-
-        await base.clickAndWait(selector.vendor.vSetup.goToStoreDashboard)
-
-        let dashboardIsVisible = await base.isVisible(selector.vendor.vDashboard.dashboard)
-        expect(dashboardIsVisible).toBe(true)
-
-    },
-
-
-
-    //-------------------------------------------------- products ---------------------------------------------------//
-
-
-
-    //vendor add simple product
-    async addSimpleProduct(productName, productPrice, category) {
+    // Vendor Add Simple Product
+    async addSimpleProduct(product) {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.products)
 
-        //add new simple product
-        await page.click(selector.vendor.product.addNewProduct)
-        await page.type(selector.vendor.product.productName, productName)
-        await page.type(selector.vendor.product.productPrice, productPrice)
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
+        // Add New Simple Product
+        await base.click(selector.vendor.product.addNewProduct)
+        await base.type(selector.vendor.product.productName, product.productName())
+        await base.type(selector.vendor.product.productPrice, product.regularPrice())
+        // await base.click(selector.vendor.product.productCategory) //TODO: handel via multistep category
+        // await base.type(selector.vendor.product.productCategoryInput, product.category)
+        // await base.press(data.key.enter)
         await base.clickAndWait(selector.vendor.product.createProduct)
 
         let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+        expect(createdProduct.toLowerCase()).toBe(product.productName.toLowerCase())
     },
 
-    //vendor add variable product
-    async addVariableProduct(productName, productPrice, category, attribute, attributeTerms) {
-        await this.goToVendorDashboard()
+    // Vendor Add Variable Product
+    async addVariableProduct(product) {
+        await this.addSimpleProduct(product)
 
-        await base.clickAndWait(selector.vendor.vDashboard.products)
-
-        //add new variable product
-        await page.click(selector.vendor.product.addNewProduct)
-        await page.type(selector.vendor.product.productName, productName)
-        await page.type(selector.vendor.product.productPrice, productPrice)
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
-        await base.clickAndWait(selector.vendor.product.createProduct)
-
-        let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
-
-        //edit product
-        await page.select(selector.vendor.product.productType, 'variable')
-        //add variation
-        await page.select(selector.vendor.product.customProductAttribute, `pa_${attribute}`)
-        await base.wait(1)
-        await page.click(selector.vendor.product.addAttribute)
-        await base.waitForSelector(selector.vendor.product.selectAll)
-        await page.click(selector.vendor.product.selectAll)
-        await base.click(selector.vendor.product.usedForVariations)
-        await base.waitForSelector(selector.vendor.product.saveAttributes)
-        await page.click(selector.vendor.product.saveAttributes)
-
-        await base.waitForSelector(selector.vendor.product.addVariations)
-        await page.select(selector.vendor.product.addVariations, 'link_all_variations')
-        await base.wait(1)
-        await page.click(selector.vendor.product.go)
-        await base.waitForSelector(selector.vendor.product.confirmGo)
-        await page.click(selector.vendor.product.confirmGo)
-        await base.wait(1)
-        await page.click(selector.vendor.product.okSuccessAlertGo)
-        await base.wait(1)
-
-        await page.select(selector.vendor.product.addVariations, 'variable_regular_price')
-        await base.wait(1)
-        await page.click(selector.vendor.product.go)
-        await base.waitForSelector(selector.vendor.product.variationPrice)
-        await page.type(selector.vendor.product.variationPrice, '100')
-        await page.click(selector.vendor.product.okVariationPrice)
-
-        await base.waitForSelector(selector.vendor.product.saveProduct)
-        await base.clickAndWait(selector.vendor.product.saveProduct)
-        await base.wait(1)
-
-        let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
-    },
-
-    //vendor add simple subscription product
-    async addSimpleSubscription(productName, productPrice, category) {
-        await this.goToVendorDashboard()
-
-        await base.clickAndWait(selector.vendor.vDashboard.products)
-
-        //add new simple subscription product
-        await page.click(selector.vendor.product.addNewProduct)
-        await page.type(selector.vendor.product.productName, productName)
-        await page.type(selector.vendor.product.productPrice, productPrice)
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
-        await base.clickAndWait(selector.vendor.product.createProduct)
-
-        let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
-
-        //edit product
-        await page.select(selector.vendor.product.productType, 'subscription')
-        await page.type(selector.vendor.product.subscriptionPrice, productPrice)
-        await page.select(selector.vendor.product.subscriptionPeriodInterval, '1')
-        await page.select(selector.vendor.product.subscriptionPeriod, 'month')
-        await page.select(selector.vendor.product.expireAfter, '0')
-        await page.type(selector.vendor.product.subscriptionTrialLength, '0')
-        await page.select(selector.vendor.product.subscriptionTrialPeriod, 'day')
-
-        await base.clickAndWait(selector.vendor.product.saveProduct)
-
-        let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
-    },
-
-    //vendor add variable subscription product
-    async addVariableSubscription(productName, productPrice, category, attribute, attributeTerms) {
-        await this.goToVendorDashboard()
-
-        await base.clickAndWait(selector.vendor.vDashboard.products)
-
-        //add new variable subscription product
-        await page.click(selector.vendor.product.addNewProduct)
-        await page.type(selector.vendor.product.productName, productName)
-        await page.type(selector.vendor.product.productPrice, productPrice)
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
-        await base.clickAndWait(selector.vendor.product.createProduct)
-
-        let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
-
-        //edit product
-        await page.select(selector.vendor.product.productType, 'variable-subscription')
-        await base.wait(1)
-
-        //add variation
+        // Edit Product
+        await base.select(selector.vendor.product.productType, product.productType)
+        // Add Variation
         //TODO: create attribute if not exists
-        await page.select(selector.vendor.product.customProductAttribute, `pa_${attribute}`)
-        await page.click(selector.vendor.product.addAttribute)
+        await base.select(selector.vendor.product.customProductAttribute, `pa_${product.attribute}`)
+        await base.wait(1)
+        await base.click(selector.vendor.product.addAttribute)
         await base.waitForSelector(selector.vendor.product.selectAll)
-        await page.click(selector.vendor.product.selectAll)
+        await base.click(selector.vendor.product.selectAll)
         await base.click(selector.vendor.product.usedForVariations)
         await base.waitForSelector(selector.vendor.product.saveAttributes)
-        await page.click(selector.vendor.product.saveAttributes)
+        await base.click(selector.vendor.product.saveAttributes)
 
         await base.waitForSelector(selector.vendor.product.addVariations)
-        await page.select(selector.vendor.product.addVariations, 'link_all_variations')
+        await base.select(selector.vendor.product.addVariations, product.variable.linkAllVariation)
         await base.wait(1)
-        await page.click(selector.vendor.product.go)
+        await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.confirmGo)
-        await page.click(selector.vendor.product.confirmGo)
+        await base.click(selector.vendor.product.confirmGo)
         await base.wait(1)
-        await page.click(selector.vendor.product.okSuccessAlertGo)
+        await base.click(selector.vendor.product.okSuccessAlertGo)
         await base.wait(1)
 
-        await page.select(selector.vendor.product.addVariations, 'variable_regular_price')
+        await base.select(selector.vendor.product.addVariations, product.variable.variableRegularPrice)
         await base.wait(1)
-        await page.click(selector.vendor.product.go)
+        await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.variationPrice)
-        await page.type(selector.vendor.product.variationPrice, '100')
-        await page.click(selector.vendor.product.okVariationPrice)
+        await base.type(selector.vendor.product.variationPrice, product.regularPrice())
+        await base.click(selector.vendor.product.okVariationPrice)
 
         await base.waitForSelector(selector.vendor.product.saveProduct)
         await base.clickAndWait(selector.vendor.product.saveProduct)
         await base.wait(1)
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
     },
 
-    //vendor add external product
-    async addExternalProduct(productName, productPrice, category) {
-        await this.goToVendorDashboard()
-
-        await base.clickAndWait(selector.vendor.vDashboard.products)
-
-        //add new external product
-        await page.click(selector.vendor.product.addNewProduct)
-        await page.type(selector.vendor.product.productName, productName)
-        await page.type(selector.vendor.product.productPrice, productPrice)
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
-        await base.clickAndWait(selector.vendor.product.createProduct)
-
-        let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
+    // Vendor Add Simple Subscription Product
+    async addSimpleSubscription(product) {
+        await this.addSimpleProduct(product)
 
         //edit product
-        await page.select(selector.vendor.product.productType, 'external')
-        await page.type(selector.vendor.product.productUrl, await base.getBaseUrl() + '/shop/uncategorized/subscription_handcrafted-granite-chicken/')
-        await page.type(selector.vendor.product.buttonText, 'Buy product')
-        await base.clearAndType(selector.vendor.product.price, productPrice)
+        await base.select(selector.vendor.product.productType, product.productType)
+        await base.type(selector.vendor.product.subscriptionPrice, product.subscriptionPrice())
+        await base.select(selector.vendor.product.subscriptionPeriodInterval, product.subscriptionPeriodInterval)
+        await base.select(selector.vendor.product.subscriptionPeriod, product.subscriptionPeriod)
+        await base.select(selector.vendor.product.expireAfter, product.expireAfter)
+        await base.type(selector.vendor.product.subscriptionTrialLength, product.subscriptionTrialLength)
+        await base.select(selector.vendor.product.subscriptionTrialPeriod, product.subscriptionTrialPeriod)
 
         await base.clickAndWait(selector.vendor.product.saveProduct)
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
     },
 
-    //vendor add auction product
-    async addAuctionProduct(productName, productPrice, startDate, endDate, category) {
+    // Vendor Add Variable Subscription Product
+    async addVariableSubscription(product) {
+        await this.addSimpleProduct(product)
+
+        // Edit Product
+        await base.select(selector.vendor.product.productType, product.productType)
+        await base.wait(1)
+
+        // Add Variation
+        //TODO: create attribute if not exists
+        await base.select(selector.vendor.product.customProductAttribute, `pa_${product.attribute}`)
+        await base.click(selector.vendor.product.addAttribute)
+        await base.waitForSelector(selector.vendor.product.selectAll)
+        await base.click(selector.vendor.product.selectAll)
+        await base.click(selector.vendor.product.usedForVariations)
+        await base.waitForSelector(selector.vendor.product.saveAttributes)
+        await base.click(selector.vendor.product.saveAttributes)
+
+        await base.waitForSelector(selector.vendor.product.addVariations)
+        await base.select(selector.vendor.product.addVariations, product.variableSubscription.linkAllVariation)
+        await base.wait(1)
+        await base.click(selector.vendor.product.go)
+        await base.waitForSelector(selector.vendor.product.confirmGo)
+        await base.click(selector.vendor.product.confirmGo)
+        await base.wait(1)
+        await base.click(selector.vendor.product.okSuccessAlertGo)
+        await base.wait(1)
+
+        await base.select(selector.vendor.product.addVariations, product.variableSubscription.variableRegularPrice)
+        await base.wait(1)
+        await base.click(selector.vendor.product.go)
+        await base.waitForSelector(selector.vendor.product.variationPrice)
+        await base.type(selector.vendor.product.variationPrice, product.regularPrice())
+        await base.click(selector.vendor.product.okVariationPrice)
+
+        await base.waitForSelector(selector.vendor.product.saveProduct)
+        await base.clickAndWait(selector.vendor.product.saveProduct)
+        await base.wait(1)
+
+        let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
+    },
+
+    // Vendor Add External Product
+    async addExternalProduct(product, productName, productPrice, category) {
+        await this.addSimpleProduct(product)
+
+        // Edit Product
+        await base.select(selector.vendor.product.productType, product.productType)
+        await base.type(selector.vendor.product.productUrl, await base.getBaseUrl() + product.external.productUrl)
+        await base.type(selector.vendor.product.buttonText, product.buttonText)
+        await base.clearAndType(selector.vendor.product.price, product.regularPrice())
+
+        await base.clickAndWait(selector.vendor.product.saveProduct)
+
+        let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
+    },
+
+    // Vendor Add Auction Product
+    async addAuctionProduct(product) {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.auction)
 
         //add new auction product
         await base.clickAndWait(selector.vendor.vAuction.addNewActionProduct)
-        await page.type(selector.vendor.vAuction.productName, faker.commerce.productName() + (' (Auction)'))
-        // await page.type(selector.vendor.vAuction.productShortDescription, productShortDescription)
+        await base.type(selector.vendor.vAuction.productName, product.productName())
+        // await base.click(selector.vendor.product.productCategory)
+        // await base.type(selector.vendor.product.productCategoryInput, product.category)
+        // await base.press(data.key.enter)
 
-        // await page.click(selector.vendor.product.productCategory)
-        // await page.type(selector.vendor.product.productCategoryInput, category)
-        // await page.keyboard.press('Enter')
-
-        // await page.select(selector.vendor.vAuction.itemCondition, itemCondition)
-        // await page.select(selector.vendor.vAuction.actionType, actionType)
-        await page.type(selector.vendor.vAuction.startPrice, productPrice)
-        await page.type(selector.vendor.vAuction.bidIncrement, '50')
-        await page.type(selector.vendor.vAuction.reservedPrice, String(Number(productPrice) + 400))
-        await page.type(selector.vendor.vAuction.buyItNowPrice, String(Number(productPrice) + 900))
-        await base.removeElementAttribute(selector.vendor.vAuction.auctionStartDate, 'readonly') 
-        await base.removeElementAttribute(selector.vendor.vAuction.auctionEndDate, 'readonly') 
-        await base.type(selector.vendor.vAuction.auctionStartDate, startDate) 
-        await base.type(selector.vendor.vAuction.auctionEndDate, endDate)
+        // await base.select(selector.vendor.vAuction.itemCondition, product.itemCondition)
+        // await base.select(selector.vendor.vAuction.actionType, product.auctionType)
+        await base.type(selector.vendor.vAuction.startPrice, product.regularPrice())
+        await base.type(selector.vendor.vAuction.bidIncrement, product.bidIncrement)
+        await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPrice())
+        await base.type(selector.vendor.vAuction.buyItNowPrice, product.buyItNowPrice())
+        await base.removeElementAttribute(selector.vendor.vAuction.auctionStartDate, 'readonly')
+        await base.removeElementAttribute(selector.vendor.vAuction.auctionEndDate, 'readonly')
+        await base.type(selector.vendor.vAuction.auctionStartDate, product.startDate)
+        await base.type(selector.vendor.vAuction.auctionEndDate, product.endDate)
 
         await base.clickAndWait(selector.vendor.vAuction.addAuctionProduct)
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('× Success! The product has been updated successfully. View Product →')//TODO: update assertion text)
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
 
     },
 
-    //vendor add booking product
-    async addBookingProduct(productName, category, bookingDurationType, bookingDuration, bookingDurationUnit, calenderDisplayMode, maxBookingsPerBlock,
-        minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDateUnit, baseCost, blockCost) {
+    // Vendor Add Booking Product
+    async addBookingProduct(product, productName,) {
         await this.goToVendorDashboard()
-
+        let productName = product.productName()
         await base.clickAndWait(selector.vendor.vDashboard.booking)
         await base.clickAndWait(selector.vendor.vBooking.addNewBookingProduct)
 
-        //add new booking product
-        await page.type(selector.vendor.vBooking.productName, productName)
-        await page.click(selector.vendor.vBooking.productCategory)
-        await page.type(selector.vendor.vBooking.productCategoryInput, category)
-        await page.keyboard.press('Enter')
+        // Add New Booking Product
+        await base.type(selector.vendor.vBooking.productName, productName)
+        // await base.click(selector.vendor.vBooking.productCategory)
+        // await base.type(selector.vendor.vBooking.productCategoryInput, product.category)
+        // await base.press(data.key.enter)
 
-        // general Booking options
-        await page.select(selector.vendor.vBooking.bookingDurationType, bookingDurationType)
-        await base.clearAndType(selector.vendor.vBooking.bookingDuration, bookingDuration)
-        await page.select(selector.vendor.vBooking.bookingDurationUnit, bookingDurationUnit)
+        // General Booking Options
+        await base.select(selector.vendor.vBooking.bookingDurationType, product.bookingDurationType)
+        await base.clearAndType(selector.vendor.vBooking.bookingDurationMax, product.bookingDurationMax)
+        await base.select(selector.vendor.vBooking.bookingDurationUnit, product.bookingDurationUnit)
 
-        await page.select(selector.vendor.vBooking.calenderDisplayMode, calenderDisplayMode)
+        await base.select(selector.vendor.vBooking.calenderDisplayMode, product.calenderDisplayMode)
         await base.check(selector.vendor.vBooking.enableCalendarRangePicker)
 
-        //availability
-        await base.clearAndType(selector.vendor.vBooking.maxBookingsPerBlock, maxBookingsPerBlock)
-        await base.clearAndType(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDate, minimumBookingWindowIntoTheFutureDate)
-        await page.select(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDateUnit, minimumBookingWindowIntoTheFutureDateUnit)
-        await base.clearAndType(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDate, maximumBookingWindowIntoTheFutureDate)
-        await page.select(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDateUnit, maximumBookingWindowIntoTheFutureDateUnit)
+        // Availability
+        await base.clearAndType(selector.vendor.vBooking.maxBookingsPerBlock, product.maxBookingsPerBlock)
+        await base.clearAndType(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDate, product.minimumBookingWindowIntoTheFutureDate)
+        await base.select(selector.vendor.vBooking.minimumBookingWindowIntoTheFutureDateUnit, product.minimumBookingWindowIntoTheFutureDateUnit)
+        await base.clearAndType(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDate, product.maximumBookingWindowIntoTheFutureDate)
+        await base.select(selector.vendor.vBooking.maximumBookingWindowIntoTheFutureDateUnit, product.maximumBookingWindowIntoTheFutureDateUnit)
 
-        //costs
-        await page.type(selector.vendor.vBooking.baseCost, baseCost)
-        await page.type(selector.vendor.vBooking.blockCost, blockCost)
+        // Costs
+        await base.type(selector.vendor.vBooking.baseCost, product.baseCost)
+        await base.type(selector.vendor.vBooking.blockCost, product.blockCost)
 
         await base.clickAndWait(selector.vendor.vBooking.saveProduct)
 
@@ -429,52 +333,48 @@ module.exports = {
 
     },
 
-    //vendor search similar product
+    // Vendor Search Similar Product
     async searchSimilarProduct(productName) {
-        await page.click(selector.vendor.vSearchSimilarProduct.search)
-        await page.type(selector.vendor.SearchSimilarProduct.search, productName)
+        await base.click(selector.vendor.vSearchSimilarProduct.search)
+        await base.type(selector.vendor.vSearchSimilarProduct.search, productName)
         await base.clickAndWait(selector.vendor.vSearchSimilarProduct.search)
-        await page.click(selector.vendor.vSearchSimilarProduct.search)
+        await base.click(selector.vendor.vSearchSimilarProduct.search)
     },
 
 
+    // Coupons 
 
-    //-------------------------------------------------- coupons ---------------------------------------------------//
-
-
-
-    //vendor add coupon
-    async addCoupon(couponTitle, couponAmount) {
+    // Vendor Add Coupon
+    async addCoupon(coupon) {
         await this.goToVendorDashboard()
 
-        // await base.clickAndWait(selector.vendor.vDashboard.coupons)
-        // await base.clickAndWait(selector.vendor.vCoupon.addNewCoupon)
-        // await page.type(selector.vendor.vCoupon.couponTitle, couponTitle)
-        // await page.type(selector.vendor.vCoupon.amount, couponAmount)
-        // await page.click(selector.vendor.vCoupon.selectAll)
-        // await page.click(selector.vendor.vCoupon.applyForNewProducts)
-        // await page.click(selector.vendor.vCoupon.showOnStore)
-        // await base.clickAndWait(selector.vendor.vCoupon.createCoupon)
-        // let couponError = await base.isVisible(selector.vendor.vCoupon.couponError)
-        // if (couponError) {
-        //     let errorMessage = await base.getElementText(selector.vendor.vCoupon.couponError)
-        //     if (errorMessage.includes('Coupon title already exists')) {
-        //         return
-        //     }
-        // }
+        await base.clickAndWait(selector.vendor.vDashboard.coupons)
+        await base.clickAndWait(selector.vendor.vCoupon.addNewCoupon)
+        await base.type(selector.vendor.vCoupon.couponTitle, coupon.title)
+        await base.type(selector.vendor.vCoupon.amount, coupon.amount)
+        await base.click(selector.vendor.vCoupon.selectAll)
+        await base.click(selector.vendor.vCoupon.applyForNewProducts)
+        await base.click(selector.vendor.vCoupon.showOnStore)
+        await base.clickAndWait(selector.vendor.vCoupon.createCoupon)
+        let couponError = await base.isVisible(selector.vendor.vCoupon.couponError)
+        if (couponError) {
+            let errorMessage = await base.getElementText(selector.vendor.vCoupon.couponError)
+            if (errorMessage.includes(coupon.existingCouponErrorMessage)) {
+                return
+            }
+        }
 
-        // let createdCoupon = await base.getElementText(selector.vendor.vCoupon.createdCoupon)
-        // expect(createdCoupon.toLowerCase()).toBe(couponTitle.toLowerCase())
+        let createdCoupon = await base.getElementText(selector.vendor.vCoupon.createdCoupon)
+        expect(createdCoupon.toLowerCase()).toBe(coupon.title.toLowerCase()) //TODO:check working or not
     },
 
 
 
-    //-------------------------------------------------- withdraw ---------------------------------------------------//
+    // Withdraw 
 
 
-
-    //vendor request withdraw 
-    async requestWithdraw(withdrawMethod, withdrawAmount) {
+    // Vendor Request Withdraw 
+    async requestWithdraw(withdraw) {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
@@ -500,22 +400,21 @@ module.exports = {
         // console.log(balance)
 
         if (balance > minimumWithdrawAmount) {
-            await page.click(selector.vendor.vWithdraw.requestWithdraw)
+            await base.click(selector.vendor.vWithdraw.requestWithdraw)
             await base.clearAndType(selector.vendor.vWithdraw.withdrawAmount, String(minimumWithdrawAmount))
             await base.wait(2)
-            await page.select(selector.vendor.vWithdraw.withdrawMethod, withdrawMethod)
+            await base.select(selector.vendor.vWithdraw.withdrawMethod, withdraw.withdrawMethod.default)
             await base.clickAndWait(selector.vendor.vWithdraw.submitRequest)
 
             let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
             expect(canRequestIsVisible).toBe(true)
         } else {
-
             // throw new Error("Vendor balance is less than minimum withdraw amount")
             console.log("Vendor balance is less than minimum withdraw amount")
         }
     },
 
-    //vendor cancel withdraw request
+    // Vendor Cancel Withdraw Request
     async cancelRequestWithdraw() {
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
         await base.clickAndWait(selector.vendor.vWithdraw.cancelRequest)
@@ -526,22 +425,21 @@ module.exports = {
 
     },
 
-    //vendor add auto withdraw disbursement schedule
-    async addAutoWithdrawDisbursementSchedule(preferredPaymentMethod, preferredSchedule, minimumWithdrawAmount, reserveBalance) {
+    // Vendor Add Auto Withdraw Disbursement Schedule
+    async addAutoWithdrawDisbursementSchedule(withdraw) {
 
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
-        await page.click(selector.vendor.vWithdraw.editSchedule)
-        await page.select(selector.vendor.vWithdraw.preferredPaymentMethod, preferredPaymentMethod)
-        await page.click(selector.vendor.vWithdraw[preferredSchedule])
-        // let length = await base.getCount(selector.vendor.withdraw.onlyWhenBalanceIs)
-        await page.select(selector.vendor.vWithdraw.onlyWhenBalanceIs, minimumWithdrawAmount)
-        await page.select(selector.vendor.vWithdraw.maintainAReserveBalance, reserveBalance)
+        await base.click(selector.vendor.vWithdraw.editSchedule)
+        await base.select(selector.vendor.vWithdraw.preferredPaymentMethod, withdraw.preferredPaymentMethod)
+        await base.click(selector.vendor.vWithdraw[withdraw.preferredSchedule])
+        await base.select(selector.vendor.vWithdraw.onlyWhenBalanceIs, withdraw.minimumWithdrawAmount)
+        await base.select(selector.vendor.vWithdraw.maintainAReserveBalance, withdraw.reservedBalance)
         await base.clickAndWait(selector.vendor.vWithdraw.changeSchedule)
     },
 
-    // vendor add default withdraw payment methods
+    // Vendor Add Default Withdraw Payment Methods
     async addDefaultWithdrawPaymentMethods(preferredSchedule) {
         await this.goToVendorDashboard()
 
@@ -559,344 +457,340 @@ module.exports = {
 
     },
 
-    //vendor add vendor details
-    async setVendorDetails(firstName, lastName, email, currentPassword, newPassword) {
-        await base.clearAndType(selector.vendor.vendorDetails.firstName, firstName)
-        await base.clearAndType(selector.vendor.vendorDetails.lastName, lastName)
-        await base.clearAndType(selector.vendor.vendorDetails.email, email)
-        await page.type(selector.vendor.vendorDetails.currentPassword, currentPassword)
-        await page.type(selector.vendor.vendorDetails.NewPassword, newPassword)
-        await page.type(selector.vendor.vendorDetails.confirmNewPassword, newPassword)
-        await page.click(selector.vendor.vendorDetails.saveChanges)
+    // Vendor Add Vendor Details
+    async setVendorDetails(vendorInfo) {
+        await base.clearAndType(selector.vendor.vendorDetails.firstName, vendorInfo.firstName())
+        await base.clearAndType(selector.vendor.vendorDetails.lastName, vendorInfo.lastName())
+        await base.clearAndType(selector.vendor.vendorDetails.email, vendorInfo.email())
+        await base.type(selector.vendor.vendorDetails.currentPassword, vendorInfo.password)
+        await base.type(selector.vendor.vendorDetails.NewPassword, vendorInfo.password1)
+        await base.type(selector.vendor.vendorDetails.confirmNewPassword, vendorInfo.password)
+        await base.click(selector.vendor.vendorDetails.saveChanges)
 
     },
 
-    //-------------------------------------------------- vendor settings ---------------------------------------------------//
+    // Vendor Settings 
 
-
-
-    //vendor set store settings
-    async setStoreSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName,
-        companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban, map, minimumOrderAmount, percentage, supportButtonText,
-        minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder) {
-
+    // Vendor Set Store Settings
+    async setStoreSettings(vendorInfo) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.settings)
 
-        await this.basicInfoSettings(storeName, storeProductsPerPage, phoneNo, street, street2, city, postOrZipCode, country, state, companyName, companyIdOrEuidNumber, vatOrTaxNumber, nameOfBank, bankIban)
-        await this.mapSettings(map)
-        await this.termsAndConditionsSettings()
-        await this.openingClosingTimeSettings()
-        await this.vacationSettings()
-        await this.discountSettings()
-        await this.biographySettings()
-        await this.storeSupportSettings()
-        await this.minMaxSettings(minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
-
-        //update settings
-        await page.click(selector.vendor.vStoreSettings.updateSettings)
+        await this.basicInfoSettings(vendorInfo)
+        await this.mapSettings(vendorInfo.mapLocation)
+        await this.termsAndConditionsSettings(vendorInfo.termsAndConditions)
+        await this.openingClosingTimeSettings(vendorInfo.openingClosingTime)
+        await this.vacationSettings(vendorInfo.vacation)
+        await this.discountSettings(vendorInfo.discount)
+        await this.biographySettings(vendorInfo.biography)
+        await this.storeSupportSettings(vendorInfo.supportButtonText)
+        await this.minMaxSettings(vendorInfo.minMax)
+        // Update Settings
+        await base.click(selector.vendor.vStoreSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(vendorInfo.storeSettingsSaveSuccessMessage)
     },
 
-    //vendor set store address 
-    async setStoreAddress(street, street2, city, postOrZipCode, country, state) {
-
+    // Vendor Set Store Address 
+    async setStoreAddress(vendorInfo) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.settings)
 
-        await base.clearAndType(selector.vendor.vStoreSettings.street, street)
-        await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
-        await base.clearAndType(selector.vendor.vStoreSettings.city, city)
-        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
-        await base.select(selector.vendor.vStoreSettings.country, country)
-        await base.select(selector.vendor.vStoreSettings.state, state)
+        await base.clearAndType(selector.vendor.vStoreSettings.street, vendorInfo.street1)
+        await base.clearAndType(selector.vendor.vStoreSettings.street2, vendorInfo.street2)
+        await base.clearAndType(selector.vendor.vStoreSettings.city, vendorInfo.city)
+        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, vendorInfo.zipCode)
+        await base.select(selector.vendor.vStoreSettings.country, vendorInfo.countrySelectValue)
+        await base.select(selector.vendor.vStoreSettings.state, vendorInfo.stateSelectValue)
 
-        //update settings
-        await page.click(selector.vendor.vStoreSettings.updateSettings)
+        // Update Settings
+        await base.click(selector.vendor.vStoreSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(vendorInfo.storeSettingsSaveSuccessMessage)
     },
 
-    //vendor set banner and profile picture settings
-    async bannerAndProfilePictureSettings() {
-        //upload banner and profile picture  
+    // Vendor Set Banner and Profile Picture Settings
+    async bannerAndProfilePictureSettings(banner, profilePicture) {
+        // Upload Banner and Profile Picture  
         await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.bannerImage, selector.vendor.vStoreSettings.removeBannerImage)
-        await page.click(selector.vendor.vStoreSettings.banner)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/banner.png')
+        await base.click(selector.vendor.vStoreSettings.banner)
+        await base.wpUploadFile(banner)
         await base.removePreviousUploadedImage(selector.vendor.vStoreSettings.profilePictureImage, selector.vendor.vStoreSettings.removeProfilePictureImage)
-        await page.click(selector.vendor.vStoreSettings.profilePicture)
-        await base.wpUploadFile('tests/e2e/utils/sampleData/avatar.png')
+        await base.click(selector.vendor.vStoreSettings.profilePicture)
+        await base.wpUploadFile(profilePicture)
     },
 
-    //vendor set basic info settings
-    async basicInfoSettings() {
-        // store basic info
-        await base.clearAndType(selector.vendor.vStoreSettings.storeName, storeName)
-        await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, storeProductsPerPage)
-        await base.clearAndType(selector.vendor.vStoreSettings.phoneNo, phoneNo)
-
-        // address
-        await base.clearAndType(selector.vendor.vStoreSettings.street, street)
-        await base.clearAndType(selector.vendor.vStoreSettings.street2, street2)
-        await base.clearAndType(selector.vendor.vStoreSettings.city, city)
-        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, postOrZipCode)
-        await page.select(selector.vendor.vStoreSettings.country, country)
-        await page.select(selector.vendor.vStoreSettings.state, state)
-
-        //company info
-        await base.clearAndType(selector.vendor.vStoreSettings.companyName, companyName)
-        await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, companyIdOrEuidNumber)
-        await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vatOrTaxNumber)
-        await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, nameOfBank)
-        await base.clearAndType(selector.vendor.vStoreSettings.bankIban, bankIban)
-        //email
+    // Vendor Set Basic Info Settings
+    async basicInfoSettings(vendorInfo) {
+        // Store Basic Info
+        await base.clearAndType(selector.vendor.vStoreSettings.storeName, vendorInfo.storeName)
+        await base.clearAndType(selector.vendor.vStoreSettings.storeProductsPerPage, vendorInfo.storeProductsPerPage)
+        await base.clearAndType(selector.vendor.vStoreSettings.phoneNo, vendorInfo.phone)
+        // Address
+        await base.clearAndType(selector.vendor.vStoreSettings.street, vendorInfo.street1)
+        await base.clearAndType(selector.vendor.vStoreSettings.street2, vendorInfo.street2)
+        await base.clearAndType(selector.vendor.vStoreSettings.city, vendorInfo.city)
+        await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, vendorInfo.zipCode)
+        await base.select(selector.vendor.vStoreSettings.country, vendorInfo.countrySelectValue)
+        await base.select(selector.vendor.vStoreSettings.state, vendorInfo.stateSelectValue)
+        // Company Info
+        await base.clearAndType(selector.vendor.vStoreSettings.companyName, vendorInfo.companyName)
+        await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, vendorInfo.companyId)
+        await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vendorInfo.vatNumber)
+        await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, vendorInfo.bankName)
+        await base.clearAndType(selector.vendor.vStoreSettings.bankIban, vendorInfo.bankIban)
+        // Email
         await base.check(selector.vendor.vStoreSettings.email)
-        //show more products
+        // Show More Products
         await base.check(selector.vendor.vStoreSettings.moreProducts)
     },
 
-    //vendor set map settings
-    async mapSettings() {
-        //map
-        await base.clearAndType(selector.vendor.vStoreSettings.map, map)
+    // Vendor Set Map Settings
+    async mapSettings(mapLocation) {
+        // Map
+        await base.clearAndType(selector.vendor.vStoreSettings.map, mapLocation)
         await base.wait(1)
-        await page.keyboard.press('ArrowDown')
-        await page.keyboard.press('Enter')
+        await base.press(data.key.arrowDown)
+        await base.press(data.key.enter)
     },
 
-    //vendor set terms and conditions settings
-    async termsAndConditionsSettings() {
-        //terms and conditions
+    // Vendor Set Terms and Conditions Settings
+    async termsAndConditionsSettings(termsAndConditions) {
+        // Terms and Conditions
         await base.check(selector.vendor.vStoreSettings.termsAndConditions)
         let termsAndConditionsIframe = await base.switchToIframe(selector.vendor.vStoreSettings.termsAndConditionsIframe)
-        await base.iframeClearAndType(termsAndConditionsIframe, selector.vendor.vStoreSettings.termsAndConditionsHtmlBody, 'Terms and Conditions Vendors')
+        await base.iframeClearAndType(termsAndConditionsIframe, selector.vendor.vStoreSettings.termsAndConditionsHtmlBody, termsAndConditions)
     },
 
-    //vendor set opening closing time settings
-    async openingClosingTimeSettings() {
-        //store opening closing time
+    // Vendor Set Opening Closing Time Settings
+    async openingClosingTimeSettings(openingClosingTime) {
+        // Store Opening Closing Time
         await base.check(selector.vendor.vStoreSettings.storeOpeningClosingTime)
         await base.wait(1)
-        let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        for (let day of days) {
+        for (let day of openingClosingTime.days) {
             await base.click(selector.vendor.vStoreSettings.chooseBusinessDays)
             await base.wait(2)
             await base.type(selector.vendor.vStoreSettings.chooseBusinessDays, day)
-            await page.keyboard.press('Enter')
+            await base.press(data.key.enter)
             await base.click(selector.vendor.vStoreSettings.businessDaysTab(day))
             await base.wait(1)
-            //individual day settings
+            // Individual Day Settings
             await base.waitForSelector(selector.vendor.vStoreSettings.openingTime(day))
-            await base.clearAndType(selector.vendor.vStoreSettings.openingTime(day), '06:00 AM')
-            await base.clearAndType(selector.vendor.vStoreSettings.closingTime(day), '11:30 PM')
+            await base.clearAndType(selector.vendor.vStoreSettings.openingTime(day), openingClosingTime.openingTime)
+            await base.clearAndType(selector.vendor.vStoreSettings.closingTime(day), openingClosingTime.closingTime)
         }
     },
 
-    //vendor set vacation settings
-    async vacationSettings() {
-        //vacation
+    // Vendor Set Vacation Settings
+    async vacationSettings(vacation) {
+        // Vacation
         let noVacationIsSetIsVisible = await base.isVisible(selector.vendor.vStoreSettings.noVacationIsSet)
         if (!noVacationIsSetIsVisible) {
             await base.hover(selector.vendor.vStoreSettings.vacationRow)
-            await page.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
-            await page.click(selector.vendor.vStoreSettings.confirmDeleteSavedVacationSchedule)
+            await base.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
+            await base.click(selector.vendor.vStoreSettings.confirmDeleteSavedVacationSchedule)
         }
-        let vacationDayFrom = helpers.addDays(helpers.currentDate, helpers.getRandomArbitraryInteger(31, 365))
-        let vacationDayTo = helpers.addDays(vacationDayFrom, 31)
+        // let vacationDayFrom = helpers.addDays(helpers.currentDate, helpers.getRandomArbitraryInteger(31, 365))
+        // let vacationDayTo = helpers.addDays(vacationDayFrom, 31)
         await base.check(selector.vendor.vStoreSettings.goToVacation)
-        await base.select(selector.vendor.vStoreSettings.closingStyle, 'datewise')
-        await base.type(selector.vendor.vStoreSettings.vacationDateRangeFrom, vacationDayFrom)
-        await base.type(selector.vendor.vStoreSettings.vacationDateRangeTo, vacationDayTo)
-        await base.type(selector.vendor.vStoreSettings.setVacationMessage, 'We are currently out of order')
-        await page.click(selector.vendor.vStoreSettings.saveVacationEdit)
+        await base.select(selector.vendor.vStoreSettings.closingStyle, vacation.closingStyle)
+        await base.type(selector.vendor.vStoreSettings.vacationDateRangeFrom, vacation.vacationDayFrom)
+        await base.type(selector.vendor.vStoreSettings.vacationDateRangeTo, vacation.vacationDayTo)
+        await base.type(selector.vendor.vStoreSettings.setVacationMessage, vacation.vacationMessage)
+        await base.click(selector.vendor.vStoreSettings.saveVacationEdit)
     },
 
-    //vendor set discount settings
-    async discountSettings(supportButtonText) {
-        //discount
+    // Vendor Set Discount Settings
+    async discountSettings(discount) {
+        // Discount
         await base.check(selector.vendor.vStoreSettings.enableStoreWideDiscount)
-        await base.clearAndType(selector.vendor.vStoreSettings.minimumOrderAmount, minimumOrderAmount)
-        await base.clearAndType(selector.vendor.vStoreSettings.percentage, percentage)
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumOrderAmount, discount.minimumOrderAmount)
+        await base.clearAndType(selector.vendor.vStoreSettings.percentage, discount.minimumOrderAmountPercentage)
     },
 
-    //vendor set biography settings
-    async biographySettings(supportButtonText) {
-        //biography
+    // Vendor Set Biography Settings
+    async biographySettings(biography) {
+        // Biography
         let biographyIframe = await base.switchToIframe(selector.vendor.vStoreSettings.biographyIframe)
-        await base.iframeClearAndType(biographyIframe, selector.vendor.vStoreSettings.biographyHtmlBody, 'Vendor biography')
+        await base.iframeClearAndType(biographyIframe, selector.vendor.vStoreSettings.biographyHtmlBody, biography)
     },
 
-    //vendor set store support settings
+    // Vendor Set Store Support Settings
     async storeSupportSettings(supportButtonText) {
-        //store support
+        // Store Support
         await base.check(selector.vendor.vStoreSettings.showSupportButtonInStore)
         await base.check(selector.vendor.vStoreSettings.showSupportButtonInSingleProduct)
         await base.clearAndType(selector.vendor.vStoreSettings.supportButtonText, supportButtonText)
     },
 
-    //vendor set minmax settings
-    async minMaxSettings(minimumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder, minimumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder) {
-        //min-max
+    // Vendor Set Minmax Settings
+    async minMaxSettings(minMax) {
+        // Min-Max
         await base.check(selector.vendor.vStoreSettings.enableMinMaxQuantities)
-        await base.clearAndType(selector.vendor.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minimumProductQuantityToPlaceAnOrder)
-        await base.clearAndType(selector.vendor.vStoreSettings.maximumProductQuantityToPlaceAnOrder, maximumProductQuantityToPlaceAnOrder)
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumProductQuantityToPlaceAnOrder, minMax.minimumProductQuantity)
+        await base.clearAndType(selector.vendor.vStoreSettings.maximumProductQuantityToPlaceAnOrder, minMax.maximumProductQuantity)
         await base.check(selector.vendor.vStoreSettings.enableMinMaxAmount)
-        await base.clearAndType(selector.vendor.vStoreSettings.minimumAmountToPlaceAnOrder, minimumAmountToPlaceAnOrder)
-        await base.clearAndType(selector.vendor.vStoreSettings.maximumAmountToPlaceAnOrder, maximumAmountToPlaceAnOrder)
-        await page.click(selector.vendor.vStoreSettings.clear)
-        await page.click(selector.vendor.vStoreSettings.selectAll)
-        await base.selectOptionByText(selector.vendor.vStoreSettings.selectCategory, 'Uncategorized')
+        await base.clearAndType(selector.vendor.vStoreSettings.minimumAmountToPlaceAnOrder, minMax.minimumAmount)
+        await base.clearAndType(selector.vendor.vStoreSettings.maximumAmountToPlaceAnOrder, minMax.maximumAmount)
+        await base.click(selector.vendor.vStoreSettings.clear)
+        await base.click(selector.vendor.vStoreSettings.selectAll)
+        await base.selectOptionByText(selector.vendor.vStoreSettings.selectCategory, minMax.category)
     },
 
 
-    //vendor add addons
-    async addAddon() {
+    // Vendor Add Addons
+    async addAddon(addon) {
+        await this.goToVendorDashboard()
+
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.addons)
 
-        //add addon
+        // Add Addon
         await base.clickAndWait(selector.vendor.vAddonSettings.createNewAddon)
-        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helpers.randomNumber())
-        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
-        await page.click(selector.vendor.vAddonSettings.productCategories,)
-        await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
-        await page.keyboard.press('Enter')
+        await base.clearAndType(selector.vendor.vAddonSettings.name, addon.name)
+        await base.clearAndType(selector.vendor.vAddonSettings.priority, addon.priority)
+        await base.click(selector.vendor.vAddonSettings.productCategories,)
+        await base.type(selector.vendor.vAddonSettings.productCategories, addon.category)
+        await base.press(data.key.enter)
 
-        //Add-on fields
-        await page.click(selector.vendor.vAddonSettings.addField)
-        await base.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
-        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
-        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
-        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
-        await page.click(selector.vendor.vAddonSettings.enableDescription)
-        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
-        await page.click(selector.vendor.vAddonSettings.requiredField)
-        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
-        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
-        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
+        // Add-On Fields
+        await base.click(selector.vendor.vAddonSettings.addField)
+        await base.select(selector.vendor.vAddonSettings.type, addon.type)
+        await base.select(selector.vendor.vAddonSettings.displayAs, addon.displayAs)
+        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, addon.titleRequired)
+        await base.select(selector.vendor.vAddonSettings.formatTitle, addon.formatTitle)
+        await base.click(selector.vendor.vAddonSettings.enableDescription)
+        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, addon.addDescription)
+        await base.click(selector.vendor.vAddonSettings.requiredField)
+        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, addon.enterAnOption)
+        await base.select(selector.vendor.vAddonSettings.optionPriceType, addon.optionPriceType)
+        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, addon.optionPriceInput)
         await base.clickAndWait(selector.vendor.vAddonSettings.publish)
 
         let successMessage = await base.getElementText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
-        expect(successMessage).toMatch('Add-on saved successfully')
+        expect(successMessage).toMatch(addon.saveSuccessMessage)
+        return addon.name
     },
-    //vendor edit addons
-    async editAddon(addon) {
+    // Vendor Edit Addons
+    async editAddon(addon, addonName) {
+        await this.goToVendorDashboard()
+
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.addons)
 
-        //add addon
-        await base.clickAndWait(selector.vendor.vAddonSettings.editAddon(addon))
-        await base.clearAndType(selector.vendor.vAddonSettings.name, 'Add-ons Group #' + helpers.randomNumber())
-        await base.clearAndType(selector.vendor.vAddonSettings.priority, '10')
-        await page.click(selector.vendor.vAddonSettings.productCategories,)
-        await page.type(selector.vendor.vAddonSettings.productCategories, 'Uncategorized')
-        await page.keyboard.press('Enter')
+        // Add Addon
+        await base.clickAndWait(selector.vendor.vAddonSettings.editAddon(addonName))
+        // await base.clickAndWait(selector.vendor.vAddonSettings.firstAddon)
+        await base.clearAndType(selector.vendor.vAddonSettings.name, addon.name) //TODO: check if new name is generated or not
+        await base.clearAndType(selector.vendor.vAddonSettings.priority, addon.priority)
+        await base.click(selector.vendor.vAddonSettings.productCategories,)
+        await base.type(selector.vendor.vAddonSettings.productCategories, addon.category)
+        await base.press(data.key.enter)
 
-        //Add-on fields
-        await page.click(selector.vendor.vAddonSettings.addField)
-        await base.select(selector.vendor.vAddonSettings.type, 'multiple_choice')
-        await page.select(selector.vendor.vAddonSettings.displayAs, 'select')
-        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, 'Add-on Title')
-        await page.select(selector.vendor.vAddonSettings.formatTitle, 'label')
-        await page.click(selector.vendor.vAddonSettings.enableDescription)
-        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, 'Add-on description')
-        await page.click(selector.vendor.vAddonSettings.requiredField)
-        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, 'Option 1')
-        await page.select(selector.vendor.vAddonSettings.optionPriceType, 'flat_fee')
-        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, '30')
+        // Add-On Fields
+        await base.click(selector.vendor.vAddonSettings.addField)
+        await base.select(selector.vendor.vAddonSettings.type, addon.type)
+        await base.select(selector.vendor.vAddonSettings.displayAs, addon.displayAs)
+        await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, addon.titleRequired)
+        await base.select(selector.vendor.vAddonSettings.formatTitle, addon.formatTitle)
+        await base.click(selector.vendor.vAddonSettings.enableDescription)
+        await base.clearAndType(selector.vendor.vAddonSettings.addDescription, addon.addDescription)
+        await base.click(selector.vendor.vAddonSettings.requiredField)
+        await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, addon.enterAnOption)
+        await base.select(selector.vendor.vAddonSettings.optionPriceType, addon.optionPriceType)
+        await base.clearAndType(selector.vendor.vAddonSettings.optionPriceInput, addon.optionPriceInput)
         await base.clickAndWait(selector.vendor.vAddonSettings.update)
 
         let successMessage = await base.getElementText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
-        expect(successMessage).toMatch('Add-on saved successfully')
+        expect(successMessage).toMatch(addon.saveSuccessMessage)
     },
 
-    //paypal payment settings
-    async setPaypal(email) {
-        //paypal
-        await base.clearAndType(selector.vendor.vPaymentSettings.paypal, email)
-        //update settings
+    // Paypal Payment Settings
+    async setPaypal(paymentMethod) {
+        // Paypal
+        await base.clearAndType(selector.vendor.vPaymentSettings.paypal, paymentMethod.email())
+        // Update Settings
         await base.clickAndWait(selector.vendor.vPaymentSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(paymentMethod.saveSuccessMessage)
     },
 
-    //bank transfer payment settings
-    async setBankTransfer(bankAccountName, bankAccountNumber, bankName, bankAddress, bankRoutingNumber, bankIban, bankSwiftCode) {
-        //bank transfer
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountName, bankAccountName)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountNumber, bankAccountNumber)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankName, bankName)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankAddress, bankAddress)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankRoutingNumber, bankRoutingNumber)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankIban, bankIban)
-        await base.clearAndType(selector.vendor.vPaymentSettings.bankSwiftCode, bankSwiftCode)
-        //update settings
+    // Bank Transfer Payment Settings
+    async setBankTransfer(paymentMethod) {
+        // Bank Transfer
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountName, paymentMethod.bankAccountName)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankAccountNumber, paymentMethod.bankAccountNumber)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankName, paymentMethod.bankName)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankAddress, paymentMethod.bankAddress)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankRoutingNumber, paymentMethod.bankRoutingNumber)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankIban, paymentMethod.bankIban)
+        await base.clearAndType(selector.vendor.vPaymentSettings.bankSwiftCode, paymentMethod.bankSwiftCode)
+        // Update Settings
         await base.clickAndWait(selector.vendor.vPaymentSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(paymentMethod.saveSuccessMessage)
     },
 
-    //stripe payment settings
-    async setStripe(email) {
-        //Stripe
-        // await base.clickAndWait(selector.vendor.vPaymentSettings.ConnectWithStripe)
-    },
+    // // Stripe Payment Settings
+    // async setStripe(email) {
+    //     // Stripe
+    //     // await base.clickAndWait(selector.vendor.vPaymentSettings.ConnectWithStripe)
+    // },
 
-    //paypal marketplace payment settings
-    async setPaypalMarketPlace(email) {
-        //paypal marketplace
-        // await base.clearAndType(selector.vendor.vPaymentSettings.paypalMarketplace, paypalMarketplace)
-        // await base.clickAndWait(selector.vendor.vPaymentSettings.paypalMarketplaceSignUp)
-    },
+    // // Paypal Marketplace Payment Settings
+    // async setPaypalMarketPlace(email) {
+    //     // Paypal Marketplace
+    //     // await base.clearAndType(selector.vendor.vPaymentSettings.paypalMarketplace, paypalMarketplace)
+    //     // await base.clickAndWait(selector.vendor.vPaymentSettings.paypalMarketplaceSignUp)
+    // },
 
-    //razorpay payment settings
-    async setRazorpay(email) {
-        //razorpay
-        //     await base.clickAndWait(selector.vendor.vPaymentSettings.rzSignup)
-        //  // existing account info
-        //     await page.click(selector.vendor.vPaymentSettings.rzIHaveAlreadyAnAccount)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountId, rzAccountId)
-        //     await page.click(selector.vendor.vPaymentSettings.rzConnectExistingAccount)
-        //  //new account info
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountName, rzAccountName)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountEmail, rzAccountEmail)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzYourCompanyName, rzYourCompanyName)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzYourCompanyType, rzYourCompanyType)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountName, rzBankAccountName)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountNumber, rzBankAccountNumber)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
-        //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountType, rzBankAccountType)
-        //     await base.clickAndWait(selector.vendor.vPaymentSettings.rzConnectAccount)
-    },
+    // // Razorpay Payment Settings
+    // async setRazorpay(email) {
+    //     // Razorpay
+    //     //     await base.clickAndWait(selector.vendor.vPaymentSettings.rzSignup)
+    //     //  // existing account info
+    //     //     await base.click(selector.vendor.vPaymentSettings.rzIHaveAlreadyAnAccount)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountId, rzAccountId)
+    //     //     await base.click(selector.vendor.vPaymentSettings.rzConnectExistingAccount)
+    //     //  //new account info
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountName, rzAccountName)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzAccountEmail, rzAccountEmail)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzYourCompanyName, rzYourCompanyName)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzYourCompanyType, rzYourCompanyType)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountName, rzBankAccountName)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountNumber, rzBankAccountNumber)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankIfscCode, rzBankIfscCode)
+    //     //     await base.clearAndType(selector.vendor.vPaymentSettings.rzBankAccountType, rzBankAccountType)
+    //     //     await base.clickAndWait(selector.vendor.vPaymentSettings.rzConnectAccount)
+    // },
 
-    //custom payment settings
-    async setCustom(emailOrPhone) {
-        //custom payment method
-        await base.clearAndType(selector.vendor.vPaymentSettings.customPayment, emailOrPhone)
-        //update settings
+    // Custom Payment Settings
+    async setCustom(paymentMethod) {
+        // Custom Payment Method
+        await base.clearAndType(selector.vendor.vPaymentSettings.customPayment, paymentMethod.email())
+        // Update Settings
         await base.clickAndWait(selector.vendor.vPaymentSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(paymentMethod.saveSuccessMessage)
     },
 
-    //skrill payment settings
-    async setSkrill(email) {
-        //skrill
-        await base.clearAndType(selector.vendor.skrill.email, email)
-        //update settings
+    // Skrill Payment Settings
+    async setSkrill(paymentMethodemail) {
+        // Skrill
+        await base.clearAndType(selector.vendor.skrill.email, paymentMethod.email())
+        // Update Settings
         await base.clickAndWait(selector.vendor.vPaymentSettings.updateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vPaymentSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(paymentMethod.saveSuccessMessage)
     },
 
-    //vendor set payment settings
+    // Vendor Set Payment Settings
     async setPaymentSettings() {
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
@@ -912,198 +806,195 @@ module.exports = {
 
     },
 
-    //vendor send id verification request
-    async sendIdVerificationRequest() {
+    // Vendor Send Id Verification Request
+    async sendIdVerificationRequest(verification) {
+        await this.goToVendorDashboard()
+
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
         await base.wait(2)
 
-        //id verification
+        // Id Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
         if (cancelRequestIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
+            await base.click(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
             await base.wait(2)
         }
-        await page.click(selector.vendor.vVerificationSettings.startIdVerification)
+        await base.click(selector.vendor.vVerificationSettings.startIdVerification)
         await base.wait(1)
         let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedPhoto)
         if (previousUploadedImageIsVisible) {
             await base.hover(selector.vendor.vVerificationSettings.previousUploadedPhoto)
-            await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedPhoto)
+            await base.click(selector.vendor.vVerificationSettings.removePreviousUploadedPhoto)
             await base.wait(2)
         }
         await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
-        await page.click(selector.vendor.vVerificationSettings.uploadPhoto)
+        await base.click(selector.vendor.vVerificationSettings.uploadPhoto)
         await base.wait(2)
         let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await base.wait(1)
         } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
         }
         await base.click(selector.vendor.vVerificationSettings.select)
-        await page.click(selector.vendor.vVerificationSettings.submitId)
+        await base.click(selector.vendor.vVerificationSettings.submitId)
         await base.wait(2)
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.idUpdateSuccessMessage)
-        expect(successMessage).toMatch('Your ID verification request is Sent and pending approval')
+        expect(successMessage).toMatch(verification.idRequestSubmitSuccessMessage)
     },
 
-    //vendor send address verification request
-    async sendAddressVerificationRequest() {
+    // Vendor Send Address Verification Request
+    async sendAddressVerificationRequest(verification) {
+        await this.goToVendorDashboard()
+
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
         await base.wait(2)
 
-        //company verification
+        // Company Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
         if (cancelRequestIsVisible) {
             await base.click(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
             await base.wait(1)
         }
-        await page.click(selector.vendor.vVerificationSettings.startAddressVerification)
+        await base.click(selector.vendor.vVerificationSettings.startAddressVerification)
         await base.wait(1)
-        await base.clearAndType(selector.vendor.vVerificationSettings.street, 'abc street')
-        await base.clearAndType(selector.vendor.vVerificationSettings.street2, 'xyz street')
-        await base.clearAndType(selector.vendor.vVerificationSettings.city, 'New York')
-        await base.clearAndType(selector.vendor.vVerificationSettings.postOrZipCode, '10006')
-        await base.select(selector.vendor.vVerificationSettings.country, 'US')
-        await base.select(selector.vendor.vVerificationSettings.state, 'NY')
+        await base.clearAndType(selector.vendor.vVerificationSettings.street, verification.street1)
+        await base.clearAndType(selector.vendor.vVerificationSettings.street2, verification.street2)
+        await base.clearAndType(selector.vendor.vVerificationSettings.city, verification.city)
+        await base.clearAndType(selector.vendor.vVerificationSettings.postOrZipCode, verification.zipCode)
+        await base.select(selector.vendor.vVerificationSettings.country, verification.country)
+        await base.select(selector.vendor.vVerificationSettings.state, verification.state)
 
         // let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
         // if (previousUploadedImageIsVisible) {
         //     await base.hover(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
-        //     await page.click(selector.vendor.vVerificationSettings.removePreviousUploadedResidenceProof)
+        //     await base.click(selector.vendor.vVerificationSettings.removePreviousUploadedResidenceProof)
         //     await base.wait(4)
         // }
-  
+
         await base.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
         await base.wait(2)
         let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await base.wait(1)
         } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
         }
 
         await base.click(selector.vendor.vVerificationSettings.select)
-        await page.click(selector.vendor.vVerificationSettings.submitAddress)
+        await base.click(selector.vendor.vVerificationSettings.submitAddress)
         await base.wait(2)
 
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
-        expect(successMessage).toMatch('Your Address verification request is Sent and Pending approval')
+        expect(successMessage).toMatch(verification.addressRequestSubmitSuccessMessage)
     },
 
-    //vendor send company verification request
-    async sendCompanyVerificationRequest() {
+    // Vendor Send Company Verification Request
+    async sendCompanyVerificationRequest(verification) {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
         await base.wait(2)
 
-        //company verification
+        // Company Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
         if (cancelRequestIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
+            await base.click(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
             await base.wait(1)
         }
-        await page.click(selector.vendor.vVerificationSettings.startCompanyVerification)
+        await base.click(selector.vendor.vVerificationSettings.startCompanyVerification)
         await base.wait(1)
-        await page.click(selector.vendor.vVerificationSettings.uploadFiles)
+        await base.click(selector.vendor.vVerificationSettings.uploadFiles)
         await base.wait(2)
         let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
-            await page.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await base.wait(1)
         } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, 'tests/e2e/utils/sampleData/avatar.png')
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
         }
         await base.click(selector.vendor.vVerificationSettings.select)
-        await page.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
+        await base.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
         await base.wait(2)
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.companyInfoUpdateSuccessMessage)
-        expect(successMessage).toMatch('Your company verification request is sent and pending approval')
+        expect(successMessage).toMatch(verification.companyRequestSubmitSuccessMessage)
     },
 
-    //vendor set verification settings
+    // Vendor Set Verification Settings
     async setVerificationSettings() {
-        await base.goto('dashboard/settings/verification/')
         await this.sendIdVerificationRequest()
-        await base.goto('dashboard/settings/verification/')
         await this.sendAddressVerificationRequest()
-        await base.goto('dashboard/settings/verification/')
         await this.sendCompanyVerificationRequest()
     },
 
-    //vendor set delivery settings
-    async setDeliveryTimeSettings() {
+    // Vendor Set Delivery Settings
+    async setDeliveryTimeSettings(deliveryTime) {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.deliveryTime)
 
-        //delivery support
+        // Delivery Support
         await base.check(selector.vendor.vDeliveryTimeSettings.homeDelivery)
         await base.check(selector.vendor.vDeliveryTimeSettings.storePickup)
-        await base.clearAndType(selector.vendor.vDeliveryTimeSettings.deliveryBlockedBuffer, '0')
+        await base.clearAndType(selector.vendor.vDeliveryTimeSettings.deliveryBlockedBuffer, deliveryTime.deliveryBlockedBuffer)
 
         // let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        let days = ['sunday',] //TODO: not working for multiple days
-        for (let day of days) {
-            //checkbox
+        // let days = ['sunday',] //TODO: not working for multiple days
+        for (let day of deliveryTime.days) {
+            // Checkbox
             await base.check(selector.vendor.vDeliveryTimeSettings.deliveryDayCheckbox(day))
-            //tab
+            // Tab
             await base.click(selector.vendor.vDeliveryTimeSettings.deliveryDayTab(day))
-            //individual day settings
-            await base.select(selector.vendor.vDeliveryTimeSettings.openingTime(day), '06:00 AM')
-            await base.select(selector.vendor.vDeliveryTimeSettings.closingTime(day), '12:00 PM')
+            // Individual Day Settings
+            await base.select(selector.vendor.vDeliveryTimeSettings.openingTime(day), deliveryTime.openingTime)
+            await base.select(selector.vendor.vDeliveryTimeSettings.closingTime(day), deliveryTime.closingTime)
 
-            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot(day), '300')
-            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), '100')
+            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot(day), deliveryTime.timeSlot)
+            await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), deliveryTime.orderPerSlot)
             // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot, '30')
             // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot, '10')
         }
         await base.clickAndWait(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Delivery settings has been saved successfully!')
+        expect(successMessage).toMatch(deliveryTime.saveSuccessMessage)
     },
 
+    // Vendor Shipping Settings 
 
-
-    //-------------------------------------------------- vendor shipping settings ---------------------------------------------------//
-
-
-
-    //vendor set all shipping settings
+    // Vendor Set All Shipping Settings
     async setALLShippingSettings() {
         await this.goToVendorDashboard()
-        await this.setShippingSettings('US', 'Flat Rate', 'flat_rate')
-        await this.setShippingSettings('US', 'Free Shipping', 'free_shipping')
-        await this.setShippingSettings('US', 'Local Pickup', 'local_pickup')
-        await this.setShippingSettings('US', 'Table Rate', 'dokan_table_rate_shipping')
-        await this.setShippingSettings('US', 'Distance Rate', 'dokan_distance_rate_shipping')
+        await this.setShippingSettings(data.vendor.shipping.shippingMethods.flatRate)
+        await this.setShippingSettings(data.vendor.shipping.shippingMethods.freeShipping)
+        await this.setShippingSettings(data.vendor.shipping.shippingMethods.localPickup)
+        await this.setShippingSettings(data.vendor.shipping.shippingMethods.tableRateShipping)
+        await this.setShippingSettings(data.vendor.shipping.shippingMethods.distanceRateShipping)
     },
 
-    //set shipping policies
-    async setShippingPolicies(processingTime, shippingPolicy, refundPolicy) {
+    // Set Shipping Policies
+    async setShippingPolicies(shippingPolicy) {
         await base.clickAndWait(selector.vendor.vShippingSettings.clickHereToAddShippingPolicies)
-        await page.select(selector.vendor.vShippingSettings.processingTime, processingTime)//TODO:locator don't work
-        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy)//TODO:locator don't work
-        await base.type(selector.vendor.vShippingSettings.refundPolicy, refundPolicy)//TODO:locator don't work
+        await base.select(selector.vendor.vShippingSettings.processingTime, shippingPolicy.processingTime)//TODO:locator don't work
+        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy.shippingPolicy)//TODO:locator don't work
+        await base.type(selector.vendor.vShippingSettings.refundPolicy, shippingPolicy.refundPolicy)//TODO:locator don't work
         await base.clickAndWait(selector.vendor.vShippingSettings.shippingPoliciesSaveSettings)
 
         let successMessage = await base.getElementText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Settings save successfully')
+        expect(successMessage).toMatch(shippingPolicy.saveSuccessMessage)
     },
 
-    //vendor set shipping settings
-    async setShippingSettings(shippingZone, shippingMethod, selectShippingMethod) {
+    // Vendor Set Shipping Settings
+    async setShippingSettings(shipping) {
         await this.goToVendorDashboard()
 
         //TODO: admin need to enable shipping settings switch to admin & enable
@@ -1112,102 +1003,102 @@ module.exports = {
 
         // await this.setShippingPolicies('3', 'shipping policy', 'refund policy') //TODO:locator don't work
 
-        // edit shipping zone
-        await base.hover(selector.vendor.vShippingSettings.shippingZoneCell(shippingZone))
-        await base.click(selector.vendor.vShippingSettings.editShippingZone(shippingZone))
+        // Edit Shipping Zone
+        await base.hover(selector.vendor.vShippingSettings.shippingZoneCell(shipping.shippingZone))
+        await base.click(selector.vendor.vShippingSettings.editShippingZone(shipping.shippingZone))
         await base.wait(3)
 
-        let methodIsVisible = await base.isVisible(selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
+        let methodIsVisible = await base.isVisible(selector.vendor.vShippingSettings.shippingMethodCell(shipping.shippingMethod))
         if (!methodIsVisible) {
             await base.click(selector.vendor.vShippingSettings.addShippingMethod)
             await base.wait(2)
-            await page.select(selector.vendor.vShippingSettings.shippingMethod, selectShippingMethod)
-            await page.click(selector.vendor.vShippingSettings.shippingMethodPopupAddShippingMethod)
+            await base.select(selector.vendor.vShippingSettings.shippingMethod, shipping.selectShippingMethod)
+            await base.click(selector.vendor.vShippingSettings.shippingMethodPopupAddShippingMethod)
             await base.wait(2)
         }
 
-        //edit shipping method
-        await base.hover(selector.vendor.vShippingSettings.shippingMethodCell(shippingMethod))
-        await base.click(selector.vendor.vShippingSettings.editShippingMethod(shippingMethod))
+        // Edit Shipping Method
+        await base.hover(selector.vendor.vShippingSettings.shippingMethodCell(shipping.shippingMethod))
+        await base.click(selector.vendor.vShippingSettings.editShippingMethod(shipping.shippingMethod))
         await base.wait(2)
 
-        switch (selectShippingMethod) {
+        switch (shipping.selectShippingMethod) {
             case 'flat_rate':
-                //flat rate
-                await base.clearAndType(selector.vendor.vShippingSettings.flatRateMethodTitle, shippingMethod)
-                await base.clearAndType(selector.vendor.vShippingSettings.flatRateCost, '20')
-                await page.select(selector.vendor.vShippingSettings.flatRateTaxStatus, 'taxable')
-                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, 'Flat rate')
-                await page.select(selector.vendor.vShippingSettings.flatRateCalculationType, 'class')
+                // Flat Rate
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateMethodTitle, shipping.shippingMethod)
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateCost, shipping.shippingCost)
+                await base.select(selector.vendor.vShippingSettings.flatRateTaxStatus, shipping.taxStatus)
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, shipping.description)
+                await base.select(selector.vendor.vShippingSettings.flatRateCalculationType, shipping.calculationType)
                 break
 
             case 'free_shipping':
-                //free shipping
-                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingTitle, shippingMethod)
-                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingMinimumOrderAmount, '200')
+                // Free Shipping
+                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingTitle, shipping.shippingMethod)
+                await base.clearAndType(selector.vendor.vShippingSettings.freeShippingMinimumOrderAmount, shipping.freeShippingMinimumOrderAmount)
                 break
 
             case 'local_pickup':
-                //local pickup
-                await base.clearAndType(selector.vendor.vShippingSettings.localPickupTitle, shippingMethod)
-                await base.clearAndType(selector.vendor.vShippingSettings.localPickupCost, '20')
-                await page.select(selector.vendor.vShippingSettings.localPickupTaxStatus, 'taxable')
-                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, 'Local Pickup')
+                // Local Pickup
+                await base.clearAndType(selector.vendor.vShippingSettings.localPickupTitle, shipping.shippingMethod)
+                await base.clearAndType(selector.vendor.vShippingSettings.localPickupCost, shipping.shippingCost)
+                await base.select(selector.vendor.vShippingSettings.localPickupTaxStatus, shipping.taxStatus)
+                await base.clearAndType(selector.vendor.vShippingSettings.flatRateDescription, shipping.description)
                 break
 
             case 'dokan_table_rate_shipping':
-                //dokan table rate shipping
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMethodTitle, shippingMethod)
-                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxStatus, 'taxable')
-                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxIncludedInShippingCosts, 'no')
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFee, '10')
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumShippingCost, '200')
-                //rates
-                // await page.select(selector.vendor.vShippingSettings.tableRateShippingCalculationType, 'item')
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFeePerOrder, '10')
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMinimumCostPerOrder, '10')
-                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumCostPerOrder, '200')
+                // Dokan Table Rate Shipping
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMethodTitle, shipping.shippingMethod)
+                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxStatus, shipping.taxStatus)
+                await base.select(selector.vendor.vShippingSettings.tableRateShippingTaxIncludedInShippingCosts, shipping.taxIncludedInShippingCosts)
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFee, shipping.handlingFee)
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumShippingCost, shipping.maximumShippingCost)
+                // Rates
+                // await base.select(selector.vendor.vShippingSettings.tableRateShippingCalculationType,  shipping.calculationType)
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingHandlingFeePerOrder, shipping.handlingFeePerOrder)
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMinimumCostPerOrder, shipping.minimumCostPerOrder)
+                await base.clearAndType(selector.vendor.vShippingSettings.tableRateShippingMaximumCostPerOrder, shipping.maximumCostPerOrder)
 
                 await base.click(selector.vendor.vShippingSettings.tableRateShippingUpdateSettings)
                 let tableRateSuccessMessage = await base.getElementText(selector.vendor.vShippingSettings.tableRateShippingUpdateSettingsSuccessMessage)
-                expect(tableRateSuccessMessage).toMatch('Table rates has been saved successfully!')
+                expect(tableRateSuccessMessage).toMatch(shipping.saveSuccessMessage)
                 return
 
             case 'dokan_distance_rate_shipping':
-                //dokan distance rate shipping
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingMethodTitle, shippingMethod)
-                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTaxStatus, 'taxable')
-                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTransportationMode, 'driving')
-                await base.select(selector.vendor.vShippingSettings.distanceRateShippingAvoid, 'none')
-                await base.select(selector.vendor.vShippingSettings.distanceRateShippingDistanceUnit, 'metric')
+                // Dokan Distance Rate Shipping
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingMethodTitle, shipping.shippingMethod)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTaxStatus, shipping.taxStatus)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingTransportationMode, shipping.transportationMode)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingAvoid, shipping.avoid)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingDistanceUnit, shipping.distanceUnit)
                 await base.check(selector.vendor.vShippingSettings.distanceRateShippingShowDistance)
                 await base.check(selector.vendor.vShippingSettings.distanceRateShippingShowDuration)
-                //shipping address
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress1, 'abc street')
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress2, 'xyz street')
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingCity, 'New York')
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingZipOrPostalCode, '10006')
-                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingStateOrProvince, 'New York')
-                await base.select(selector.vendor.vShippingSettings.distanceRateShippingCountry, 'United States (US)')
+                // Shipping Address
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress1, shipping.street1)
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingAddress2, shipping.street2)
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingCity, shipping.city)
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingZipOrPostalCode, shipping.zipCode)
+                await base.clearAndType(selector.vendor.vShippingSettings.distanceRateShippingStateOrProvince, shipping.state)
+                await base.select(selector.vendor.vShippingSettings.distanceRateShippingCountry, shipping.country)
 
                 await base.click(selector.vendor.vShippingSettings.distanceRateShippingUpdateSettings)
                 let distanceRateSuccessMessage = await base.getElementText(selector.vendor.vShippingSettings.distanceRateShippingUpdateSettingsSuccessMessage)
-                expect(distanceRateSuccessMessage).toMatch('Distance rates has been saved successfully!')
+                expect(distanceRateSuccessMessage).toMatch(shipping.saveSuccessMessage)
                 return
 
             default:
                 break
         }
 
-        await page.click(selector.vendor.vShippingSettings.shippingSettingsSaveSettings)
+        await base.click(selector.vendor.vShippingSettings.shippingSettingsSaveSettings)
         await base.wait(1)
         await base.click(selector.vendor.vShippingSettings.saveChanges)
 
         let successMessage = await base.getElementText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Zone settings save successfully')
+        expect(successMessage).toMatch(shipping.saveSuccessMessage)
     },
 
-    //vendor set social profile settings
+    // Vendor Set Social Profile Settings
     async setSocialProfile(urls) {
         await this.goToVendorDashboard()
 
@@ -1221,43 +1112,44 @@ module.exports = {
         await base.clearAndType(selector.vendor.vSocialProfileSettings.youtube, urls.youtube)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.instagram, urls.instagram)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.flicker, urls.flickr)
-        // await page.click(selector.vendor.vSocialProfileSettings.updateSettings) //TODO: save settings button click don't work
-        await page.keyboard.press('Enter')
+        // await base.click(selector.vendor.vSocialProfileSettings.updateSettings) //TODO: save settings button click don't work
+        await base.press(data.key.enter)
 
         let successMessage = await base.getElementText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Your information has been saved successfully')
+        expect(successMessage).toMatch(data.urls.saveSuccessMessage)
     },
 
-    //vendor set rma settings
-    async setRmaSettings(label, type, length, lengthValue, lengthDuration) {
+    // Vendor Set Rma Settings
+    async setRmaSettings(rma) {
         await this.goToVendorDashboard()
 
         //TODO: admin need to enable rma settings switch to admin & enable
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.rma)
 
-        await base.clearAndType(selector.vendor.vRmaSettings.label, label)
-        await page.select(selector.vendor.vRmaSettings.type, type)
-        await page.select(selector.vendor.vRmaSettings.length, length)
-        await base.clearAndType(selector.vendor.vRmaSettings.lengthValue, lengthValue)
-        await page.select(selector.vendor.vRmaSettings.lengthDuration, lengthDuration)
+        await base.clearAndType(selector.vendor.vRmaSettings.label, rma.label)
+        await base.select(selector.vendor.vRmaSettings.type, rma.type)
+        await base.select(selector.vendor.vRmaSettings.length, rma.rmaLength)
+        await base.clearAndType(selector.vendor.vRmaSettings.lengthValue, rma.lengthValue)
+        await base.select(selector.vendor.vRmaSettings.lengthDuration, rma.lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(selector.vendor.vRmaSettings.refundReasons)
         if (refundReasonIsVisible) {
             await base.checkMultiple(selector.vendor.vRmaSettings.refundReasons)
         }
         let iframe = await base.switchToIframe(selector.vendor.vRmaSettings.refundPolicyIframe)
-        await base.iframeClearAndType(iframe, selector.vendor.vRmaSettings.refundPolicyHtmlBody, 'Refund Policy Vendor')
-        await page.click(selector.vendor.vRmaSettings.rmaSaveChanges)
+        await base.iframeClearAndType(iframe, selector.vendor.vRmaSettings.refundPolicyHtmlBody, rma.refundPolicyHtmlBody)
+        await base.click(selector.vendor.vRmaSettings.rmaSaveChanges)
 
         let successMessage = await base.getElementText(selector.vendor.vRmaSettings.updateSettingsSuccessMessage)
-        expect(successMessage).toMatch('Settings saved successfully')
+        expect(successMessage).toMatch(rma.saveSuccessMessage)
 
     },
 
 
-    //----------------------------------------------------Vendor functions---------------------------------------//
+    // Vendor Functions
 
+    // Vendor Approve Product Review
     async approveProductReview(reviewMessage) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.reviews)
@@ -1283,13 +1175,13 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vReturnRequest.view(orderId))
 
-        // change order status to refund
-        await page.select(selector.vendor.vReturnRequest.changeOrderStatus, 'processing')
+        // Change Order Status to Refund
+        await base.select(selector.vendor.vReturnRequest.changeOrderStatus, 'processing')
         await base.alert('accept')
         await base.clickAndWait(selector.vendor.vReturnRequest.updateOrderStatus)
 
-        //refund request
-        await page.click(selector.vendor.vReturnRequest.sendRefund)
+        // Refund Request
+        await base.click(selector.vendor.vReturnRequest.sendRefund)
         await base.wait(3)
         let tax = String(helpers.price(await base.getElementText(selector.vendor.vReturnRequest.taxAmount(productName))))
         let subTotal = String(helpers.price(await await base.getElementText(selector.vendor.vReturnRequest.subTotal(productName))))
@@ -1317,15 +1209,15 @@ module.exports = {
 
         await this.searchProduct(productName)
         await base.clickAndWait(selector.vendor.product.productLink(productName))
-        //override rma settings
+        // Override Rma Settings
         await base.check(selector.vendor.product.overrideYourDefaultRmaSettingsForThisProduct)
         await base.wait(1)
 
         await base.clearAndType(selector.vendor.product.rmaLabel, label)
-        await page.select(selector.vendor.product.rmaType, type)
-        await page.select(selector.vendor.product.rmaLength, length)
+        await base.select(selector.vendor.product.rmaType, type)
+        await base.select(selector.vendor.product.rmaLength, length)
         await base.clearAndType(selector.vendor.product.rmaLengthValue, lengthValue)
-        await page.select(selector.vendor.product.rmaLengthDuration, lengthDuration)
+        await base.select(selector.vendor.product.rmaLengthDuration, lengthDuration)
 
         let refundReasonIsVisible = await base.isVisible(selector.vendor.product.refundReasons)
         if (refundReasonIsVisible) {
@@ -1335,15 +1227,15 @@ module.exports = {
         await base.clickAndWait(selector.vendor.product.saveProduct)
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
     },
 
-    //add quantity discount
+    // Add Quantity Discount
     async addQuantityDiscount(productName, minimumQuantity, discountPercentage) {
         await this.searchProduct(productName)
         await base.clickAndWait(selector.vendor.product.productLink(productName))
 
-        //add quantity discount
+        // Add Quantity Discount
         await base.check(selector.vendor.product.enableBulkDiscount)
         await base.wait(1)
         await base.clearAndType(selector.vendor.product.lotMinimumQuantity, minimumQuantity)
@@ -1352,9 +1244,10 @@ module.exports = {
         await base.clickAndWait(selector.vendor.product.saveProduct)
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
-        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch('Success! The product has been saved successfully. View Product →')
+        expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
     },
 
+    // Vendor Search Product
     async searchProduct(productName) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.products)
@@ -1371,8 +1264,8 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vDashboard.orders)
 
         await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
-        await page.click(selector.vendor.vOrders.edit)
-        await page.select(selector.vendor.vOrders.orderStatus, orderStatus)
+        await base.click(selector.vendor.vOrders.edit)
+        await base.select(selector.vendor.vOrders.orderStatus, orderStatus)
         await base.click(selector.vendor.vOrders.updateOrderStatus)
         await base.wait(3)
 
@@ -1380,13 +1273,14 @@ module.exports = {
         expect(currentOrderStatus.toLowerCase()).toMatch((orderStatus.replace(/(^wc)|(\W)/g, '')).toLowerCase())
     },
 
+    // Venddor Refund Order
     async refundOrder(orderNumber, productName, partialRefund = false) {
         await this.goToVendorDashboard()
         await base.clickAndWait(selector.vendor.vDashboard.orders)
         await base.clickAndWait(selector.vendor.vOrders.orderLink(orderNumber))
 
         //request refund
-        await page.click(selector.vendor.vOrders.requestRefund)
+        await base.click(selector.vendor.vOrders.requestRefund)
         let productQuantity = await base.getElementText(selector.vendor.vOrders.productQuantity(productName))
         let productCost = helpers.price(await base.getElementText(selector.vendor.vOrders.productCost(productName)))
         let productTax = helpers.price(await base.getElementText(selector.vendor.vOrders.productTax(productName)))
@@ -1397,14 +1291,14 @@ module.exports = {
             await base.clearAndType(selector.vendor.vOrders.refundProductTaxAmount(productName), String(helpers.roundToTwo(productTax / 2)))
         }
         await base.type(selector.vendor.vOrders.refundReason, 'Defective product')
-        await page.click(selector.vendor.vOrders.refundManually)
+        await base.click(selector.vendor.vOrders.refundManually)
         await base.wait(1.5)
-        await page.click(selector.vendor.vOrders.confirmRefund)
+        await base.click(selector.vendor.vOrders.confirmRefund)
         await base.wait(1.5)
 
         let successMessage = await base.getElementText(selector.vendor.vOrders.refundRequestSuccessMessage)
         expect(successMessage).toMatch('Refund request submitted.')
-        await page.click(selector.vendor.vOrders.refundRequestSuccessMessageOk)
+        await base.click(selector.vendor.vOrders.refundRequestSuccessMessageOk)
     },
 
 
@@ -1437,7 +1331,7 @@ module.exports = {
         return vOrderDetails
     },
 
-    //get total vendor earnings
+    // Get Total Vendor Earnings
     async getTotalVendorEarning() {
         await this.goToVendorDashboard()
 

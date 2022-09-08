@@ -2224,6 +2224,7 @@ module.exports = {
             // general Booking options
             bookingDurationType: "#\\_wc_booking_duration_type",
             bookingDuration: "#\\_wc_booking_duration",
+            bookingDurationMax: "#_wc_booking_max_duration",
             bookingDurationUnit: "#\\_wc_booking_duration_unit",
 
             calenderDisplayMode: "#\\_wc_booking_calendar_display_mode",
@@ -2702,6 +2703,7 @@ module.exports = {
         vAddonSettings: {
             createNewAddon: ".dokan-pa-all-addons .dokan-btn",
             createNew: "//a[normalize-space()='Create New']",
+            firstAddon: "#the-list tr td .edit a",
             editAddon: (addon) => `//a[contains(text(), '${addon}')]/..//a[contains(text(), 'Edit')]`,
             deleteAddon: (addon) => `//a[contains(text(), '${addon}')]/..//a[contains(text(), 'Delete')]`,
             backToAddonLists: ".back-to-addon-lists-btn",
@@ -3189,7 +3191,7 @@ module.exports = {
             billingFirstName: "#billing_first_name",
             billingLastName: "#billing_last_name",
             billingCompanyName: "#billing_company",
-            billingCompanyIDOrEuidNumber: "#billing_dokan_company_id_number",
+            billingCompanyID: "#billing_dokan_company_id_number",
             billingVatOrTaxNumber: "#billing_dokan_vat_number",
             billingNameOfBank: "#billing_dokan_bank_name",
             billingBankIban: "#billing_dokan_bank_iban",

@@ -1,20 +1,22 @@
-require('dotenv').config()
-// console.log(process.env.ENV)
+// require('dotenv').config()
+// // console.log(process.env.ENV)
 
-// if (process.env.ENV == 'local') {
-//     console.log('first file')
-//     require('dotenv').config({ path: '.env.local' })
+// // if (process.env.ENV == 'local') {
+// //     console.log('first file')
+// //     require('dotenv').config({ path: '.env.local' })
 
-//     console.log(process.env.ABC)
-//     console.log(process.env.ENV)
+// //     console.log(process.env.ABC)
+// //     console.log(process.env.ENV)
+// // }
+
+// var dotenv = require('dotenv');
+// var fs = require('fs');
+// if (process.env.ENV === 'local') {
+//     //  process.env = dotenv.parse(fs.readFileSync('.env'));
+//     process.env = dotenv.parse(fs.readFileSync('.env.local'));
 // }
-
-var dotenv = require('dotenv');
-var fs = require('fs');
-if (process.env.ENV === 'local') {
-    //  process.env = dotenv.parse(fs.readFileSync('.env'));
-    process.env = dotenv.parse(fs.readFileSync('.env.local'));
-}
-// console.log(config1.ABC)
-// console.log(config2.ABC)
-console.log(process.env)
+// // console.log(config1.ABC)
+// // console.log(config2.ABC)
+// console.log(process.env)
+var a = 3.76546
+console.log(a.toPrecision(5))
