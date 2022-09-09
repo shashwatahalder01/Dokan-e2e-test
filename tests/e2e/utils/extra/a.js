@@ -18,5 +18,24 @@
 // // console.log(config1.ABC)
 // // console.log(config2.ABC)
 // console.log(process.env)
-var a = 3.76546
-console.log(a.toPrecision(5))
+// var a = 3.76546
+// console.log(a.toPrecision(5))
+
+
+let aobj= {
+    m1: 's1',
+    m2: 's2'
+}
+
+let obj2 ={
+    m2: 'changed value'
+}
+
+function my(...obj){
+    console.log(...obj)
+}
+
+
+// my(aobj)
+
+console.log({...aobj ,...obj2})

@@ -33,9 +33,9 @@ module.exports = {
   },
 
   async goToPlugins() {
-    await base.goto(data.subUrls.backend.plugins)
-    // await base.hover(selector.admin.aDashboard.plugins)
-    // await base.clickAndWait(selector.admin.plugins.installedPlugins)
+    // await base.goto(data.subUrls.backend.plugins)
+    await base.hover(selector.admin.aDashboard.plugins)
+    await base.clickAndWait(selector.admin.plugins.installedPlugins)
 
     const url = await page.url()
     expect(url).toMatch(data.subUrls.backend.plugins)

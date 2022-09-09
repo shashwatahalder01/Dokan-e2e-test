@@ -299,9 +299,11 @@ module.exports = {
 
     // Create a new url
     async createURL(subPath) {
-        let url = new URL(process.env.BASE_URL)
-        url.pathname = url.pathname + subPath + '/'
-        return url.href
+        // let url = new URL(process.env.BASE_URL)
+        // url.pathname = url.pathname + subPath + '/'
+        // return url.href
+        return process.env.BASE_URL + '/' + subPath + '/'
+
     },
 
     // Goto url it about:blank is loaded
@@ -728,12 +730,10 @@ module.exports = {
             selector = selector + ' span'
         }
         let value = await this.getElementBackgroundColor(selector)
-        if (!value.includes('rgb(0, 144, 255)')) { //TODO: crosscheck changes
+        if (!value.includes('rgb(0, 144, 255)')) { 
             await this.click(selector)
-        } else {
-            await this.click(selector)
-            await this.click(selector)
-        }
+        } 
+  
     },
 
     // Admin disable switcher , if disabled then skip : admin settings switcher
@@ -746,10 +746,7 @@ module.exports = {
         let value = await this.getElementBackgroundColor(selector)
         if (value.includes('rgb(0, 144, 255)')) {
             await this.click(selector)
-        } else {
-            await this.click(selector)
-            await this.click(selector)
-        }
+        } 
     },
 
     // Admin enable payment methods via slider
@@ -924,7 +921,7 @@ module.exports = {
                 break;
             }
             lastHTMLSize = currentHTMLSize;
-            await page.waitFor(checkDurationMsecs); 
+            await page.waitFor(checkDurationMsecs);
         }
     },
 

@@ -81,7 +81,7 @@ describe('Environment setup test', () => {
         await adminPage.addDokanSubscription(data.predefined.vendorSubscription.nonRecurring)
     })
 
-    it('admin set dokan general settings', async () => {
+    it.only('admin set dokan general settings', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.setDokanGeneralSettings(data.dokanSettings.general)
     })
@@ -166,19 +166,19 @@ describe('Environment setup test', () => {
 
     it('add test vendor1', async () => {
         // Add Vendor1
-        await vendorPage.vendorRegister(data.predefined.vendorInfo, false, data.vendorSetupWizard)
+        await vendorPage.vendorRegister({ ...data.vendor.vendorInfo, ...data.predefined.vendorInfo }, false, data.vendorSetupWizard)
     })
 
     it('add test vendor1 products', async () => {
         await loginPage.login(data.vendor)
         // Add Products
-        await vendorPage.addSimpleProduct(data.predefined.simpleProduct.product1)
+        await vendorPage.addSimpleProduct({ ...data.product.simple, ...data.predefined.simpleProduct.product1 })
     })
 
     it('add test vendor1 coupons', async () => {
         await loginPage.login(data.vendor)
         // Add Coupons
-        await vendorPage.addCoupon(data.predefined.coupon.coupon1)
+        await vendorPage.addCoupon({ ...data.coupon, ...data.predefined.coupon.coupon1 })
     })
 
     it('add test vendor1 address', async () => {
@@ -191,7 +191,7 @@ describe('Environment setup test', () => {
         await vendorPage.setRmaSettings(data.vendor.rma)
     })
 
-    it('admin add test vendor products ', async () => {
+    it.skip('admin add test vendor products ', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.addSimpleProduct(data.product.simple, 'publish', false)
         await adminPage.addSimpleProduct(data.product.simple, 'draft', false)
@@ -202,14 +202,14 @@ describe('Environment setup test', () => {
     // Customer Details 
 
     it('add test customer1', async () => {
-        await customerPage.customerRegister(data.customer)
-    }) 
+        await customerPage.customerRegister({ ...data.customer.customerInfo, ...data.predefined.customerInfo })
+    })
 
     it('add test customer1 addresses', async () => {
         await loginPage.login(data.customer)
-        await customerPage.addBillingAddress(data.predefined.customerInfo)
-        await customerPage.addShippingAddress(data.predefined.customerInfo)
-        await customerPage.customerLogout()
+        await customerPage.addBillingAddress({ ...data.customer.customerInfo, ...data.predefined.customerInfo })
+        await customerPage.addShippingAddress({ ...data.customer.customerInfo, ...data.predefined.customerInfo })
+        await loginPage.logout()
     })
 
 })

@@ -1,10 +1,8 @@
 const base = require("../pages/base.js")
-const customerPage = require('../pages/customer.js')
 const loginPage = require('../pages/login.js')
 const data = require('../utils/testData.js')
 const helpers = require("../utils/helpers.js")
 const selector = require("../pages/selectors.js")
-const { faker } = require('@faker-js/faker')
 
 
 
@@ -33,13 +31,13 @@ module.exports = {
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
-            await customerPage.customerLogout()
+            await loginPage.logout()
         }
         username = vendorInfo.firstName()
         await base.clearAndType(selector.vendor.vRegistration.regEmail, username + data.vendor.vendorInfo.emailDomain)
         await base.clearAndType(selector.vendor.vRegistration.regPassword, vendorInfo.password)
         await base.click(selector.vendor.vRegistration.regVendor)
-        await base.clearAndType(selector.vendor.vRegistration.firstName, vendorInfo.firstName)
+        await base.clearAndType1(selector.vendor.vRegistration.firstName, vendorInfo.firstName)
         await base.clearAndType(selector.vendor.vRegistration.lastName, vendorInfo.lastName)
         await base.clearAndType(selector.vendor.vRegistration.shopName, vendorInfo.shopName)
         // await base.clearAndType(selector.vendor.shopUrl, shopUrl)
@@ -129,10 +127,10 @@ module.exports = {
         await this.goToVendorDashboard()
 
         await base.clickAndWait(selector.vendor.vDashboard.products)
-
+        let productName = product.productName()
         // Add New Simple Product
         await base.click(selector.vendor.product.addNewProduct)
-        await base.type(selector.vendor.product.productName, product.productName())
+        await base.type(selector.vendor.product.productName, productName)
         await base.type(selector.vendor.product.productPrice, product.regularPrice())
         // await base.click(selector.vendor.product.productCategory) //TODO: handel via multistep category
         // await base.type(selector.vendor.product.productCategoryInput, product.category)
@@ -140,7 +138,7 @@ module.exports = {
         await base.clickAndWait(selector.vendor.product.createProduct)
 
         let createdProduct = await base.getElementValue(selector.vendor.product.title)
-        expect(createdProduct.toLowerCase()).toBe(product.productName.toLowerCase())
+        expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
     },
 
     // Vendor Add Variable Product
@@ -295,7 +293,7 @@ module.exports = {
     },
 
     // Vendor Add Booking Product
-    async addBookingProduct(product, productName,) {
+    async addBookingProduct(product,) {
         await this.goToVendorDashboard()
         let productName = product.productName()
         await base.clickAndWait(selector.vendor.vDashboard.booking)

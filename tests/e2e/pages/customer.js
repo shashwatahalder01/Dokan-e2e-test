@@ -44,7 +44,7 @@ module.exports = {
 
     // Customer Register
     async customerRegister(customerInfo) {
-        let username = customerInfo.username()
+        let username = customerInfo.username() 
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
