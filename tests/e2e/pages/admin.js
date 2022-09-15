@@ -355,19 +355,19 @@ module.exports = {
     await base.click(selector.admin.dokan.settings.deliveryTime)
 
     // Delivery Time Settings
-    await base.wait(0.5)
+    await base.wait(1.5)
     await base.enableSwitcher(selector.admin.dokan.settings.allowVendorSettings)
     await base.clearAndType(selector.admin.dokan.settings.deliveryDateLabel, deliveryTime.deliveryDateLabel)
     await base.clearAndType(selector.admin.dokan.settings.deliveryBlockedBuffer, deliveryTime.deliveryBlockedBuffer)
     await base.clearAndType(selector.admin.dokan.settings.deliveryBoxInfo, deliveryTime.deliveryBoxInfo)
     await base.enableSwitcher(selector.admin.dokan.settings.requireDeliveryDateAndTime)
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[0])) //TODO:update this
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[1]))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[2]))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[3]))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[4]))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[5]))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay[6]))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.sunday)) 
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.monday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.tuesday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.wednesday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.thursday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.friday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.saturday))
     await base.clearAndType(selector.admin.dokan.settings.openingTime, deliveryTime.openingTime)
     await base.clearAndType(selector.admin.dokan.settings.closingTime, deliveryTime.closingTime)
     await base.clearAndType(selector.admin.dokan.settings.timeSlot, deliveryTime.timeSlot)
@@ -480,6 +480,7 @@ module.exports = {
     expect(successMessage).toMatch(subscription.saveSuccessMessage)
 
     // Disabling Vendor Subscription //TODO: remove after handling buy subscription while vendor signup
+    await base.wait(1)
     await base.disableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
     await base.click(selector.admin.dokan.settings.vendorSubscriptionSaveChanges)
   },
@@ -515,7 +516,7 @@ module.exports = {
       await base.click(selector.admin.wooCommerce.settings.insertRow)
     }
     await base.clearAndType(selector.admin.wooCommerce.settings.taxRate, tax.taxRate)
-    await base.click(selector.admin.wooCommerce.settings.taxTable) //TODO: recheck if it required
+    await base.click(selector.admin.wooCommerce.settings.taxTable) 
     await base.wait(1)
     await base.click(selector.admin.wooCommerce.settings.taxRateSaveChanges)
     await base.wait(3)
@@ -1041,6 +1042,7 @@ module.exports = {
 
       // Add New Term
       for (let attributeTerm of attribute.attributeTerms) {
+        await base.wait(1.5)
         await base.type(selector.admin.products.attribute.attributeTerm, attributeTerm)
         await base.type(selector.admin.products.attribute.attributeTermSlug, attributeTerm)
         await base.click(selector.admin.products.attribute.addAttributeTerm)
@@ -1073,12 +1075,13 @@ module.exports = {
     // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
     await base.scrollToTop()
+    await base.wait(2)
 
     switch (product.status) {
       case 'publish':
         // Publish
-        await base.wait(1)
         await base.clickAndWait(selector.admin.products.product.publish)
+        await base.wait(2)
         let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
         expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
         break
@@ -1086,6 +1089,7 @@ module.exports = {
       case 'draft':
         // Draft
         await base.clickAndWait(selector.admin.products.product.saveDraft)
+        await base.wait(2)
         let draftProductCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
         expect(draftProductCreateSuccessMessage).toMatch(data.product.draftUpdateSuccessMessage)
         break
@@ -1096,6 +1100,7 @@ module.exports = {
         await base.select(selector.admin.products.product.status, data.product.status.pending)
         await base.wait(1)
         await base.clickAndWait(selector.admin.products.product.saveDraft)
+        await base.wait(2)
         let pendingProductCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
         expect(pendingProductCreateSuccessMessage).toMatch(data.product.pendingProductUpdateSuccessMessage)
         break
@@ -1182,7 +1187,9 @@ module.exports = {
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
     // Publish
     await base.scrollToTop()
+    await base.wait(2)
     await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
 
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
@@ -1207,7 +1214,9 @@ module.exports = {
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
     // Publish
     await base.scrollToTop()
+    await base.wait(2)
     await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
 
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
@@ -1237,7 +1246,9 @@ module.exports = {
 
     // Publish
     await base.scrollToTop()
+    await base.wait(2)
     await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
 
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
@@ -1267,7 +1278,9 @@ module.exports = {
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
     // Publish
     await base.scrollToTop()
+    await base.wait(2)
     await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
 
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch(product.publishSuccessMessage)
@@ -1297,7 +1310,9 @@ module.exports = {
     await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
     // Publish
     await base.scrollToTop()
+    await base.wait(2)
     await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
 
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
     expect(productCreateSuccessMessage).toMatch(product.publishSuccessMessage)

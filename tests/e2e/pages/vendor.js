@@ -34,7 +34,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.vRegistration.regPassword, vendorInfo.password)
         await base.click(selector.vendor.vRegistration.regVendor)
         await base.type(selector.vendor.vRegistration.firstName, username)
-        await base.type(selector.vendor.vRegistration.lastName, vendorInfo.lastName)
+        await base.type(selector.vendor.vRegistration.lastName, vendorInfo.lastName())
         await base.type(selector.vendor.vRegistration.shopName, vendorInfo.shopName)
         // await base.clearAndType(selector.vendor.shopUrl, shopUrl)
         await base.click(selector.vendor.vRegistration.shopUrl)
@@ -148,7 +148,7 @@ module.exports = {
         await base.click(selector.vendor.product.addNewProduct)
         await base.type(selector.vendor.product.productName, productName)
         await base.type(selector.vendor.product.productPrice, product.regularPrice())
-        // await  this.addCategory(product.category)
+        // await this.addCategory(product.category)
         await base.clickAndWait(selector.vendor.product.createProduct)
 
         let createdProduct = await base.getElementValue(selector.vendor.product.title)
@@ -173,16 +173,15 @@ module.exports = {
         await base.click(selector.vendor.product.saveAttributes)
 
         await base.waitForSelector(selector.vendor.product.addVariations)
-        await base.select(selector.vendor.product.addVariations, product.variable.variations.linkAllVariation)
-        await base.wait(1)
+        await base.select(selector.vendor.product.addVariations, product.variations.linkAllVariation)
+        await base.wait(2)
         await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.confirmGo)
         await base.click(selector.vendor.product.confirmGo)
         await base.wait(1)
         await base.click(selector.vendor.product.okSuccessAlertGo)
         await base.wait(1)
-
-        await base.select(selector.vendor.product.addVariations, product.variable.variableRegularPrice)
+        await base.select(selector.vendor.product.addVariations, product.variations.variableRegularPrice)
         await base.wait(1)
         await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.variationPrice)
@@ -201,7 +200,7 @@ module.exports = {
     async addSimpleSubscription(product) {
         await this.addSimpleProduct(product)
 
-        //edit product
+        // Edit Product
         await base.select(selector.vendor.product.productType, product.productType)
         await base.type(selector.vendor.product.subscriptionPrice, product.subscriptionPrice())
         await base.select(selector.vendor.product.subscriptionPeriodInterval, product.subscriptionPeriodInterval)
@@ -235,7 +234,7 @@ module.exports = {
         await base.click(selector.vendor.product.saveAttributes)
 
         await base.waitForSelector(selector.vendor.product.addVariations)
-        await base.select(selector.vendor.product.addVariations, product.variableSubscription.linkAllVariation)
+        await base.select(selector.vendor.product.addVariations, product.variations.linkAllVariation)
         await base.wait(1)
         await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.confirmGo)
@@ -244,7 +243,7 @@ module.exports = {
         await base.click(selector.vendor.product.okSuccessAlertGo)
         await base.wait(1)
 
-        await base.select(selector.vendor.product.addVariations, product.variableSubscription.variableRegularPrice)
+        await base.select(selector.vendor.product.addVariations, product.variations.variableRegularPrice)
         await base.wait(1)
         await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.variationPrice)
@@ -284,6 +283,7 @@ module.exports = {
         //add new auction product
         await base.clickAndWait(selector.vendor.vAuction.addNewActionProduct)
         await base.type(selector.vendor.vAuction.productName, product.productName())
+        await this.addCategory(product.category)
         // await base.click(selector.vendor.product.productCategory)
         // await base.type(selector.vendor.product.productCategoryInput, product.category)
         // await base.press(data.key.enter)
@@ -291,8 +291,8 @@ module.exports = {
         // await base.select(selector.vendor.vAuction.itemCondition, product.itemCondition)
         // await base.select(selector.vendor.vAuction.actionType, product.auctionType)
         await base.type(selector.vendor.vAuction.startPrice, product.regularPrice())
-        await base.type(selector.vendor.vAuction.bidIncrement, product.bidIncrement)
-        await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPrice())
+        await base.type(selector.vendor.vAuction.bidIncrement, product.bidIncrement())
+        await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPriced())
         await base.type(selector.vendor.vAuction.buyItNowPrice, product.buyItNowPrice())
         await base.removeElementAttribute(selector.vendor.vAuction.auctionStartDate, 'readonly')
         await base.removeElementAttribute(selector.vendor.vAuction.auctionEndDate, 'readonly')
@@ -377,13 +377,10 @@ module.exports = {
         }
 
         let createdCoupon = await base.getElementText(selector.vendor.vCoupon.createdCoupon)
-        expect(createdCoupon.toLowerCase()).toBe(coupon.title.toLowerCase()) //TODO:check working or not
+        expect(createdCoupon.toLowerCase()).toBe(coupon.title.toLowerCase()) 
     },
 
-
-
     // Withdraw 
-
 
     // Vendor Request Withdraw 
     async requestWithdraw(withdraw) {
@@ -660,8 +657,9 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vSettings.addons)
 
         // Add Addon
+        let addonName = addon.name()
         await base.clickAndWait(selector.vendor.vAddonSettings.createNewAddon)
-        await base.clearAndType(selector.vendor.vAddonSettings.name, addon.name)
+        await base.clearAndType(selector.vendor.vAddonSettings.name, addonName)
         await base.clearAndType(selector.vendor.vAddonSettings.priority, addon.priority)
         await base.click(selector.vendor.vAddonSettings.productCategories,)
         await base.type(selector.vendor.vAddonSettings.productCategories, addon.category)
@@ -683,7 +681,7 @@ module.exports = {
 
         let successMessage = await base.getElementText(selector.vendor.vAddonSettings.addonUpdateSuccessMessage)
         expect(successMessage).toMatch(addon.saveSuccessMessage)
-        return addon.name
+        return addonName
     },
     // Vendor Edit Addons
     async editAddon(addon, addonName) {
@@ -695,19 +693,20 @@ module.exports = {
         // Add Addon
         await base.clickAndWait(selector.vendor.vAddonSettings.editAddon(addonName))
         // await base.clickAndWait(selector.vendor.vAddonSettings.firstAddon)
-        await base.clearAndType(selector.vendor.vAddonSettings.name, addon.name) //TODO: check if new name is generated or not
+        await base.clearAndType(selector.vendor.vAddonSettings.name, addon.name())
         await base.clearAndType(selector.vendor.vAddonSettings.priority, addon.priority)
         await base.click(selector.vendor.vAddonSettings.productCategories,)
         await base.type(selector.vendor.vAddonSettings.productCategories, addon.category)
         await base.press(data.key.enter)
 
         // Add-On Fields
-        await base.click(selector.vendor.vAddonSettings.addField)
+        // await base.click(selector.vendor.vAddonSettings.addField)
+        await base.click(".wc-pao-addon-header.ui-sortable-handle")
         await base.select(selector.vendor.vAddonSettings.type, addon.type)
         await base.select(selector.vendor.vAddonSettings.displayAs, addon.displayAs)
         await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, addon.titleRequired)
         await base.select(selector.vendor.vAddonSettings.formatTitle, addon.formatTitle)
-        await base.click(selector.vendor.vAddonSettings.enableDescription)
+        // await base.click(selector.vendor.vAddonSettings.enableDescription)
         await base.clearAndType(selector.vendor.vAddonSettings.addDescription, addon.addDescription)
         await base.click(selector.vendor.vAddonSettings.requiredField)
         await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, addon.enterAnOption)
@@ -834,6 +833,7 @@ module.exports = {
         }
         await base.click(selector.vendor.vVerificationSettings.startIdVerification)
         await base.wait(1)
+
         // Remove Previously Uploaded Image
         let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedPhoto)
         if (previousUploadedImageIsVisible) {
@@ -843,14 +843,6 @@ module.exports = {
         }
         // await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
         await base.click(selector.vendor.vVerificationSettings.uploadPhoto)
-        await base.wait(2)
-        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
-        // if (uploadedMediaIsVisible) {
-        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
-        //     await base.wait(1)
-        // } else {
-        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
-        // }
         await this.uploadMedia(verification.file)
         await base.click(selector.vendor.vVerificationSettings.select)
         await base.click(selector.vendor.vVerificationSettings.submitId)
@@ -883,20 +875,10 @@ module.exports = {
         await base.select(selector.vendor.vVerificationSettings.country, verification.country)
         await base.select(selector.vendor.vVerificationSettings.state, verification.state)
         await base.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
-
-        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
-        // if (uploadedMediaIsVisible) {
-        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
-        //     await base.wait(1)
-        // } else {
-        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
-        // }
         await this.uploadMedia(verification.file)
-
         await base.click(selector.vendor.vVerificationSettings.select)
         await base.click(selector.vendor.vVerificationSettings.submitAddress)
         await base.wait(4)
-
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
         expect(successMessage).toMatch(verification.addressRequestSubmitSuccessMessage)
@@ -925,15 +907,7 @@ module.exports = {
             await base.click(selector.vendor.vVerificationSettings.UploadedCompanyFileClose)
             await base.wait(1)
         }
-
         await base.click(selector.vendor.vVerificationSettings.uploadFiles)
-        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
-        // if (uploadedMediaIsVisible) {
-        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
-        //     await base.wait(1)
-        // } else {
-        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
-        // }
         await this.uploadMedia(verification.file)
         await base.click(selector.vendor.vVerificationSettings.select)
         await base.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
@@ -945,12 +919,12 @@ module.exports = {
 
     async uploadMedia(file) {
         await base.wait(2)
-        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
+        let uploadedMediaIsVisible = await base.isVisible(selector.wpMedia.uploadedMedia)
         if (uploadedMediaIsVisible) {
-            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
+            await base.click(selector.wpMedia.uploadedMedia)
             await base.wait(1)
         } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, file)
+            await base.uploadImage(selector.wpMedia.selectFiles, file)
         }
     },
 

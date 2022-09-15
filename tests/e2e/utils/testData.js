@@ -1,10 +1,9 @@
 const { faker } = require('@faker-js/faker')
-const { isThemeInstalled } = require('@wordpress/e2e-test-utils')
 const helpers = require("./helpers.js")
 
 
 
-module.exports = {
+let that = module.exports = {
 
    // Fixed  test data 
 
@@ -240,7 +239,7 @@ module.exports = {
       external: {
          productType: 'external',
          productName: () => faker.commerce.productName() + (' (External)'),
-         productUrl: 'product/p1_v1/',
+         productUrl: '/product/p1_v1/',
          buttonText: 'Buy product',
          category: 'Uncategorized',
          regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
@@ -322,10 +321,10 @@ module.exports = {
          category: 'Uncategorized',
          itemCondition: 'new',
          auctionType: 'normal',
-         regularPrice: (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
-         bidIncrement: '50',
-         reservedPriced: () => String(Number(this.product.auction.regularPrice) + 500),
-         buyItNowPrice: () => String(Number(this.product.auction.regularPrice) + 1000),
+         regularPrice: () => (faker.finance.amount(10, 100, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         bidIncrement: () => (faker.finance.amount(40, 50, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         reservedPriced: () => (faker.finance.amount(400, 500, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         buyItNowPrice: () => (faker.finance.amount(900, 1000, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
          startDate: helpers.currentDateTime.replace(/,/g, ''),
          endDate: helpers.addDays(helpers.currentDateTime, 60).replace(/,/g, ''),
          saveSuccessMessage: '× Success! The product has been updated successfully. View Product →',
@@ -662,7 +661,15 @@ module.exports = {
          deliveryDateLabel: 'Delivery Date',
          deliveryBlockedBuffer: '0',
          deliveryBoxInfo: 'This store needs %DAY% day(s) to process your delivery request',
-         deliveryDay: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+         deliveryDay: {
+            sunday: 'Sunday',
+            monday: 'Monday',
+            tuesday: 'Tuesday',
+            wednesday: 'Wednesday',
+            thursday: 'Thursday',
+            friday: 'Friday',
+            saturday: 'Saturday'
+         },
          openingTime: '12:00 AM',
          closingTime: '11:30 PM',
          timeSlot: '30',
@@ -1004,9 +1011,9 @@ module.exports = {
          reservedBalance: '15',
 
       },
-      addon: {
 
-         name: 'Add-ons Group #' + helpers.randomNumber(),
+      addon: {
+         name: () => 'Add-ons Group #' + helpers.randomNumber(),
          priority: '10',
          category: 'Uncategorized',
          type: 'multiple_choice',
@@ -1161,7 +1168,7 @@ module.exports = {
       vendorInfo: {
          firstName: () => 'vendor1',
          lastName: () => 'v1',
-         userName: 'vendor1',
+         username: 'vendor1',
          shopName: 'vendorStore1',
       },
 
@@ -1172,7 +1179,9 @@ module.exports = {
       customerInfo: {
          firstName: () => 'customer1',
          lastName: () => 'c1',
-      },
+         username: () => 'customer1',
+      }
+
    }
 }
 

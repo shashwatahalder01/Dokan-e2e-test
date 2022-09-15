@@ -1,15 +1,11 @@
 
 module.exports = {
 
+    // Login
 
-
-    //--------------------------------------------login---------------------------------------------//
-
-
-
-    // selectors
+    // Selectors
     frontend: {
-        //fronted menus
+        // Fronted Menus
         home: "//a[contains(text(),'Home')]",
         cart: "//a[contains(text(),'Cart')]",
         checkout: "//a[contains(text(),'Checkout')]",
@@ -20,52 +16,56 @@ module.exports = {
         shop: "//a[contains(text(),'Shop')]",
         storeList: "//a[contains(text(),'Store List')]",
 
-        //go to vendor dashboard
+        // Go to Vendor Dashboard
         goToVendorDashboard: ".dokan-btn.dokan-btn-theme.vendor-dashboard",
 
-        //user login
+        // User Login
         username: "#username",
         userPassword: "#password",
         rememberMe: "#rememberme",
         logIn: "//button[@value='Log in']",
         lostPassword: ".woocommerce-LostPassword > a",
 
-        //user logout
+        // User Logout
         customerLogout: ".woocommerce-MyAccount-navigation-link--customer-logout > a",
         vendorLogout: ".fa-power-off",
 
-        //user forget password
+        // User Forget Password
         resetPasswordEmail: "#user_login",
         resetPasswordBtn: ".woocommerce-Button.button"
     },
 
     backend: {
-        // admin login
+        // Admin Login
         email: "#user_login",
         password: "#user_pass",
         rememberMe: "#rememberme",
         login: "#wp-submit",
         dashboardMenu: ".wp-first-item > .wp-menu-name",
         dashboardText: ".wrap h1",
-        // admin logout
+        // Admin Logout
         userMenu: "#wp-admin-bar-my-account a",
         logout: "#wp-admin-bar-logout a",
-        //logout message
+        // Logout Message
         logoutSuccessMessage: "#login p",
-        //login error
+        // Login Error
         loginError: '#login_error',
     },
 
+    wpMedia: {
+        // Wp Image Upload
+        wpUploadFiles: "#menu-item-upload",
+        uploadedMedia: ".attachment-preview",
+        selectFiles: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']",
+        select: "//div[@class='supports-drag-drop' and @style='position: relative;']//button[contains(@class, 'media-button-select')]"
+    },
 
-
-    //--------------------------------------------admin---------------------------------------------//
-
-
+    // Admin
 
     admin: {
-        //admin dashboard
+        // Admin Dashboard
         aDashboard: {
-            //dashboard menus
+            // Dashboard Menus
             dashboard: ".wp-first-item .wp-menu-name",
             posts: ".menu-icon-post .wp-menu-name",
             media: ".menu-icon-media .wp-menu-name",
@@ -1323,8 +1323,8 @@ module.exports = {
                 tagInput: '#new-tag-product_tag',
                 addTag: '.tagadd',
                 //status
-                editStatus:".edit-post-status.hide-if-no-js",
-                status:"#post-status-select #post_status",
+                editStatus: ".edit-post-status.hide-if-no-js",
+                status: "#post-status-select #post_status",
                 //publish
                 saveDraft: '#save-post',
                 preview: '#post-preview',
@@ -3289,7 +3289,7 @@ module.exports = {
             openTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Open Tickets')]",
             closedTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Closed Tickets')]",
 
-            firstOpenTicket:".dokan-support-topics-list tr td a",
+            firstOpenTicket: ".dokan-support-topics-list tr td a",
 
             chatText: (text) => `//div[contains(@class, 'dokan-chat-text')//p[contains(text(),'${text}')]`,
             addReply: "#dokan-support-commentform #comment",
