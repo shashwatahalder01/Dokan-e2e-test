@@ -146,7 +146,7 @@ module.exports = {
       pendingProductUpdateSuccessMessage: 'Product updated. ',
 
       status: {
-         publish: 'publish', //TODO: publish or public
+         publish: 'publish',
          draft: 'draft',
          pending: 'pending'
       },
@@ -300,7 +300,7 @@ module.exports = {
       },
 
       booking: {
-         productName: faker.commerce.productName() + (' (Booking)'),
+         productName: () => faker.commerce.productName() + (' (Booking)'),
          productType: 'booking',
          category: 'Uncategorized',
          bookingDurationType: 'customer',
@@ -317,7 +317,7 @@ module.exports = {
          blockCost: '10',
       },
       auction: {
-         productName: faker.commerce.productName() + (' (Auction)'),
+         productName: () => faker.commerce.productName() + (' (Auction)'),
          productType: 'auction',
          category: 'Uncategorized',
          itemCondition: 'new',
@@ -361,6 +361,15 @@ module.exports = {
    },
 
    order: {
+      orderStatus: {
+         pending: 'wc-pending',
+         processing: 'wc-processing',
+         onhold: 'wc-on-hold',
+         completed: 'wc-completed',
+         cancelled: 'wc-cancelled',
+         refunded: 'wc-refunded',
+         failed: 'wc-failed',
+      },
       // Refund
       refund: {
          itemQuantity: '1',
@@ -742,7 +751,7 @@ module.exports = {
       backend: {
          login: 'wp-login.php',
          adminLogin: 'wp-admin',
-         adminDashboard: 'wp-admin/index.php',
+         adminDashboard: 'wp-admin',
          dokanSettings: 'wp-admin/admin.php?page=dokan#/settings',
          woocommerceSettings: 'wp-admin/admin.php?page=wc-settings',
          plugins: 'wp-admin/plugins.php',
@@ -752,6 +761,7 @@ module.exports = {
          shop: 'shop',
          storeListing: 'store-listing',
          cart: 'cart',
+         checkout: 'checkout',
          dashboard: 'dashboard',
 
       },
@@ -849,11 +859,11 @@ module.exports = {
          shippingZone: 'US',
          shippingCountry: 'United States (US)',
          shippingMethods: {
-            localPickupflatRate: {
+            flatRate: {
                shippingZone: 'US',
                shippingCountry: 'United States (US)',
                selectShippingMethod: 'flat_rate',
-               shippingMethod: 'Flat rate',
+               shippingMethod: 'Flat Rate',
                taxStatus: 'taxable',
                shippingCost: '20',
                description: 'Flat rate',
@@ -865,7 +875,7 @@ module.exports = {
                shippingZone: 'US',
                shippingCountry: 'United States (US)',
                selectShippingMethod: 'free_shipping',
-               shippingMethod: 'Free shipping',
+               shippingMethod: 'Free Shipping',
                freeShippingRequires: 'min_amount',
                freeShippingMinimumOrderAmount: '200',
                saveSuccessMessage: 'Zone settings save successfully',
@@ -875,7 +885,7 @@ module.exports = {
                shippingZone: 'US',
                shippingCountry: 'United States (US)',
                selectShippingMethod: 'local_pickup',
-               shippingMethod: 'Local pickup',
+               shippingMethod: 'Local Pickup',
                taxStatus: 'taxable',
                shippingCost: '20',
                description: 'Local Pickup',
@@ -888,6 +898,7 @@ module.exports = {
                shippingCountry: 'United States (US)',
                selectShippingMethod: 'dokan_table_rate_shipping',
                shippingMethod: 'Table Rate',
+               taxStatus: 'taxable',
                taxIncludedInShippingCosts: 'no',
                handlingFee: '10',
                maximumShippingCost: '200',
@@ -904,6 +915,7 @@ module.exports = {
                shippingCountry: 'United States (US)',
                selectShippingMethod: 'dokan_distance_rate_shipping',
                shippingMethod: 'Distance Rate',
+               taxStatus: 'taxable',
                transportationMode: 'driving',
                avoid: 'none',
                distanceUnit: 'metric',
@@ -913,6 +925,7 @@ module.exports = {
                zipCode: '10006',
                state: 'New York',
                country: 'United States (US)',
+               saveSuccessMessage: 'Distance rates has been saved successfully!',
             },
 
             vendorShipping: {
@@ -959,8 +972,8 @@ module.exports = {
          days: ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'],
          openingTime: '06:00 AM',
          closingTime: '12:00 PM',
-         timeSlot: '300',
-         orderPerSlot: '100',
+         timeSlot: '30',
+         orderPerSlot: '10',
          saveSuccessMessage: 'Delivery settings has been saved successfully!',
       },
 
@@ -1029,13 +1042,70 @@ module.exports = {
          // storename: () => this.customer.customerInfo.firstName + 'store',
          username: () => faker.name.firstName('male'),
          storename: () => faker.name.firstName('male') + 'store',
-      companyName: faker.company.companyName(),
-      companyId: faker.random.alphaNumeric(5),
-      vatNumber: faker.random.alphaNumeric(10),
-      bankName: faker.address.state(),
-      bankIban: faker.finance.iban(),
-      phone: faker.phone.phoneNumber('(###) ###-####'),
-      street1: 'abc street', //TODO: address should be global or not
+         companyName: faker.company.companyName(),
+         companyId: faker.random.alphaNumeric(5),
+         vatNumber: faker.random.alphaNumeric(10),
+         bankName: faker.address.state(),
+         bankIban: faker.finance.iban(),
+         phone: faker.phone.phoneNumber('(###) ###-####'),
+         street1: 'abc street', //TODO: address should be global or not
+         street2: 'xyz street',
+         country: 'United States (US)',
+         countrySelectValue: 'US',
+         stateSelectValue: 'NY',
+         city: 'New York',
+         zipCode: '10006',
+         state: 'New York',
+         accountName: 'accountName',
+         accountNumber: faker.random.alphaNumeric(10),
+         bankName: 'bankName',
+         bankAddress: 'bankAddress',
+         routingNumber: faker.random.alphaNumeric(10),
+         swiftCode: faker.random.alphaNumeric(10),
+         iban: faker.random.alphaNumeric(10),
+
+         addressChangeSuccessMessage: 'Address changed successfully.',
+         getSupport: {
+            subject: 'get Support Subject',
+            message: 'get Support Message',
+            supportSubmitSuccessMessage: 'Thank you. Your ticket has been submitted!',
+         },
+      },
+      rma: {
+         sendMessage: "Message send successfully"
+      },
+      account: {
+         updateSuccessMessage: "Account details changed successfully.",
+      },
+      follow: {
+         following: 'Following',
+      },
+      registrationErrorMessage: 'Error: An account is already registered with your email address. Please log in.',
+   },
+
+   key: {
+      arrowDown: 'ArrowDown',
+      enter: 'Enter',
+   },
+
+   plugin: {
+      // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
+      PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
+      activeClass: 'active',
+   },
+
+   woocommerce: {
+      saveSuccessMessage: 'Your settings have been saved.',
+   },
+
+   wholesale: {
+      wholesaleRequestSendMessage: "Your wholesale customer request send to the admin. Please wait for approval",
+      becomeWholesaleCustomerSuccessMessage: 'You are succefully converted as a wholesale customer',
+      wholesaleCapabilityActivate: 'Wholesale capability activate',
+   },
+
+   address: {
+      street1: 'abc street',
       street2: 'xyz street',
       country: 'United States (US)',
       countrySelectValue: 'US',
@@ -1043,121 +1113,66 @@ module.exports = {
       city: 'New York',
       zipCode: '10006',
       state: 'New York',
-      accountName: 'accountName',
-      accountNumber: faker.random.alphaNumeric(10),
-      bankName: 'bankName',
-      bankAddress: 'bankAddress',
-      routingNumber: faker.random.alphaNumeric(10),
-      swiftCode: faker.random.alphaNumeric(10),
-      iban: faker.random.alphaNumeric(10),
-
-      addressChangeSuccessMessage: 'Address changed successfully.',
-      getSupport: {
-         subject: 'get Support Subject',
-         message: 'get Support Message',
-         supportSubmitSuccessMessage: 'Thank you. Your ticket has been submitted!',
-      },
-   },
-   registrationErrorMessage: 'Error: An account is already registered with your email address. Please log in.',
-},
-
-   key: {
-   arrowDown: 'ArrowDown',
-      enter: 'Enter',
    },
 
-plugin: {
-   // PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions', 'elementor', 'elementor-pro',],
-   PluginSlugList: ['dokan-lite', 'dokan-pro', 'woocommerce', 'woocommerce-bookings', 'woocommerce-product-add-ons', 'woocommerce-simple-auction', 'woocommerce-subscriptions',],
-      activeClass: 'active',
-   },
+   // predefined  test data 
 
-woocommerce: {
-   saveSuccessMessage: 'Your settings have been saved.',
-   },
-
-wholesale: {
-   wholesaleRequestSendMessage: "Your wholesale customer request send to the admin. Please wait for approval",
-      becomeWholesaleCustomerSuccessMessage: 'You are succefully converted as a wholesale customer',
-         wholesaleCapabilityActivate: 'Wholesale capability activate',
-   },
-
-address: {
-   street1: 'abc street',
-      street2: 'xyz street',
-         country: 'United States (US)',
-            countrySelectValue: 'US',
-               stateSelectValue: 'NY',
-                  city: 'New York',
-                     zipCode: '10006',
-                        state: 'New York',
-   },
-
-// predefined  test data 
-
-predefined: {
-   simpleProduct: {
-      product1: {
-         productName: () => 'p1_v1 (simple)',
+   predefined: {
+      simpleProduct: {
+         product1: {
+            name: 'p1_v1 (simple)',
+            productName: () => 'p1_v1 (simple)',
          },
-      product2: 'p2_v1 (simple)',
+         product2: 'p2_v1 (simple)',
          productfrac1: 'p1_F1_v1 (simple)',
-            productfrac2: 'p2_F2_v1 (simple)'
-   },
-   variableProduct: {
-      product1: 'p1_v1 (variable)'
-   },
-   simpleSubscription: {
-      product1: 'p1_v1 (simple subscription)'
-   },
-   variableSubscription: {
-      product1: 'p1_v1 (variable subscription)'
-   },
-   externalProduct: {
-      product1: 'p1_v1 (external/affiliate)'
-   },
-   auctionProduct: {
-      product1: 'p1_v1 (auction)'
-   },
-   bookingProduct: {
-      product1: 'p1_v1 (booking)'
-   },
-   saleProduct: {
-      product1: 'p1_v1 (sale)'
-   },
-   vendorSubscription: {
-      nonRecurring: {
-         productType: 'product_pack',
-            productName: () => 'Dokan_Subscription_Non_recurring',
-               category: 'Uncategorized',
-                  regularPrice: () => (faker.finance.amount(100, 200, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
-                     numberOfProducts: '-1',
-                        packValidity: '0',
-                           advertisementSlot: '-1',
-                              expireAfterDays: '-1',
-                                 storeName: 'admin',
-                                    status: 'publish',
-         },
-   },
-   coupon: {
-      coupon1: {
-         title: 'C1_v1',
-         },
-   },
-   vendorInfo: {
-      firstName: () => 'vendor1',
-         lastName: () => 'v1',
-            userName: 'vendor1',
-               shopName: 'vendorStore1',
+         productfrac2: 'p2_F2_v1 (simple)'
       },
-},
-vendorStores: {
-   vendor1: 'vendorStore1',
-      venor2: 'vendorStore2'
-},
-customerInfo: {
-   firstName: () => 'customer1',
-      lastName: () => 'c1',
-   },
+      variableProduct: {
+         product1: 'p1_v1 (variable)'
+      },
+      simpleSubscription: {
+         product1: 'p1_v1 (simple subscription)'
+      },
+      variableSubscription: {
+         product1: 'p1_v1 (variable subscription)'
+      },
+      externalProduct: {
+         product1: 'p1_v1 (external/affiliate)'
+      },
+      auctionProduct: {
+         product1: 'p1_v1 (auction)'
+      },
+      bookingProduct: {
+         product1: 'p1_v1 (booking)'
+      },
+      saleProduct: {
+         product1: 'p1_v1 (sale)'
+      },
+      vendorSubscription: {
+         nonRecurring: {
+            productName: () => 'Dokan_Subscription_Non_recurring',
+         },
+      },
+      coupon: {
+         coupon1: {
+            title: 'C1_v1',
+         },
+      },
+      vendorInfo: {
+         firstName: () => 'vendor1',
+         lastName: () => 'v1',
+         userName: 'vendor1',
+         shopName: 'vendorStore1',
+      },
+
+      vendorStores: {
+         vendor1: 'vendorStore1',
+         venor2: 'vendorStore2'
+      },
+      customerInfo: {
+         firstName: () => 'customer1',
+         lastName: () => 'c1',
+      },
+   }
 }
 

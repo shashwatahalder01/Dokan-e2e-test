@@ -8,37 +8,27 @@ module.exports = {
   // Navigation 
 
   async goToAdminDashboard() {
-    await base.goIfNotThere(data.subUrls.backend.adminDashboard) //TODO: check if goto or goifnothere is applicable
-
-    const url = await page.url()
-    expect(url).toMatch(data.subUrls.backend.adminDashboard)
+    await base.goIfNotThere(data.subUrls.backend.adminDashboard)
   },
 
   async goToDokanSettings() {
     await base.goIfNotThere(data.subUrls.backend.dokanSettings)
     // await base.hover(selector.admin.aDashboard.dokan)
     // await base.clickAndWait(selector.admin.dokan.settingsMenu)
-
-    const url = await page.url()
-    expect(url).toMatch(data.subUrls.backend.dokanSettings)
+    // const url = await page.url()
+    // expect(url).toMatch(data.subUrls.backend.dokanSettings)
   },
 
   async goToWooCommerceSettings() {
     await base.goIfNotThere(data.subUrls.backend.woocommerceSettings)
-    // await base.hover(selector.admin.aDashboard.wooCommerce)
-    // await base.clickAndWait(selector.admin.wooCommerce.settingsMenu)
-
-    const url = await page.url()
-    expect(url).toMatch(data.subUrls.backend.woocommerceSettings)
   },
 
   async goToPlugins() {
-    // await base.goto(data.subUrls.backend.plugins)
-    await base.hover(selector.admin.aDashboard.plugins)
-    await base.clickAndWait(selector.admin.plugins.installedPlugins)
-
-    const url = await page.url()
-    expect(url).toMatch(data.subUrls.backend.plugins)
+    await base.goIfNotThere(data.subUrls.backend.plugins)
+    // await base.hover(selector.admin.aDashboard.plugins)
+    // await base.clickAndWait(selector.admin.plugins.installedPlugins)
+    // const url = await page.url()
+    // expect(url).toMatch(data.subUrls.backend.plugins)
   },
 
 
@@ -140,7 +130,7 @@ module.exports = {
   // Admin Set Dokan Selling Settings
   async setDokanSellingSettings(selling) {
     await this.goToDokanSettings()
-
+    await base.wait(2)
     await base.click(selector.admin.dokan.settings.sellingOptions)
 
     // Commission Settings
@@ -164,13 +154,10 @@ module.exports = {
     await base.enableSwitcher(selector.admin.dokan.settings.newVendorEnableAuction)
     await base.enableSwitcher(selector.admin.dokan.settings.enableMinMaxQuantities)
     await base.enableSwitcher(selector.admin.dokan.settings.enableMinMaxAmount)
-    await base.clickAndWait(selector.admin.dokan.settings.sellingOptionsSaveChanges)//TODO:might not need clickandwait
+    await base.clickAndWait(selector.admin.dokan.settings.sellingOptionsSaveChanges)
 
-    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
-    expect(successMessage).toMatch(selling.saveSuccessMessage) //TODO: check working or not
-
-    // let commission = await base.getElementValue(selector.admin.dokan.settings.adminCommission)//TODO: update assertion
-    // expect(commission).toMatch(selling.adminCommission)
+    let commission = await base.getElementValue(selector.admin.dokan.settings.adminCommission)
+    expect(commission).toMatch(selling.adminCommission)
   },
 
   // Admin Set Dokan Withdraw Settings
@@ -250,12 +237,10 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.storeBannerHeight, appreance.storeBannerHeight)
     await base.enableSwitcher(selector.admin.dokan.settings.storeOpeningClosingTimeWidget)
     await base.enableSwitcher(selector.admin.dokan.settings.showVendorInfo)
-    await base.clickAndWait(selector.admin.dokan.settings.appearanceSaveChanges) //TODO:might not need clickandwait
+    await base.clickAndWait(selector.admin.dokan.settings.appearanceSaveChanges)
 
-    let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage) //TODO: check working or not
-    expect(successMessage).toMatch(appreance.saveSuccessMessage)
-    // let apiKey = await base.getElementValue(selector.admin.dokan.settings.googleMapApiKey) //TODO: update assertion
-    // expect(apiKey).toMatch(appreance.googleMapApiKey)
+    let apiKey = await base.getElementValue(selector.admin.dokan.settings.googleMapApiKey)
+    expect(apiKey).toMatch(appreance.googleMapApiKey)
   },
 
   // Admin Set Dokan Privacy Policy Settings
@@ -360,7 +345,7 @@ module.exports = {
     await base.click(selector.admin.dokan.settings.euComplianceFieldsSaveChanges)
 
     let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
-    expect(successMessage).toMatch(euCompliance.saveSuccessMessage)
+    expect(successMessage).toMatch(data.dokanSettings.euCompliance.saveSuccessMessage)
   },
 
   // Admin Set Dokan Delivery Time Settings
@@ -495,7 +480,7 @@ module.exports = {
     expect(successMessage).toMatch(subscription.saveSuccessMessage)
 
     // Disabling Vendor Subscription //TODO: remove after handling buy subscription while vendor signup
-    await base.enableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
+    await base.disableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
     await base.click(selector.admin.dokan.settings.vendorSubscriptionSaveChanges)
   },
 
@@ -536,7 +521,7 @@ module.exports = {
     await base.wait(3)
 
     let newTaxRate = await base.getElementValue(selector.admin.wooCommerce.settings.taxRate)
-    expect(newTaxRate).toBe(tax.taxRate.toPrecision(5))  
+    expect(newTaxRate).toBe((tax.taxRate).toPrecision(5))
 
 
   },
@@ -1334,7 +1319,8 @@ module.exports = {
   async adminApproveWholesaleRequest(customer) {
     await base.hover(selector.admin.aDashboard.dokan)
     await base.clickAndWait(selector.admin.dokan.wholesaleCustomerMenu)
-    await base.click(selector.admin.dokan.wholesaleCustomer.statusSlider(customer))
+    await base.click(selector.admin.dokan.wholesaleCustomer.statusSlider)
+    // await base.wait(5)
 
     let enableStatusSuccessMessage = await base.getElementText(selector.admin.dokan.wholesaleCustomer.enableStatusUpdateSuccessMessage)
     expect(enableStatusSuccessMessage).toMatch(data.wholesale.wholesaleCapabilityActivate)

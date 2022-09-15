@@ -13,38 +13,29 @@ module.exports = {
 
     async goToMyAccount() {
         await base.goIfNotThere(data.subUrls.frontend.myAccount)
-
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.myAccount)
-    },
-
-    async goToShop() {
-        await base.goIfNotThere(data.subUrls.frontend.shop)
-
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.shop)
-    },
-
-    async goToStoreList() {
-        await base.goIfNotThere(data.subUrls.frontend.storeListing)
-
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.storeListing)
     },
 
     async goToCart() {
         await base.goIfNotThere(data.subUrls.frontend.cart)
+    },
 
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.cart)
+    async goToCheckout() {
+        await base.goIfNotThere(data.subUrls.frontend.checkout)
+    },
+
+    async goToShop() {
+        await base.goIfNotThere(data.subUrls.frontend.shop)
+    },
+
+    async goToStoreList() {
+        await base.goIfNotThere(data.subUrls.frontend.storeListing)
     },
 
     // Customer Details 
 
-
     // Customer Register
     async customerRegister(customerInfo) {
-        let username = customerInfo.username() 
+        let username = customerInfo.username()
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
@@ -62,15 +53,13 @@ module.exports = {
                 return
             }
         }
-
         let loggedInUser = await base.getCurrentUser()
         expect(username.toLowerCase()).toBe(loggedInUser)
     },
 
-
     // Customer Become Vendor
     async customerBecomeVendor(customerInfo) {
-        firstName = customerInfo.firstName()
+        let firstName = customerInfo.firstName()
         await base.clickAndWait(selector.customer.cDashboard.becomeVendor)
         // vendor registration form
         await base.type(selector.customer.cDashboard.firstName, firstName)
@@ -86,12 +75,20 @@ module.exports = {
         await base.type(selector.customer.cDashboard.bankIban, customerInfo.bankIban)
         await base.clickIfVisible(selector.customer.cDashboard.termsAndConditions)
         let subscriptionPackIsVisible = await base.isVisible(selector.customer.cDashboard.subscriptionPack)
+        if (subscriptionPackIsVisible) {
+            await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack, selector.vendor.vRegistration.subscriptionPackOptions, data.predefined.vendorSubscription.nonRecurring.productName())
+        }
         await base.click(selector.customer.cDashboard.becomeAVendor)
         await base.wait(4)
-        // if (subscriptionPackIsVisible) {
-        //     console.log('subscription pack is visible')
-        //     await this.placeOrder('bank', false, false, true)//TODO: don't work: handle vendor subscription pack scenario and assertion too
-        // }
+        if (subscriptionPackIsVisible) {
+            await this.placeOrder('bank', false, false, true)
+
+            // Skip Vendor Setup Wizard
+            await base.clickAndWait(selector.vendor.vSetup.notRightNow)
+
+            let dashboardIsVisible = await base.isVisible(selector.vendor.vDashboard.dashboard)
+            expect(dashboardIsVisible).toBe(true)
+        }
 
     },
 
@@ -99,7 +96,6 @@ module.exports = {
     async customerBecomeWholesaleCustomer() {
         let currentUser = await base.getCurrentUser()
         await base.click(selector.customer.cDashboard.becomeWholesaleCustomer)
-        await base.wait(4)
         let returnMessage = await base.getElementText(selector.customer.cDashboard.wholesaleRequestReturnMessage)
         if (returnMessage != data.wholesale.wholesaleRequestSendMessage) {
             let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
@@ -139,7 +135,7 @@ module.exports = {
         await base.clickAndWait(selector.customer.cAddress.billingSaveAddress)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch(data.customer.customerInfo.addressChangeSuccessMessage)//TODO: decide success message should come from parameter or directly import form data file
+        expect(successMessage).toMatch(data.customer.customerInfo.addressChangeSuccessMessage)
     },
 
     // Customer Add Shipping Address
@@ -176,7 +172,7 @@ module.exports = {
         await base.click(selector.customer.cRma.sendMessage)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch("Message send successfully")
+        expect(successMessage).toMatch(data.customer.rma.sendMessage)
     },
 
     // Customer Update Password
@@ -187,7 +183,7 @@ module.exports = {
         await base.click(selector.customer.cAccountDetails.saveChanges)
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        expect(successMessage).toMatch("Account details changed successfully.")
+        expect(successMessage).toMatch(data.customer.account.updateSuccessMessage)
     },
 
     // Customer Add Customer Details
@@ -227,7 +223,7 @@ module.exports = {
 
         let currentStoreFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         // Unfollow If Not Already
-        if (currentStoreFollowStatus == "Following") {
+        if (currentStoreFollowStatus == 'Following') {
             await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
             await base.wait(1)
         }
@@ -253,9 +249,9 @@ module.exports = {
             await base.click(selector.customer.cSingleStore.editReview)
         }
         await base.wait(2)
-        await base.setElementAttributeValue(selector.customer.cSingleStore.rating, 'style', rating)
+        await base.setElementAttributeValue(selector.customer.cSingleStore.rating, 'style', store.rating)
         await base.clearAndType(selector.customer.cSingleStore.reviewTitle, store.reviewTitle)
-        await base.clearAndType(selector.customer.cSingleStore.reviewMessage, store.reviewMessage)
+        await base.clearAndType(selector.customer.cSingleStore.reviewMessage, reviewMessage)
         await base.click(selector.customer.cSingleStore.submitReview)
         await base.wait(2)
 
@@ -287,11 +283,13 @@ module.exports = {
     async addCustomerSupportTicket(message) {
         await base.click(selector.customer.cMyAccount.supportTickets)
         await base.click(selector.customer.cSupportTickets.openTickets)
+        await base.clickAndWait(selector.customer.cSupportTickets.firstOpenTicket)
 
-        // await base.click(selector.customer.cSupportTickets.addReply)
         await base.clearAndType(selector.customer.cSupportTickets.addReply, message)
         await base.click(selector.customer.cSupportTickets.submitReply)
-        //TODO: add assertion
+
+        let chatTextIsVisible = await base.isVisible(selector.customer.cSupportTickets.chatText(message))
+        expect(chatTextIsVisible).toBe(true)
     },
 
     // Customer Rate & Review Product
@@ -313,14 +311,6 @@ module.exports = {
 
         let submittedReviewMessage = await base.getElementText(selector.customer.cSingleProduct.submittedReview(reviewMessage))
         expect(submittedReviewMessage).toMatch(reviewMessage)
-
-        //TODO: uncomment after handling circular issue
-        // let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
-        // if (awaitingApprovalReviewIsVisible) {
-        //     await loginPage.switchUser(data.vendor)
-        //     await vendorPage.approveProductReview(reviewMessage)
-        // }
-
     },
 
     // Customer Report Product
@@ -337,7 +327,8 @@ module.exports = {
         let successMessage = await base.getElementText(selector.customer.cSingleProduct.reportSubmitSuccessMessage)
         expect(successMessage).toMatch(report.reportSubmitSuccessMessage)
 
-        await base.click(selector.customer.cSingleProduct.confirmReportSubmit) //TODO: why this line??
+        // Close Popup
+        await base.click(selector.customer.cSingleProduct.confirmReportSubmit)
 
     },
 
@@ -357,10 +348,10 @@ module.exports = {
 
     async buyProduct(productName, couponCode = false, getOrderDetails = false, payMentMethod = 'bank', paymentDetails) {
         // Clear Cart before Buying
-        // await this.clearCart()
+        await this.clearCart()
         // Buy Product
         await this.searchProduct(productName)
-        await this.addProductToCartFromShop(productName)//TODO: implement for other products , buy every product from single product page
+        await this.addProductToCartFromShop(productName)
         await this.goToCartFromShop()
         if (couponCode) {
             await this.applyCoupon(couponCode)
@@ -391,9 +382,9 @@ module.exports = {
         expect(productTitle).toMatch(productName)
     },
 
-
     // Customer Add Product to Cart from Shop Page
     async addProductToCartFromShop(productName) {
+        await this.goToShop()
         await this.searchProduct(productName)
 
         await base.click(selector.customer.cShop.addToCart)
@@ -401,7 +392,12 @@ module.exports = {
         await base.waitForSelector(selector.customer.cShop.viewCart)
         let cartIsVisible = await base.isVisible(selector.customer.cShop.viewCart)
         expect(cartIsVisible).toBe(true)
+    },
 
+    // Customer Check Whether Product Is on Cart
+    async productIsOnCart(productName) {
+        let productIsVisible = await base.isVisible(selector.customer.cCart.cartItem(productName))
+        expect(productIsVisible).toBe(true)
     },
 
     // Customer Add Product to Cart from Product Details Page
@@ -419,9 +415,8 @@ module.exports = {
 
         await base.waitForSelector(selector.customer.cCart.cartPageHeader)
         let cartIsVisible = await base.isVisible(selector.customer.cCart.cartPageHeader)
-        expect(cartIsVisible).toBe(true) //TODO: update assertion, also verify cart product added product from shop
+        expect(cartIsVisible).toBe(true)
     },
-
 
     // Go to Cart from Product Details Page
     async goToCartFromSingleProductPage() {
@@ -470,21 +465,14 @@ module.exports = {
     },
 
     // Customer Apply Coupon
-    async applyCoupon(couponCode) {
-        let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(couponCode))
+    async applyCoupon(coupon) {
+        let couponIsApplied = await base.isVisible(selector.customer.cCart.removeCoupon(coupon.title))
         if (couponIsApplied) {
-            await this.removeAppliedCoupon(couponCode)
+            await this.removeAppliedCoupon(coupon.title)
         }
-
-        await base.type(selector.customer.cCart.couponCode, couponCode)
+        await base.type(selector.customer.cCart.couponCode, coupon.title)
         await base.click(selector.customer.cCart.applyCoupon)
         await base.wait(6)
-
-        // // Negative Test
-        // let failureMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
-        // expect(failureMessage).toMatch(`Coupon "${couponCode}" does not exist!`)
-        // expect(failureMessage).toMatch("Sorry, this coupon is not applicable to selected products.") //for other vendor coupons
-        // expect(failureMessage).toMatch("Coupon code already applied!") 
 
         let successMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceSuccessMessage)
         expect(successMessage).toMatch("Coupon code applied successfully.")
@@ -501,7 +489,6 @@ module.exports = {
 
     // Customer Place Order
     async placeOrder(paymentMethod = 'bank', getOrderDetails = false, paymentDetails, billingDetails = false, shippingDetails = false) {
-        //TODO:handle billing address warning or shipping address warning
         if (billingDetails) await this.addBillingAddressInCheckout(data.customer.customerInfo)
         if (shippingDetails) await this.addShippingAddressInCheckout(data.customer.customerInfo)
         await base.wait(6)
@@ -524,7 +511,7 @@ module.exports = {
                 await base.clickAndWait(selector.customer.cCheckout.placeOrder)
                 break
             case 'stripe':
-                await this.payWithStripe()
+                await this.payWithStripe(paymentDetails)
                 break
             case 'paypalMarketPlace':
                 await this.payWithPaypalMarketPlace()
@@ -551,11 +538,32 @@ module.exports = {
         }
     },
 
+    // Pay with Stripe Connect
+    async payWithStripe(paymentDetails) {
+        let cardInfo = paymentDetails.cardInfo
 
-    async payWithStripe() { },
+        await base.click(selector.customer.cCheckout.stripeConnect)
+        await base.wait(2)
+
+        let savedTestCardIsVisible = await base.isVisible(selector.customer.cPayWithStripe.savedTestCard4242)
+        if (!savedTestCardIsVisible) {
+            let stripeConnectIframe = await base.switchToIframe(selector.customer.cPayWithStripe.stripeConnectIframe)
+            await base.iframeClearAndType(stripeConnectIframe, selector.customer.cPayWithStripe.cardNumber, cardInfo.cardNumber)
+            await base.iframeClearAndType(stripeConnectIframe, selector.customer.cPayWithStripe.expDate, cardInfo.cardExpiryDate)
+            await base.iframeClearAndType(stripeConnectIframe, selector.customer.cPayWithStripe.cvc, cardInfo.cardCvc)
+            await base.click(selector.customer.cPayWithStripe.savePaymentInformation)
+        } else {
+            await base.click(selector.customer.cPayWithStripe.savedTestCard4242)
+        }
+        await base.click(selector.customer.cCheckout.placeOrder)
+        await base.wait(5)
+    },
+    
     async payWithPaypalMarketPlace() { },
     async payWithRazorPay() { },
     async payWithMangoPay() { },
+
+    // Pay with Stripe Express
     async payWithStripeExpress(paymentDetails) {
         let paymentMethod = paymentDetails.paymentMethod
         let cardInfo = paymentDetails.cardInfo
@@ -563,8 +571,8 @@ module.exports = {
         await base.click(selector.customer.cCheckout.stripeExpress)
         await base.wait(2)
 
-        let savedTestCard4242IsVisible = await base.isVisible(selector.customer.cPayWithStripeExpress.savedTestCard4242)
-        if (!savedTestCard4242IsVisible) {
+        let savedTestCardIsVisible = await base.isVisible(selector.customer.cPayWithStripeExpress.savedTestCard4242)
+        if (!savedTestCardIsVisible) {
             let stripeExpressCardIframe = await base.switchToIframe(selector.customer.cPayWithStripeExpress.stripeExpressIframe)
             switch (paymentMethod) {
                 case 'card':

@@ -7,7 +7,7 @@
 // const helpers = require('../utils/helpers.js')
 // const { faker } = require('@faker-js/faker')
 // const timeout = process.env.TIME_OUT
-// jest.retryTimes(process.env.RETRY_TIMES)
+//jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
 
 // describe('dokan calculation functionality test', () => {

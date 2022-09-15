@@ -215,6 +215,15 @@ it.skip('customer can add payment method', async () => {
   await customerPage.deletePaymentMethod()
 })
 
+it.skip('customer can send return request ', async () => {
+  await loginPage.login(data.customer)
+  let cOrderDetails = await customerPage.buyProduct(data.predefined.simpleProduct.product1.name, false, true)
+  await loginPage.switchUser(data.vendor)
+  await vendorPage.changeOrderStatus(cOrderDetails.orderNumber, data.order.orderStatus.pending)
+  await loginPage.switchUser(data.customer)
+  await customerPage.sendWarrantyRequest(cOrderDetails.orderNumber, data.predefined.simpleProduct.product1.name, data.order)
+})
+
 
 it.skip('admin set dokan settings', async () => {
   await loginPage.adminLogin(data.admin)

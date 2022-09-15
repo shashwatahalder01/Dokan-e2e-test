@@ -1,7 +1,7 @@
 const adminPage = require('../pages/admin.js')
 const loginPage = require('../pages/login.js')
 const data = require('../utils/testData.js')
-jest.retryTimes(process.env.RETRY_TIMES) //TODO: add to jest config
+jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
 
 

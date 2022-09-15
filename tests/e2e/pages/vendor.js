@@ -1,8 +1,10 @@
 const base = require("../pages/base.js")
 const loginPage = require('../pages/login.js')
+const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
 const helpers = require("../utils/helpers.js")
 const selector = require("../pages/selectors.js")
+const { addCategory } = require("./admin.js")
 
 
 
@@ -12,42 +14,36 @@ module.exports = {
 
     async goToMyAccount() {
         await base.goIfNotThere(data.subUrls.frontend.myAccount)
-
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.myAccount)
     },
 
     async goToVendorDashboard() {
         await base.goIfNotThere(data.subUrls.frontend.dashboard)
-
-        const url = await page.url()
-        expect(url).toMatch(data.subUrls.frontend.dashboard)
     },
 
     // Setup Wizard 
 
     // Vendor Registration
-    async vendorRegister(vendorInfo, setupWizardChoice, setupWizardData) {
+    async vendorRegister(vendorInfo, setupWizardData) {
         await this.goToMyAccount()
         let loginIsVisible = await base.isVisible(selector.customer.cRegistration.regEmail)
         if (!loginIsVisible) {
             await loginPage.logout()
         }
-        username = vendorInfo.firstName()
+        let username = vendorInfo.firstName()
         await base.clearAndType(selector.vendor.vRegistration.regEmail, username + data.vendor.vendorInfo.emailDomain)
         await base.clearAndType(selector.vendor.vRegistration.regPassword, vendorInfo.password)
         await base.click(selector.vendor.vRegistration.regVendor)
-        await base.clearAndType1(selector.vendor.vRegistration.firstName, vendorInfo.firstName)
-        await base.clearAndType(selector.vendor.vRegistration.lastName, vendorInfo.lastName)
-        await base.clearAndType(selector.vendor.vRegistration.shopName, vendorInfo.shopName)
+        await base.type(selector.vendor.vRegistration.firstName, username)
+        await base.type(selector.vendor.vRegistration.lastName, vendorInfo.lastName)
+        await base.type(selector.vendor.vRegistration.shopName, vendorInfo.shopName)
         // await base.clearAndType(selector.vendor.shopUrl, shopUrl)
         await base.click(selector.vendor.vRegistration.shopUrl)
-        await base.clearAndType(selector.vendor.vRegistration.companyName, vendorInfo.companyName)
-        await base.clearAndType(selector.vendor.vRegistration.companyId, vendorInfo.companyId)
-        await base.clearAndType(selector.vendor.vRegistration.vatNumber, vendorInfo.vatNumber)
-        await base.clearAndType(selector.vendor.vRegistration.bankName, vendorInfo.bankName)
-        await base.clearAndType(selector.vendor.vRegistration.bankIban, vendorInfo.bankIban)
-        await base.clearAndType(selector.vendor.vRegistration.phone, vendorInfo.phone)
+        await base.type(selector.vendor.vRegistration.companyName, vendorInfo.companyName)
+        await base.type(selector.vendor.vRegistration.companyId, vendorInfo.companyId)
+        await base.type(selector.vendor.vRegistration.vatNumber, vendorInfo.vatNumber)
+        await base.type(selector.vendor.vRegistration.bankName, vendorInfo.bankName)
+        await base.type(selector.vendor.vRegistration.bankIban, vendorInfo.bankIban)
+        await base.type(selector.vendor.vRegistration.phone, vendorInfo.phone)
         let termsAndConditionsIsVisible = await base.isVisible(selector.customer.cDashboard.termsAndConditions)
         if (termsAndConditionsIsVisible) {
             await base.check(selector.customer.cDashboard.termsAndConditions)
@@ -55,10 +51,11 @@ module.exports = {
 
         let subscriptionPackIsVisible = await base.isVisible(selector.vendor.vRegistration.subscriptionPack)
         if (subscriptionPackIsVisible) {
-            await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack, selector.vendor.vRegistration.subscriptionPackOptions, "Dokan_subscription_Non_recurring")
+            await base.selectOptionByText(selector.vendor.vRegistration.subscriptionPack, selector.vendor.vRegistration.subscriptionPackOptions, data.predefined.vendorSubscription.nonRecurring.productName())
         }
 
         await base.clickAndWait(selector.vendor.vRegistration.register)
+        await base.wait(4)
         let registrationErrorIsVisible = await base.isVisible(selector.customer.cWooSelector.wooCommerceError)
         if (registrationErrorIsVisible) {
             let errorMessage = await base.getElementText(selector.customer.cWooSelector.wooCommerceError)
@@ -66,44 +63,46 @@ module.exports = {
                 return
             }
         }
-
-        await this.vendorSetupWizard(setupWizardChoice, setupWizardData)
+        if (subscriptionPackIsVisible) {
+            await customerPage.placeOrder('bank', false, false, true)
+        }
+        await this.vendorSetupWizard(setupWizardData)
     },
 
     // Vendor Setup Wizard
-    async vendorSetupWizard(vendorSetupWizard) {
-        if (setupWizardChoice) {
+    async vendorSetupWizard(setupWizardData) {
+        if (setupWizardData.choice) {
             await base.click(selector.vendor.vSetup.letsGo)
 
-            await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, vendorSetupWizard.storeProductsPerPage)
-            await base.type(selector.vendor.vSetup.street1, vendorSetupWizard.street1)
-            await base.type(selector.vendor.vSetup.street2, vendorSetupWizard.street2)
-            await base.type(selector.vendor.vSetup.city, vendorSetupWizard.city)
-            await base.type(selector.vendor.vSetup.zipCode, vendorSetupWizard.zipCode)
+            await base.clearAndType(selector.vendor.vSetup.storeProductsPerPage, setupWizardData.storeProductsPerPage)
+            await base.type(selector.vendor.vSetup.street1, setupWizardData.street1)
+            await base.type(selector.vendor.vSetup.street2, setupWizardData.street2)
+            await base.type(selector.vendor.vSetup.city, setupWizardData.city)
+            await base.type(selector.vendor.vSetup.zipCode, setupWizardData.zipCode)
             await base.click(selector.vendor.vSetup.country)
-            await base.type(selector.vendor.vSetup.countryInput, vendorSetupWizard.country)
+            await base.type(selector.vendor.vSetup.countryInput, setupWizardData.country)
             await base.press(data.key.enter)
-            await base.type(selector.vendor.vSetup.state, vendorSetupWizard.state)
+            await base.type(selector.vendor.vSetup.state, setupWizardData.state)
             await base.press(data.key.enter)
             await base.click(selector.vendor.vSetup.email)
             await base.clickAndWait(selector.vendor.vSetup.continueStoreSetup)
 
             // Paypal
-            await base.clearAndType(selector.vendor.vSetup.paypal, vendorSetupWizard.paypal())
+            await base.clearAndType(selector.vendor.vSetup.paypal, setupWizardData.paypal())
             // Bank Transfer
-            await base.type(selector.vendor.vSetup.bankAccountName, vendorSetupWizard.bankAccountName)
-            await base.select(selector.vendor.vSetup.bankAccountType, vendorSetupWizard.bankAccountType)
-            await base.type(selector.vendor.vSetup.bankRoutingNumber, vendorSetupWizard.bankRoutingNumber)
-            await base.type(selector.vendor.vSetup.bankAccountNumber, vendorSetupWizard.bankAccountNumber)
-            await base.type(selector.vendor.vSetup.bankName, vendorSetupWizard.bankName)
-            await base.type(selector.vendor.vSetup.bankAddress, vendorSetupWizard.bankAddress)
-            await base.type(selector.vendor.vSetup.bankIban, vendorSetupWizard.bankIban)
-            await base.type(selector.vendor.vSetup.bankSwiftCode, vendorSetupWizard.bankSwiftCode)
+            await base.type(selector.vendor.vSetup.bankAccountName, setupWizardData.bankAccountName)
+            await base.select(selector.vendor.vSetup.bankAccountType, setupWizardData.bankAccountType)
+            await base.type(selector.vendor.vSetup.bankRoutingNumber, setupWizardData.bankRoutingNumber)
+            await base.type(selector.vendor.vSetup.bankAccountNumber, setupWizardData.bankAccountNumber)
+            await base.type(selector.vendor.vSetup.bankName, setupWizardData.bankName)
+            await base.type(selector.vendor.vSetup.bankAddress, setupWizardData.bankAddress)
+            await base.type(selector.vendor.vSetup.bankIban, setupWizardData.bankIban)
+            await base.type(selector.vendor.vSetup.bankSwiftCode, setupWizardData.bankSwiftCode)
             await base.check(selector.vendor.vSetup.declaration)
 
-            await base.type(selector.vendor.vSetup.customPayment, vendorSetupWizard.customPayment)
+            await base.type(selector.vendor.vSetup.customPayment, setupWizardData.customPayment)
 
-            await base.clearAndType(selector.vendor.vSetup.skrill, vendorSetupWizard.skrill)
+            await base.clearAndType(selector.vendor.vSetup.skrill, setupWizardData.skrill)
             await base.clickAndWait(selector.vendor.vSetup.continuePaymentSetup)
 
             await base.clickAndWait(selector.vendor.vSetup.goToStoreDashboard)
@@ -120,6 +119,23 @@ module.exports = {
 
     },
 
+
+    // Vendor Add Product Category
+    async addCategory(category) {
+        await base.click(selector.vendor.product.productCategoryModal)
+        await base.type(selector.vendor.product.productCategorySearchInput, category)
+        await base.click(selector.vendor.product.productCategorySearchResult)
+        await base.click(selector.vendor.product.productCategoryDone)
+        let categoryAlreadySelectedPopup = await base.isVisible(selector.vendor.product.productCategoryAlreadySelectedPopup)
+        if (categoryAlreadySelectedPopup) {
+            await base.click(selector.vendor.product.productCategoryAlreadySelectedPopup)
+            await base.wait(1)
+            await base.click(selector.vendor.product.productCategoryModalClose)
+            await base.wait(1)
+        }
+
+    },
+
     // Products 
 
     // Vendor Add Simple Product
@@ -132,9 +148,7 @@ module.exports = {
         await base.click(selector.vendor.product.addNewProduct)
         await base.type(selector.vendor.product.productName, productName)
         await base.type(selector.vendor.product.productPrice, product.regularPrice())
-        // await base.click(selector.vendor.product.productCategory) //TODO: handel via multistep category
-        // await base.type(selector.vendor.product.productCategoryInput, product.category)
-        // await base.press(data.key.enter)
+        // await  this.addCategory(product.category)
         await base.clickAndWait(selector.vendor.product.createProduct)
 
         let createdProduct = await base.getElementValue(selector.vendor.product.title)
@@ -159,7 +173,7 @@ module.exports = {
         await base.click(selector.vendor.product.saveAttributes)
 
         await base.waitForSelector(selector.vendor.product.addVariations)
-        await base.select(selector.vendor.product.addVariations, product.variable.linkAllVariation)
+        await base.select(selector.vendor.product.addVariations, product.variable.variations.linkAllVariation)
         await base.wait(1)
         await base.click(selector.vendor.product.go)
         await base.waitForSelector(selector.vendor.product.confirmGo)
@@ -246,12 +260,12 @@ module.exports = {
     },
 
     // Vendor Add External Product
-    async addExternalProduct(product, productName, productPrice, category) {
+    async addExternalProduct(product) {
         await this.addSimpleProduct(product)
 
         // Edit Product
         await base.select(selector.vendor.product.productType, product.productType)
-        await base.type(selector.vendor.product.productUrl, await base.getBaseUrl() + product.external.productUrl)
+        await base.type(selector.vendor.product.productUrl, await base.getBaseUrl() + product.productUrl)
         await base.type(selector.vendor.product.buttonText, product.buttonText)
         await base.clearAndType(selector.vendor.product.price, product.regularPrice())
 
@@ -820,25 +834,27 @@ module.exports = {
         }
         await base.click(selector.vendor.vVerificationSettings.startIdVerification)
         await base.wait(1)
+        // Remove Previously Uploaded Image
         let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedPhoto)
         if (previousUploadedImageIsVisible) {
             await base.hover(selector.vendor.vVerificationSettings.previousUploadedPhoto)
             await base.click(selector.vendor.vVerificationSettings.removePreviousUploadedPhoto)
             await base.wait(2)
         }
-        await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
+        // await base.waitForSelector(selector.vendor.vVerificationSettings.uploadPhoto)
         await base.click(selector.vendor.vVerificationSettings.uploadPhoto)
         await base.wait(2)
-        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
-        if (uploadedMediaIsVisible) {
-            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
-            await base.wait(1)
-        } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
-        }
+        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
+        // if (uploadedMediaIsVisible) {
+        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
+        //     await base.wait(1)
+        // } else {
+        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
+        // }
+        await this.uploadMedia(verification.file)
         await base.click(selector.vendor.vVerificationSettings.select)
         await base.click(selector.vendor.vVerificationSettings.submitId)
-        await base.wait(2)
+        await base.wait(4)
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.idUpdateSuccessMessage)
         expect(successMessage).toMatch(verification.idRequestSubmitSuccessMessage)
@@ -852,7 +868,7 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vSettings.verification)
         await base.wait(2)
 
-        // Company Verification
+        // Address Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
         if (cancelRequestIsVisible) {
             await base.click(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
@@ -866,27 +882,20 @@ module.exports = {
         await base.clearAndType(selector.vendor.vVerificationSettings.postOrZipCode, verification.zipCode)
         await base.select(selector.vendor.vVerificationSettings.country, verification.country)
         await base.select(selector.vendor.vVerificationSettings.state, verification.state)
-
-        // let previousUploadedImageIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
-        // if (previousUploadedImageIsVisible) {
-        //     await base.hover(selector.vendor.vVerificationSettings.previousUploadedResidenceProof)
-        //     await base.click(selector.vendor.vVerificationSettings.removePreviousUploadedResidenceProof)
-        //     await base.wait(4)
-        // }
-
         await base.click(selector.vendor.vVerificationSettings.uploadResidenceProof)
-        await base.wait(2)
-        let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
-        if (uploadedMediaIsVisible) {
-            await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
-            await base.wait(1)
-        } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
-        }
+
+        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
+        // if (uploadedMediaIsVisible) {
+        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
+        //     await base.wait(1)
+        // } else {
+        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
+        // }
+        await this.uploadMedia(verification.file)
 
         await base.click(selector.vendor.vVerificationSettings.select)
         await base.click(selector.vendor.vVerificationSettings.submitAddress)
-        await base.wait(2)
+        await base.wait(4)
 
 
         let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.addressUpdateSuccessMessage)
@@ -899,7 +908,6 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
-        await base.wait(2)
 
         // Company Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
@@ -907,23 +915,43 @@ module.exports = {
             await base.click(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)
             await base.wait(1)
         }
+
         await base.click(selector.vendor.vVerificationSettings.startCompanyVerification)
         await base.wait(1)
+
+        // Remove Previously Uploaded Company File
+        let UploadedCompanyFileIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.UploadedCompanyFileClose)
+        if (UploadedCompanyFileIsVisible) {
+            await base.click(selector.vendor.vVerificationSettings.UploadedCompanyFileClose)
+            await base.wait(1)
+        }
+
         await base.click(selector.vendor.vVerificationSettings.uploadFiles)
+        // let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
+        // if (uploadedMediaIsVisible) {
+        //     await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
+        //     await base.wait(1)
+        // } else {
+        //     await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
+        // }
+        await this.uploadMedia(verification.file)
+        await base.click(selector.vendor.vVerificationSettings.select)
+        await base.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
+        await base.wait(4)
+
+        let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.companyInfoUpdateSuccessMessage)
+        expect(successMessage).toMatch(verification.companyRequestSubmitSuccessMessage)
+    },
+
+    async uploadMedia(file) {
         await base.wait(2)
         let uploadedMediaIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.uploadedMedia)
         if (uploadedMediaIsVisible) {
             await base.click(selector.vendor.vVerificationSettings.uploadedMedia)
             await base.wait(1)
         } else {
-            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, verification.file)
+            await base.uploadImage(selector.vendor.vVerificationSettings.selectFiles, file)
         }
-        await base.click(selector.vendor.vVerificationSettings.select)
-        await base.click(selector.vendor.vVerificationSettings.submitCompanyInfo)
-        await base.wait(2)
-
-        let successMessage = await base.getElementText(selector.vendor.vVerificationSettings.companyInfoUpdateSuccessMessage)
-        expect(successMessage).toMatch(verification.companyRequestSubmitSuccessMessage)
     },
 
     // Vendor Set Verification Settings
@@ -945,8 +973,6 @@ module.exports = {
         await base.check(selector.vendor.vDeliveryTimeSettings.storePickup)
         await base.clearAndType(selector.vendor.vDeliveryTimeSettings.deliveryBlockedBuffer, deliveryTime.deliveryBlockedBuffer)
 
-        // let days = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday']
-        // let days = ['sunday',] //TODO: not working for multiple days
         for (let day of deliveryTime.days) {
             // Checkbox
             await base.check(selector.vendor.vDeliveryTimeSettings.deliveryDayCheckbox(day))
@@ -958,8 +984,6 @@ module.exports = {
 
             await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot(day), deliveryTime.timeSlot)
             await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot(day), deliveryTime.orderPerSlot)
-            // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.timeSlot, '30')
-            // await base.clearAndType(selector.vendor.vDeliveryTimeSettings.orderPerSlot, '10')
         }
         await base.clickAndWait(selector.vendor.vDeliveryTimeSettings.deliveryTimeUpdateSettings)
 

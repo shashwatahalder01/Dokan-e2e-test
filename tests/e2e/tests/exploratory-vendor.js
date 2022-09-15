@@ -5,7 +5,7 @@ const adminPage = require('../pages/admin.js')
 const customerPage = require('../pages/customer.js')
 const base = require("../pages/base.js")  //Actions
 const data = require('../utils/testData.js')
-
+jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
 describe('Vendor Exploration test', () => {
 

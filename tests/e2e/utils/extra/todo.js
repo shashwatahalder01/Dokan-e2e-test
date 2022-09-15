@@ -53,3 +53,13 @@
 //TODO: remove all predefined data form page to test data >> subscription pack on vendor page
 //TODO: check if dokan upgrade exist is exists then upgrade it
 //TODO: admin add variable subscription and group product
+//TODO: decide success message should come from parameter or directly import form data file or direct string value
+//TODO: handle add product to cart for other products(variable,subscription),buy every product from single product page
+
+
+//TODO: add this on vendor approve review request
+let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
+if (awaitingApprovalReviewIsVisible) {
+    await loginPage.switchUser(data.vendor)
+    await vendorPage.approveProductReview(reviewMessage)
+}

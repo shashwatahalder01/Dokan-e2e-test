@@ -20,9 +20,12 @@ module.exports = {
     async loginFrontend(user) {
         await base.goIfBlank(data.subUrls.frontend.myAccount)
         let currentUser = await base.getCurrentUser()
-        if (user.username === currentUser) { // skip if user is already loggedin 
+        // Skip If User Is Already Loggedin 
+        if (user.username === currentUser) {
             return
-        } else if ((user.username !== currentUser) && (currentUser !== undefined)) { // logout if other user is already loggedin
+        }
+        // Logout If Other User Is Already Loggedin
+        else if ((user.username !== currentUser) && (currentUser !== undefined)) {
             await this.logoutFrontend()
         }
         // Login User

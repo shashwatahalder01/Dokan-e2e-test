@@ -6,8 +6,7 @@ const base = require('../pages/base.js')
 const data = require('../utils/testData.js')
 const helpers = require('../utils/helpers.js')
 const { faker } = require('@faker-js/faker')
-const timeout = process.env.TIME_OUT
-jest.retryTimes(process.env.RETRY_TIMES)
+jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
 
 describe('refund functionality test', () => {
@@ -45,7 +44,7 @@ describe('refund functionality test', () => {
         //admin approve refund request
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.approveRefundRequest(cOrderDetails.orderNumber, true)
-    }, timeout)
+    })
 
 
     it('vendor refund test', async () => {
@@ -69,7 +68,7 @@ describe('refund functionality test', () => {
         // approve refund request
         await loginPage.switchUser(process.env.ADMIN, process.env.ADMIN_PASSWORD)
         await adminPage.approveRefundRequest(cOrderDetails.orderNumber, true)
-    }, timeout)
+    })
 
     it.only('calculation test', async () => {
         // let productName = data.product.name.simple  
@@ -135,5 +134,5 @@ describe('refund functionality test', () => {
         expect(calculatedVendorEarning === aOrderDetails.vendorEarning && calculatedVendorEarning === vOrderDetails.vendorEarning).toBeTruthy()
 
 
-    }, timeout)
+    })
 })

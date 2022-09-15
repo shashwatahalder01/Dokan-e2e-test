@@ -3,7 +3,7 @@ const adminPage = require('../pages/admin.js')
 const vendorPage = require('../pages/vendor.js')
 const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
-jest.retryTimes(process.env.RETRY_TIMES)
+jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
 describe('Environment setup test', () => {
     // beforeAll(async () => {})
@@ -30,7 +30,7 @@ describe('Environment setup test', () => {
 
     it('admin enable register password field', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.enablePasswordInputField()
+        await adminPage.enablePasswordInputField(data.woocommerce)
     })
 
     it('admin set tax rate', async () => {
@@ -78,10 +78,10 @@ describe('Environment setup test', () => {
 
     it('admin add dokan subscription', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addDokanSubscription(data.predefined.vendorSubscription.nonRecurring)
+        await adminPage.addDokanSubscription({ ...data.product.vendorSubscription, ...data.predefined.vendorSubscription.nonRecurring })
     })
 
-    it.only('admin set dokan general settings', async () => {
+    it('admin set dokan general settings', async () => {
         await loginPage.adminLogin(data.admin)
         await adminPage.setDokanGeneralSettings(data.dokanSettings.general)
     })
@@ -166,7 +166,7 @@ describe('Environment setup test', () => {
 
     it('add test vendor1', async () => {
         // Add Vendor1
-        await vendorPage.vendorRegister({ ...data.vendor.vendorInfo, ...data.predefined.vendorInfo }, false, data.vendorSetupWizard)
+        await vendorPage.vendorRegister({ ...data.vendor.vendorInfo, ...data.predefined.vendorInfo }, data.vendorSetupWizard)
     })
 
     it('add test vendor1 products', async () => {
@@ -191,12 +191,12 @@ describe('Environment setup test', () => {
         await vendorPage.setRmaSettings(data.vendor.rma)
     })
 
-    it.skip('admin add test vendor products ', async () => {
-        await loginPage.adminLogin(data.admin)
-        await adminPage.addSimpleProduct(data.product.simple, 'publish', false)
-        await adminPage.addSimpleProduct(data.product.simple, 'draft', false)
-        await adminPage.addSimpleProduct(data.product.simple, 'pending', false)
-        await adminPage.addSimpleProduct(data.product.simple, 'publish', true)
+    it('admin add test vendor products ', async () => {
+        await loginPage.switchUser(data.admin)
+        await adminPage.addSimpleProduct({ ...data.product.simple, status: 'publish', stockStatus: false })
+        await adminPage.addSimpleProduct({ ...data.product.simple, status: 'draft', stockStatus: false })
+        await adminPage.addSimpleProduct({ ...data.product.simple, status: 'pending', stockStatus: false })
+        await adminPage.addSimpleProduct({ ...data.product.simple, status: 'publish', stockStatus: true })
     })
 
     // Customer Details 

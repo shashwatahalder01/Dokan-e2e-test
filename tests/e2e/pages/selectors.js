@@ -1579,8 +1579,8 @@ module.exports = {
 
             //permalinks settings
             //common settings
-            numeric: "//input[@value='/archives/%post_id%']",
-            postName: "//input[@value='/%postname%/' and @type='radio']",
+            numeric: "//input[@value='/archives/%post_id%']/..",
+            postName: "//input[@value='/%postname%/' and @type='radio']/..",
             //optional settings
             shopBaseWithCategory: "//input[@value='/shop/%product_cat%/']",
             customBase: "//input[@id='woocommerce_custom_selection']",
@@ -1750,8 +1750,13 @@ module.exports = {
             productScheduleFrom: ".dokan-start-date",
             productScheduleTo: ".dokan-end-date",
             productScheduleCancel: ".cancel_sale_schedule.dokan-hide",
+            productCategoryModal: "#dokan-add-new-product-form #dokan-category-open-modal",
             productCategory: "#select2-product_cat-container",
-            productCategoryInput: ".select2-search--dropdown .select2-search__field",
+            productCategorySearchInput: "#dokan-single-cat-search-input",
+            productCategorySearchResult: "#dokan-cat-search-res-ul li",
+            productCategoryDone: "#dokan-single-cat-select-btn",
+            productCategoryAlreadySelectedPopup: ".swal2-confirm",
+            productCategoryModalClose: "#dokan-category-close-modal",
             productCategoryValues: ".select2-results ul li",
             productTags: '.select2-search__field',
             productDescription: 'textarea[placeholder="Enter some short description about this product..."]',
@@ -2900,6 +2905,7 @@ module.exports = {
             //company verification
             startCompanyVerification: "#dokan_v_company_click",
             cancelCompanyVerificationRequest: "#dokan_v_company_cancel",
+            UploadedCompanyFileClose: '.dokan-btn.dokan-btn-danger',
             uploadFiles: ".dokan-files-drag",
             cancelSelectedInfo: ".fa-times",
             submitCompanyInfo: "#dokan_v_company_submit",
@@ -3283,7 +3289,10 @@ module.exports = {
             openTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Open Tickets')]",
             closedTickets: "//ul[contains(@class,'subsubsub')]//a[contains(text(),'Closed Tickets')]",
 
-            addReply: "#comment",
+            firstOpenTicket:".dokan-support-topics-list tr td a",
+
+            chatText: (text) => `//div[contains(@class, 'dokan-chat-text')//p[contains(text(),'${text}')]`,
+            addReply: "#dokan-support-commentform #comment",
             submitReply: "#submit",
         },
 
@@ -3452,6 +3461,7 @@ module.exports = {
         cCart: {
             cartPageHeader: ".entry-title",
             //edit cart
+            cartItem: (productName) => `//td[@class='product-name']//a[contains(text(),'${productName}')]`,
             removeItem: (productName) => `//a[contains(text(),'${productName}')]/../..//a[@class='remove']`,
             quantity: (productName) => `//a[contains(text(),'${productName}')]/../..//input[@class='input-text qty text']`,
             couponCode: "#coupon_code",
@@ -3519,6 +3529,7 @@ module.exports = {
             checkPayments: ".payment_method_cheque label",
             cashOnDelivery: ".payment_method_cod label",
             paypalAdaptive: ".payment_method_dokan_paypal_adaptive label",
+            stripeConnect: ".wc_payment_method.payment_method_dokan-stripe-connect label",
             wireCardCreditCard: ".payment_method_dokan-moip-connect label",
             paypalMarketPlace: ".wc_payment_method.payment_method_dokan_paypal_marketplace label",
             stripeExpress: ".wc_payment_method.payment_method_dokan_stripe_express label",
@@ -3529,8 +3540,10 @@ module.exports = {
 
         cPayWithStripe: {
             strip: "#payment_method_dokan-stripe-connect",
-            // strip1:"..payment_method_dokan-stripe-connect label",
+            savedTestCard4242: "//label[contains(text(),'Visa ending in 4242')]/..//input",
             userNewPaymentMethod: "#wc-dokan-stripe-connect-payment-token-new",
+            stripeConnectIframe: "#dokan-stripe-express-element iframe",
+            creditCard: "#card-tab",
             cardNumber: "//input[@name='cardnumber']",
             expDate: "//input[@name='exp-date']",
             cvc: "//input[@name='cvc']",

@@ -319,6 +319,9 @@ module.exports = {
         if (!await this.isCurrentURL(subPath)) {
             let url = await this.createURL(subPath)
             await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
+
+            let currentUrl = await page.url()
+            expect(currentUrl).toMatch(subPath)
         }
     },
 
@@ -751,19 +754,19 @@ module.exports = {
 
     // Admin enable payment methods via slider
     async enablePaymentMethod(selector) {
-        let classValueBefore = await base.getElementClassValue(selector)
+        let classValueBefore = await this.getElementClassValue(selector)
         if (classValueBefore.includes('woocommerce-input-toggle--disabled')) {
-            await base.click(selector)
-            await base.wait(2)
+            await this.click(selector)
+            await this.wait(2)
         }
         // else {
-        //   await base.click(selector)
-        //   await base.wait(2)
-        //   await base.click(selector)
-        //   await base.wait(2)
+        //   await this.click(selector)
+        //   await this.wait(2)
+        //   await this.click(selector)
+        //   await this.wait(2)
         // }
 
-        let classValueAfter = await base.getElementClassValue(selector)
+        let classValueAfter = await this.getElementClassValue(selector)
         expect(classValueAfter).toContain('woocommerce-input-toggle--enabled')
     },
 
