@@ -1104,58 +1104,60 @@ module.exports = {
   },
 
   // Admin Add Variable Product
-  // async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
-  //   await base.hover(selector.admin.aDashboard.products)
-  //   await base.clickAndWait(selector.admin.products.addNewMenu)
+  async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
+    await base.hover(selector.admin.aDashboard.products)
+    await base.clickAndWait(selector.admin.products.addNewMenu)
 
-  //   // add new variable product
-  //   await base.select(selector.admin.products.product.productType, 'variable')
+    // Add New Variable Product
+    // Name
+    await base.type(selector.admin.products.product.productName, product.productName())
+    await base.select(selector.admin.products.product.productType, 'variable')
 
-  //   await base.click(selector.admin.products.product.attributes)
-  //   // await base.wait(1)
+    await base.click(selector.admin.products.product.attributes)
+    // await base.wait(1)
 
-  //   // add attributes
-  //   await base.select(selector.admin.products.product.customProductAttribute, `pa_${attribute}`)
-  //   await base.wait(2)
-  //   await base.click(selector.admin.products.product.addAttribute)
-  //   await base.wait(2)
-  //   await base.click(selector.admin.products.product.selectAll)
-  //   await base.click(selector.admin.products.product.usedForVariations)
-  //   await base.wait(2)
-  //   await base.click(selector.admin.products.product.saveAttributes)
-  //   await base.wait(2)
+    // Add Attributes
+    await base.select(selector.admin.products.product.customProductAttribute, `pa_${attribute}`)
+    await base.wait(2)
+    await base.click(selector.admin.products.product.addAttribute)
+    await base.wait(2)
+    await base.click(selector.admin.products.product.selectAll)
+    await base.click(selector.admin.products.product.usedForVariations)
+    await base.wait(2)
+    await base.click(selector.admin.products.product.saveAttributes)
+    await base.wait(2)
 
-  //   //TODO: need to update js alert 
-  //   // add variations
-    // await base.click(selector.admin.products.product.productVariations)
-  //   await base.wait(2)
-  //   await base.click(selector.admin.products.product.variations)
-  //   await base.wait(2)
-  //   await base.select(selector.admin.products.product.addVariations, 'link_all_variations')
-  //   await base.wait(2)
-  //   await base.alert('accept')
-  //   await base.click(selector.admin.products.product.go)
-  //   await base.wait(2)
+    //TODO: need to update js alert 
+    // Add Variations
+    await base.click(selector.admin.products.product.productVariations)
+    await base.wait(2)
+    await base.click(selector.admin.products.product.variations)
+    await base.wait(2)
+    await base.select(selector.admin.products.product.addVariations, 'link_all_variations')
+    await base.wait(2)
+    await base.alert('accept')
+    await base.click(selector.admin.products.product.go)
+    await base.wait(2)
 
-  //   await base.select(selector.admin.products.product.addVariations, 'variable_regular_price')
-  //   await base.wait(2)
-  //   await base.click(selector.admin.products.product.go)
-  //   await base.alertWithValue(120)
-  //   await base.wait(2)
+    await base.select(selector.admin.products.product.addVariations, 'variable_regular_price')
+    await base.wait(2)
+    await base.click(selector.admin.products.product.go)
+    await base.alertWithValue(120)
+    await base.wait(2)
 
-  //   //category
-  //   await base.click(selector.admin.products.product.category(categoryName))
-  //   //vendor
-  //   // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-  //   await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-  //   // name
-  //   await base.type(selector.admin.products.product.productName, product.productName) // TODO: publish element is blocked by other element that's why name is filled later
-  //   //publish
-  //   await base.clickAndWait(selector.admin.products.product.publish)
-
-  //   let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
-  //   expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
-  // },
+    // Category
+    await base.click(selector.admin.products.product.category(categoryName))
+    // Vendor
+    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
+    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
+    // Publish
+    await base.scrollToTop()
+    await base.wait(2)
+    await base.clickAndWait(selector.admin.products.product.publish)
+    await base.wait(2)
+    let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
+    expect(productCreateSuccessMessage).toMatch(data.product.publishSuccessMessage)
+  },
 
   // Admin Add Simple Subscription Product
   async addSimpleSubscription(product) {
@@ -1320,8 +1322,6 @@ module.exports = {
 
   // Wholesale Customer 
 
-
-
   // Admin Approve Wholesale Request
   async adminApproveWholesaleRequest(customer) {
     await base.hover(selector.admin.aDashboard.dokan)
@@ -1333,7 +1333,7 @@ module.exports = {
     expect(enableStatusSuccessMessage).toMatch(data.wholesale.wholesaleCapabilityActivate)
   },
 
-  async getOrderDetails(orderNumber) { //TODO: separate function to get order details from inside order details base
+  async getOrderDetails(orderNumber) {
     let subMenuOpened = await base.getElementClassValue(selector.admin.aDashboard.dokanMenu)
     if (subMenuOpened.includes('opensub')) {
       await base.hover(selector.admin.aDashboard.dokan)

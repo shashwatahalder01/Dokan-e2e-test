@@ -3194,8 +3194,7 @@ module.exports = {
         // Customer Address
         cAddress: {
             // Billing Address
-            editBillingAddress: ".u-column1.col-1 .edit",
-            editBillingAddress1: ".edit", // When Shipping Disabled
+            editBillingAddress: "//h3[contains(text(),'Billing address')]/..//a[@class='edit']",
             billingFirstName: "#billing_first_name",
             billingLastName: "#billing_last_name",
             billingCompanyName: "#billing_company",
@@ -3218,7 +3217,7 @@ module.exports = {
             billingSaveAddress: "//button[@name='save_address']",
 
             // Shipping Address
-            editShippingAddress: ".u-column2.col-2 .edit",
+            editShippingAddress: "//h3[contains(text(),'Shipping address')]/..//a[@class='edit']",
             shippingFirstName: "#shipping_first_name",
             shippingLastName: "#shipping_last_name",
             shippingCompanyName: "#shipping_company",

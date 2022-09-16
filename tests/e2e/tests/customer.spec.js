@@ -39,7 +39,7 @@ describe('customer functionality test', () => {
         await customerPage.addCustomerDetails(data.customer.customerInfo)
     })
 
-    it('customer add billing details', async () => {
+    it.only('customer add billing details', async () => {
         await loginPage.login(data.customer)
         await customerPage.addBillingAddress(data.customer.customerInfo)
     })

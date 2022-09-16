@@ -9,7 +9,7 @@ const selector = require("../pages/selectors.js")
 
 module.exports = {
 
-    // navigation 
+    // Navigation 
 
     async goToMyAccount() {
         await base.goIfNotThere(data.subUrls.frontend.myAccount)
@@ -275,7 +275,7 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.auction)
 
-        //add new auction product
+        // Add New Auction Product
         await base.clickAndWait(selector.vendor.vAuction.addNewActionProduct)
         await base.type(selector.vendor.vAuction.productName, product.productName())
         // await this.addCategory(product.category)

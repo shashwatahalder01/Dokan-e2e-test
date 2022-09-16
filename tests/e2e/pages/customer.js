@@ -112,7 +112,7 @@ module.exports = {
 
         await base.clickAndWait(selector.customer.cMyAccount.addresses)
         //billing address
-        await page.$(selector.customer.cMyAccount.addresses) !== null ? await base.clickAndWait(selector.customer.cAddress.editBillingAddress) : await base.clickAndWait(selector.customer.cAddress.editBillingAddress1)
+        await base.clickAndWait(selector.customer.cAddress.editBillingAddress) 
         await base.clearAndType(selector.customer.cAddress.billingFirstName, billingInfo.firstName())
         await base.clearAndType(selector.customer.cAddress.billingLastName, billingInfo.lastName())
         await base.clearAndType(selector.customer.cAddress.billingCompanyName, billingInfo.companyName)
