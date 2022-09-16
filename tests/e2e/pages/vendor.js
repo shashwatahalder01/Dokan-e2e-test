@@ -4,7 +4,6 @@ const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
 const helpers = require("../utils/helpers.js")
 const selector = require("../pages/selectors.js")
-const { addCategory } = require("./admin.js")
 
 
 
@@ -119,7 +118,6 @@ module.exports = {
 
     },
 
-
     // Vendor Add Product Category
     async addCategory(category) {
         await base.click(selector.vendor.product.productCategoryModal)
@@ -133,7 +131,6 @@ module.exports = {
             await base.click(selector.vendor.product.productCategoryModalClose)
             await base.wait(1)
         }
-
     },
 
     // Products 
@@ -162,7 +159,6 @@ module.exports = {
         // Edit Product
         await base.select(selector.vendor.product.productType, product.productType)
         // Add Variation
-        //TODO: create attribute if not exists
         await base.select(selector.vendor.product.customProductAttribute, `pa_${product.attribute}`)
         await base.wait(1)
         await base.click(selector.vendor.product.addAttribute)
@@ -224,7 +220,6 @@ module.exports = {
         await base.wait(1)
 
         // Add Variation
-        //TODO: create attribute if not exists
         await base.select(selector.vendor.product.customProductAttribute, `pa_${product.attribute}`)
         await base.click(selector.vendor.product.addAttribute)
         await base.waitForSelector(selector.vendor.product.selectAll)
@@ -283,13 +278,10 @@ module.exports = {
         //add new auction product
         await base.clickAndWait(selector.vendor.vAuction.addNewActionProduct)
         await base.type(selector.vendor.vAuction.productName, product.productName())
-        await this.addCategory(product.category)
-        // await base.click(selector.vendor.product.productCategory)
-        // await base.type(selector.vendor.product.productCategoryInput, product.category)
-        // await base.press(data.key.enter)
+        // await this.addCategory(product.category)
 
-        // await base.select(selector.vendor.vAuction.itemCondition, product.itemCondition)
-        // await base.select(selector.vendor.vAuction.actionType, product.auctionType)
+        await base.select(selector.vendor.vAuction.itemCondition, product.itemCondition)
+        await base.select(selector.vendor.vAuction.auctionType, product.auctionType)
         await base.type(selector.vendor.vAuction.startPrice, product.regularPrice())
         await base.type(selector.vendor.vAuction.bidIncrement, product.bidIncrement())
         await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPriced())
@@ -303,7 +295,6 @@ module.exports = {
 
         let productCreateSuccessMessage = await base.getElementText(selector.vendor.product.updatedSuccessMessage)
         expect(productCreateSuccessMessage.replace(/\s+/g, ' ').trim()).toMatch(product.saveSuccessMessage)
-
     },
 
     // Vendor Add Booking Product
@@ -315,9 +306,7 @@ module.exports = {
 
         // Add New Booking Product
         await base.type(selector.vendor.vBooking.productName, productName)
-        // await base.click(selector.vendor.vBooking.productCategory)
-        // await base.type(selector.vendor.vBooking.productCategoryInput, product.category)
-        // await base.press(data.key.enter)
+        // await this.addCategory(product.category)
 
         // General Booking Options
         await base.select(selector.vendor.vBooking.bookingDurationType, product.bookingDurationType)
@@ -342,7 +331,6 @@ module.exports = {
 
         let createdProduct = await base.getElementValue(selector.vendor.vBooking.productName)
         expect(createdProduct.toLowerCase()).toBe(productName.toLowerCase())
-
     },
 
     // Vendor Search Similar Product
@@ -352,7 +340,6 @@ module.exports = {
         await base.clickAndWait(selector.vendor.vSearchSimilarProduct.search)
         await base.click(selector.vendor.vSearchSimilarProduct.search)
     },
-
 
     // Coupons 
 
@@ -375,9 +362,8 @@ module.exports = {
                 return
             }
         }
-
         let createdCoupon = await base.getElementText(selector.vendor.vCoupon.createdCoupon)
-        expect(createdCoupon.toLowerCase()).toBe(coupon.title.toLowerCase()) 
+        expect(createdCoupon.toLowerCase()).toBe(coupon.title.toLowerCase())
     },
 
     // Withdraw 
@@ -388,13 +374,6 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.withdraw)
 
-        // try {
-        //     let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
-        //     expect(canRequestIsVisible).toBe(false)
-        // } catch (err) {
-        //     throw new Error("Vendor already requested for withdraw")
-        // }
-
         let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
         if (canRequestIsVisible) {
             await base.clickAndWait(selector.vendor.vWithdraw.cancelRequest)
@@ -403,10 +382,8 @@ module.exports = {
 
         let minimumWithdrawAmount = await base.getElementText(selector.vendor.vWithdraw.minimumWithdrawAmount)
         minimumWithdrawAmount = helpers.price(minimumWithdrawAmount)
-        // console.log(minimumWithdrawAmount)
         let balance = await base.getElementText(selector.vendor.vWithdraw.balance)
         balance = helpers.price(balance)
-        // console.log(balance)
 
         if (balance > minimumWithdrawAmount) {
             await base.click(selector.vendor.vWithdraw.requestWithdraw)
@@ -431,7 +408,6 @@ module.exports = {
 
         let canRequestIsVisible = await base.isVisible(selector.vendor.vWithdraw.cancelRequest)
         expect(canRequestIsVisible).toBe(false)
-
     },
 
     // Vendor Add Auto Withdraw Disbursement Schedule
@@ -463,7 +439,6 @@ module.exports = {
         } else {
             throw new Error("Withdraw payment method isn\'t set up")
         }
-
     },
 
     // Vendor Add Vendor Details
@@ -475,7 +450,6 @@ module.exports = {
         await base.type(selector.vendor.vendorDetails.NewPassword, vendorInfo.password1)
         await base.type(selector.vendor.vendorDetails.confirmNewPassword, vendorInfo.password)
         await base.click(selector.vendor.vendorDetails.saveChanges)
-
     },
 
     // Vendor Settings 
@@ -601,8 +575,6 @@ module.exports = {
             await base.click(selector.vendor.vStoreSettings.deleteSavedVacationSchedule)
             await base.click(selector.vendor.vStoreSettings.confirmDeleteSavedVacationSchedule)
         }
-        // let vacationDayFrom = helpers.addDays(helpers.currentDate, helpers.getRandomArbitraryInteger(31, 365))
-        // let vacationDayTo = helpers.addDays(vacationDayFrom, 31)
         await base.check(selector.vendor.vStoreSettings.goToVacation)
         await base.select(selector.vendor.vStoreSettings.closingStyle, vacation.closingStyle)
         await base.type(selector.vendor.vStoreSettings.vacationDateRangeFrom, vacation.vacationDayFrom)
@@ -700,13 +672,11 @@ module.exports = {
         await base.press(data.key.enter)
 
         // Add-On Fields
-        // await base.click(selector.vendor.vAddonSettings.addField)
-        await base.click(".wc-pao-addon-header.ui-sortable-handle")
+        await base.click(selector.vendor.vAddonSettings.addedFirstField)
         await base.select(selector.vendor.vAddonSettings.type, addon.type)
         await base.select(selector.vendor.vAddonSettings.displayAs, addon.displayAs)
         await base.clearAndType(selector.vendor.vAddonSettings.titleRequired, addon.titleRequired)
         await base.select(selector.vendor.vAddonSettings.formatTitle, addon.formatTitle)
-        // await base.click(selector.vendor.vAddonSettings.enableDescription)
         await base.clearAndType(selector.vendor.vAddonSettings.addDescription, addon.addDescription)
         await base.click(selector.vendor.vAddonSettings.requiredField)
         await base.clearAndType(selector.vendor.vAddonSettings.enterAnOption, addon.enterAnOption)
@@ -979,11 +949,18 @@ module.exports = {
 
     // Set Shipping Policies
     async setShippingPolicies(shippingPolicy) {
-        await base.clickAndWait(selector.vendor.vShippingSettings.clickHereToAddShippingPolicies)
-        await base.select(selector.vendor.vShippingSettings.processingTime, shippingPolicy.processingTime)//TODO:locator don't work
-        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicy, shippingPolicy.shippingPolicy)//TODO:locator don't work
-        await base.type(selector.vendor.vShippingSettings.refundPolicy, shippingPolicy.refundPolicy)//TODO:locator don't work
-        await base.clickAndWait(selector.vendor.vShippingSettings.shippingPoliciesSaveSettings)
+        await this.goToVendorDashboard()
+
+        await base.clickAndWait(selector.vendor.vDashboard.settings)
+        await base.clickAndWait(selector.vendor.vSettings.shipping)
+
+        await base.click(selector.vendor.vShippingSettings.shippingPolicies.clickHereToAddShippingPolicies)
+        await base.wait(1)
+        await base.select(selector.vendor.vShippingSettings.shippingPolicies.processingTime, shippingPolicy.processingTime)
+        await base.clearAndType(selector.vendor.vShippingSettings.shippingPolicies.shippingPolicy, shippingPolicy.shippingPolicy)
+        await base.type(selector.vendor.vShippingSettings.shippingPolicies.refundPolicy, shippingPolicy.refundPolicy)
+        await base.click(selector.vendor.vShippingSettings.shippingPolicies.shippingPoliciesSaveSettings)
+        await base.wait(2)
 
         let successMessage = await base.getElementText(selector.vendor.vShippingSettings.updateSettingsSuccessMessage)
         expect(successMessage).toMatch(shippingPolicy.saveSuccessMessage)
@@ -993,11 +970,8 @@ module.exports = {
     async setShippingSettings(shipping) {
         await this.goToVendorDashboard()
 
-        //TODO: admin need to enable shipping settings switch to admin & enable
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.shipping)
-
-        // await this.setShippingPolicies('3', 'shipping policy', 'refund policy') //TODO:locator don't work
 
         // Edit Shipping Zone
         await base.hover(selector.vendor.vShippingSettings.shippingZoneCell(shipping.shippingZone))
@@ -1108,8 +1082,9 @@ module.exports = {
         await base.clearAndType(selector.vendor.vSocialProfileSettings.youtube, urls.youtube)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.instagram, urls.instagram)
         await base.clearAndType(selector.vendor.vSocialProfileSettings.flicker, urls.flickr)
-        // await base.click(selector.vendor.vSocialProfileSettings.updateSettings) //TODO: save settings button click don't work
-        await base.press(data.key.enter)
+        await base.clickJs(selector.vendor.vSocialProfileSettings.updateSettings) 
+        // await base.wait(3)
+        // await base.press(data.key.enter)
 
         let successMessage = await base.getElementText(selector.vendor.vSocialProfileSettings.updateSettingsSuccessMessage)
         expect(successMessage).toMatch(data.urls.saveSuccessMessage)
@@ -1119,7 +1094,6 @@ module.exports = {
     async setRmaSettings(rma) {
         await this.goToVendorDashboard()
 
-        //TODO: admin need to enable rma settings switch to admin & enable
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.rma)
 

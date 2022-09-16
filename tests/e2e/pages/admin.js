@@ -13,10 +13,6 @@ module.exports = {
 
   async goToDokanSettings() {
     await base.goIfNotThere(data.subUrls.backend.dokanSettings)
-    // await base.hover(selector.admin.aDashboard.dokan)
-    // await base.clickAndWait(selector.admin.dokan.settingsMenu)
-    // const url = await page.url()
-    // expect(url).toMatch(data.subUrls.backend.dokanSettings)
   },
 
   async goToWooCommerceSettings() {
@@ -25,10 +21,6 @@ module.exports = {
 
   async goToPlugins() {
     await base.goIfNotThere(data.subUrls.backend.plugins)
-    // await base.hover(selector.admin.aDashboard.plugins)
-    // await base.clickAndWait(selector.admin.plugins.installedPlugins)
-    // const url = await page.url()
-    // expect(url).toMatch(data.subUrls.backend.plugins)
   },
 
 
@@ -479,7 +471,7 @@ module.exports = {
     let successMessage = await base.getElementText(selector.admin.dokan.settings.dokanUpdateSuccessMessage)
     expect(successMessage).toMatch(subscription.saveSuccessMessage)
 
-    // Disabling Vendor Subscription //TODO: remove after handling buy subscription while vendor signup
+    // Disabling Vendor Subscription 
     await base.wait(1)
     await base.disableSwitcher(selector.admin.dokan.settings.enableProductSubscription)
     await base.click(selector.admin.dokan.settings.vendorSubscriptionSaveChanges)
@@ -535,14 +527,14 @@ module.exports = {
     await this.enablePasswordInputField()
     await this.addStandardTaxRate(data.tax)
     await this.setCurrencyOptions(data.currency)
-    // await this.addShippingMethod(data.shipping.shippingMethods.flatRate)
-    // await this.addShippingMethod(data.shipping.shippingMethods.flatRate)
-    // await this.addShippingMethod(data.shipping.shippingMethods.freeShipping)
-    // await this.addShippingMethod(data.shipping.shippingMethods.tableRateShipping)
-    // await this.addShippingMethod(data.shipping.shippingMethods.distanceRateShipping)
-    // await this.addShippingMethod(data.shipping.shippingMethods.vendorShipping)
-    // await this.deleteShippingMethod(data.shipping.shippingMethods.flatRate)
-    // await this.deleteShippingZone(data.shipping.shippingZone)
+    await this.addShippingMethod(data.shipping.shippingMethods.flatRate)
+    await this.addShippingMethod(data.shipping.shippingMethods.flatRate)
+    await this.addShippingMethod(data.shipping.shippingMethods.freeShipping)
+    await this.addShippingMethod(data.shipping.shippingMethods.tableRateShipping)
+    await this.addShippingMethod(data.shipping.shippingMethods.distanceRateShipping)
+    await this.addShippingMethod(data.shipping.shippingMethods.vendorShipping)
+    await this.deleteShippingMethod(data.shipping.shippingMethods.flatRate)
+    await this.deleteShippingZone(data.shipping.shippingZone)
   },
 
   // Enable Password Field
@@ -587,7 +579,7 @@ module.exports = {
       // Add Shipping Zone
       await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingZone)
       await base.clearAndType(selector.admin.wooCommerce.settings.zoneName, shipping.shippingZone)
-      // await base.select(selector.admin.wooCommerce.settings.zoneRegions, shippingCountry) //user select values  'country:US',
+      // await base.select(selector.admin.wooCommerce.settings.zoneRegions, shippingCountry) //use select values  'country:US',
       await base.click(selector.admin.wooCommerce.settings.zoneRegions)
       await base.type(selector.admin.wooCommerce.settings.zoneRegions, shipping.shippingCountry)
       await base.wait(2)
@@ -1135,7 +1127,7 @@ module.exports = {
 
   //   //TODO: need to update js alert 
   //   // add variations
-  //   await base.click(selector.admin.products.product.variations)
+    // await base.click(selector.admin.products.product.productVariations)
   //   await base.wait(2)
   //   await base.click(selector.admin.products.product.variations)
   //   await base.wait(2)

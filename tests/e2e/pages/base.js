@@ -13,7 +13,7 @@ module.exports = {
             const style = window.getComputedStyle(element)
             return (style && style.display !== 'none' &&
                 style.visibility !== 'hidden' && style.opacity !== '0')
-        }, el)
+        }, element)
         var visible = await isVisibleHandle.jsonValue()
         const box = await element.boxModel()
         if (visible && box) {
@@ -25,10 +25,11 @@ module.exports = {
     // Check whether element is visible or not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
+            let element;
             if (/^(\/\/|\(\/\/)/.test(selector)) {
-                var element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
+                element = document.evaluate(selector, document, null, XPathResult.FIRST_ORDERED_NODE_TYPE, null).singleNodeValue
             } else {
-                var element = document.querySelector(selector)
+                element = document.querySelector(selector)
             }
             if (element) {
                 let style = window.getComputedStyle(element)
@@ -733,10 +734,10 @@ module.exports = {
             selector = selector + ' span'
         }
         let value = await this.getElementBackgroundColor(selector)
-        if (!value.includes('rgb(0, 144, 255)')) { 
+        if (!value.includes('rgb(0, 144, 255)')) {
             await this.click(selector)
-        } 
-  
+        }
+
     },
 
     // Admin disable switcher , if disabled then skip : admin settings switcher
@@ -749,7 +750,7 @@ module.exports = {
         let value = await this.getElementBackgroundColor(selector)
         if (value.includes('rgb(0, 144, 255)')) {
             await this.click(selector)
-        } 
+        }
     },
 
     // Admin enable payment methods via slider

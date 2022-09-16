@@ -9,19 +9,19 @@ describe('vendor functionality test', () => {
     // beforeEach(async () => {})
     // afterEach(async () => {await browser.close()})
 
-   // it('vendor can register', async () => {
-   //    await vendorPage.vendorRegister(data.vendor.vendorInfo,data.vendorSetupWizard)
-   //    await loginPage.logout()
-   // })
+   it('vendor can register', async () => {
+      await vendorPage.vendorRegister(data.vendor.vendorInfo,data.vendorSetupWizard)
+      await loginPage.logout()
+   })
 
-   // it('vendor can login', async () => {
-   //    await loginPage.login(data.vendor)
-   // })
+   it('vendor can login', async () => {
+      await loginPage.login(data.vendor)
+   })
 
-   // it('vendor can logout', async () => {
-   //    await loginPage.login(data.vendor)
-   //    await loginPage.logout()
-   // })
+   it('vendor can logout', async () => {
+      await loginPage.login(data.vendor)
+      await loginPage.logout()
+   })
 
    it('vendor can add simple product', async () => {
       await loginPage.login(data.vendor)
@@ -48,7 +48,7 @@ describe('vendor functionality test', () => {
       await vendorPage.addExternalProduct(data.product.external)
    })
 
-   it.only('vendor can add auction product', async () => {
+   it('vendor can add auction product', async () => {
       await loginPage.login(data.vendor)
       await vendorPage.addAuctionProduct(data.product.auction)
    })
@@ -58,105 +58,110 @@ describe('vendor functionality test', () => {
       await vendorPage.addBookingProduct(data.product.booking)
    })
  
-//    it('vendor can add coupon', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.addCoupon(data.coupon)
-//    })
+   it('vendor can add coupon', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.addCoupon(data.coupon)
+   })
 
-//    it('vendor can request withdraw', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.requestWithdraw(data.vendor.withdraw)
-//    })
+   it('vendor can request withdraw', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.requestWithdraw(data.vendor.withdraw)
+   })
 
-//    it.skip('vendor can cancel request withdraw', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.requestWithdraw(data.vendor.withdraw)
-//       await vendorPage.cancelRequestWithdraw()
-//    })
+   it.skip('vendor can cancel request withdraw', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.requestWithdraw(data.vendor.withdraw)
+      await vendorPage.cancelRequestWithdraw()
+   })
 
-//    it('vendor can add auto withdraw disbursement schedule', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.addAutoWithdrawDisbursementSchedule(data.vendor.withdraw)
-//    })
+   it('vendor can add auto withdraw disbursement schedule', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.addAutoWithdrawDisbursementSchedule(data.vendor.withdraw)
+   })
 
-//    it.skip('vendor can add default withdraw payment methods ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.skrill)
-//       // Cleanup
-//       await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.paypal)
-//    })
+   it.skip('vendor can add default withdraw payment methods ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.skrill)
+      // Cleanup
+      await vendorPage.addDefaultWithdrawPaymentMethods(data.vendor.withdraw.defaultWithdrawMethod.paypal)
+   })
 
-//    // vendor settings
+   // vendor settings
 
-//    it.skip('vendor can set store settings ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setStoreSettings(data.vendor.vendorInfo)
-//    })
+   it.skip('vendor can set store settings ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setStoreSettings(data.vendor.vendorInfo)
+   })
 
-//    it.skip('vendor can add addons', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.addAddon(data.vendor.addon)
-//    })
+   it.skip('vendor can add addons', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.addAddon(data.vendor.addon)
+   })
 
-//    it.skip('vendor can edit addon request ', async () => {
-//       await loginPage.login(data.vendor)
-//       let addonName = await vendorPage.addAddon(data.vendor.addon)
-//       await vendorPage.editAddon(data.vendor.addon, addonName)
-//    })
+   it.skip('vendor can edit addon request ', async () => {
+      await loginPage.login(data.vendor)
+      let addonName = await vendorPage.addAddon(data.vendor.addon)
+      await vendorPage.editAddon(data.vendor.addon, addonName)
+   })
 
-//    it('vendor can send id verification request ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.sendIdVerificationRequest(data.vendor.verification)
-//    })
+   it('vendor can send id verification request ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.sendIdVerificationRequest(data.vendor.verification)
+   })
 
-//    it('vendor can send address verification request ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.sendAddressVerificationRequest(data.vendor.verification)
-//    })
+   it('vendor can send address verification request ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.sendAddressVerificationRequest(data.vendor.verification)
+   })
 
-//    it('vendor can send company verification request ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.sendCompanyVerificationRequest(data.vendor.verification)
-//    })
+   it('vendor can send company verification request ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.sendCompanyVerificationRequest(data.vendor.verification)
+   })
 
-//    it('vendor can set delivery time settings ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setDeliveryTimeSettings(data.vendor.deliveryTime)
-//    })
+   it('vendor can set delivery time settings ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setDeliveryTimeSettings(data.vendor.deliveryTime)
+   })
 
-//    it('vendor can set flat rate shipping ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.flatRate)
-//    })
+   it('vendor can set shipping policy', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingPolicies(data.vendor.shipping.shippingPolicy) 
+   })
 
-//    it('vendor can set free shipping ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.freeShipping)
-//    })
+   it('vendor can set flat rate shipping ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.flatRate)
+   })
 
-//    it('vendor can set local pickup shipping ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.localPickup)
-//    })
+   it('vendor can set free shipping ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.freeShipping)
+   })
 
-//    it('vendor can set table rate shipping shipping ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.tableRateShipping)
-//    })
+   it('vendor can set local pickup shipping ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.localPickup)
+   })
 
-//    it('vendor can set dokan distance rate shipping ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.distanceRateShipping)
-//    })
+   it('vendor can set table rate shipping shipping ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.tableRateShipping)
+   })
 
-//    it('vendor can set social profile settings ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setSocialProfile(data.urls)
-//    })
+   it('vendor can set dokan distance rate shipping ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setShippingSettings(data.vendor.shipping.shippingMethods.distanceRateShipping)
+   })
 
-//    it('vendor can set rma settings ', async () => {
-//       await loginPage.login(data.vendor)
-//       await vendorPage.setRmaSettings(data.vendor.rma)
-//    })
+   it('vendor can set social profile settings ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setSocialProfile(data.urls)
+   })
+
+   it('vendor can set rma settings ', async () => {
+      await loginPage.login(data.vendor)
+      await vendorPage.setRmaSettings(data.vendor.rma)
+   })
 
 }) 

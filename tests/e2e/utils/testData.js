@@ -108,7 +108,7 @@ let that = module.exports = {
    shippingPolicy: ['1', '2', '3', '4', '5', '6', '7', '8', '9'], // TODO: replace with select text values
    vendorShippingMethods: ['flat_rate', 'free_shipping', 'local_pickup', 'dokan_table_rate_shipping', 'dokan_distance_rate_shipping'],
    flatRateCalculationType: ['class', 'order'],
-   flatRateCalculationType: ['item', 'line', 'class'], // TODO: replace with select text values, one option missing
+   flatRateCalculationType1: ['item', 'line', 'class'], // TODO: replace with select text values, one option missing
    tableRateTaxIncludedInShippingCosts: ['yes', 'no'],
    distanceRateTransportationMode: ['driving', 'walking', 'Bicycling'],
    distanceRateAvoid: ['none', 'tolls', 'highways', 'ferries'],
@@ -858,9 +858,9 @@ let that = module.exports = {
 
       shipping: {
          shippingPolicy: {
-            processingTime: '',
-            shippingPolicy: '',
-            refundPolicy: '',
+            processingTime: '3',
+            shippingPolicy: 'shipping policy', 
+            refundPolicy: 'refund policy',
             saveSuccessMessage: 'Settings save successfully',
          },
          shippingZone: 'US',
@@ -1052,7 +1052,6 @@ let that = module.exports = {
          companyName: faker.company.companyName(),
          companyId: faker.random.alphaNumeric(5),
          vatNumber: faker.random.alphaNumeric(10),
-         bankName: faker.address.state(),
          bankIban: faker.finance.iban(),
          phone: faker.phone.phoneNumber('(###) ###-####'),
          street1: 'abc street', //TODO: address should be global or not

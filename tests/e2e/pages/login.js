@@ -12,8 +12,8 @@ module.exports = {
     },
 
     // User Logout
-    async logout(user) {
-        await this.logoutFrontend(user)
+    async logout() {
+        await this.logoutFrontend()
     },
 
     // Login from Frontend
