@@ -90,7 +90,7 @@ describe('admin functionality test', () => {
 
     // tax settings
     it('admin can set standard tax rate', async () => {
-        await loginPage.adminLogin(data.admin)
+        // await loginPage.adminLogin(data.admin)
         await adminPage.addStandardTaxRate(data.tax)
     })
 
