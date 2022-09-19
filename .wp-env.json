@@ -11,8 +11,8 @@
     "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wb.zip",
     "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wpad.zip",
     "http://qa.wowgiftmart.com/wp-content/uploads/2022/05/wsa.zip",
-    ".plugins/dokan/",
-    ".plugins/dokan-pro/"
+    "./plugins/dokan/",
+    "./plugins/dokan-pro/"
   ],
   "themes": [
     "https://downloads.wordpress.org/theme/storefront.latest-stable.zip"
