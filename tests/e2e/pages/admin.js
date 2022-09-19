@@ -495,6 +495,7 @@ module.exports = {
 
   // Admin Add Standard Tax Rate
   async addStandardTaxRate(tax) {
+
     await this.goToWooCommerceSettings()
 
     // Enable Tax
@@ -514,9 +515,7 @@ module.exports = {
     await base.wait(3)
 
     let newTaxRate = await base.getElementValue(selector.admin.wooCommerce.settings.taxRate)
-    expect(newTaxRate).toBe((tax.taxRate).toPrecision(5))
-
-
+    expect(newTaxRate).toBe(String(Number(tax.taxRate).toPrecision(5)))
   },
 
 

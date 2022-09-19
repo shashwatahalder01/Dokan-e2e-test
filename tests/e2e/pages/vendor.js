@@ -284,7 +284,7 @@ module.exports = {
         await base.select(selector.vendor.vAuction.auctionType, product.auctionType)
         await base.type(selector.vendor.vAuction.startPrice, product.regularPrice())
         await base.type(selector.vendor.vAuction.bidIncrement, product.bidIncrement())
-        await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPriced())
+        await base.type(selector.vendor.vAuction.reservedPrice, product.reservedPrice())
         await base.type(selector.vendor.vAuction.buyItNowPrice, product.buyItNowPrice())
         await base.removeElementAttribute(selector.vendor.vAuction.auctionStartDate, 'readonly')
         await base.removeElementAttribute(selector.vendor.vAuction.auctionEndDate, 'readonly')
@@ -313,7 +313,7 @@ module.exports = {
         await base.clearAndType(selector.vendor.vBooking.bookingDurationMax, product.bookingDurationMax)
         await base.select(selector.vendor.vBooking.bookingDurationUnit, product.bookingDurationUnit)
 
-        await base.select(selector.vendor.vBooking.calenderDisplayMode, product.calenderDisplayMode)
+        await base.select(selector.vendor.vBooking.calenderDisplayMode, product.calendarDisplayMode)
         await base.check(selector.vendor.vBooking.enableCalendarRangePicker)
 
         // Availability
