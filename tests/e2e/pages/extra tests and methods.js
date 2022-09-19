@@ -246,3 +246,40 @@ it.skip('admin set dokan settings', async () => {
     //         if (pages.length > 1)
     //             await pages[0].close();
     // })
+
+      //  // Switch to another tab
+      //  async switchTab() { },//TODO: add this
+
+      //  // Open link in new tab
+      //  async openInNewTab() { //TODO: correct this
+      //      const browser = await puppeteer.launch()
+      //      const page = await browser.newPage()
+      //      // await browser.newPage() 
+      //      // const page2 = await browser.newPage()        // open new tab
+      //      // await page2.bringToFront() 
+      //      // const page = page2
+      //  },
+
+          // if(window.alert){
+    // //   return true
+    // // }
+    // window.confirm = () => true
+    // window.prompt = () => 120
+    page.on('dialog', dialog => {
+      expect(dialog.message()).toEqual('Enter a value')
+      dialog.accept(['120']);
+    });  
+
+      // await page.evaluate(window.prompt = () => '120')
+
+        // page.on('dialog', dialog => {
+    //   dialog.accept(120);
+    // // });  
+    // page.on('dialog', dialog => {
+    //   expect(dialog.message()).toEqual('Are you sure you want to link all variations? This will create a new variation for each and every possible combination of variation attributes (max 50 per run).')
+    //   dialog.accept();
+    //   expect(dialog.message()).toEqual('3 variations added')
+    //   dialog.accept();
+    // });
+
+        // await page.evaluate(window.alert = () => true)

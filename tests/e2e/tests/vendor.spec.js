@@ -10,7 +10,7 @@ describe('vendor functionality test', () => {
     // afterEach(async () => {await browser.close()})
 
    it('vendor can register', async () => {
-      await vendorPage.vendorRegister(data.vendor.vendorInfo,data.vendorSetupWizard)
+      await vendorPage.vendorRegister(data.vendor.vendorInfo, data.vendorSetupWizard)
       await loginPage.logout()
    })
 

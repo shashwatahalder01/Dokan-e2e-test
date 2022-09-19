@@ -1,7 +1,8 @@
 const adminPage = require('../pages/admin.js')
+const base = require('../pages/base.js')
 const loginPage = require('../pages/login.js')
 const data = require('../utils/testData.js')
-jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
+jest.retryTimes(process.env.RETRY_TIMES, { logErrorsBeforeRetry: true })
 
 
 
@@ -101,7 +102,7 @@ describe('admin functionality test', () => {
 
     it('admin can set free shipping', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.addShippingMethod(data.shipping.shippingMethods.freeShipping)     
+        await adminPage.addShippingMethod(data.shipping.shippingMethods.freeShipping)
     })
 
     it('admin can set local pickup shipping', async () => {
@@ -206,7 +207,7 @@ describe('admin functionality test', () => {
 
     it('admin can set dokan eu compliance settings', async () => {
         await loginPage.adminLogin(data.admin)
-        await adminPage.setDokanEuComplianceSettings(data.dokanSettings.euCompliance)
+        await adminPage.setDokanEuComplianceSettings()
     })
 
     it('admin can set dokan delivery time settings', async () => {

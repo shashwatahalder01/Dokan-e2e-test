@@ -6,7 +6,7 @@ const { PendingXHR } = require('pending-xhr-puppeteer');
 // let regexXpath = /^(\/\/|\(\/\/)/
 module.exports = {
 
-    // Check whether element is ready or not
+    // Check Whether Element Is Ready or Not
     async isLocatorReady(selector) {
         let element = await this.getElement(selector)
         const isVisibleHandle = await page.evaluateHandle((element) => {
@@ -22,7 +22,7 @@ module.exports = {
         return false
     },
 
-    // Check whether element is visible or not
+    // Check Whether Element Is Visible or Not
     async isVisible(selector) {
         return await page.evaluate((selector) => {
             let element;
@@ -40,24 +40,23 @@ module.exports = {
         }, selector)
     },
 
-    // Click element and wait until network idle
+    // Click Element and Wait until Network Idle
     async clickAndWait(selector) {
         let element = await this.getElement(selector)
-        await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // consider navigation to be finished when there are no more than 2 network connections for at least 500 ms.
-        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle0' })]) // consider navigation to be finished when there are no more than 0 network connections for at least 500 ms.
-        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' })]) // consider navigation to be finished when the DOMContentLoaded event is fired.
-        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'load' })]) // consider navigation to be finished when the load event is fired.
-        // await Promise.race([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) //wait on both simultaneously and handle whichever occurs first
+        await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // Consider Navigation to Be Finished When There Are No More than 2 Network Connections for at Least 500 Ms.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'networkidle0' })]) // Consider Navigation to Be Finished When There Are No More than 0 Network Connections for at Least 500 Ms.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'domcontentloaded' })]) // Consider Navigation to Be Finished When the Domcontentloaded Event Is Fired.
+        // await Promise.all([element.click(), page.waitForNavigation({ waitUntil: 'load' })]) // Consider Navigation to Be Finished When the Load Event Is Fired.
+        // await Promise.race([element.click(), page.waitForNavigation({ waitUntil: 'networkidle2' })]) // Wait on Both Simultaneously and Handle Whichever Occurs First
     },
 
-    // Click element and wait until network idle
+    // Click Element and Wait until Network Idle
     async clickAndWaitForResponse(selector) {
         let element = await this.getElement(selector)
-        // page.waitForRequest() // TODO: implement this
         await Promise.all([element.click(), page.waitForResponse(response => response.status() === 200)])
     },
 
-    // Click element and wait until network idle
+    // Click Element and Wait until Network Idle
     async clickAndWaitForHTMLRendered(selector) {
         let element = await this.getElement(selector)
         await element.click()
@@ -65,7 +64,7 @@ module.exports = {
     },
 
 
-    // Wait for all xhr triggered by all the events of the page
+    // Wait for All Xhr Triggered by All the Events of the Page
     async clickAndWaitForAllXhrTest(selector) {
         const pendingXHR = new PendingXHR(page)
         let element = await this.getElement(selector)
@@ -86,16 +85,15 @@ module.exports = {
         // console.log("Clicked and waited for response")
     },
 
-    // Wait for all xhr triggered by all the events of the page with promise.race
+    // Wait for All Xhr Triggered by All the Events of the Page with Promise.Race
     async clickAndWaitForAllXhrWithRacePromise(selector) {
         const pendingXHR = new PendingXHR(page)
         let element = await this.getElement(selector)
         await element.click()
-        await Promise.race([pendingXHR.waitForAllXhrFinished(), new Promise(resolve => { setTimeout(resolve, 10000) }),
-        ]);
+        await Promise.race([pendingXHR.waitForAllXhrFinished(), new Promise(resolve => { setTimeout(resolve, 10000) }),]);
     },
 
-    // Wait for all xhr triggered by all the events of the page
+    // Wait for All Xhr Triggered by All the Events of the Page
     async clickAndWaitForAllXhr(selector) {
         const pendingXHR = new PendingXHR(page)
         let element = await this.getElement(selector)
@@ -105,7 +103,7 @@ module.exports = {
         // await Promise.all([element.click(), pendingXHR.waitForAllXhrFinished()])
     },
 
-    // Wait for all xhr triggered by an event of the page
+    // Wait for All Xhr Triggered by an Event of the Page
     async clickAndWaitOnceForAllXhr(selector) {
         const pendingXHR = new PendingXHR(page)
         let element = await this.getElement(selector)
@@ -116,20 +114,20 @@ module.exports = {
         await this.wait(0.5)
     },
 
-    // Wait for element and then click
+    // Wait for Element and Then Click
     async click(selector) {
         let element = await this.getElement(selector)
         await element.click()
     },
 
-    // Wait for element and then click by running the JavaScript HTMLElement.click() method
+    // Wait for Element and Then Click by Running the Javascript element.Click() method
     async clickJs(selector) {
         let element = await this.getElement(selector)
         await page.evaluate(el => el.click(), element);
     },
 
 
-    // Wait for element and then click
+    // Wait for Element and Then Click
     async clickOnly(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             let [element] = await page.$x(selector)
@@ -140,7 +138,7 @@ module.exports = {
         }
     },
 
-    // Click if element is visible
+    // Click If Element Is Visible
     async clickIfVisible(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
@@ -148,7 +146,7 @@ module.exports = {
         }
     },
 
-    // Wait for element
+    // Wait for Element
     async waitForSelector(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector)
@@ -157,7 +155,7 @@ module.exports = {
         }
     },
 
-    // Wait for element to visible and then click
+    // Wait for Element to Visible and Then Click
     async waitVisibleAndClick(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             await page.waitForXPath(selector, { visible: true })
@@ -170,28 +168,28 @@ module.exports = {
         }
     },
 
-    // Hover on element
+    // Hover on Element
     async hover(selector) {
         let element = await this.getElement(selector)
         await element.hover()
         await this.wait(1)
     },
 
-    // Check checkbox, if checked then skip
+    // Check Checkbox, If Checked Then Skip
     async check(selector) {
         let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
         if (!isCheckBoxChecked) {
             await element.click()
         }
-        else { // if checked uncheck then check
+        else { // If Checked Uncheck Then Check
             await element.click()
             await page.waitForTimeout(10)
             await element.click()
         }
     },
 
-    // Uncheck checkbox, if unchecked then skip
+    // Uncheck Checkbox, If Unchecked Then Skip
     async uncheck(selector) {
         let element = await this.getElement(selector)
         const isCheckBoxChecked = await (await element.getProperty("checked")).jsonValue()
@@ -205,17 +203,17 @@ module.exports = {
         }
     },
 
-    // Wait for select element then set value based on options value
+    // Wait for Select Element Then Set Value Based on Options Value
     async select(selector, value) {
         let element = await this.getElement(selector)
         await element.select(value)
     },
 
-    // Set value based on select options text
-    async selectOptionByText(selectSelector, OptionSelector, textContent) {
-        let elements = await page.$$(OptionSelector)
-
-        for (let element of elements) {
+    // Set Value Based on Select Options Text
+    async selectOptionByText(selectSelector, optionSelector, textContent) {
+        let elements = await page.$$(optionSelector)
+        
+        for (let element of elements) {  
             const text = await page.evaluate(element => element.textContent, element)
             if (textContent.toLowerCase() == (text.trim()).toLowerCase()) {
                 let value = await (await element.getProperty('value')).jsonValue()
@@ -225,30 +223,23 @@ module.exports = {
         }
     },
 
-    // or 
+    // Or 
 
-    // Set value based on select options text  optimize version
-    async selectByText(selector, text) {  // TODO: don't work for text ,fix this
-        // let optionValue = await page.$$eval('option', options => options.find(o => o.innerText == text)?.value)
-        let optionValue = await page.$$eval('option', options => options.find(o => o.innerText === 'NYshop')?.value) //TODO:working
-
-        var currentPageNo = "100"
-        await page.$eval('div.panel-footer', (e, no) => e.setAttribute("data-page", no), currentPageNo)
-
-        // console.log(optionValue)
-        // await page.select(selector, optionValue)
-
-        // await page.evaluate((selector,text) => {
-        //     const example = document.querySelector(selector)
-        //     const example_options = example.querySelectorAll('option')
-        //     const selected_option = [...example_options].find(option => option.text === text)
-        //     selected_option.selected = true
-        // })
-
-        // await page.evaluate(() => { $(`${selector} option:contains('${text}')`)[0].selected = true })
+    // Set Value Based on Select Options Text 
+    async selectByText(selectSelector, optionSelector, text) {
+        let optionValue = await page.$$eval(optionSelector, (options, text) => options.find(option => option.innerText.toLowerCase() === text.toLowerCase())?.value, text)
+        await page.select(selectSelector, optionValue);
     },
 
-    // Click multiple elements with same selector/class/xpath
+    // Or 
+
+    // Set Value Based on Select Options Text [N.B. Both Selector Must Be Xpath Selector]
+    async selectByText1(selector, opptionSelector) {
+        let optionValue = await this.getElementValue(opptionSelector)
+        await page.select(selector, optionValue)
+    },
+
+    // Click Multiple Elements with Same Selector/Class/Xpath
     async clickMultiple(selector) {
         let elements = await this.getElements(selector)
         for (let element of elements) {
@@ -257,7 +248,7 @@ module.exports = {
         }
     },
 
-    // Check multiple elements with same selector/class/xpath
+    // Check Multiple Elements with Same Selector/Class/Xpath
     async checkMultiple(selector) {
         let elements = await this.getElements(selector)
         for (let element of elements) {
@@ -275,7 +266,7 @@ module.exports = {
 
     // Media
 
-    // Upload image via file chooser
+    // Upload Image via File Chooser
     async uploadImage(selector, image) {
         let element = await this.getElement(selector)
         const [fileChooser] = await Promise.all([page.waitForFileChooser(), element.click()])
@@ -285,20 +276,20 @@ module.exports = {
 
     // Navigation
 
-    // Get base url
+    // Get Base URL
     async getBaseUrl() {
         let url = await page.url()
         //   return url.match(/^https?:\/\/[^#?\/]+/)[0] //using regex
         return new URL(url).origin //using Web API's built-in URL
     },
 
-    // Check current url is equal to expected url, return boolean
+    // Check Current URL Is Equal to Expected URL, Return Boolean
     async isCurrentURL(subpath) {
         const currentURL = new URL(await page.url())
         return currentURL.href === await this.createURL(subpath)
     },
 
-    // Create a new url
+    // Create a New URL
     async createURL(subPath) {
         // let url = new URL(process.env.BASE_URL)
         // url.pathname = url.pathname + subPath + '/'
@@ -307,15 +298,15 @@ module.exports = {
 
     },
 
-    // Goto url it about:blank is loaded
+    // Goto URL It about:Blank Is Loaded
     async goIfBlank(subPath) {
-        let blankPage = await page.evaluate(() => { return window.location.href === 'about:blank' })
+        let blankPage = await page.evaluate(() => window.location.href === 'about:blank')
         if (blankPage) {
             await this.goto(subPath)
         }
     },
 
-    // Goto subUrl if current url is not equal to expected url
+    // Goto Suburl If Current URL Is Not Equal to Expected URL
     async goIfNotThere(subPath) {
         if (!await this.isCurrentURL(subPath)) {
             let url = await this.createURL(subPath)
@@ -326,20 +317,20 @@ module.exports = {
         }
     },
 
-    // Goto subUrl
+    // Goto Suburl
     async goto(subPath) {
         let url = await this.createURL(subPath)
         await Promise.all([page.goto(url), page.waitForNavigation({ waitUntil: 'networkidle2' })])
     },
 
-    // Reload page and wait until network idle
+    // Reload Page and Wait until Network Idle
     async reload() {
         await page.reload({ waitUntil: 'networkidle2' })
     },
 
-    // Element & element attribute
+    // Element & Element Attribute
 
-    // Get element handle for xpath or css selector 
+    // Get Element Handle for Xpath or Css Selector 
     async getElement(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             await Promise.race([page.waitForXPath(selector), page.waitForNavigation({ waitUntil: "networkidle2" })])
@@ -354,13 +345,13 @@ module.exports = {
         }
     },
 
-    // Get multiple elements
+    // Get Multiple Elements
     async getElements(selector) {
         let elements = await page.$$(selector)
         return elements
     },
 
-    // Get element text
+    // Get Element Text
     async getElementText(selector) {
         let element = await this.getElement(selector)
         let text = await (await element.getProperty('textContent')).jsonValue()
@@ -368,7 +359,7 @@ module.exports = {
         return text.trim()
     },
 
-    // Get element property value
+    // Get Element Property Value
     async getElementValue(selector) {
         let element = await this.getElement(selector)
         let value = await (await element.getProperty('value')).jsonValue()
@@ -376,7 +367,7 @@ module.exports = {
         return value
     },
 
-    // Get element property value: background color
+    // Get Element Property Value: Background Color
     async getElementBackgroundColor(selector) {
         let element = await this.getElement(selector)
         let value = await page.evaluate(element => window.getComputedStyle(element).getPropertyValue('background-color'), element)
@@ -384,7 +375,7 @@ module.exports = {
         return value
     },
 
-    // Get element property value CSS
+    // Get Element Property Value CSS
     async getElementValueCSS(selector, property) {
         let element = await this.getElement(selector)
         // let value = await page.$eval(element, el => window.getComputedStyle(el).getPropertyValue('background-color'))
@@ -393,7 +384,7 @@ module.exports = {
         return value
     },
 
-    // Get element property CSS values
+    // Get Element Property CSS Values
     async getElementValueCSSAll(selector) {
         let element = await this.getElement(selector)
         let value = await page.evaluate(element => {
@@ -409,7 +400,7 @@ module.exports = {
         return value
     },
 
-    // Get pseudo element style
+    // Get Pseudo Element Style
     async getPseudoElementStyles(selector, pseudoElement, property) {
         let element = await this.getElement(selector)
         let value = await page.evaluate((element, pseudoElement, property) => {
@@ -420,7 +411,7 @@ module.exports = {
         return value
     },
 
-    // Get element class value
+    // Get Element Class Value
     async getElementClassValue(selector) {
         let element = await this.getElement(selector)
         let classValue = await (await element.getProperty('className')).jsonValue()
@@ -428,7 +419,7 @@ module.exports = {
         return classValue
     },
 
-    // Get element attribute value
+    // Get Element Attribute Value
     async getElementAttributeValue(selector, attribute) {
         let element = await this.getElement(selector)
         let value = await (await element.getProperty(attribute)).jsonValue()
@@ -436,27 +427,26 @@ module.exports = {
         return value
     },
 
-    // Get element attribute value
+    // Get Element Attribute Value
     async setElementAttributeValue(selector, attribute, value) {
         // await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
         let element = await this.getElement(selector)
         await page.evaluate((element, attribute, value) => element.setAttribute(attribute, value), element, attribute, value)
     },
 
-    // Set element value
+    // Set Element Value
     async setElementValue(selector, value) {
         let element = await this.getElement(selector)
         await page.evaluate((element, value) => element.value = value, element, value)
     },
 
-    // Remove element attribute
+    // Remove Element Attribute
     async removeElementAttribute(selector, attribute) {
-        // await page.evaluate(document.getElementsById(selector).removeAttribute(attribute))
         let element = await this.getElement(selector)
         await page.evaluate((element, attribute) => element.removeAttribute(attribute), element, attribute)
     },
 
-    // Get element count
+    // Get Element Count
     async getElementCount(selector) {
         let elements = await page.$$(selector)
         let length = elements.length
@@ -464,14 +454,14 @@ module.exports = {
         return length
     },
 
-    // or
+    // Or
     async getCount(selector) {
         let count = await page.$$eval(selector, element => element.length)
         // console.log(count)
         return count
     },
 
-    // Get dropdown options  span dropdown
+    // Get Dropdown Options  Span Dropdown
     async getDropdownOptions(selector) {
         let elements = await page.$$(selector)
         let options = []
@@ -483,14 +473,14 @@ module.exports = {
         return options
     },
 
-    // or
+    // Or
     async getMultipleElementTexts(selector) {
         let texts = await page.$$eval(selector, elements => elements.map(item => item.textContent))
         // console.log(texts)
         return texts
     },
 
-    // Set dropdown option  span dropdown
+    // Set Dropdown Option  Span Dropdown
     async setDropdownOptionSpan(selector, value) {
         let elements = await page.$$(selector)
         for (let element of elements) {
@@ -503,13 +493,13 @@ module.exports = {
         }
     },
 
-    // Clear input field
+    // Clear Input Field
     async clearInputField(selector) {
         let element = await this.getElement(selector)
         await page.evaluate(element => element.value = '', element)
     },
 
-    // or
+    // Or
     async clearInputField1(selector) {
         let element = await this.getElement(selector)
         await element.click({ clickCount: 3 })
@@ -522,14 +512,14 @@ module.exports = {
         await element.type(value)
     },
 
-    // Clear input field and type 
+    // Clear Input Field and Type 
     async clearAndType(selector, value) {
         let element = await this.getElement(selector)
         await page.evaluate(element => element.value = '', element)
         await element.type(value)
     },
 
-    //or
+    // Or
     async clearAndType1(selector, value) {
         let element = await this.getElement(selector)
         await element.click({ clickCount: 3 })
@@ -537,62 +527,49 @@ module.exports = {
         await element.type(value)
     },
 
-    //or
+    // Or
     async clearAndType2(selector, value) {
         await page.$eval(selector, element => element.value = '')
         await page.type(selector, value)
     },
 
-    // Press key
+    // Press Key
     async press(key) {
         await page.keyboard.press(key)
     },
 
-    // Scroll to top
+    // Scroll to Top
     async scrollToTop() {
         await page.evaluate(() => { window.scroll(0, 0); });
 
     },
 
-    // Scroll element into view
+    // Scroll Element into View
     async scrollIntoView(selector) {  //TODO: doesn't work
         let element = await this.getElement(selector)
         await page.evaluate(element => element.scrollIntoView(), element)
     },
 
-    // Close single tab
+    // Close Single Tab
     async closeSingleTab() {
         await page.close()
     },
 
-    // Close all tab i.e. close browser
+    // Close All Tab I.E. Close Browser
     async closeAllTab() {
         await browser.close()
     },
 
-    // Switch to another tab
-    async switchTab() { },//TODO: add this
-
-    // Open link in new tab
-    async openInNewTab() { //TODO: correct this
-        const browser = await puppeteer.launch()
-        const page = await browser.newPage()
-        // await browser.newPage() 
-        // const page2 = await browser.newPage()        // open new tab
-        // await page2.bringToFront() 
-        // const page = page2
-    },
-
     // Iframe
 
-    // Iframe: Switch to iframe
+    // Iframe: Switch to Iframe
     async switchToIframe(selector) {
         const frameHandle = await this.getElement(selector)
         const iframe = await frameHandle.contentFrame()
         return iframe
     },
 
-    // Iframe: Get element handle for xpath or css selector 
+    // Iframe: Get Element Handle for Xpath or Css Selector 
     async getIframeElement(iframe, selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             await iframe.waitForXPath(selector)
@@ -605,21 +582,21 @@ module.exports = {
         }
     },
 
-    // Iframe: Click element
+    // Iframe: Click Element
     async iframeClick(iframe, selector) {
         let element = await this.getIframeElement(iframe, selector)
         await element.click()
 
     },
 
-    // Iframe: Clear and type iframe input element 
+    // Iframe: Clear and Type Iframe Input Element 
     async iframeClearAndType(iframe, selector, value) {
         await iframe.$eval(selector, element => element.textContent = '')
         // await iframe.$eval(selector, element => element.value = '')
         await iframe.type(selector, value)
     },
 
-    // Handle alert
+    // Handle Alert
     async alert(action) {
         page.on('dialog', async dialog => {
             // console.log(dialog.message())
@@ -646,12 +623,12 @@ module.exports = {
     // dialog.type()
 
 
-    // Get page content
+    // Get Page Content
     async getPageContent() {
         return await page.content()
     },
 
-    // Get page title
+    // Get Page Title
     async getPageTitle() {
         return await page.title()
     },
@@ -661,19 +638,17 @@ module.exports = {
         await page.waitForTimeout(seconds * 1000)
     },
 
-    // Wait for navigation
+    // Wait for Navigation
     async waitForNavigation() {
         await page.waitForNavigation({ waitUntil: 'networkidle2' })
     },
 
-    //TODO: add function for grab console error
-    //TODO: use event console.error
 
 
 
-    //---------------------------------------------- Dokan specific functions ------------------------------------//
+    // Dokan Specific Functions 
 
-    // enable switch : dokan setup wizard
+    // Enable Switch : Dokan Setup Wizard
     // async enableSwitcherSetupWizard(selector) {
     //     let value = await this.getElementBackgroundColor(selector + '//span')
     //     if (value == 'on') {
@@ -684,7 +659,7 @@ module.exports = {
     //     }
     // },
 
-    // Enable switch or checkbox: dokan setup wizard
+    // Enable Switch or Checkbox: Dokan Setup Wizard
     async enableSwitcherSetupWizard(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
@@ -705,7 +680,7 @@ module.exports = {
         }
     },
 
-    // Enable switch or checkbox: dokan setup wizard
+    // Enable Switch or Checkbox: Dokan Setup Wizard
     async disableSwitcherSetupWizard(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
@@ -726,7 +701,7 @@ module.exports = {
         }
     },
 
-    // Admin enable switcher , if enabled then skip : admin settings switcher
+    // Admin Enable Switcher , If Enabled Then Skip : Admin Settings Switcher
     async enableSwitcher(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             selector = selector + '//span'
@@ -740,7 +715,7 @@ module.exports = {
 
     },
 
-    // Admin disable switcher , if disabled then skip : admin settings switcher
+    // Admin Disable Switcher , If Disabled Then Skip : Admin Settings Switcher
     async disableSwitcher(selector) {
         if (/^(\/\/|\(\/\/)/.test(selector)) {
             selector = selector + '//span'
@@ -753,7 +728,7 @@ module.exports = {
         }
     },
 
-    // Admin enable payment methods via slider
+    // Admin Enable Payment Methods via Slider
     async enablePaymentMethod(selector) {
         let classValueBefore = await this.getElementClassValue(selector)
         if (classValueBefore.includes('woocommerce-input-toggle--disabled')) {
@@ -772,7 +747,7 @@ module.exports = {
     },
 
 
-    // Delete element if exist (only first will delete) dokan specific :rma,report abuse
+    // Delete Element If Exist (Only First Will Delete) dokan Specific :Rma,Report Abuse
     async deleteIfExists(selector) { //TODO: there may be alternative solution, this method might not needed
         let elementExists = await this.isVisible(selector)
         if (elementExists) {
@@ -797,7 +772,7 @@ module.exports = {
     //     }
     // },
 
-    // Check for php error
+    // Check for Php Error
     async checkPHPError() {
         // let pageContent = await page.content()
         // let pageContent = pageContent.toLowerCase()  
@@ -809,7 +784,7 @@ module.exports = {
         }
     },
 
-    // Check if page not exits
+    // Check If Page Not Exits
     async checkPageNotExist() {
         let pageContent = await page.content()
 
@@ -820,7 +795,7 @@ module.exports = {
     },
 
 
-    // Upload image
+    // Upload Image
     async wpUploadFile(filePath) {
         //wp image upload
         let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
@@ -847,9 +822,9 @@ module.exports = {
         // }
     },
 
-    // Upload image if no image is uploaded
+    // Upload Image If No Image Is Uploaded
     async wpUploadFileIfNotUploaded(filePath) {
-        //wp image upload
+        // Wp Image Upload
         let wpUploadFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@id='menu-item-upload']"
         let uploadedMedia = ".attachment-preview"
         let selectFiles = "//div[@class='supports-drag-drop' and @style='position: relative;']//button[@class='browser button button-hero']"
@@ -874,7 +849,7 @@ module.exports = {
         }
     },
 
-    // Remove previous uploaded image if exists
+    // Remove Previous Uploaded Image If Exists
     async removePreviousUploadedImage(previousUploadedImageSelector, removePreviousUploadedImageSelector) {
         let previousUploadedImageIsVisible = await this.isVisible(previousUploadedImageSelector)
         if (previousUploadedImageIsVisible) {
@@ -884,7 +859,7 @@ module.exports = {
         }
     },
 
-    // Get wordpress current user
+    // Get Wordpress Current User
     async getCurrentUser() {
         const cookies = await page.cookies()
         const cookie = cookies.find(c => {
@@ -898,7 +873,7 @@ module.exports = {
     },
 
 
-    // Wait till HTML Rendered
+    // Wait Till Html Rendered
     async waitTillHTMLRendered(page, timeout = 30000) {
         const checkDurationMsecs = 1000;
         const maxChecks = timeout / checkDurationMsecs;

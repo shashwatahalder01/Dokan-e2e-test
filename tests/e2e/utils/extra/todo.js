@@ -55,11 +55,14 @@
 //TODO: admin add variable subscription and group product
 //TODO: decide success message should come from parameter or directly import form data file or direct string value
 //TODO: handle add product to cart for other products(variable,subscription),buy every product from single product page
-async getOrderDetails(orderNumber) { //TODO: separate function to get order details from inside order details base
+// async getOrderDetails(orderNumber) { //TODO: separate function to get order details from inside order details base
 
 //TODO: add this on vendor approve review request
-let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
-if (awaitingApprovalReviewIsVisible) {
-    await loginPage.switchUser(data.vendor)
-    await vendorPage.approveProductReview(reviewMessage)
-}
+// let awaitingApprovalReviewIsVisible = await base.isVisible(selector.customer.cSingleProduct.awaitingApprovalReview(reviewMessage))
+// if (awaitingApprovalReviewIsVisible) {
+//     await loginPage.switchUser(data.vendor)
+//     await vendorPage.approveProductReview(reviewMessage)
+// }
+
+//TODO: add function for grab console error
+    //TODO: use event console.error

@@ -3,6 +3,7 @@ const customerPage = require('../pages/customer.js')
 const data = require('../utils/testData.js')
 jest.retryTimes(process.env.RETRY_TIMES,{logErrorsBeforeRetry: true}) 
 
+
 describe('customer functionality test', () => {
     // beforeAll(async () => {})
     // afterAll(async () => {})
@@ -39,7 +40,7 @@ describe('customer functionality test', () => {
         await customerPage.addCustomerDetails(data.customer.customerInfo)
     })
 
-    it.only('customer add billing details', async () => {
+    it('customer add billing details', async () => {
         await loginPage.login(data.customer)
         await customerPage.addBillingAddress(data.customer.customerInfo)
     })
@@ -59,7 +60,7 @@ describe('customer functionality test', () => {
         await customerPage.searchProduct(data.predefined.simpleProduct.product1.name)
     })
 
-    it('customer buy product', async () => {
+    it.only('customer buy product', async () => {
         await loginPage.login(data.customer)
         await customerPage.clearCart()
         await customerPage.addProductToCartFromShop(data.predefined.simpleProduct.product1.name)

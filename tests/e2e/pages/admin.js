@@ -353,13 +353,13 @@ module.exports = {
     await base.clearAndType(selector.admin.dokan.settings.deliveryBlockedBuffer, deliveryTime.deliveryBlockedBuffer)
     await base.clearAndType(selector.admin.dokan.settings.deliveryBoxInfo, deliveryTime.deliveryBoxInfo)
     await base.enableSwitcher(selector.admin.dokan.settings.requireDeliveryDateAndTime)
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.sunday)) 
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.monday))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.tuesday))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.wednesday))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.thursday))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.friday))
-    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.saturday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.sunday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.monday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.tuesday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.wednesday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.thursday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.friday))
+    await base.enableSwitcher(selector.admin.dokan.settings.deliveryDay(deliveryTime.deliveryDay.saturday))
     await base.clearAndType(selector.admin.dokan.settings.openingTime, deliveryTime.openingTime)
     await base.clearAndType(selector.admin.dokan.settings.closingTime, deliveryTime.closingTime)
     await base.clearAndType(selector.admin.dokan.settings.timeSlot, deliveryTime.timeSlot)
@@ -508,7 +508,7 @@ module.exports = {
       await base.click(selector.admin.wooCommerce.settings.insertRow)
     }
     await base.clearAndType(selector.admin.wooCommerce.settings.taxRate, tax.taxRate)
-    await base.click(selector.admin.wooCommerce.settings.taxTable) 
+    await base.click(selector.admin.wooCommerce.settings.taxTable)
     await base.wait(1)
     await base.click(selector.admin.wooCommerce.settings.taxRateSaveChanges)
     await base.wait(3)
@@ -596,15 +596,11 @@ module.exports = {
       await base.click(selector.admin.wooCommerce.settings.addShippingMethods)
       await base.select(selector.admin.wooCommerce.settings.shippingMethod, shipping.selectShippingMethod)
       await base.clickAndWait(selector.admin.wooCommerce.settings.addShippingMethod)
-      await base.wait(1)
-      // Set Shipping Method Options
-      await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shipping.shippingMethod))
-      await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingMethod))
-    } else {
-      // Edit Shipping Method
-      await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shipping.shippingMethod))
-      await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingMethod))
+      await base.wait(4)
     }
+    // Edit Shipping Method Options
+    await base.hover(selector.admin.wooCommerce.settings.shippingMethodCell(shipping.shippingMethod))
+    await base.click(selector.admin.wooCommerce.settings.editShippingMethod(shipping.shippingMethod))
 
     switch (shipping.selectShippingMethod) {
       case 'flat_rate':
@@ -724,7 +720,7 @@ module.exports = {
       await base.clickAndWait(selector.admin.wooCommerce.settings.generalSaveChanges)
 
       let successMessage = await base.getElementText(selector.admin.wooCommerce.settings.updatedSuccessMessage)
-      expect(successMessage).toMatch(currency.saveSuccessMessage)
+      expect(successMessage).toMatch(data.payment.currency.saveSuccessMessage)
     }
   },
 
@@ -1062,10 +1058,8 @@ module.exports = {
     if (product.stockStatus) {
       await this.editStockStatus(data.product.stockStatus.outOfStock)
     }
-
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
 
@@ -1104,21 +1098,22 @@ module.exports = {
   },
 
   // Admin Add Variable Product
-  async addVariableProduct(productName, productPrice, categoryName, vendor, attribute, attributeTerms) {
+  async addVariableProduct(product) {
     await base.hover(selector.admin.aDashboard.products)
     await base.clickAndWait(selector.admin.products.addNewMenu)
 
     // Add New Variable Product
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
-    await base.select(selector.admin.products.product.productType, 'variable')
+    await base.select(selector.admin.products.product.productType, product.productType)
 
-    await base.click(selector.admin.products.product.attributes)
-    // await base.wait(1)
 
     // Add Attributes
-    await base.select(selector.admin.products.product.customProductAttribute, `pa_${attribute}`)
-    await base.wait(2)
+    await base.wait(1)
+    await base.click(selector.admin.products.product.attributes)
+    await base.wait(1)
+    await base.select(selector.admin.products.product.customProductAttribute, `pa_${product.attribute}`)
+    await base.wait(3)
     await base.click(selector.admin.products.product.addAttribute)
     await base.wait(2)
     await base.click(selector.admin.products.product.selectAll)
@@ -1127,32 +1122,27 @@ module.exports = {
     await base.click(selector.admin.products.product.saveAttributes)
     await base.wait(2)
 
-    //TODO: need to update js alert 
     // Add Variations
-    await base.click(selector.admin.products.product.productVariations)
-    await base.wait(2)
     await base.click(selector.admin.products.product.variations)
-    await base.wait(2)
-    await base.select(selector.admin.products.product.addVariations, 'link_all_variations')
-    await base.wait(2)
+    await base.wait(6)
+    await base.select(selector.admin.products.product.addVariations, product.variations.linkAllVariation)
+    await base.wait(1)
     await base.alert('accept')
     await base.click(selector.admin.products.product.go)
-    await base.wait(2)
 
-    await base.select(selector.admin.products.product.addVariations, 'variable_regular_price')
-    await base.wait(2)
+    await base.wait(6)
+    await base.select(selector.admin.products.product.addVariations, product.variations.variableRegularPrice)
+    await base.wait(1)
     await base.click(selector.admin.products.product.go)
-    await base.alertWithValue(120)
-    await base.wait(2)
+    await base.alertWithValue(120) // Don't work
 
     // Category
-    await base.click(selector.admin.products.product.category(categoryName))
-    // Vendor
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-    // Publish
+    await base.click(selector.admin.products.product.category(product.category))
+    // Vendor Store Name
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
     let productCreateSuccessMessage = await base.getElementText(selector.admin.products.product.updatedSuccessMessage)
@@ -1177,11 +1167,10 @@ module.exports = {
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-    // Publish
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
 
@@ -1198,17 +1187,16 @@ module.exports = {
     // Name
     await base.type(selector.admin.products.product.productName, product.productName())
     await base.select(selector.admin.products.product.productType, product.productType)
-    await base.type(selector.admin.products.product.productUrl, await base.getBaseUrl() + product.external.productUrl)
+    await base.type(selector.admin.products.product.productUrl, await base.getBaseUrl() + product.productUrl)
     await base.type(selector.admin.products.product.buttonText, product.buttonText)
     await base.type(selector.admin.products.product.regularPrice, product.regularPrice())
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-    // Publish
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
 
@@ -1235,12 +1223,10 @@ module.exports = {
     await base.type(selector.admin.products.product.expireAfterDays, product.expireAfterDays)
     await base.click(selector.admin.products.product.recurringPayment)
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-
-    // Publish
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
 
@@ -1260,7 +1246,7 @@ module.exports = {
     await base.select(selector.admin.products.product.itemCondition, product.itemCondition)
     await base.select(selector.admin.products.product.auctionType, product.auctionType)
     await base.type(selector.admin.products.product.startPrice, product.regularPrice())
-    await base.type(selector.admin.products.product.bidIncrement, product.bidIncrement)
+    await base.type(selector.admin.products.product.bidIncrement, product.bidIncrement())
     await base.type(selector.admin.products.product.reservedPrice, product.reservedPrice())
     await base.type(selector.admin.products.product.buyItNowPrice, product.buyItNowPrice())
     await base.type(selector.admin.products.product.auctionDatesFrom, product.startDate)
@@ -1268,11 +1254,10 @@ module.exports = {
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, product.storeName)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-    // Publish
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
 
@@ -1300,11 +1285,10 @@ module.exports = {
     // Category
     await base.click(selector.admin.products.product.category(product.category))
     // Vendor Store Name
-    // await base.selectByText(selector.admin.products.product.storeName, vendor)//TODO: replace below line with this
-    await base.selectOptionByText(selector.admin.products.product.storeName, selector.admin.products.product.vendorOptions, product.storeName)
-    // Publish
+    await base.selectByText(selector.admin.products.product.storeName, selector.admin.products.product.storeNameOptions, product.storeName)
     await base.scrollToTop()
     await base.wait(2)
+    // Publish
     await base.clickAndWait(selector.admin.products.product.publish)
     await base.wait(2)
 

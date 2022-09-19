@@ -567,7 +567,7 @@ let that = module.exports = {
 
       },
       stripeExpress: {
-         titile: 'Dokan Express Payment Methods',
+         title: 'Dokan Express Payment Methods',
          description: 'Pay with your credit card via Stripe.',
          testPublishableKey: 'pk_test_',
          testSecretKey: 'sk_test_',
@@ -729,7 +729,7 @@ let that = module.exports = {
       sellingProductTypes: 'Both',
       commissionTypeValues: 'Percentage',
       adminCommission: '10',
-      minimumWithdrawLimit: '50',
+      minimumWithdrawLimit: '5',
    },
 
    vendorSetupWizard: {
@@ -804,7 +804,7 @@ let that = module.exports = {
          vatNumber: faker.random.alphaNumeric(10),
          bankName: faker.address.state(), //TODO: fix this
          bankIban: faker.finance.iban(),
-         phone: faker.phone.phoneNumber('(###) ###-####'),
+         phoneNumber: faker.phone.phoneNumber('(###) ###-####'),
          street1: 'abc street',
          street2: 'xyz street',
          country: 'United States (US)',
@@ -815,7 +815,7 @@ let that = module.exports = {
          state: 'New York',
          accountName: 'accountName',
          accountNumber: faker.random.alphaNumeric(10),
-         bankName: 'bankName',
+         // bankName: 'bankName',
          bankAddress: 'bankAddress',
          routingNumber: faker.random.alphaNumeric(10),
          swiftCode: faker.random.alphaNumeric(10),

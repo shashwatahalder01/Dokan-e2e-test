@@ -139,9 +139,8 @@ wp-content/
 artifacts/
 jest-stare/
 allure-results/
+# plugins/
 #js config
 jsconfig.json
 
-
-.wp-env2.json
 

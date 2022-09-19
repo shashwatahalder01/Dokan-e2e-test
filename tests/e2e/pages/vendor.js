@@ -42,7 +42,7 @@ module.exports = {
         await base.type(selector.vendor.vRegistration.vatNumber, vendorInfo.vatNumber)
         await base.type(selector.vendor.vRegistration.bankName, vendorInfo.bankName)
         await base.type(selector.vendor.vRegistration.bankIban, vendorInfo.bankIban)
-        await base.type(selector.vendor.vRegistration.phone, vendorInfo.phone)
+        await base.type(selector.vendor.vRegistration.phone, vendorInfo.phoneNumber)
         let termsAndConditionsIsVisible = await base.isVisible(selector.customer.cDashboard.termsAndConditions)
         if (termsAndConditionsIsVisible) {
             await base.check(selector.customer.cDashboard.termsAndConditions)
@@ -180,7 +180,7 @@ module.exports = {
         await base.select(selector.vendor.product.addVariations, product.variations.variableRegularPrice)
         await base.wait(1)
         await base.click(selector.vendor.product.go)
-        await base.waitForSelector(selector.vendor.product.variationPrice)
+        // await base.waitForSelector(selector.vendor.product.variationPrice)
         await base.type(selector.vendor.product.variationPrice, product.regularPrice())
         await base.click(selector.vendor.product.okVariationPrice)
 
@@ -518,12 +518,12 @@ module.exports = {
         await base.clearAndType(selector.vendor.vStoreSettings.postOrZipCode, vendorInfo.zipCode)
         await base.select(selector.vendor.vStoreSettings.country, vendorInfo.countrySelectValue)
         await base.select(selector.vendor.vStoreSettings.state, vendorInfo.stateSelectValue)
-        // Company Info
-        await base.clearAndType(selector.vendor.vStoreSettings.companyName, vendorInfo.companyName)
-        await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, vendorInfo.companyId)
-        await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vendorInfo.vatNumber)
-        await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, vendorInfo.bankName)
-        await base.clearAndType(selector.vendor.vStoreSettings.bankIban, vendorInfo.bankIban)
+        // Company Info //TODO: uncomment after ui fix
+        // await base.clearAndType(selector.vendor.vStoreSettings.companyName, vendorInfo.companyName)
+        // await base.clearAndType(selector.vendor.vStoreSettings.companyIdOrEuidNumber, vendorInfo.companyId)
+        // await base.clearAndType(selector.vendor.vStoreSettings.vatOrTaxNumber, vendorInfo.vatNumber)
+        // await base.clearAndType(selector.vendor.vStoreSettings.nameOfBank, vendorInfo.bankName)
+        // await base.clearAndType(selector.vendor.vStoreSettings.bankIban, vendorInfo.bankIban)
         // Email
         await base.check(selector.vendor.vStoreSettings.email)
         // Show More Products
@@ -761,7 +761,7 @@ module.exports = {
     },
 
     // Skrill Payment Settings
-    async setSkrill(paymentMethodemail) {
+    async setSkrill(paymentMethod) {
         // Skrill
         await base.clearAndType(selector.vendor.skrill.email, paymentMethod.email())
         // Update Settings
@@ -793,7 +793,7 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
-        await base.wait(2)
+        await base.wait(3)
 
         // Id Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelIdVerificationRequest)
@@ -828,7 +828,7 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
-        await base.wait(2)
+        await base.wait(3)
 
         // Address Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelAddressVerificationRequest)
@@ -860,6 +860,7 @@ module.exports = {
 
         await base.clickAndWait(selector.vendor.vDashboard.settings)
         await base.clickAndWait(selector.vendor.vSettings.verification)
+        await base.wait(3)
 
         // Company Verification
         let cancelRequestIsVisible = await base.isVisible(selector.vendor.vVerificationSettings.cancelCompanyVerificationRequest)

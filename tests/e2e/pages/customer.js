@@ -228,7 +228,7 @@ module.exports = {
             await base.wait(1)
         }
         await base.clickAndWaitOnceForAllXhr(selector.customer.cStoreList.followUnFollowStore(vendorName))
-        await base.wait(1)
+        await base.wait(3)
         let storeFollowStatus = await base.getElementText(selector.customer.cStoreList.currentStoreFollowStatus(vendorName))
         expect(storeFollowStatus).toMatch('Following')
     },
@@ -496,18 +496,17 @@ module.exports = {
         switch (paymentMethod) {
             case 'bank':
                 await base.click(selector.customer.cCheckout.directBankTransfer)
-                await base.wait(2)
+                await base.wait(3)
                 await base.clickAndWait(selector.customer.cCheckout.placeOrder)
-
                 break
             case 'check':
                 await base.click(selector.customer.cCheckout.checkPayments)
-                await base.wait(2)
+                await base.wait(3)
                 await base.clickAndWait(selector.customer.cCheckout.placeOrder)
                 break
             case 'cod':
                 await base.click(selector.customer.cCheckout.cashOnDelivery)
-                await base.wait(2)
+                await base.wait(3)
                 await base.clickAndWait(selector.customer.cCheckout.placeOrder)
                 break
             case 'stripe':

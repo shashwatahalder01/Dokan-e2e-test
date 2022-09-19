@@ -1310,7 +1310,8 @@ module.exports = {
                 adminCommissionCombined: '.additional_fee > .input-text',
                 // Vendor
                 storeName: '#dokan_product_author_override',
-                vendorOptions: "#dokan_product_author_override > option",
+                storeNameOptions: '#dokan_product_author_override option',
+                storeNameOption: (text) => `//select[@id='dokan_product_author_override']//option[contains(text(),'${text}')]`, // Select Option by text
 
                 // Category
                 category: (categoryName) => `//label[contains(text(), ' ${categoryName}')]/input`,
@@ -1865,7 +1866,7 @@ module.exports = {
             confirmGo: ".swal2-confirm",
             okSuccessAlertGo: ".swal2-confirm",
             cancelGo: ".swal2-cancel.swal2-styled",
-            variationPrice: ".swal2-popup.swal2-modal.swal2-show .swal2-input",
+            variationPrice: ".swal2-input",
             okVariationPrice: ".swal2-confirm",
             cancelVariationPrice: ".swal2-cancel",
             saveVariationChanges: ".save-variation-changes",
