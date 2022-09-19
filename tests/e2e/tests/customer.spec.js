@@ -60,7 +60,7 @@ describe('customer functionality test', () => {
         await customerPage.searchProduct(data.predefined.simpleProduct.product1.name)
     })
 
-    it.only('customer buy product', async () => {
+    it('customer buy product', async () => {
         await loginPage.login(data.customer)
         await customerPage.clearCart()
         await customerPage.addProductToCartFromShop(data.predefined.simpleProduct.product1.name)
