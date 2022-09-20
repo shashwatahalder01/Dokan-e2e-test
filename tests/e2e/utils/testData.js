@@ -306,7 +306,7 @@ let that = module.exports = {
          bookingDuration: '2',
          bookingDurationMax: '2',
          bookingDurationUnit: 'day',
-         calenderDisplayMode: 'always_visible',
+         calendarDisplayMode: 'always_visible',
          maxBookingsPerBlock: '5',
          minimumBookingWindowIntoTheFutureDate: '0',
          minimumBookingWindowIntoTheFutureDateUnit: 'month',
@@ -323,7 +323,7 @@ let that = module.exports = {
          auctionType: 'normal',
          regularPrice: () => (faker.finance.amount(10, 100, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
          bidIncrement: () => (faker.finance.amount(40, 50, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
-         reservedPriced: () => (faker.finance.amount(400, 500, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
+         reservedPrice: () => (faker.finance.amount(400, 500, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
          buyItNowPrice: () => (faker.finance.amount(900, 1000, faker.helpers.arrayElement([1, 2]))).replace('.', ','),
          startDate: helpers.currentDateTime.replace(/,/g, ''),
          endDate: helpers.addDays(helpers.currentDateTime, 60).replace(/,/g, ''),
@@ -961,7 +961,8 @@ let that = module.exports = {
       },
 
       verification: {
-         file: 'tests/e2e/utils/sampleData/avatar.png',
+         file: '../utils/sampleData/avatar.png',
+         file2: 'tests/e2e/utils/sampleData/avatar.png',
          street1: 'abc street',
          street2: 'xyz street',
          city: 'New York',

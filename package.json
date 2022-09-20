@@ -51,10 +51,8 @@
     "jest-stare": "^2.3.0",
     "like-mysql": "^2.0.2",
     "mysql": "^2.18.1",
-    "mysql2": "^2.3.3",
     "open": "^8.4.0",
     "pending-xhr-puppeteer": "^2.3.3",
-    "puppeteer-extra-commands": "^2.2.20",
     "puppeteer-testing-library": "^0.6.0"
   }
 }
