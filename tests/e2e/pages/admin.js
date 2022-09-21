@@ -951,7 +951,7 @@ module.exports = {
     await base.type(selector.admin.dokan.vendors.username, firstName)
     await base.type(selector.admin.dokan.vendors.companyName, vendorInfo.companyName)
     await base.type(selector.admin.dokan.vendors.companyIdEuidNumber, vendorInfo.companyId)
-    await base.type(selector.admin.dokan.vendors.vatOrTaxNumber, vendorInfo.vatOrTaxNumber)
+    await base.type(selector.admin.dokan.vendors.vatOrTaxNumber, vendorInfo.vatNumber)
     await base.type(selector.admin.dokan.vendors.nameOfBank, vendorInfo.nameOfBank)
     await base.type(selector.admin.dokan.vendors.bankIban, vendorInfo.bankIban)
     await base.wait(3)

@@ -879,6 +879,28 @@ module.exports = {
 
         // Woocommerce
         wooCommerce: {
+            //Woocommerce Setup wizard
+            setupWizard: {
+                //store details
+                country: '#woocommerce-select-control-0__control-input', //United States (US) — New York
+                address: '#inspector-text-control-0',
+                zipCode: '#inspector-text-control-1',
+                city: '#inspector-text-control-2',
+                continue: '//button[contains(text(),"Continue")]',
+                noThanks: '//button[contains(text(),"No thanks")]',
+                //Industry
+                fashion: '#inspector-checkbox-control-1',
+                // Product Types
+                // Business Details
+                label: '//label[contains(text(),"How many products do you plan to display?")]',
+                oneToTen: '//button[contains(text(),"1 - 10")]',
+                label2:'//label[contains(text(),"Currently selling elsewhere?")]',
+                no: '//button[contains(text(),"No")]',
+                addReccommendBusinesFeature: 'inspector-checkbox-control-17',
+                // Theme
+                continueWithActiveTheme: '//button[contains(text(),"Continue with my active theme")]'
+            },
+
             // Woocommerce Menu
             settingsMenu: "//li[contains(@class,'toplevel_page_woocommerce')]//a[text()='Settings']",
 

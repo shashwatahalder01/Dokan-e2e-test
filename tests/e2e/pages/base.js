@@ -227,7 +227,7 @@ module.exports = {
 
     // Set Value Based on Select Options Text 
     async selectByText(selectSelector, optionSelector, text) {
-        let optionValue = await page.$$eval(optionSelector, (options, text) => options.find(option => option.innerText.toLowerCase() === text.toLowerCase())?.value, text)
+        let optionValue = await page.$$eval(optionSelector, (options, text) => options.find(option => (option.innerText).toLowerCase() === text.toLowerCase())?.value, text)
         await page.select(selectSelector, optionValue);
     },
 
