@@ -442,14 +442,14 @@ module.exports = {
     },
 
     // Vendor Add Vendor Details
-    async setVendorDetails(vendorInfo) {
-        await base.clearAndType(selector.vendor.vendorDetails.firstName, vendorInfo.firstName())
-        await base.clearAndType(selector.vendor.vendorDetails.lastName, vendorInfo.lastName())
-        await base.clearAndType(selector.vendor.vendorDetails.email, vendorInfo.email())
-        await base.type(selector.vendor.vendorDetails.currentPassword, vendorInfo.password)
-        await base.type(selector.vendor.vendorDetails.NewPassword, vendorInfo.password1)
-        await base.type(selector.vendor.vendorDetails.confirmNewPassword, vendorInfo.password)
-        await base.click(selector.vendor.vendorDetails.saveChanges)
+    async setvAccountDetails(vendorInfo) {
+        await base.clearAndType(selector.vendor.vAccountDetails.firstName, vendorInfo.firstName())
+        await base.clearAndType(selector.vendor.vAccountDetails.lastName, vendorInfo.lastName())
+        await base.clearAndType(selector.vendor.vAccountDetails.email, vendorInfo.email())
+        await base.type(selector.vendor.vAccountDetails.currentPassword, vendorInfo.password)
+        await base.type(selector.vendor.vAccountDetails.NewPassword, vendorInfo.password1)
+        await base.type(selector.vendor.vAccountDetails.confirmNewPassword, vendorInfo.password)
+        await base.click(selector.vendor.vAccountDetails.saveChanges)
     },
 
     // Vendor Settings 

@@ -1,7 +1,7 @@
 require('dotenv').config()
 const dotenv = require('dotenv');
 const fs = require('fs');
-if (process.env.ENV ? process.env.ENV : 'git' === 'local') {
+if (process.env.ENV ? process.env.ENV : 'git' === 'local') {//TODO :update this
     process.env = dotenv.parse(fs.readFileSync('.env.local'));
 }
 

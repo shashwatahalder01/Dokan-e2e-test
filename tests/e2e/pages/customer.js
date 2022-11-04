@@ -281,7 +281,7 @@ module.exports = {
 
     // Customer Add Customer Support Ticket
     async addCustomerSupportTicket(message) {
-        await base.click(selector.customer.cMyAccount.supportTickets)
+        await base.click(selector.customer.cMyAccount.sellerSupportTickets)
         await base.click(selector.customer.cSupportTickets.openTickets)
         await base.clickAndWait(selector.customer.cSupportTickets.firstOpenTicket)
 
@@ -306,7 +306,7 @@ module.exports = {
         let duplicateCommentAlertIsVisible = await base.isVisible(selector.customer.cSingleProduct.duplicateCommentAlert)
         if (duplicateCommentAlertIsVisible) {
             await base.clickAndWait(selector.customer.cSingleProduct.backFromDuplicateCommentAlert)
-            await this.rateProduct(rating)
+            await this.rateProduct(review.rating) // TODO: not implemented yet
         }
 
         let submittedReviewMessage = await base.getElementText(selector.customer.cSingleProduct.submittedReview(reviewMessage))

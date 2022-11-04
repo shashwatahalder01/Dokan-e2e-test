@@ -138,7 +138,7 @@ module.exports = {
         }
     },
 
-    // Click If Element Is Visible
+    // Click Is Visible
     async clickIfVisible(selector) {
         let IsVisible = await this.isVisible(selector)
         if (IsVisible) {
@@ -298,7 +298,7 @@ module.exports = {
 
     },
 
-    // Goto URL It about:Blank Is Loaded
+    // Goto URL If about:Blank Is Loaded
     async goIfBlank(subPath) {
         let blankPage = await page.evaluate(() => window.location.href === 'about:blank')
         if (blankPage) {
@@ -427,7 +427,7 @@ module.exports = {
         return value
     },
 
-    // Get Element Attribute Value
+    // Set Element Attribute Value
     async setElementAttributeValue(selector, attribute, value) {
         // await page.$eval(selector, (element, attribute, value) => element.setAttribute(attribute, value), attribute, value)
         let element = await this.getElement(selector)
