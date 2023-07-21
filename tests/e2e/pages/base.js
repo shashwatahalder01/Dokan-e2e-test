@@ -212,8 +212,8 @@ module.exports = {
     // Set Value Based on Select Options Text
     async selectOptionByText(selectSelector, optionSelector, textContent) {
         let elements = await page.$$(optionSelector)
-        
-        for (let element of elements) {  
+
+        for (let element of elements) {
             const text = await page.evaluate(element => element.textContent, element)
             if (textContent.toLowerCase() == (text.trim()).toLowerCase()) {
                 let value = await (await element.getProperty('value')).jsonValue()
@@ -810,7 +810,7 @@ module.exports = {
             // await page.click(uploadedMedia)   
             await this.wait(1)
         }
-        // else {
+        else {
         await this.uploadImage(selectFiles, filePath)
         await this.click(select)
         await this.wait(2)
@@ -854,7 +854,7 @@ module.exports = {
         let previousUploadedImageIsVisible = await this.isVisible(previousUploadedImageSelector)
         if (previousUploadedImageIsVisible) {
             await this.hover(previousUploadedImageSelector)
-            await page.click(removePreviousUploadedImageSelector)
+            await this.click(removePreviousUploadedImageSelector)
             await this.wait(2)
         }
     },
